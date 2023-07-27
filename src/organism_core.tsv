@@ -1,0 +1,567 @@
+curie	label	label_source	iedb_synonyms	level	parent	parent_label	use_other
+NCBITaxon:1	Root	NCBI Taxonomy scientific name		upper			
+OBI:0100026	Organism	Ontology for Biomedical Investigations		upper	NCBITaxon:1	Root	
+NCBITaxon:2157	Archeobacterium	IEDB		upper	OBI:0100026	Organism	
+NCBITaxon:2	Bacteria	singular of NCBI Taxonomy scientific name		upper	OBI:0100026	Organism	TRUE
+NCBITaxon:201174	Actinobacterium	singular of NCBI Taxonomy scientific name		upper	NCBITaxon:2	Bacteria	
+NCBITaxon:1716	Corynebacterium	NCBI Taxonomy scientific name		upper	NCBITaxon:201174	Actinobacterium	
+NCBITaxon:1763	Mycobacterium	NCBI Taxonomy scientific name		upper	NCBITaxon:201174	Actinobacterium	
+NCBITaxon:1773	Mycobacterium tuberculosis	NCBI Taxonomy scientific name	M. tuberculosis;M tuberculosis;MTB;Tb	species	NCBITaxon:1763	Mycobacterium	
+NCBITaxon:1239	Bacillota (Firmicutes)	NCBI Taxonomy scientific name		upper	NCBITaxon:2	Bacteria	
+NCBITaxon:91061	Bacillus [class]	IEDB		upper	NCBITaxon:1239	Bacillota (Firmicutes)	
+NCBITaxon:1279	Staphylococcus	NCBI Taxonomy scientific name		upper	NCBITaxon:91061	Bacillus [class]	
+NCBITaxon:1350	Enterococcus	NCBI Taxonomy scientific name		upper	NCBITaxon:91061	Bacillus [class]	
+NCBITaxon:1386	Bacillus [genus]	IEDB		upper	NCBITaxon:91061	Bacillus [class]	
+NCBITaxon:1578	Lactobacillus	NCBI Taxonomy scientific name		upper	NCBITaxon:91061	Bacillus [class]	
+NCBITaxon:186801	Clostridia	NCBI Taxonomy scientific name		upper	NCBITaxon:1239	Bacillota (Firmicutes)	
+NCBITaxon:1496	Clostridium difficile	GenBank common name		species	NCBITaxon:186801	Clostridia	
+NCBITaxon:213849	Campylobacterales	NCBI Taxonomy scientific name		upper	NCBITaxon:2	Bacteria	
+NCBITaxon:204428	Chlamydiae	NCBI Taxonomy scientific name		upper	NCBITaxon:2	Bacteria	
+NCBITaxon:32066	Fusobacteriota	NCBI Taxonomy scientific name		upper	NCBITaxon:2	Bacteria	
+NCBITaxon:1224	Proteobacterium (purple photosynthetic bacterium)	singular of NCBI Taxonomy scientific name (singular of NCBI common name)		upper	NCBITaxon:2	Bacteria	
+NCBITaxon:28211	Alphaproteobacterium	singular of NCBI Taxonomy scientific name		upper	NCBITaxon:1224	Proteobacterium (purple photosynthetic bacterium)	
+NCBITaxon:234	Brucella	NCBI Taxonomy scientific name		upper	NCBITaxon:28211	Alphaproteobacterium	
+NCBITaxon:356	Rhizobiales	NCBI Taxonomy scientific name		upper	NCBITaxon:28211	Alphaproteobacterium	
+NCBITaxon:766	Rickettsiales	NCBI Taxonomy scientific name		upper	NCBITaxon:28211	Alphaproteobacterium	
+NCBITaxon:13687	Sphingomonas	NCBI Taxonomy scientific name		upper	NCBITaxon:28211	Alphaproteobacterium	
+NCBITaxon:28216	Betaproteobacterium	singular of NCBI Taxonomy scientific name		upper	NCBITaxon:1224	Proteobacterium (purple photosynthetic bacterium)	
+NCBITaxon:1236	Gammaproteobacterium	singular of NCBI Taxonomy scientific name		upper	NCBITaxon:1224	Proteobacterium (purple photosynthetic bacterium)	
+NCBITaxon:469	Acinetobacter	NCBI Taxonomy scientific name		upper	NCBITaxon:1236	Gammaproteobacterium	
+NCBITaxon:543	Enterobacteriaceae	NCBI Taxonomy scientific name		upper	NCBITaxon:1236	Gammaproteobacterium	
+NCBITaxon:562	Escherichia coli	NCBI Taxonomy scientific name	E. coli;E coli	species	NCBITaxon:543	Enterobacteriaceae	
+NCBITaxon:590	Salmonella	NCBI Taxonomy scientific name		upper	NCBITaxon:543	Enterobacteriaceae	
+NCBITaxon:777	Coxiella burnetii	NCBI Taxonomy scientific name		species	NCBITaxon:1236	Gammaproteobacterium	
+NCBITaxon:72273	Thiotrichales	NCBI Taxonomy scientific name		upper	NCBITaxon:1236	Gammaproteobacterium	
+NCBITaxon:263	Francisella tularensis	NCBI Taxonomy scientific name		species	NCBITaxon:72273	Thiotrichales	
+NCBITaxon:135623	Vibrionales	NCBI Taxonomy scientific name		upper	NCBITaxon:1236	Gammaproteobacterium	
+NCBITaxon:203692	Spirochaetia	NCBI Taxonomy scientific name		upper	NCBITaxon:2	Bacteria	
+iedb-taxon:2-other	Other Bacteria	IEDB		upper	NCBITaxon:2	Bacteria	
+NCBITaxon:976	Bacteroidete	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:2-other	Other Bacteria	
+NCBITaxon:1117	Cyanobacterium (blue-green alga)	singular of NCBI Taxonomy scientific name (singular of NCBI common name)		upper	iedb-taxon:2-other	Other Bacteria	
+NCBITaxon:1148	Synechocystis sp. PCC 6803	NCBI Taxonomy scientific name		species	NCBITaxon:1117	Cyanobacterium (blue-green alga)	
+NCBITaxon:28221	Deltaproteobacterium	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:2-other	Other Bacteria	
+NCBITaxon:29547	Epsilonproteobacterium	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:2-other	Other Bacteria	
+NCBITaxon:203691	Spirochaete	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:2-other	Other Bacteria	
+NCBITaxon:544448	Tenericutes	NCBI Taxonomy scientific name		upper	iedb-taxon:2-other	Other Bacteria	
+NCBITaxon:823	Parabacteroides distasonis			species	iedb-taxon:2-other	Other Bacterium	
+NCBITaxon:1796646	Muribaculum intestinale			species	iedb-taxon:2-other	Other Bacterium	
+NCBITaxon:2759	Eukaryote	singular of NCBI Taxonomy scientific name		upper	OBI:0100026	Organism	TRUE
+NCBITaxon:5794	Apicomplexan	singular of NCBI Taxonomy scientific name		upper	NCBITaxon:2759	Eukaryote	
+NCBITaxon:5811	Toxoplasma gondii	NCBI Taxonomy scientific name		species	NCBITaxon:5794	Apicomplexan	
+NCBITaxon:5654	Trypanosomatidae	NCBI Taxonomy scientific name		upper	NCBITaxon:2759	Eukaryote	
+NCBITaxon:5658	Leishmania	NCBI Taxonomy scientific name		upper	NCBITaxon:5654	Trypanosomatidae	
+NCBITaxon:5690	Trypanosoma	NCBI Taxonomy scientific name		upper	NCBITaxon:5654	Trypanosomatidae	
+NCBITaxon:4751	Fungus	singular of NCBI Taxonomy scientific name		upper	NCBITaxon:2759	Eukaryote	TRUE
+NCBITaxon:5204	Basidiomycota	NCBI Taxonomy scientific name		upper	NCBITaxon:4751	Fungus	
+NCBITaxon:6029	Microsporidium	singular of NCBI Taxonomy scientific name		upper	NCBITaxon:4751	Fungus	
+NCBITaxon:147538	Pexixomycotina	NCBI Taxonomy scientific name		upper	NCBITaxon:4751	Fungus	
+NCBITaxon:5543	Trichoderma	NCBI Taxonomy scientific name		upper	NCBITaxon:147538	Pexixomycotina	
+NCBITaxon:5599	Alternaria alternata	NCBI Taxonomy scientific name		species	NCBITaxon:147538	Pexixomycotina	
+NCBITaxon:1129544	Rhizophagus	NCBI Taxonomy scientific name		upper	NCBITaxon:4751	Fungus	
+NCBITaxon:4892	Saccharomycetales	NCBI Taxonomy scientific name (singular of GenBank common name)		upper	NCBITaxon:4751	Fungus	
+NCBITaxon:4932	Saccharomyces cerevisiae (baker's yeast)	NCBI Taxonomy scientific name (GenBank common name)		species	NCBITaxon:4892	Saccharomycetales	
+NCBITaxon:451866	Taphrinomycotina	NCBI Taxonomy scientific name		upper	NCBITaxon:4751	Fungus	
+iedb-taxon:4751-other	Other Fungus	IEDB		upper	NCBITaxon:4751	Fungus	
+NCBITaxon:33208	Metazoan	singular of NCBI Taxonomy scientific name (singular of NCBI common name)		upper	NCBITaxon:2759	Eukaryote	TRUE
+NCBITaxon:6854	Arachnid	singular of NCBI Taxonomy scientific name		upper	NCBITaxon:33208	Metazoan	
+NCBITaxon:6933	Acari (mites and ticks)	NCBI Taxonomy scientific name		upper	NCBITaxon:6854	Arachnid	
+NCBITaxon:6935	Ixodid (tick)	singular of NCBI Taxonomy scientific name (singular of GenBank common name)		upper	NCBITaxon:6933	Acari (mites and ticks)	
+NCBITaxon:6951	Astigmata (mite)	NCBI Taxonomy scientific name (common name)		upper	NCBITaxon:6933	Acari (mites and ticks)	
+NCBITaxon:6953	Dermatophagoides (dust mite)	NCBI Taxonomy scientific name (singular of GenBank common name)		upper	NCBITaxon:6951	Astigmata (mite)	
+NCBITaxon:6893	Araneid (spider)	singular of NCBI Taxonomy scientific name (singular of GenBank common name)		upper	NCBITaxon:6854	Arachnid	
+NCBITaxon:6855	Scorpiones (scorpion)	singular of NCBI Taxonomy scientific name		upper	NCBITaxon:6854	Arachnid	
+NCBITaxon:6657	Crustacean	singular of NCBI Taxonomy scientific name		upper	NCBITaxon:33208	Metazoan	
+NCBITaxon:6447	Mollusc	singular of NCBI Taxonomy scientific name		upper	NCBITaxon:33208	Metazoan	
+NCBITaxon:6231	Nematode (roundworm)	singular of NCBI Taxonomy scientific name (NCBI common name)		upper	NCBITaxon:33208	Metazoan	
+NCBITaxon:6251	Ascaris	NCBI Taxonomy scientific name		upper	NCBITaxon:6231	Nematode (roundworm)	
+NCBITaxon:6264	Toxocara	NCBI Taxonomy scientific name		upper	NCBITaxon:6231	Nematode (roundworm)	
+NCBITaxon:6157	Platyhelminth (flatworm)	singular of NCBI Taxonomy scientific name (NCBI common name)		upper	NCBITaxon:33208	Metazoan	
+NCBITaxon:6191	Fasciola	NCBI Taxonomy scientific name		upper	NCBITaxon:6157	Platyhelminth (flatworm)	
+NCBITaxon:46580	Spirometra	NCBI Taxonomy scientific name		upper	NCBITaxon:6157	Platyhelminth (flatworm)	
+NCBITaxon:50557	Insect	singular of NCBI Taxonomy scientific name		upper	NCBITaxon:33208	Metazoan	TRUE
+NCBITaxon:7434	Aculeata (ant, bee, stinging wasp)	NCBI Taxonomy scientific name		upper	NCBITaxon:50557	Insect	
+NCBITaxon:85823	Blattoid (cockroach)	singular of NCBI Taxonomy scientific name (singular of GenBank common name)		upper	NCBITaxon:50557	Insect	
+NCBITaxon:7147	Dipteran (fly)	singular of NCBI Taxonomy scientific name (singular of GenBank common name)		upper	NCBITaxon:50557	Insect	
+NCBITaxon:7165	Anopheles gambiae (African malaria mosquito)	NCBI Taxonomy scientific name (GenBank common name)		species	NCBITaxon:7147	Dipteran (fly)	
+NCBITaxon:7088	Lepidopteran (butterfly or moth)	singular of NCBI Taxonomy scientific name (singular of GenBank common name)		upper	NCBITaxon:50557	Insect	
+iedb-taxon:50557-other	Other Insect	IEDB		upper	NCBITaxon:50557	Insect	
+NCBITaxon:7399	Hymenopteran	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:50557-other	Other Insect	
+NCBITaxon:7742	Vertebrate	singular of NCBI Taxonomy scientific name		upper	NCBITaxon:33208	Metazoan	TRUE
+NCBITaxon:8342	Anuran (frog or toad)	singular of NCBI Taxonomy scientific name (singular of GenBank common name)		upper	NCBITaxon:7742	Vertebrate	
+NCBITaxon:8782	Ave (bird)	singular of NCBI Taxonomy scientific name (singular of GenBank common name)		upper	NCBITaxon:7742	Vertebrate	
+NCBITaxon:8867	Cygnus (swan)	NCBI Taxonomy scientific name (singular of GenBank common name)		upper	NCBITaxon:8782	Ave (bird)	
+NCBITaxon:9031	Gallus gallus (chicken)	NCBI Taxonomy scientific name (GenBank common name)		species	NCBITaxon:8782	Ave (bird)	
+NCBITaxon:9090	Coturnix	NCBI Taxonomy scientific name		upper	NCBITaxon:8782	Ave (bird)	
+iedb-taxon:10002034	Fish	IEDB		upper	NCBITaxon:7742	Vertebrate	
+NCBITaxon:7898	Actinopterygii (ray-finned fish)	NCBI Taxonomy scientific name (singular of GenBank common name)		upper	iedb-taxon:10002034	Fish	
+NCBITaxon:8060	Pollachius virens (pollock)			species	NCBITaxon:7898	Actinopterygii (ray-finned fish)	
+NCBITaxon:8168	Perca fluviatilis (perch)			species	NCBITaxon:7898	Actinopterygii (ray-finned fish)	
+NCBITaxon:29151	Osmerus eperlanus (European smelt)			species	NCBITaxon:7898	Actinopterygii (ray-finned fish)	
+NCBITaxon:38527	Abramis brama (bream)			species	NCBITaxon:7898	Actinopterygii (ray-finned fish)	
+NCBITaxon:54563	Rutilus frisii (Black Sea roach)			species	NCBITaxon:7898	Actinopterygii (ray-finned fish)	
+NCBITaxon:57865	Gymnocephalus cernua (ruffe)			species	NCBITaxon:7898	Actinopterygii (ray-finned fish)	
+NCBITaxon:1042646	Gadus chalcogrammus (Alaska pollock)			species	NCBITaxon:7898	Actinopterygii (ray-finned fish)	
+NCBITaxon:7777	Chondrichthyes (cartilaginous fishes)	NCBI Taxonomy scientific name (GenBank common name)		upper	iedb-taxon:10002034	Fish	
+NCBITaxon:117893	Batoidea (ray)	NCBI Taxonomy scientific name (singular of GenBank common name)		upper	NCBITaxon:7777	Chondrichthyes (cartilaginous fishes)	
+NCBITaxon:119203	Selachii (shark)	NCBI Taxonomy scientific name (common name)		upper	NCBITaxon:7777	Chondrichthyes (cartilaginous fishes)	
+NCBITaxon:8570	Serpent (snake)	singular of NCBI Taxonomy scientific name (singular of GenBank common name)		upper	NCBITaxon:7742	Vertebrate	
+NCBITaxon:8752	Lachesis muta (bushmaster)	NCBI Taxonomy scientific name (GenBank common name)		species	NCBITaxon:8570	Serpent (snake)	
+NCBITaxon:40674	Mammal	singular of NCBI Taxonomy scientific name		upper	NCBITaxon:7742	Vertebrate	TRUE
+NCBITaxon:9835	Camelid	singular of NCBI Taxonomy scientific name		upper	NCBITaxon:40674	Mammal	
+NCBITaxon:33554	Carnivore	singular of NCBI Taxonomy scientific name		upper	NCBITaxon:40674	Mammal	
+NCBITaxon:9612	Canis lupus (wolf or dog)	NCBI Taxonomy scientific name (common name)		species	NCBITaxon:33554	Carnivore	
+NCBITaxon:9665	Mustela	NCBI Taxonomy scientific name		upper	NCBITaxon:33554	Carnivore	
+NCBITaxon:9721	Cetacean (whale, dolphin, or porpoise)	singular of NCBI Taxonomy scientific name (singular of NCBI common name)		upper	NCBITaxon:40674	Mammal	
+NCBITaxon:9397	Chiropteran (bat)	singular of NCBI Taxonomy scientific name (singular of GenBank common name)		upper	NCBITaxon:40674	Mammal	
+NCBITaxon:9788	Equid (horse)	singular of NCBI Taxonomy scientific name (singular of GenBank common name)		upper	NCBITaxon:40674	Mammal	
+NCBITaxon:314147	Glire (rodent or rabbit)	singular of NCBI Taxonomy scientific name (singular of GenBank common name)		upper	NCBITaxon:40674	Mammal	
+NCBITaxon:9986	Oryctolagus cuniculus (rabbit)	NCBI Taxonomy scientific name (GenBank common name)		species	NCBITaxon:314147	Glire (rodent or rabbit)	
+NCBITaxon:10008	Tamiasciurus	NCBI Taxonomy scientific name		upper	NCBITaxon:314147	Glire (rodent or rabbit)	
+NCBITaxon:10090	Mus musculus (mouse)	NCBI Taxonomy scientific name (NCBI common name)		species	NCBITaxon:314147	Glire (rodent or rabbit)	
+NCBITaxon:10114	Rattus (rat)	NCBI Taxonomy scientific name (NCBI common name)		upper	NCBITaxon:314147	Glire (rodent or rabbit)	
+NCBITaxon:10141	Cavia porcellus (guinea pig)	NCBI Taxonomy scientific name (NCBI common name)		species	NCBITaxon:314147	Glire (rodent or rabbit)	
+NCBITaxon:42414	Sigmodon (cotton rat)	NCBI Taxonomy scientific name (singular of GenBank common name)		upper	NCBITaxon:314147	Glire (rodent or rabbit)	
+NCBITaxon:9263	Marsupial	singular of NCBI Taxonomy scientific name		upper	NCBITaxon:40674	Mammal	
+NCBITaxon:9845	Ruminant	singular of NCBI Taxonomy scientific name		upper	NCBITaxon:40674	Mammal	
+NCBITaxon:9443	Primate	singular of NCBI Taxonomy scientific name		upper	NCBITaxon:40674	Mammal	TRUE
+NCBITaxon:9527	Cercopithecid (Old World monkey)	singular of NCBI Taxonomy scientific name (singular of GenBank common name)		upper	NCBITaxon:9443	Primate	
+NCBITaxon:9539	Macaca (macaque)	NCBI Taxonomy scientific name (singular of GenBank common name)		upper	NCBITaxon:9527	Cercopithecid (Old World monkey)	
+NCBITaxon:9554	Papio (baboon)	NCBI Taxonomy scientific name (singular of GenBank common name)		upper	NCBITaxon:9527	Cercopithecid (Old World monkey)	
+NCBITaxon:314295	Hominoid	singular of NCBI Taxonomy scientific name (NCBI common name)		upper	NCBITaxon:9443	Primate	
+NCBITaxon:9593	Gorilla gorilla	NCBI Taxonomy scientific name		species	NCBITaxon:314295	Hominoid	
+NCBITaxon:9600	Pongo pygmaeus (Bornean orangutan)	NCBI Taxonomy scientific name (GenBank common name)		species	NCBITaxon:314295	Hominoid	
+NCBITaxon:9601	Pongo abelii (Sumatran orangutan)	NCBI Taxonomy scientific name (GenBank common name)		species	NCBITaxon:314295	Hominoid	
+NCBITaxon:9606	Homo sapiens (human)	NCBI Taxonomy scientific name (GenBank common name)		species	NCBITaxon:314295	Hominoid	
+NCBITaxon:9479	Platyrrhini (New World monkey)	NCBI Taxonomy scientific name (singular of GenBank common name)		upper	NCBITaxon:9443	Primate	
+NCBITaxon:9481	Callithrix (marmoset)	NCBI Taxonomy scientific name (common name)		upper	NCBITaxon:9479	Platyrrhini (New World monkey)	
+NCBITaxon:9486	Saguinus (tamarin)	NCBI Taxonomy scientific name (common name)		upper	NCBITaxon:9479	Platyrrhini (New World monkey)	
+NCBITaxon:9504	Aotus (night monkey)	NCBI Taxonomy scientific name (singular of GenBank common name)		upper	NCBITaxon:9479	Platyrrhini (New World monkey)	
+NCBITaxon:9506	Ateles (spider monkey)	NCBI Taxonomy scientific name (common name)		upper	NCBITaxon:9479	Platyrrhini (New World monkey)	
+iedb-taxon:9443-other	Other Primate	IEDB		upper	NCBITaxon:9443	Primate	
+iedb-taxon:40674-other	Other Mammal	IEDB		upper	NCBITaxon:40674	Mammal	
+NCBITaxon:9823	Sus scrofa (pig)	NCBI Taxonomy scientific name (GenBank common name)		species	iedb-taxon:40674-other	Other Mammal	
+iedb-taxon:7742-other	Other Vertebrate	IEDB		upper	NCBITaxon:7742	Vertebrate	
+NCBITaxon:7746	Petromyzontid (lamprey)	singular of NCBI Taxonomy scientific name (singular of GenBank common name)		upper	iedb-taxon:7742-other	Other Vertebrate	
+iedb-taxon:33208-other	Other Metazoan	IEDB		upper	NCBITaxon:33208	Metazoan	
+NCBITaxon:58024	Spermatophyta (seed plant)	singular of NCBI Taxonomy scientific name (singular of NCBI common name)		upper	NCBITaxon:2759	Eukaryote	TRUE
+iedb-taxon:10002037	Dicot	IEDB		upper	NCBITaxon:58024	Spermatophyta (seed plant)	
+NCBITaxon:3650	Cucurbitaceae (cucumber family)	NCBI Taxonomy scientific name (NCBI common name)		upper	iedb-taxon:10002037	Dicot	
+NCBITaxon:3700	Brassicaceae (mustard family)	NCBI Taxonomy scientific name (GenBank common name)		upper	iedb-taxon:10002037	Dicot	
+NCBITaxon:4070	Solanaceae (nightshade family)	NCBI Taxonomy scientific name (NCBI common name)		upper	iedb-taxon:10002037	Dicot	
+NCBITaxon:3469	Papaver somniferum (opium poppy)			species	iedb-taxon:10002037	Dicot	
+NCBITaxon:3559	Chenopodium album (lamb's-quarters)			species	iedb-taxon:10002037	Dicot	
+NCBITaxon:3562	Spinacia oleracea (spinach)			species	iedb-taxon:10002037	Dicot	
+NCBITaxon:3972	Viscum album (European mistletoe)			species	iedb-taxon:10002037	Dicot	
+NCBITaxon:4037	Apiaceae (carrot family)			upper	iedb-taxon:10002037	Dicot	
+NCBITaxon:4045	Apium graveolens (celery)	NCBI Taxonomy scientific name (common name)		species	NCBITaxon:4037	Apiaceae (carrot family)	
+NCBITaxon:4180	Pedaliaceae (sesame family)			upper	iedb-taxon:10002037	Dicot	
+NCBITaxon:151250	Kali turgidum (common saltwort)			species	iedb-taxon:10002037	Dicot	
+NCBITaxon:161934	Beta vulgaris (beet)			species	iedb-taxon:10002037	Dicot	
+NCBITaxon:3803	Fabaceae (pea family)	NCBI Taxonomy scientific name (NCBI common name)		upper	NCBITaxon:58024	Spermatophyta (seed plant)	
+NCBITaxon:3818	Arachis hypogaea (peanut)	NCBI Taxonomy scientific name (GenBank common name)		species	NCBITaxon:3803	Fabaceae (pea family)	
+iedb-taxon:10002038	Monocot	IEDB		upper	NCBITaxon:58024	Spermatophyta (seed plant)	
+NCBITaxon:4613	Bromeliaceae (bromeliad family)			upper	iedb-taxon:10002038	Monocot	
+NCBITaxon:4637	Musaceae (banana family)			upper	iedb-taxon:10002038	Monocot	
+NCBITaxon:40552	Asparagaceae (asparagus family)			upper	iedb-taxon:10002038	Monocot	
+NCBITaxon:82070	Squilla maritima			species	iedb-taxon:10002038	Monocot	
+NCBITaxon:476176	Moraea pallida			species	iedb-taxon:10002038	Monocot	
+NCBITaxon:3318	Pinaceae (pine family)	NCBI Taxonomy scientific name (NCBI common name)		upper	NCBITaxon:58024	Spermatophyte	
+NCBITaxon:3346	Pinus pinea (parasol pine)			species	NCBITaxon:3318	Pinaceae (pine family)	
+NCBITaxon:3352	Pinus taeda (loblolly pine)			species	NCBITaxon:3318	Pinaceae (pine family)	
+NCBITaxon:71647	Pinus pinaster (cluster pine)			species	NCBITaxon:3318	Pinaceae (pine family)	
+NCBITaxon:4479	Poaceae (grass family)	NCBI Taxonomy scientific name (NCBI common name)		upper	NCBITaxon:58024	Spermatophyta (seed plant)	
+NCBITaxon:4496	Avena (oat)	NCBI Taxonomy scientific name (singular of GenBank common name)		upper	NCBITaxon:4479	Poaceae (grass family)	
+NCBITaxon:4522	Lolium perenne (perennial ryegrass)	NCBI Taxonomy scientific name (NCBI common name)		species	NCBITaxon:4479	Poaceae (grass family)	
+NCBITaxon:4545	Poa pratensis (Kentucky bluegrass)	NCBI Taxonomy scientific name (GenBank common name)		species	NCBITaxon:4479	Poaceae (grass family)	
+NCBITaxon:15957	Phleum pratense (timothy grass)	NCBI Taxonomy scientific name (GenBank common name)		species	NCBITaxon:4479	Poaceae (grass family)	
+NCBITaxon:28909	Cynodon dactylon (Bermuda grass)	NCBI Taxonomy scientific name (GenBank common name)		species	NCBITaxon:4479	Poaceae (grass family)	
+NCBITaxon:3615	Polygonaceae (buckwheat family)	NCBI Taxonomy scientific name (NCBI common name)		upper	NCBITaxon:58024	Spermatophyta (seed plant)	
+iedb-taxon:10002036	Tree or Shrub	IEDB		upper	NCBITaxon:58024	Spermatophyta (seed plant)	
+NCBITaxon:3367	Cupressaceae (cypress family)	NCBI Taxonomy scientific name (NCBI common name)		upper	iedb-taxon:10002036	Tree or Shrub	
+NCBITaxon:3369	Cryptomeria japonica (Japanese cedar)	NCBI Taxonomy scientific name (GenBank common name)		species	NCBITaxon:3367	Cupressaceae (cypress family)	
+NCBITaxon:13100	Juniperus (juniper)	NCBI Taxonomy scientific name (singular of GenBank common name)		upper	NCBITaxon:3367	Cupressaceae (cypress family)	
+NCBITaxon:3514	Betulaceae (birch family)	NCBI Taxonomy scientific name (NCBI common name)		upper	iedb-taxon:10002036	Tree or Shrub	
+NCBITaxon:16714	Juglandaceae (walnut family)	NCBI Taxonomy scientific name (NCBI common name)		upper	iedb-taxon:10002036	Tree or Shrub	
+NCBITaxon:3433	Lauraceae (laurel family)			upper	iedb-taxon:10002036	Tree or Shrub	
+NCBITaxon:3503	Fagaceae (beech family)			upper	iedb-taxon:10002036	Tree or Shrub	
+NCBITaxon:3602	Vitaceae (grape family)			upper	iedb-taxon:10002036	Tree or Shrub	
+NCBITaxon:3623	Actinidiaceae (Chinese gooseberry family)			upper	iedb-taxon:10002036	Tree or Shrub	
+NCBITaxon:3642	Lecythidaceae (Brazil nut family)			upper	iedb-taxon:10002036	Tree or Shrub	
+NCBITaxon:3745	Rosaceae (rose family)			upper	iedb-taxon:10002036	Tree or Shrub	
+NCBITaxon:3754	Prunus	NCBI Taxonomy scientific name		upper	NCBITaxon:3745	Rosaceae (rose family)	
+NCBITaxon:3954	Combretaceae (Indian almond family)			upper	iedb-taxon:10002036	Tree or Shrub	
+NCBITaxon:155017	Anogeissus	NCBI Taxonomy scientific name		upper	NCBITaxon:3954	Combretaceae (Indian almond family)	
+NCBITaxon:3977	Euphorbiaceae (spurge family)			upper	iedb-taxon:10002036	Tree or Shrub	
+NCBITaxon:3981	Hevea brasiliensis (rubbertree)	NCBI Taxonomy scientific name (NCBI common name)		species	NCBITaxon:3977	Euphorbiaceae (spurge family)	
+NCBITaxon:3988	Ricinus communis (castor bean)	NCBI Taxonomy scientific name (GenBank common name)		species	NCBITaxon:3977	Euphorbiaceae (spurge family)	
+NCBITaxon:4011	Anacardiaceae (sumac family)			upper	iedb-taxon:10002036	Tree or Shrub	
+NCBITaxon:4022	Acer (maple trees)			upper	iedb-taxon:10002036	Tree or Shrub	
+NCBITaxon:4144	Oleaceae (olive famly)			upper	iedb-taxon:10002036	Tree or Shrub	
+NCBITaxon:4146	Olea europaea (common olive)	NCBI Taxonomy scientific name (GenBank common name)		species	NCBITaxon:4144	Oleaceae (olive famly)	
+NCBITaxon:4401	Platanaceae (plane-tree family)			upper	iedb-taxon:10002036	Tree or Shrub	
+NCBITaxon:23513	Rutaceae (rue family)			upper	iedb-taxon:10002036	Tree or Shrub	
+NCBITaxon:23672	Sapindaceae (soapberry family)			upper	iedb-taxon:10002036	Tree or Shrub	
+NCBITaxon:157914	Ziziphus mauritiana (Chinese-date)			species	iedb-taxon:10002036	Tree or Shrub	
+iedb-taxon:10002035	Weed	IEDB		upper	NCBITaxon:58024	Spermatophyta (seed plant)	
+NCBITaxon:3563	Amaranthaceae (amaranth family)	NCBI Taxonomy scientific name (NCBI common name)		upper	iedb-taxon:10002035	Weed	
+NCBITaxon:4210	Asteraceae (daisy family)	NCBI Taxonomy scientific name (NCBI common name)		upper	iedb-taxon:10002035	Weed	
+NCBITaxon:4211	Ambrosia (ragweed)	NCBI Taxonomy scientific name (singular of GenBank common name)		upper	NCBITaxon:4210	Asteraceae (daisy family)	
+NCBITaxon:4220	Artemisia vulgaris (mugwort)	NCBI Taxonomy scientific name (NCBI common name)		species	NCBITaxon:4210	Asteraceae (daisy family)	
+NCBITaxon:3499	Urticaceae (nettle family)			upper	iedb-taxon:10002035	Weed	
+NCBITaxon:156152	Plantaginaceae (speedwell family)			upper	iedb-taxon:10002035	Weed	
+iedb-taxon:58024-other	Other Spermatophyta (seed plant)	IEDB		upper	NCBITaxon:58024	Spermatophyta (seed plant)	
+iedb-taxon:2759-other	Other Eukaryote	IEDB		upper	NCBITaxon:2759	Eukaryote	
+NCBITaxon:5741	Giardia intestinalis (Giardia lamblia)	NCBI Taxonomy scientific name (GenBank synonym )		species	iedb-taxon:2759-other	Other Eukaryote	
+NCBITaxon:554915	Amoebozoan	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:2759-other	Other Eukaryote	
+NCBITaxon:10239	Virus	singular of NCBI Taxonomy scientific name		upper	OBI:0100026	Organism	TRUE
+iedb-taxon:10002039	DNA virus	IEDB		upper	NCBITaxon:10239	Virus	TRUE
+NCBITaxon:10508	Adenovirus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002039	DNA virus	
+iedb-taxon:10002041	Bacteriophage (DNA)	IEDB		upper	iedb-taxon:10002039	DNA virus	
+NCBITaxon:10656	Tectiviridae (Tectivirus)			upper	iedb-taxon:10002041	Bacteriophage (DNA)	
+NCBITaxon:10662	Myoviridae				iedb-taxon:10002041	Bacteriophage (DNA)	
+NCBITaxon:10699	Siphoviridae				iedb-taxon:10002041	Bacteriophage (DNA)	
+NCBITaxon:10744	Podoviridae				iedb-taxon:10002041	Bacteriophage (DNA)	
+NCBITaxon:10860	Inoviridae			upper	iedb-taxon:10002041	Bacteriophage (DNA)	
+NCBITaxon:28883	Caudovirales				iedb-taxon:10002041	Bacteriophage (DNA)	
+NCBITaxon:10442	Baculoviridae	NCBI Taxonomy scientific name		upper	iedb-taxon:10002039	DNA virus	
+NCBITaxon:10241	Chordopoxvirinae	NCBI Taxonomy scientific name		upper	iedb-taxon:10002039	DNA virus	
+NCBITaxon:10404	Hepadnavirus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002039	DNA virus	
+NCBITaxon:10292	Herpesvirus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002039	DNA virus	
+NCBITaxon:10298	Human herpesvirus 1	NCBI Taxonomy scientific name	herpes virus 1;HHV1		NCBITaxon:10292	Herpesvirus	
+NCBITaxon:10310	Human herpesvirus 2	NCBI Taxonomy scientific name	herpes virus 2;HHV2;HSV-2		NCBITaxon:10292	Herpesvirus	
+NCBITaxon:10335	Human herpesvirus 3 (Varicella-zoster virus)	NCBI Taxonomy scientific name (GenBank common name)	herpes virus 3;HHV3;HSV-3;HSV3		NCBITaxon:10292	Herpesvirus	
+NCBITaxon:10359	Human herpesvirus 5 (Human cytomegalovirus)	NCBI Taxonomy scientific name (GenBank common name)	herpes virus 5;CMV;HHV5;HSV-5;HSV5		NCBITaxon:10292	Herpesvirus	
+NCBITaxon:10376	Human herpesvirus 4 (Epstein Barr virus)	NCBI Taxonomy scientific name (GenBank common name)	herpes virus 4;EBV;HHV4;HSV-4;HSV4		NCBITaxon:10292	Herpesvirus	
+NCBITaxon:151340	Papillomavirus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002039	DNA virus	
+NCBITaxon:40119	Parvovirinae	NCBI Taxonomy scientific name		upper	iedb-taxon:10002039	DNA virus	
+iedb-taxon:10002043	Plant virus (DNA)	IEDB		upper	iedb-taxon:10002039	DNA virus	
+NCBITaxon:10811	Geminiviridae (Geminivirus)			upper	iedb-taxon:10002043	Plant virus (DNA)	
+NCBITaxon:328670	Banana streak GF virus (Banana streak Goldfinger virus)				iedb-taxon:10002043	Plant virus (DNA)	
+NCBITaxon:328671	Banana streak OL virus (Banana streak Obino l'Ewai virus)				iedb-taxon:10002043	Plant virus (DNA)	
+NCBITaxon:1016852	Banana streak CA virus (Banana streak Cavendish virus)			species	iedb-taxon:10002043	Plant virus (DNA)	
+NCBITaxon:1016853	Banana streak IM virus (Banana streak Imove virus)				iedb-taxon:10002043	Plant virus (DNA)	
+NCBITaxon:1476909	Banana streak MY virus (Banana streak Mys virus)				iedb-taxon:10002043	Plant virus (DNA)	
+NCBITaxon:1763596	Guertu virus				iedb-taxon:10002043	Plant virus (DNA)	
+NCBITaxon:151341	Polyomaviridae	NCBI Taxonomy scientific name		upper	iedb-taxon:10002039	DNA virus	
+iedb-taxon:10002039-other	Other DNA virus	IEDB		upper	iedb-taxon:10002039	DNA virus	
+NCBITaxon:10240	Poxvirus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002039	DNA virus	
+NCBITaxon:10780	Parvoviridae family virus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002039	DNA virus	
+NCBITaxon:39724	Circovirus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002039	DNA virus	
+NCBITaxon:687329	Anelloviridae	NCBI Taxonomy scientific name		upper	iedb-taxon:10002039	DNA virus	
+NCBITaxon:687331	Alphatorquevirus	NCBI Taxonomy scientific name		upper	NCBITaxon:687329	Anelloviridae	
+NCBITaxon:10479	Thermoproteus tenax virus 1 (Thermoproteus phage 1)				iedb-taxon:10002039	DNA virus	
+NCBITaxon:10497	African swine fever virus (African swine fever virus ASF)			species	iedb-taxon:10002039	DNA virus	
+NCBITaxon:10574	Monkey B-lymphotropic papovavirus				iedb-taxon:10002039	DNA virus	
+NCBITaxon:10632	JC polyomavirus (Human polyomavirus (type JC))				iedb-taxon:10002039	DNA virus	
+NCBITaxon:10638	Kilham polyomavirus (Mouse polyomavirus (strain KILHAM))				iedb-taxon:10002039	DNA virus	
+NCBITaxon:10847	Sinsheimervirus phiX174 (Escherichia virus phiX174)			species	iedb-taxon:10002039	DNA virus	
+NCBITaxon:46242	Spodoptera litura nucleopolyhedrovirus (Prodenia litura nucleopolyhedrovirus)				iedb-taxon:10002039	DNA virus	
+NCBITaxon:46771	Simian virus 12 (Baboon polyomavirus 1)			species	iedb-taxon:10002039	DNA virus	
+NCBITaxon:148363	Helicoverpa armigera nucleopolyhedrovirus G4 (Heliocoverpa armigera single nucleocapsid nucleopolyhedrovirus G4 strain)				iedb-taxon:10002039	DNA virus	
+NCBITaxon:160691	Tiger frog virus (Rana tigrina ranavirus)				iedb-taxon:10002039	DNA virus	
+NCBITaxon:271108	Bombyx mori nucleopolyhedrovirus (Bombyx mori NPV)				iedb-taxon:10002039	DNA virus	
+NCBITaxon:342409	White spot syndrome virus (White spot syndrome virus 1)			species	iedb-taxon:10002039	DNA virus	
+NCBITaxon:388634	Bombyx mandarina nuclear polyhedrosis virus			species	iedb-taxon:10002039	DNA virus	
+NCBITaxon:493803	Merkel cell polyomavirus (MCPyV isolate R17b)				iedb-taxon:10002039	DNA virus	
+NCBITaxon:862909	Trichodysplasia spinulosa-associated polyomavirus				iedb-taxon:10002039	DNA virus	
+NCBITaxon:1380865	Rana catesbeiana virus			species	iedb-taxon:10002039	DNA virus	
+NCBITaxon:1891729	Alphapolyomavirus mauratus (Hamster polyomavirus)			species	iedb-taxon:10002039	DNA virus	
+NCBITaxon:1891730	Alphapolyomavirus muris (Murine polyomavirus)			species	iedb-taxon:10002039	DNA virus	
+NCBITaxon:1891762	Betapolyomavirus hominis (BK polyomavirus)			species	iedb-taxon:10002039	DNA virus	
+NCBITaxon:1891767	Betapolyomavirus macacae (Macaca mulatta polyomavirus 1)			species	iedb-taxon:10002039	DNA virus	
+iedb-taxon:10002040	RNA virus	IEDB		upper	NCBITaxon:10239	Virus	TRUE
+NCBITaxon:11617	Arenaviridae	NCBI Taxonomy scientific name		upper	iedb-taxon:10002040	RNA virus	
+iedb-taxon:10002042	Bacteriophage (RNA)	IEDB		upper	iedb-taxon:10002040	RNA virus	
+NCBITaxon:10877	Cystoviridae			upper	iedb-taxon:10002042	Bacteriophage (RNA)	
+NCBITaxon:11989	Leviviridae				iedb-taxon:10002042	Bacteriophage (RNA)	
+NCBITaxon:11266	Filovirus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002040	RNA virus	
+NCBITaxon:11050	Flaviviridae family virus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002040	RNA virus	
+NCBITaxon:11051	Flavivirus	NCBI Taxonomy scientific name		upper	NCBITaxon:11050	Flaviviridae family virus	
+NCBITaxon:3052230	Hepatitis C virus	IEDB		species	NCBITaxon:11050	Flaviviridae family virus	
+NCBITaxon:11095	Pestivirus	NCBI Taxonomy scientific name		upper	NCBITaxon:11050	Flaviviridae family virus	
+NCBITaxon:578319	Recombinant HCV virus	singular of NCBI Taxonomy scientific name			NCBITaxon:11050	Flaviviridae family virus	
+NCBITaxon:12475	Hepatitis delta virus (Hepatitis D virus)	NCBI Taxonomy scientific name		upper	iedb-taxon:10002040	RNA virus	
+iedb-taxon:10002045	Influenza virus	IEDB		upper	iedb-taxon:10002040	RNA virus	
+NCBITaxon:11320	Influenza A virus	NCBI Taxonomy scientific name		species	iedb-taxon:10002045	Influenza virus	
+NCBITaxon:11520	Influenza B virus (Influenza virus type B)	NCBI Taxonomy scientific name		species	iedb-taxon:10002045	Influenza virus	
+NCBITaxon:11552	Influenza C virus (Influenza C viruses)	NCBI Taxonomy scientific name		species	iedb-taxon:10002045	Influenza virus	
+NCBITaxon:142786	Norovirus (Norwalk-like viruses)	NCBI Taxonomy scientific name		upper	iedb-taxon:10002040	RNA virus	
+NCBITaxon:1980442	Orthohantavirus	NCBI Taxonomy scientific name		upper	iedb-taxon:10002040	RNA virus	
+NCBITaxon:11583	HoJo virus	NCBI Taxonomy scientific name			NCBITaxon:1980442	Orthohantavirus	
+NCBITaxon:339351	unclassified Hantavirus	NCBI Taxonomy scientific name			NCBITaxon:1980442	Orthohantavirus	
+NCBITaxon:11158	Paramyxovirus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002040	RNA virus	
+NCBITaxon:12058	Picornavirus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002040	RNA virus	
+NCBITaxon:12110	Foot-and-mouth disease virus	NCBI Taxonomy scientific name		species	NCBITaxon:12058	Picornavirus	
+iedb-taxon:10002044	Plant virus (RNA)	IEDB		upper	iedb-taxon:10002040	RNA virus	
+NCBITaxon:11611	Tospovirus				iedb-taxon:10002044	Plant virus (RNA)	
+NCBITaxon:39729	Potyviridae			upper	iedb-taxon:10002044	Plant virus (RNA)	
+NCBITaxon:39738	Tombusviridae			upper	iedb-taxon:10002044	Plant virus (RNA)	
+NCBITaxon:39740	Bromoviridae			upper	iedb-taxon:10002044	Plant virus (RNA)	
+NCBITaxon:69973	Closteroviridae			upper	iedb-taxon:10002044	Plant virus (RNA)	
+NCBITaxon:72539	Physalis mottle virus (Belladonna mottle virus(I)- Iowa strain)				iedb-taxon:10002044	Plant virus (RNA)	
+NCBITaxon:119163	Luteoviridae			upper	iedb-taxon:10002044	Plant virus (RNA)	
+NCBITaxon:143901	Benyvirus			upper	iedb-taxon:10002044	Plant virus (RNA)	
+NCBITaxon:675064	Alphaflexiviridae			upper	iedb-taxon:10002044	Plant virus (RNA)	
+NCBITaxon:675068	Betaflexiviridae			upper	iedb-taxon:10002044	Plant virus (RNA)	
+NCBITaxon:675071	Virgaviridae			upper	iedb-taxon:10002044	Plant virus (RNA)	
+NCBITaxon:675072	Secoviridae			upper	iedb-taxon:10002044	Plant virus (RNA)	
+NCBITaxon:1933300	Watermelon silver mottle tospovirus				iedb-taxon:10002044	Plant virus (RNA)	
+NCBITaxon:11632	Retrovirus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002040	RNA virus	
+NCBITaxon:11652	Primate lentivirus group	NCBI Taxonomy scientific name		upper	NCBITaxon:11632	Retrovirus	
+NCBITaxon:11270	Rhabdovirus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002040	RNA virus	
+NCBITaxon:11018	Togavirus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002040	RNA virus	
+NCBITaxon:11118	Coronavirus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002040	RNA virus	TRUE
+NCBITaxon:693996	Alphacoronavirus	NCBI Taxonomy scientific name		upper	NCBITaxon:11118	Coronavirus	
+NCBITaxon:694002	Betacoronavirus	NCBI Taxonomy scientific name		upper	NCBITaxon:11118	Coronavirus	TRUE
+NCBITaxon:2509481	Embecovirus	NCBI Taxonomy scientific name		upper	NCBITaxon:694002	Betacoronavirus	
+NCBITaxon:2509494	Merbecovirus	NCBI Taxonomy scientific name		upper	NCBITaxon:694002	Betacoronavirus	
+NCBITaxon:2509511	Sarbecovirus	NCBI Taxonomy scientific name		upper	NCBITaxon:694002	Betacoronavirus	
+iedb-taxon:10002383	Other SARS	IEDB		species	NCBITaxon:2509511	Sarbecovirus	
+NCBITaxon:284672	SARS coronavirus TJF				iedb-taxon:10002383	Other SARS	
+NCBITaxon:347537	Bat SARS CoV Rf1/2004 (Bat SARS coronavirus Rf1)				iedb-taxon:10002383	Other SARS	
+NCBITaxon:349344	Bat SARS CoV Rp3/2004 (Bat SARS coronavirus Rp3)				iedb-taxon:10002383	Other SARS	
+NCBITaxon:442736	Bat SARS coronavirus HKU3 (Bat coronavirus HKU3)				iedb-taxon:10002383	Other SARS	
+NCBITaxon:1415851	Bat SARS-like coronavirus RsSHC014				iedb-taxon:10002383	Other SARS	
+NCBITaxon:1415852	Bat SARS-like coronavirus WIV1				iedb-taxon:10002383	Other SARS	
+NCBITaxon:2709072	Bat coronavirus RaTG13 (Bat coronavirus Ra4991)				iedb-taxon:10002383	Other SARS	
+NCBITaxon:1508227	Bat SARS-like coronavirus (Bat Betacoronavirus SARS related virus)				iedb-taxon:10002383	Other SARS	
+iedb-taxon:10002440	Bat SARS-like coronavirus RmYN02	IEDB			NCBITaxon:1508227	Bat SARS-like coronavirus (Bat Betacoronavirus SARS related virus)	
+NCBITaxon:1415839	Bat SARS-like coronavirus Rs4081			species	NCBITaxon:1508227	Bat SARS-like coronavirus (Bat Betacoronavirus SARS related virus)	
+NCBITaxon:1415840	Bat SARS-like coronavirus Rs4084			species	NCBITaxon:1508227	Bat SARS-like coronavirus (Bat Betacoronavirus SARS related virus)	
+NCBITaxon:231522	SARS coronavirus GZ50				iedb-taxon:10002383	Other SARS	
+NCBITaxon:231513	Civet SARS CoV SZ3/2003 (Civet SARS-CoV/SZ3/2003)				iedb-taxon:10002383	Other SARS	
+NCBITaxon:255730	SARS coronavirus Sino1-11				iedb-taxon:10002383	Other SARS	
+NCBITaxon:256753	SARS coronavirus GZ02				iedb-taxon:10002383	Other SARS	
+NCBITaxon:285945	Civet SARS CoV 007/2004 (Civet SARS-CoV/007/2004)				iedb-taxon:10002383	Other SARS	
+NCBITaxon:293319	SARS coronavirus PC4-127				iedb-taxon:10002383	Other SARS	
+NCBITaxon:296838	SARS coronavirus PC4-137				iedb-taxon:10002383	Other SARS	
+NCBITaxon:305403	SARS coronavirus A021				iedb-taxon:10002383	Other SARS	
+NCBITaxon:347536	Bat SARS CoV Rm1/2004 (Bat SARS coronavirus Rm1)				iedb-taxon:10002383	Other SARS	
+NCBITaxon:385684	SARS coronavirus CS24				iedb-taxon:10002383	Other SARS	
+NCBITaxon:389167	Bat CoV 279/2005 (Bat coronavirus (BtCoV/279/2005))				iedb-taxon:10002383	Other SARS	
+NCBITaxon:1283332	Bat coronavirus Rp/Shaanxi2011 (Bat Rp-coronavirus/Shaanxi2011)				iedb-taxon:10002383	Other SARS	
+NCBITaxon:1283333	Bat coronavirus Cp/Yunnan2011 (Bat Cp-coronavirus/Yunnan2011)				iedb-taxon:10002383	Other SARS	
+NCBITaxon:1415834	Bat SARS-like coronavirus Rs3367				iedb-taxon:10002383	Other SARS	
+NCBITaxon:1487703	Rhinolophus affinis coronavirus				iedb-taxon:10002383	Other SARS	
+NCBITaxon:1503296	BtRf-BetaCoV/HeB2013				iedb-taxon:10002383	Other SARS	
+NCBITaxon:1503299	BtRf-BetaCoV/JL2012				iedb-taxon:10002383	Other SARS	
+NCBITaxon:1503301	BtRs-BetaCoV/GX2013				iedb-taxon:10002383	Other SARS	
+NCBITaxon:1503302	BtRs-BetaCoV/HuB2013				iedb-taxon:10002383	Other SARS	
+NCBITaxon:1503303	BtRs-BetaCoV/YN2013				iedb-taxon:10002383	Other SARS	
+NCBITaxon:305417	SARS coronavirus C028				iedb-taxon:10002383	Other SARS	
+iedb-taxon:10002316	SARS-CoV1	IEDB		species	NCBITaxon:2509511	Sarbecovirus	
+NCBITaxon:227860	SARS coronavirus Vietnam				iedb-taxon:10002316	SARS-CoV1	
+NCBITaxon:227984	SARS coronavirus Tor2 (Severe acute respiratory syndrome-related coronavirus Tor2)				iedb-taxon:10002316	SARS-CoV1	
+NCBITaxon:228330	SARS coronavirus Urbani (SARS coronavirus strain Urbani)				iedb-taxon:10002316	SARS-CoV1	
+NCBITaxon:228404	SARS coronavirus HKU-39849				iedb-taxon:10002316	SARS-CoV1	
+NCBITaxon:228407	SARS coronavirus BJ01				iedb-taxon:10002316	SARS-CoV1	
+NCBITaxon:228415	SARS coronavirus CUHK-W1				iedb-taxon:10002316	SARS-CoV1	
+NCBITaxon:229992	SARS coronavirus Frankfurt 1				iedb-taxon:10002316	SARS-CoV1	
+NCBITaxon:233044	SARS coronavirus GD01				iedb-taxon:10002316	SARS-CoV1	
+NCBITaxon:235088	SARS coronavirus HSR 1				iedb-taxon:10002316	SARS-CoV1	
+NCBITaxon:235173	SARS coronavirus Shanhgai LY (SARS coronavirus Hong Kong ZY-2003)				iedb-taxon:10002316	SARS-CoV1	
+NCBITaxon:253433	SARS coronavirus PUMC01				iedb-taxon:10002316	SARS-CoV1	
+NCBITaxon:255729	SARS coronavirus Sino3-11				iedb-taxon:10002316	SARS-CoV1	
+NCBITaxon:260550	SARS coronavirus CUHK-L2				iedb-taxon:10002316	SARS-CoV1	
+NCBITaxon:262338	SARS coronavirus GD03T0013				iedb-taxon:10002316	SARS-CoV1	
+NCBITaxon:264371	SARS coronavirus TW-HP1				iedb-taxon:10002316	SARS-CoV1	
+NCBITaxon:264376	SARS coronavirus TW-KC1				iedb-taxon:10002316	SARS-CoV1	
+NCBITaxon:273522	SARS coronavirus LLJ-2004				iedb-taxon:10002316	SARS-CoV1	
+NCBITaxon:299335	SARS coronavirus B039				iedb-taxon:10002316	SARS-CoV1	
+NCBITaxon:304858	SARS coronavirus A022				iedb-taxon:10002316	SARS-CoV1	
+NCBITaxon:312027	SARS coronavirus WH20				iedb-taxon:10002316	SARS-CoV1	
+NCBITaxon:344702	SARS coronavirus ZJ0301				iedb-taxon:10002316	SARS-CoV1	
+NCBITaxon:421444	SARS coronavirus TJ01 (SARS coronavirus strain TJ01)				iedb-taxon:10002316	SARS-CoV1	
+NCBITaxon:511429	SARS coronavirus BJ182-12				iedb-taxon:10002316	SARS-CoV1	
+NCBITaxon:511430	SARS coronavirus BJ182-4				iedb-taxon:10002316	SARS-CoV1	
+NCBITaxon:511432	SARS coronavirus BJ182a				iedb-taxon:10002316	SARS-CoV1	
+NCBITaxon:627440	SARS coronavirus ExoN1				iedb-taxon:10002316	SARS-CoV1	
+NCBITaxon:627442	SARS coronavirus P2 (SARS coronavirus strain P2)				iedb-taxon:10002316	SARS-CoV1	
+NCBITaxon:633137	SARS coronavirus MA15 (Urbani derived)				iedb-taxon:10002316	SARS-CoV1	
+NCBITaxon:633140	SARS coronavirus MA15 ExoN1 (SARS coronavirus strain MA15 ExoN1)				iedb-taxon:10002316	SARS-CoV1	
+NCBITaxon:2708335	Pangolin coronavirus			species	iedb-taxon:10002316	SARS-CoV1	
+NCBITaxon:2697049	SARS-CoV2	GenBank acronym		species	NCBITaxon:2509511	Sarbecovirus	
+iedb-taxon:10002524	SARS-CoV2 Alpha	IEDB		lower	NCBITaxon:2697049	SARS-CoV2	
+iedb-taxon:10002394	Severe acute respiratory syndrome coronavirus 2 England/MIG457/2020	IEDB			iedb-taxon:10002524	SARS-CoV2 Alpha	
+iedb-taxon:10002417	Severe acute respiratory syndrome coronavirus 2 USA/CA_CDC_5574/2020	IEDB			iedb-taxon:10002524	SARS-CoV2 Alpha	
+iedb-taxon:10002441	Severe acute respiratory syndrome coronavirus 2 DEU/VeroE6_210226_P2/2021	IEDB			iedb-taxon:10002524	SARS-CoV2 Alpha	
+iedb-taxon:10002498	Severe acute respiratory syndrome coronavirus 2 Japan/QHN001/2020	IEDB			iedb-taxon:10002524	SARS-CoV2 Alpha	
+iedb-taxon:10002501	Severe acute respiratory syndrome coronavirus 2 England/204820464/2020	IEDB			iedb-taxon:10002524	SARS-CoV2 Alpha	
+iedb-taxon:10002511	Severe acute respiratory syndrome coronavirus 2 England/BristolplusE484K/2021	IEDB			iedb-taxon:10002524	SARS-CoV2 Alpha	
+iedb-taxon:10002521	Severe acute respiratory syndrome coronavirus 2 England/20I/501Y.V1.HMPP1/2020	IEDB			iedb-taxon:10002524	SARS-CoV2 Alpha	
+iedb-taxon:10002525	SARS-CoV2 Beta	IEDB		lower	NCBITaxon:2697049	SARS-CoV2	
+iedb-taxon:10002395	Severe acute respiratory syndrome coronavirus 2 England/H204661641/2020	IEDB			iedb-taxon:10002525	SARS-CoV2 Beta	
+iedb-taxon:10002418	Severe acute respiratory syndrome coronavirus 2 South Africa/KRISP-EC-K005321/2020	IEDB			iedb-taxon:10002525	SARS-CoV2 Beta	
+iedb-taxon:10002442	Severe acute respiratory syndrome coronavirus 2 DEU/Vero E6 cells/2021	IEDB			iedb-taxon:10002525	SARS-CoV2 Beta	
+iedb-taxon:10002403	Severe acute respiratory syndrome coronavirus 2 Belguim/hCoV105 19/rega-1920/2021	IEDB			iedb-taxon:10002525	SARS-CoV2 Beta	
+iedb-taxon:10002504	Severe acute respiratory syndrome coronavirus 2 USA/MD-HP01542/2021	IEDB			iedb-taxon:10002525	SARS-CoV2 Beta	
+iedb-taxon:10002481	Severe acute respiratory syndrome coronavirus 2 Infectious clone/Wash-B.1.351/2021	IEDB			iedb-taxon:10002525	SARS-CoV2 Beta	
+iedb-taxon:10002522	Severe acute respiratory syndrome coronavirus 2 South Africa/20I/501.V2.HV001/2020	IEDB			iedb-taxon:10002525	SARS-CoV2 Beta	
+iedb-taxon:10002530	SARS-CoV2 Delta	IEDB		lower	NCBITaxon:2697049	SARS-CoV2	
+iedb-taxon:10002500	Severe acute respiratory syndrome coronavirus 2 USA/WI-UW-5250/2021	IEDB			iedb-taxon:10002530	SARS-CoV2 Delta	
+iedb-taxon:10002513	Severe acute respiratory syndrome coronavirus 2 India/VUI21APR02/2021	IEDB			iedb-taxon:10002530	SARS-CoV2 Delta	
+iedb-taxon:10002480	Severe acute respiratory syndrome coronavirus 2 USA/PHC658/2021	IEDB			iedb-taxon:10002530	SARS-CoV2 Delta	
+iedb-taxon:10002526	SARS-CoV2 Epsilon	IEDB		lower	NCBITaxon:2697049	SARS-CoV2	
+iedb-taxon:10002402	Severe acute respiratory syndrome coronavirus 2 California/CAL.20C/2020	IEDB			iedb-taxon:10002526	SARS-CoV2 Epsilon	
+iedb-taxon:10002443	Severe acute respiratory syndrome coronavirus 2 USA/CA-CDC-STM-000017247/2021	IEDB			iedb-taxon:10002526	SARS-CoV2 Epsilon	
+iedb-taxon:10002516	Severe acute respiratory syndrome coronavirus 2 USA/CA-Stanford-02_S43/2021	IEDB			iedb-taxon:10002526	SARS-CoV2 Epsilon	
+iedb-taxon:10002527	SARS-CoV2 Eta	IEDB		lower	NCBITaxon:2697049	SARS-CoV2	
+iedb-taxon:10002512	Severe acute respiratory syndrome coronavirus 2 England/UK1188/2020	IEDB			iedb-taxon:10002527	SARS-CoV2 Eta	
+iedb-taxon:10002381	Severe acute respiratory syndrome coronavirus 2 USA/CA-CZB-1072/2020	IEDB			iedb-taxon:10002527	SARS-CoV2 Eta	
+iedb-taxon:10002528	SARS-CoV2 Gamma	IEDB		lower	NCBITaxon:2697049	SARS-CoV2	
+iedb-taxon:10002396	Severe acute respiratory syndrome coronavirus 2 VOC-202101/02	IEDB			iedb-taxon:10002528	SARS-CoV2 Gamma	
+iedb-taxon:10002419	Severe acute respiratory syndrome coronavirus 2 Japan/TY7-503/2021	IEDB			iedb-taxon:10002528	SARS-CoV2 Gamma	
+iedb-taxon:10002520	Severe acute respiratory syndrome coronavirus 2 USA/MDH-0841/2021	IEDB			iedb-taxon:10002528	SARS-CoV2 Gamma	
+iedb-taxon:10002482	Severe acute respiratory syndrome coronavirus 2 Infectious clone/Wash-B.1.1.28/2021	IEDB			iedb-taxon:10002528	SARS-CoV2 Gamma	
+iedb-taxon:10002499	Severe acute respiratory syndrome coronavirus 2 Japan/TY7-501/2021	IEDB			iedb-taxon:10002528	SARS-CoV2 Gamma	
+iedb-taxon:10002529	SARS-CoV2 Iota	IEDB		lower	NCBITaxon:2697049	SARS-CoV2	
+iedb-taxon:10002424	Severe acute respiratory syndrome coronavirus 2 USA/NY-NP-DOH1/2021	IEDB			iedb-taxon:10002529	SARS-CoV2 Iota	
+iedb-taxon:10002534	SARS-CoV2 Kappa	IEDB		lower	NCBITaxon:2697049	SARS-CoV2	
+iedb-taxon:10002425	Severe acute respiratory syndrome coronavirus 2 India/MAR/CNRST-IND2/2021	IEDB			iedb-taxon:10002534	SARS-CoV2 Kappa	
+iedb-taxon:10002479	Severe acute respiratory syndrome coronavirus 2 USA/CA-Stanford-15_S02/2021	IEDB			iedb-taxon:10002534	SARS-CoV2 Kappa	
+iedb-taxon:10002514	Severe acute respiratory syndrome coronavirus 2 Recombinant/NR55495/2021	IEDB			iedb-taxon:10002534	SARS-CoV2 Kappa	
+iedb-taxon:10002531	SARS-CoV2 Lambda	IEDB		lower	NCBITaxon:2697049	SARS-CoV2	
+iedb-taxon:10002517	Severe acute respiratory syndrome coronavirus 2 Recombinant/NR55615/2021	IEDB			iedb-taxon:10002531	SARS-CoV2 Lambda	
+iedb-taxon:10002546	SARS-CoV2 Other	IEDB		lower	NCBITaxon:2697049	SARS-CoV2	
+iedb-taxon:10002329	Severe acute respiratory syndrome coronavirus 2 USA-WA1/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002320	Severe acute respiratory syndrome coronavirus 2 Shenzhen/SZTH-003/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002321	Severe acute respiratory syndrome coronavirus 2 Wuhan/IVDC-HB-01/2019	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002322	Severe acute respiratory syndrome coronavirus 2 Shenzhen/SZTH-004/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002323	Severe acute respiratory syndrome coronavirus 2 France/IDF0372/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002324	Severe acute respiratory syndrome coronavirus 2 Wuhan/WIV04/2019	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002325	Severe acute respiratory syndrome coronavirus 2 CHN/SH01/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002326	Severe acute respiratory syndrome coronavirus 2 Wuhan/AMMS01/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002327	Severe acute respiratory syndrome coronavirus 2 Wuhan/IVDC-HB-envF13/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002330	Severe acute respiratory syndrome coronavirus 2 Australia/VIC01/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002380	Severe acute respiratory syndrome coronavirus 2 ITA/INMI1/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002332	Severe acute respiratory syndrome coronavirus 2 Victoria/01/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002370	Severe acute respiratory syndrome coronavirus 2 Wuhan/Hu-1/2019	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002335	Severe acute respiratory syndrome coronavirus 2 Taiwan/CGMH-CGU-01/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002334	Severe acute respiratory syndrome coronavirus 2 HKG/HKU-001a/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002343	Severe acute respiratory syndrome coronavirus 2 Belgium/GHB-03021/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002344	Severe acute respiratory syndrome coronavirus 2 China/WH-09/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002348	Severe acute respiratory syndrome coronavirus 2 Munich isolate 984	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002349	Severe acute respiratory syndrome coronavirus 2 England/02/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002374	Severe acute respiratory syndrome coronavirus 2 Korea/KCDC03/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002375	Severe acute respiratory syndrome coronavirus 2 South Korea/KUMC17/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002376	Severe acute respiratory syndrome coronavirus 2 South Korea/NMC-nCoV02/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002382	Severe acute respiratory syndrome coronavirus 2 Germany/BavPat1/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002404	Severe acute respiratory syndrome coronavirus 2 Beijing/IMEBJ01/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002412	Severe acute respiratory syndrome coronavirus 2 Canada/ONON-VIDO-01-2/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002415	Severe acute respiratory syndrome coronavirus 2 France/IDF0571/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002485	Severe acute respiratory syndrome coronavirus 2 Columbia/MedellinUdeA1/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002486	Severe acute respiratory syndrome coronavirus 2 Liverpool/REMRQ0001/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002489	Severe acute respiratory syndrome coronavirus 2 Switzerland/GE9586/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002490	Severe acute respiratory syndrome coronavirus 2 Denmark/MinkVariant16/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002492	Severe acute respiratory syndrome coronavirus 2 Jiangsu/JS02/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002493	Severe acute respiratory syndrome coronavirus 2 Beijing/IMEBJ05MASCp6/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002494	Severe acute respiratory syndrome coronavirus 2 USA/IL-CDC-02983522-001/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002495	Severe acute respiratory syndrome coronavirus 2 Egypt/NRC-03/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002497	Severe acute respiratory syndrome coronavirus 2 Tokyo/UT-NCGM02/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002505	Severe acute respiratory syndrome coronavirus 2 China/CAS-B001/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002457	Severe acute respiratory syndrome coronavirus 2 Ohio/667H/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002391	Severe acute respiratory syndrome coronavirus 2 Germany/Heinsberg-01/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002458	Severe acute respiratory syndrome coronavirus 2 ITA/INMI4/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002393	Severe acute respiratory syndrome coronavirus 2 Munster/FI110320/1/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002413	Severe acute respiratory syndrome coronavirus 2 Netherlands/1363454NL/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002523	Severe acute respiratory syndrome coronavirus 2 Taiwan/4/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002456	Severe acute respiratory syndrome coronavirus 2 Denmark/MinkCluster5/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002478	Severe acute respiratory syndrome coronavirus 2 Scotland/CVR2224/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002509	Severe acute respiratory syndrome coronavirus 2 Uganda/A23.1/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002405	Severe acute respiratory syndrome coronavirus 2 Australia/VIC2089/2020	IEDB			iedb-taxon:10002546	SARS-CoV2 Other	
+iedb-taxon:10002563	SARS-CoV2 Zeta	IEDB		lower	NCBITaxon:2697049	SARS-CoV2	
+iedb-taxon:10002515	Severe acute respiratory syndrome coronavirus 2 USA/CA-VRLC012/2021	IEDB			iedb-taxon:10002563	SARS-CoV2 Zeta	
+NCBITaxon:2720068	unclassified Sarbecovirus	NCBI Taxonomy scientific name		upper	NCBITaxon:2509511	Sarbecovirus	
+iedb-taxon:694002-other	Other Betacoronavirus	IEDB		upper	NCBITaxon:694002	Betacoronavirus	
+iedb-taxon:11118-other	Other Coronavirus	IEDB		upper	NCBITaxon:11118	Coronavirus	
+NCBITaxon:694013	Gammacoronavirus	NCBI Taxonomy scientific name		upper	iedb-taxon:11118-other	Other Coronavirus	
+iedb-taxon:10002040-other	Other RNA virus	IEDB		upper	iedb-taxon:10002040	RNA virus	
+NCBITaxon:10880	Reovirus	singular of NCBI Taxonomy scientific name			iedb-taxon:10002040	RNA virus	
+NCBITaxon:12283	Nodavirus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002040	RNA virus	
+NCBITaxon:76803	Arterivirus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002040	RNA virus	
+NCBITaxon:28344	Porcine reproductive and respiratory syndrome virus	NCBI Taxonomy scientific name			NCBITaxon:76803	Arterivirus	
+NCBITaxon:1678141	Hepatitis E virus	NCBI Taxonomy scientific name		upper	iedb-taxon:10002040	RNA virus	
+NCBITaxon:10995	Infectious bursal disease virus (Gumboro virus)				iedb-taxon:10002040	RNA virus	
+NCBITaxon:11002	Infectious pancreatic necrosis virus (infectious pancreatic necrosis virus IPNV)				iedb-taxon:10002040	RNA virus	
+NCBITaxon:11041	Rubella virus				iedb-taxon:10002040	RNA virus	
+NCBITaxon:11244	Pneumoviridae (Pneumovirinae)			upper	iedb-taxon:10002040	RNA virus	
+NCBITaxon:11250	Human respiratory syncytial virus	NCBI Taxonomy scientific name			NCBITaxon:11244	Pneumoviridae (Pneumovirinae)	
+NCBITaxon:11318	Thogotovirus dhoriense (Dhori thogotovirus)			species	iedb-taxon:10002040	RNA virus	
+NCBITaxon:11577	La Crosse virus (Bunyavirus la crosse)				iedb-taxon:10002040	RNA virus	
+NCBITaxon:11588	Rift Valley fever virus				iedb-taxon:10002040	RNA virus	
+NCBITaxon:11589	Rift valley fever virus (STRAIN ZH-548 M12)				iedb-taxon:10002040	RNA virus	
+NCBITaxon:11976	Rabbit hemorrhagic disease virus (Rabbit haemorrhagic disease virus)			species	iedb-taxon:10002040	RNA virus	
+NCBITaxon:11978	Feline calicivirus (Feline vesivirus)			species	iedb-taxon:10002040	RNA virus	
+NCBITaxon:12455	Borna disease virus (Borna disease virus BDV)			species	iedb-taxon:10002040	RNA virus	
+NCBITaxon:12701	Human astrovirus 2 (Human astrovirus serotype 2 H-Ast2)				iedb-taxon:10002040	RNA virus	
+NCBITaxon:35305	California encephalitis virus (California bunyavirus group)				iedb-taxon:10002040	RNA virus	
+NCBITaxon:82659	Sapporo virus-Manchester (Manchester virus)				iedb-taxon:10002040	RNA virus	
+NCBITaxon:83810	Thosea asigna virus (Setothosea asigna virus)			species	iedb-taxon:10002040	RNA virus	
+NCBITaxon:234603	Sapovirus Mc114				iedb-taxon:10002040	RNA virus	
+NCBITaxon:292348	Canine calicivirus (strain 48)				iedb-taxon:10002040	RNA virus	
+NCBITaxon:707882	Duck astrovirus 1				iedb-taxon:10002040	RNA virus	
+NCBITaxon:1003835	Severe fever with thrombocytopenia syndrome virus (SFTS bunyavirus)				iedb-taxon:10002040	RNA virus	
+NCBITaxon:1133363	Schmallenberg virus				iedb-taxon:10002040	RNA virus	
+NCBITaxon:1239567	Mamastrovirus 3 (Porcine astrovirus)			species	iedb-taxon:10002040	RNA virus	
+NCBITaxon:1885248	Variegated squirrel bornavirus 1				iedb-taxon:10002040	RNA virus	
+NCBITaxon:1980519	Crimean-Congo hemorrhagic fever orthonairovirus				iedb-taxon:10002040	RNA virus	
+iedb-taxon:10239-other	Other Virus	IEDB		upper	NCBITaxon:10239	Virus	
+NCBITaxon:131567	cellular organisms				OBI:0100026	Organism	
+NCBITaxon:32644	Unidentified	NCBI Taxonomy scientific name		upper	NCBITaxon:1	Root	
+NCBITaxon:28384	other sequences	NCBI Taxonomy scientific name		upper	NCBITaxon:1	Root	
+NCBITaxon:36549	Plasmid	singular of NCBI Taxonomy scientific name			NCBITaxon:28384	other sequences	
+NCBITaxon:81077	Artificial sequence	NCBI Taxonomy scientific name			NCBITaxon:28384	other sequences	
+iedb-taxon:10002311	Canine Distemper Virus strain Rockborn	IEDB			NCBITaxon:3052342	Morbillivirus canis	
+NCBITaxon:351091	Oscillibacter valericigenes			species	iedb-taxon:186802-other	Other Eubacteriales	
+iedb-taxon:10000461	Canine distemper virus FXNO	IEDB			NCBITaxon:3052342	Morbillivirus canis	
+iedb-taxon:10001616	Guanarito virus strain INH-95551	IEDB			NCBITaxon:3052307	Mammarenavirus guanaritoense (Guanarito arenavirus)	
+iedb-taxon:10002797	Crimean-Congo hemorrhagic fever virus strain Afg09-2990	IEDB			NCBITaxon:3052518	Orthonairovirus haemorrhagiae	
+iedb-taxon:10002568	Crimean-Congo hemorrhagic fever virus Oman 199809166	IEDB			NCBITaxon:3052518	Orthonairovirus haemorrhagiae	
+iedb-taxon:10002810	Canine distemper virus strain NJ(11)2	IEDB			NCBITaxon:3052342	Morbillivirus canis	
+iedb-taxon:10002779	Lassa Virus Soromba-R (Lassa virus (strain Soromba-R))	IEDB			NCBITaxon:3052310	Mammarenavirus lassaense	
+iedb-taxon:10002764	Mus musculus HLA-B*44:01 Tg	IEDB			iedb-taxon:10001564	Mus musculus HLA-B Transgenic	
+NCBITaxon:1586324	Porcine deltacoronavirus				NCBITaxon:1965089	Coronavirus HKU15	
+iedb-taxon:10000492	Lymphocytic choriomeningitis virus ESC	IEDB			NCBITaxon:3052303	Mammarenavirus choriomeningitidis	
+iedb-taxon:10001238	Puumala virus (strain Umea/hu)	IEDB			NCBITaxon:3052493	Orthohantavirus puumalaense	
+iedb-taxon:10001617	Whitewater Arroyo virus strain AV9310135	IEDB			NCBITaxon:3052331	Mammarenavirus whitewaterense (Whitewater Arroyo mammarenavirus)	
+NCBITaxon:2978683	Burkholderia orbicola			species	NCBITaxon:87882	Burkholderia cepacia complex	
+NCBITaxon:3052307	Mammarenavirus guanaritoense (Guanarito arenavirus)			species	NCBITaxon:1653394	Mammarenavirus	
+iedb-taxon:10000483	Puumala virus CG18-20	IEDB			NCBITaxon:3052493	Orthohantavirus puumalaense	
+iedb-taxon:10001885	Pichinde virus AN3739	IEDB			NCBITaxon:2905917	Pichinde virus	
+iedb-taxon:10001020	Peste-des-petits-ruminants virus (strain Nigeria 75/1)	IEDB			NCBITaxon:2593991	Peste des petits ruminants virus	
+iedb-taxon:10002123	Peste-des-petits-ruminants virus China/Tibet/Geg/07-30	IEDB			NCBITaxon:2593991	Peste des petits ruminants virus	
+iedb-taxon:10002566	Crimean-Congo hemorrhagic fever virus Turkey 200406546	IEDB			NCBITaxon:3052518	Orthonairovirus haemorrhagiae	
+iedb-taxon:10000493	Lymphocytic choriomeningitis virus UBC	IEDB			NCBITaxon:3052303	Mammarenavirus choriomeningitidis	
+NCBITaxon:2905917	Pichinde virus				NCBITaxon:1653394	Mammarenavirus	
+NCBITaxon:674529	Bacteroides faecis			species	NCBITaxon:816	Bacteroides	
+NCBITaxon:3042615	Paraglaciecola sp. T6c (Paraglaciecola atlantica T6c)			species	iedb-taxon:1236-other	Other Gammaproteobacterium	
+iedb-taxon:10002871	Lassa Virus NIG08-A41 (Lassa virus (strain Nig08-A19))	IEDB			NCBITaxon:3052310	Mammarenavirus lassaense	
+iedb-taxon:10001980	Mus musculus Ob.1A12 TCR Tg	IEDB			iedb-taxon:10001539	Mus musculus TCR transgenic	
+iedb-taxon:10002780	Lassa Virus TGO2016 (Lassa virus (strain TGO2016))	IEDB			NCBITaxon:3052310	Mammarenavirus lassaense	
+iedb-taxon:10001336	Mus musculus MS2-3C8 TCR Tg	IEDB			iedb-taxon:10001539	Mus musculus TCR transgenic	
+NCBITaxon:88431	Dorea longicatena			species	iedb-taxon:186802-other	Other Eubacteriales	
+iedb-taxon:10000489	Lymphocytic choriomeningitis virus 8.7B23	IEDB			NCBITaxon:3052303	Mammarenavirus choriomeningitidis	
+iedb-taxon:10002310	Canine Distemper Virus strain PS	IEDB			NCBITaxon:3052342	Morbillivirus canis	
+NCBITaxon:3052331	Mammarenavirus whitewaterense (Whitewater Arroyo mammarenavirus)			species	NCBITaxon:1653394	Mammarenavirus	
+NCBITaxon:1812858	Anaerosacchariphilus polymeriproducens			species	iedb-taxon:186802-other	Other Eubacteriales	
+iedb-taxon:10000532	Peste-des-petits-ruminants virus Sungri-96	IEDB			NCBITaxon:2593991	Peste des petits ruminants virus	
+iedb-taxon:10002256	Peste-des-petits-ruminants virus Ivory Coast 1989	IEDB			NCBITaxon:2593991	Peste des petits ruminants virus	
+iedb-taxon:10001618	Pichinde virus strain Munchique	IEDB			NCBITaxon:2905917	Pichinde virus	
+iedb-taxon:10002763	Mus musculus HLA-A*11:01 Tg	IEDB			iedb-taxon:10001563	Mus musculus HLA-A Transgenic	
+iedb-taxon:10002793	Lassa Virus Nig08-A19 (Lassa virus (strain Nig08-A19))	IEDB			NCBITaxon:3052310	Mammarenavirus lassaense	
+iedb-taxon:10000484	Puumala virus Kazan	IEDB			NCBITaxon:3052493	Orthohantavirus puumalaense	
+iedb-taxon:10000490	Lymphocytic choriomeningitis virus A22.2b	IEDB			NCBITaxon:3052303	Mammarenavirus choriomeningitidis	
+iedb-taxon:10000544	Sin Nombre virus NM H10	IEDB			NCBITaxon:3052499	Orthohantavirus sinnombreense	
+iedb-taxon:10000491	Lymphocytic choriomeningitis virus Docile	IEDB			NCBITaxon:3052303	Mammarenavirus choriomeningitidis	
+iedb-taxon:10002792	Lassa Virus LASV237-NIG-2010 (Lassa virus (strain LASV237-NIG-2010))	IEDB			NCBITaxon:3052310	Mammarenavirus lassaense	
+iedb-taxon:10002671	Lassa virus Pinneo (Lassa virus (strain Pinneo))	IEDB			NCBITaxon:3052310	Mammarenavirus lassaense	
+iedb-taxon:10001615	Machupo virus strain Carvallo	IEDB			NCBITaxon:3052317	Mammarenavirus machupoense (Machupo mammarenavirus)	
+iedb-taxon:10002567	Crimean-Congo hemorrhagic fever virus Kosova Hoti	IEDB			NCBITaxon:3052518	Orthonairovirus haemorrhagiae	
+iedb-taxon:10002682	Porcine Deltacoronavirus ZJ17HZ0102/2017	IEDB			NCBITaxon:1586324	Porcine deltacoronavirus	
+NCBITaxon:33025	Phascolarctobacterium faecium			species	iedb-taxon:1239-other	Other Firmicutes (low G+C Gram-positive bacteria)	
+NCBITaxon:3052317	Mammarenavirus machupoense (Machupo mammarenavirus)			species	NCBITaxon:1653394	Mammarenavirus	
+iedb-taxon:10002312	Canine Distemper Virus strain 3	IEDB			NCBITaxon:3052342	Morbillivirus canis	
+NCBITaxon:328814	Alistipes shahii			species	NCBITaxon:239759	Alistipes	
+iedb-taxon:10002791	Lassa Virus LP (Lassa virus (strain LP))	IEDB			NCBITaxon:3052310	Mammarenavirus lassaense	
+iedb-taxon:10002809	Canine distemper virus strain 851	IEDB			NCBITaxon:3052342	Morbillivirus canis	
+iedb-taxon:10002078	Mus musculus HLA-DP2 Tg	IEDB			iedb-taxon:10002846	Mus musculus HLA-DP Transgenic	

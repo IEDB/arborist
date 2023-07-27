@@ -1,0 +1,43 @@
+table	column	label	nulltype	datatype	structure	description
+table	table			label	unique	name of this table
+table	path			line		path to the TSV file for this table, relative to the table.tsv file
+table	type		empty	table_type		type of this table, used for tables with special meanings
+table	description		empty	text		a description of this table
+column	table			label	from(table.table)	the table that this column belongs to
+column	column			label		the name of this column
+column	nulltype		empty	word	from(datatype.datatype)	the datatype for NULL values in this column
+column	datatype			word	from(datatype.datatype)	the datatype for this column
+column	structure		empty	label		schema information for this column
+column	description		empty	text		a description of this column
+datatype	datatype			word	primary	the name of this datatype
+datatype	parent		empty	word	tree(datatype)	the parent datatype
+datatype	condition		empty	line		the method for testing the datatype
+datatype	description		empty	text		a description of this datatype
+datatype	SQL type		empty	sql_type		the SQL type for representing this data
+datatype	HTML type		empty	html_type		the HTML type for viewing and editing this data
+prefix	prefix			prefix	primary	prefixes used for CURIEs
+prefix	base			IRI	unique	base IRIs used with prefixes
+iedb_taxa	iedb_id			iedb_tax_id	primary	the IEDB taxon ID, starting at 10,000,000
+iedb_taxa	label			label	unique	the label for the IEDB taxon
+iedb_taxa	parent_ids			iedb_tax_ids		a comma-separated list of parent taxa
+iedb_taxa	rank			label		the rank of the IEDB taxon
+iedb_taxa	synonyms		empty	semicolon_labels		a list of IEDB's synonyms, separated by semicolons
+organism_core	curie			tax_id	primary	the NCBI or IEDB taxon ID
+organism_core	label			label	unique	the label for this taxon
+organism_core	label_source			label		the source of the label for this taxon
+organism_core	parent			tax_id	tree(curie)	the ID of the parent of this taxon
+organism_core	parent_label			label	tree(label)	the label of the parent of this taxon
+organism_core	level			taxon_level		the level of the taxon: upper, species, lower
+organism_core	use_other		empty	boolean		true when an "Other X" node should collect outliers for this taxon
+organism_tree_tsv	curie			taxon_CURIE	primary	the CURIE for this taxon
+organism_tree_tsv	label			label	unique	the label for this taxon
+organism_tree_tsv	label_source			label		the source for this label
+organism_tree_tsv	rank		empty	label		the taxonomic rank for this taxon
+organism_tree_tsv	level		empty	taxon_level		the level of the taxon: upper, species, lower
+organism_tree_tsv	epitope_count			natural_number		the number of epitopes in IEDB for this taxon
+organism_tree_tsv	parent			CURIE	tree(curie)	the parent for this taxon
+organism_tree_tsv	parent_label			label	tree(label)	the label of the parent
+organism_tree_tsv	species		empty	CURIE		the species that this taxon belongs to (if any)
+organism_tree_tsv	species_label		empty	label		the label of the species
+organism_tree_tsv	source_table			label		the table that this node was generated from
+organism_tree_tsv	use_other		empty	boolean		true when an "Other X" node should collect outliers for this taxon

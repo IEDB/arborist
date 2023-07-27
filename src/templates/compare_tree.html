@@ -1,0 +1,60 @@
+{% extends "page.html" %}
+{% block content %}
+
+<h3 style="padding-top: 6pt">
+  <a href="{{ page.root }}{{ table_name }}/NCBITaxon:1">{{ table_name }}</a>
+  <span class="text-secondary">{{ subject }}</span>
+  {{ label }}
+</h3>
+
+<div class="pt-2 gap-2">
+  <div class="dropdown" style="display: inline-block">
+    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+      View
+    </button>
+    <ul class="dropdown-menu">
+      {% if 'NCBITaxon:' in subject %}
+      <li>
+        <a class="dropdown-item" href="https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?mode=Info&id={{ subject|replace('NCBITaxon:','')
+        }}">Official NCBI Taxonomy</a>
+      </li>
+      {% endif %}
+      <li><a class="dropdown-item" href="{{ page.root }}ncbitaxon/{{ subject }}">Our NCBI Taxonomy</a></li>
+      <li><a class="dropdown-item" href="{{ page.root }}organism_tree_old/{{ subject }}">Old Organism Tree</a></li>
+      <li><a class="dropdown-item" href="{{ page.root }}organism_tree/{{ subject }}">New Organism Tree</a></li>
+      <li><a class="dropdown-item" href="{{ page.root }}ncbitaxon organism_tree/{{ subject }}">NCBI Taxonomy vs New
+          Organism Tree</a></li>
+      <li><a class="dropdown-item" href="{{ page.root }}organism_tree_old organism_tree/{{ subject }}">Old vs New
+          Organism Tree</a></li>
+      <li><a class="dropdown-item"
+          href="{{ page.root }}upper?ID=eq.&quot;{{ subject|replace('NCBITaxon:', '')|replace('iedb-taxon:', '') }}&quot;">Upper
+          Table</a></li>
+      <li><a class="dropdown-item" href="{{ page.root }}active_taxa?curie=eq.&quot;{{ subject }}&quot;">Active-Taxa
+          Table</a></li>
+    </ul>
+  </div>
+  <a class="btn btn-secondary" role="button"
+    href="../upper?view=form&ID={{ subject|replace('NCBITaxon:','')|replace('iedb-taxon:','') }}&Label={{ label }}">Add
+    to Upper</a>
+</div>
+
+
+<div class="row">
+  <div class="col">
+    {{ tree1|safe }}
+  </div>
+  <div class="col">
+    {{ tree2|safe }}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    {{ predicate_map1|safe }}
+  </div>
+  <div class="col">
+    {{ predicate_map2|safe }}
+  </div>
+</div>
+
+{% endblock %}

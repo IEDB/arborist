@@ -1,0 +1,22 @@
+[nanobot]
+config_version = 1
+
+[logging]
+level = "DEBUG"
+
+[database]
+connection = "build/nanobot.db"
+
+[assets]
+path = "build/"
+
+[templates]
+path = "src/templates/"
+
+[actions.rebuild]
+label = "Rebuild New Organism Tree"
+commands = [
+  ["make", "save"],
+  ["make", "build/organism-tree.built"],
+  ["make", "reload"]
+]
