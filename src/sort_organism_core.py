@@ -24,6 +24,11 @@ def sort_rows(rows, tree, curie):
     '''Given rows, tree, and a CURIE,
     walk the tree depth-first
     and return the sorted list of rows.'''
+    # Update parent label
+    parent = rows[curie]['parent']
+    if parent:
+        rows[curie]['parent_label'] = rows[parent]['label']
+
     output = [rows[curie]]
     if len(tree[curie]) > 0:
         for child in tree[curie]:

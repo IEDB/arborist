@@ -127,8 +127,8 @@
                 <li><a class="dropdown-item" href="{{ page.root }}organism_tree/NCBITaxon:1">New Organism Tree</a>
                 <li><a class="dropdown-item" href="{{ page.root }}ncbitaxon organism_tree/NCBITaxon:1">Latest NCBI
                     Taxonomy vs New Organism Tree</a></li>
-                <li><a class="dropdown-item" href="{{ page.root }}organism_tree_old organism_tree/NCBITaxon:1">Old
-                    Organism Tree vs New Organism Tree</a>
+                <li><a class="dropdown-item" href="{{ page.root }}organism_tree_old organism_tree/NCBITaxon:1">Old vs
+                    New Organism Tree</a>
                 </li>
               </ul>
             </li>
@@ -252,7 +252,7 @@
         parent.className = parentCls + " is-invalid";
       }
     }
-    $('.typeahead').each(function () {configure_typeahead_form(this, "{{ table_name }}");});
+    $('.typeahead').each(function () {configure_typeahead_form(this, "{{ table2_name or table_name }}");});
     $('#tree-typeahead-form').bind('typeahead:selected', function (evt, item) {
       window.location = `{{ page.root|safe }}{{ table_name }}/${item.id}`;
     })
@@ -279,6 +279,15 @@
       });
     });
     {% endif %}
+
+    organism_core = $('[resource="iedb-taxon:source-table"]')
+      .next()
+      .find('li:contains("organism_core")')
+    if (organism_core.length > 0) {
+      $('#add-to-organism-core').hide();
+    } else {
+      $('#view-in-organism-core').hide();
+    }
   </script>
   {% block body_end %}{% endblock %}
 </body>

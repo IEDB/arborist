@@ -95,7 +95,17 @@ def copy_triples(con):
     '''Given a database connection,
     for each subject in the 'organism_tree' table,
     copy the relevant triples from the 'ncbitaxon' table.'''
-    con.execute('''
+    exclude = [
+        'rdfs:subClassOf',
+        'rdf:type',
+        'rdfs:label',
+        'oio:hasDbXref',
+        'oio:hasOBONamespace',
+        'ncbitaxon:has_rank',
+    ]
+    exclude = '","'.join(exclude)
+    exclude = f'"{exclude}"'
+    con.execute(f'''
     INSERT INTO organism_tree
     SELECT
         1 AS asserted,
@@ -108,7 +118,7 @@ def copy_triples(con):
         annotation
     FROM ncbitaxon
     WHERE subject IN (SELECT subject FROM organism_tree)
-      AND predicate NOT IN ("rdfs:subClassOf", "rdf:type", "rdfs:label")
+      AND predicate NOT IN ({exclude})
     ''')
 
 
@@ -143,13 +153,14 @@ def main():
             triples += [
                 [curie, 'rdf:type', 'owl:Class'],
                 [curie, 'rdfs:label', row['label'], 'xsd:string'],
+                [curie, 'iedb-taxon:label-source', row['label_source'], 'xsd:string'],
                 [curie, 'iedb-taxon:level', row['level'], 'xsd:string'],
                 [curie, 'iedb-taxon:source-table', row['source_table'], 'xsd:string'],
             ]
             if row['epitope_count']:
                 triples.append([curie, 'iedb-taxon:epitope-count', row['epitope_count'], 'xsd:integer']),
             if row['rank']:
-                triples.append([curie, 'ncbitaxon:has-rank', row['rank'], 'xsd:string'])
+                triples.append([curie, 'ncbitaxon:has_rank', row['rank'], 'xsd:string'])
             if row['parent']:
                 triples.append([curie, 'rdfs:subClassOf', row['parent']])
         write_triples(con, 'organism_tree', triples)

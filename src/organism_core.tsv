@@ -44,8 +44,8 @@ NCBITaxon:28221	Deltaproteobacterium	singular of NCBI Taxonomy scientific name		
 NCBITaxon:29547	Epsilonproteobacterium	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:2-other	Other Bacteria	
 NCBITaxon:203691	Spirochaete	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:2-other	Other Bacteria	
 NCBITaxon:544448	Tenericutes	NCBI Taxonomy scientific name		upper	iedb-taxon:2-other	Other Bacteria	
-NCBITaxon:823	Parabacteroides distasonis			species	iedb-taxon:2-other	Other Bacterium	
-NCBITaxon:1796646	Muribaculum intestinale			species	iedb-taxon:2-other	Other Bacterium	
+NCBITaxon:823	Parabacteroides distasonis			species	iedb-taxon:2-other	Other Bacteria	
+NCBITaxon:1796646	Muribaculum intestinale			species	iedb-taxon:2-other	Other Bacteria	
 NCBITaxon:2759	Eukaryote	singular of NCBI Taxonomy scientific name		upper	OBI:0100026	Organism	TRUE
 NCBITaxon:5794	Apicomplexan	singular of NCBI Taxonomy scientific name		upper	NCBITaxon:2759	Eukaryote	
 NCBITaxon:5811	Toxoplasma gondii	NCBI Taxonomy scientific name		species	NCBITaxon:5794	Apicomplexan	
@@ -128,11 +128,11 @@ NCBITaxon:9443	Primate	singular of NCBI Taxonomy scientific name		upper	NCBITaxo
 NCBITaxon:9527	Cercopithecid (Old World monkey)	singular of NCBI Taxonomy scientific name (singular of GenBank common name)		upper	NCBITaxon:9443	Primate	
 NCBITaxon:9539	Macaca (macaque)	NCBI Taxonomy scientific name (singular of GenBank common name)		upper	NCBITaxon:9527	Cercopithecid (Old World monkey)	
 NCBITaxon:9554	Papio (baboon)	NCBI Taxonomy scientific name (singular of GenBank common name)		upper	NCBITaxon:9527	Cercopithecid (Old World monkey)	
-NCBITaxon:314295	Hominoid	singular of NCBI Taxonomy scientific name (NCBI common name)		upper	NCBITaxon:9443	Primate	
-NCBITaxon:9593	Gorilla gorilla	NCBI Taxonomy scientific name		species	NCBITaxon:314295	Hominoid	
-NCBITaxon:9600	Pongo pygmaeus (Bornean orangutan)	NCBI Taxonomy scientific name (GenBank common name)		species	NCBITaxon:314295	Hominoid	
-NCBITaxon:9601	Pongo abelii (Sumatran orangutan)	NCBI Taxonomy scientific name (GenBank common name)		species	NCBITaxon:314295	Hominoid	
-NCBITaxon:9606	Homo sapiens (human)	NCBI Taxonomy scientific name (GenBank common name)		species	NCBITaxon:314295	Hominoid	
+NCBITaxon:314295	Hominoid (ape)	singular of NCBI Taxonomy scientific name (NCBI common name)		upper	NCBITaxon:9443	Primate	
+NCBITaxon:9593	Gorilla gorilla	NCBI Taxonomy scientific name		species	NCBITaxon:314295	Hominoid (ape)	
+NCBITaxon:9600	Pongo pygmaeus (Bornean orangutan)	NCBI Taxonomy scientific name (GenBank common name)		species	NCBITaxon:314295	Hominoid (ape)	
+NCBITaxon:9601	Pongo abelii (Sumatran orangutan)	NCBI Taxonomy scientific name (GenBank common name)		species	NCBITaxon:314295	Hominoid (ape)	
+NCBITaxon:9606	Homo sapiens (human)	NCBI Taxonomy scientific name (GenBank common name)		species	NCBITaxon:314295	Hominoid (ape)	
 NCBITaxon:9479	Platyrrhini (New World monkey)	NCBI Taxonomy scientific name (singular of GenBank common name)		upper	NCBITaxon:9443	Primate	
 NCBITaxon:9481	Callithrix (marmoset)	NCBI Taxonomy scientific name (common name)		upper	NCBITaxon:9479	Platyrrhini (New World monkey)	
 NCBITaxon:9486	Saguinus (tamarin)	NCBI Taxonomy scientific name (common name)		upper	NCBITaxon:9479	Platyrrhini (New World monkey)	
@@ -166,7 +166,7 @@ NCBITaxon:4637	Musaceae (banana family)			upper	iedb-taxon:10002038	Monocot
 NCBITaxon:40552	Asparagaceae (asparagus family)			upper	iedb-taxon:10002038	Monocot	
 NCBITaxon:82070	Squilla maritima			species	iedb-taxon:10002038	Monocot	
 NCBITaxon:476176	Moraea pallida			species	iedb-taxon:10002038	Monocot	
-NCBITaxon:3318	Pinaceae (pine family)	NCBI Taxonomy scientific name (NCBI common name)		upper	NCBITaxon:58024	Spermatophyte	
+NCBITaxon:3318	Pinaceae (pine family)	NCBI Taxonomy scientific name (NCBI common name)		upper	NCBITaxon:58024	Spermatophyta (seed plant)	
 NCBITaxon:3346	Pinus pinea (parasol pine)			species	NCBITaxon:3318	Pinaceae (pine family)	
 NCBITaxon:3352	Pinus taeda (loblolly pine)			species	NCBITaxon:3318	Pinaceae (pine family)	
 NCBITaxon:71647	Pinus pinaster (cluster pine)			species	NCBITaxon:3318	Pinaceae (pine family)	

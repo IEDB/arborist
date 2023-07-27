@@ -22,18 +22,24 @@
       <li><a class="dropdown-item" href="{{ page.root }}ncbitaxon/{{ subject }}">Our NCBI Taxonomy</a></li>
       <li><a class="dropdown-item" href="{{ page.root }}organism_tree_old/{{ subject }}">Old Organism Tree</a></li>
       <li><a class="dropdown-item" href="{{ page.root }}organism_tree/{{ subject }}">New Organism Tree</a></li>
+      <li><a class="dropdown-item" href="{{ page.root }}organism_tree_tsv?curie=eq.&quot;{{ subject }}&quot;">New
+          Organism Tree Table</a></li>
       <li><a class="dropdown-item" href="{{ page.root }}ncbitaxon organism_tree/{{ subject }}">NCBI Taxonomy vs New
           Organism Tree</a></li>
       <li><a class="dropdown-item" href="{{ page.root }}organism_tree_old organism_tree/{{ subject }}">Old vs New
           Organism Tree</a></li>
-      <li><a class="dropdown-item" href="{{ page.root }}organism_core?curie=eq.&quot;{{ subject }}&quot;">Organism Core
-          Table</a></li>
-      <li><a class="dropdown-item" href="{{ page.root }}active_taxa?curie=eq.&quot;{{ subject }}&quot;">Active-Taxa
-          Table</a></li>
     </ul>
   </div>
-  <a class="btn btn-secondary" role="button" href="../organism_core?view=form&curie={{ subject }}&label={{ label }}">Add
-    to Organism Core Table</a>
+  <a id="add-to-organism-core" class="btn btn-primary" role="button"
+    href="{{ page.root }}organism_core?view=form&curie={{ subject }}&label={{ label }}">Add to Organism Core</a>
+  <a id="view-in-organism-core" class="btn btn-success" role="button"
+    href="{{ page.root }}organism_core?curie=eq.&quot;{{ subject }}&quot;">View in
+    Organism Core</a>
+  {% if table_name != 'ncbitaxon' %}
+  <form class="form" style="display: inline-block;">
+    <input id="tree-typeahead-form" class="search typeahead" type="input" placeholder="Search New Organism Tree..." />
+  </form>
+  {% endif %}
 </div>
 
 

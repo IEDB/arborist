@@ -108,7 +108,7 @@ build/organism-tree.tsv: build/ncbitaxon.built src/assign_species.py src/organis
 	python $(word 2, $^) $(DB) $(filter %.tsv, $^) $@
 
 # Build a new organism tree
-build/organism-tree.built: build/ncbitaxon.built src/build_organism_tree.py build/organism-tree.tsv
+build/organism-tree.built: build/ncbitaxon.built src/build_organism_tree.py build/organism-tree.tsv build/organism_core.html
 	sqlite3 $(DB) "DROP TABLE IF EXISTS organism_tree"
 	python $(word 2, $^) $(DB) $(filter %.tsv, $^)
 	# sqlite3 $(DB) "ANALYZE"
