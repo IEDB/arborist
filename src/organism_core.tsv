@@ -11,8 +11,9 @@ NCBITaxon:1239	Bacillota (Firmicutes)	NCBI Taxonomy scientific name		upper	NCBIT
 NCBITaxon:91061	Bacillus [class]	IEDB		upper	NCBITaxon:1239	Bacillota (Firmicutes)	
 NCBITaxon:1279	Staphylococcus	NCBI Taxonomy scientific name		upper	NCBITaxon:91061	Bacillus [class]	
 NCBITaxon:1350	Enterococcus	NCBI Taxonomy scientific name		upper	NCBITaxon:91061	Bacillus [class]	
-NCBITaxon:1386	Bacillus [genus]	IEDB		upper	NCBITaxon:91061	Bacillus [class]	
 NCBITaxon:1578	Lactobacillus	NCBI Taxonomy scientific name		upper	NCBITaxon:91061	Bacillus [class]	
+NCBITaxon:1385	Bacillales	NCBI Taxonomy scientific name		upper	NCBITaxon:91061	Bacillus [class]	
+NCBITaxon:1386	Bacillus [genus]	IEDB		upper	NCBITaxon:1385	Bacillales	
 NCBITaxon:186801	Clostridia	NCBI Taxonomy scientific name		upper	NCBITaxon:1239	Bacillota (Firmicutes)	
 NCBITaxon:1496	Clostridium difficile	GenBank common name		species	NCBITaxon:186801	Clostridia	
 NCBITaxon:213849	Campylobacterales	NCBI Taxonomy scientific name		upper	NCBITaxon:2	Bacteria	

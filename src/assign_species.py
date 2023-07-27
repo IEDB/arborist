@@ -335,6 +335,7 @@ def main():
                 'label_source': label_source,
                 'rank': rank,
                 'level': get_level(rank),
+                'epitope_count': row['count'],
                 'source_table': 'count',
             }
 

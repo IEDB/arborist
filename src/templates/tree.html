@@ -20,16 +20,14 @@
           Organism Tree</a></li>
       <li><a class="dropdown-item" href="{{ page.root }}organism_tree_old organism_tree/{{ subject }}">Old vs New
           Organism Tree</a></li>
-      <li><a class="dropdown-item"
-          href="{{ page.root }}upper?ID=eq.&quot;{{ subject|replace('NCBITaxon:', '')|replace('iedb-taxon:', '') }}&quot;">Upper
+      <li><a class="dropdown-item" href="{{ page.root }}organism_core?curie=eq.&quot;{{ subject }}&quot;">Organism Core
           Table</a></li>
       <li><a class="dropdown-item" href="{{ page.root }}active_taxa?curie=eq.&quot;{{ subject }}&quot;">Active-Taxa
           Table</a></li>
     </ul>
   </div>
-  <a class="btn btn-secondary" role="button"
-    href="../upper?view=form&ID={{ subject|replace('NCBITaxon:','')|replace('iedb-taxon:','') }}&Label={{ label }}">Add
-    to Upper</a>
+  <a class="btn btn-secondary" role="button" href="../organism_core?view=form&curie={{ subject }}&label={{ label }}">Add
+    to Organism Core Table</a>
   {% if table_name != 'ncbitaxon' %}
   <form class="form" style="display: inline-block;">
     <input id="tree-typeahead-form" class="search typeahead" type="input" placeholder="Search..." />

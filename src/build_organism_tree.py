@@ -147,7 +147,7 @@ def main():
                 [curie, 'iedb-taxon:source-table', row['source_table'], 'xsd:string'],
             ]
             if row['epitope_count']:
-                [curie, 'iedb-taxon:epitope-count', row['epitope_count'], 'xsd:integer'],
+                triples.append([curie, 'iedb-taxon:epitope-count', row['epitope_count'], 'xsd:integer']),
             if row['rank']:
                 triples.append([curie, 'ncbitaxon:has-rank', row['rank'], 'xsd:string'])
             if row['parent']:

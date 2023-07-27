@@ -257,22 +257,22 @@
       window.location = `{{ page.root|safe }}{{ table_name }}/${item.id}`;
     })
 
-    {% if table_name == 'upper' %}
-    // Complete upper parent ID from parent label
-    $.getJSON("{{ page.root|safe }}upper.json?limit=1000&shape=value_rows", function (data) {
+    {% if table_name == 'organism_core' %}
+    // Complete parent ID from parent label
+    $.getJSON("{{ page.root|safe }}organism_core.json?limit=1000&shape=value_rows", function (data) {
       // console.log("Setting up parent label typeahead", data);
-      $('[name="Parent ID"]').bind('typeahead:selected', function (evt, item) {
+      $('#parent-typeahead-form').bind('typeahead:selected', function (evt, item) {
         for (i in data) {
-          if (data[i].ID == item.id) {
-            $('[name="Parent Label"]').prop('value', data[i].Label);
+          if (data[i].curie == item.id) {
+            $('#parent_label-typeahead-form').prop('value', data[i].label);
             break
           }
         }
       });
-      $('[name="Parent Label"]').bind('typeahead:selected', function (evt, item) {
+      $('#parent_label-typeahead-form').bind('typeahead:selected', function (evt, item) {
         for (i in data) {
-          if (data[i].Label == item.id) {
-            $('[name="Parent ID"]').prop('value', data[i].ID);
+          if (data[i].label == item.id) {
+            $('#parent-typeahead-form').prop('value', data[i].curie);
             break
           }
         }

@@ -58,8 +58,9 @@ $(DB): | build
 .PHONY: save
 save: $(EXPORT) $(DB)
 	python3 $(EXPORT) data $(DB) src/schema/ table column datatype
+	python3 $(EXPORT) data $(DB) src/ organism_core
 	python3 $(EXPORT) data $(DB) build/ $$(grep build src/schema/table.tsv | cut -f1 | tr '\n' ' ')
-	python3 src/sort_upper.py build/upper.tsv
+	python3 src/sort_organism_core.py src/organism_core.tsv
 
 .PHONY: reload
 reload:
