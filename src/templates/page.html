@@ -223,7 +223,7 @@
           return a.order - b.order;
         },
         remote: {
-          url: `{{ page.root|safe }}${table}{% if tree %}/NCBITaxon:1{% endif %}?text=%QUERY&column=${col}&format=json`,
+          url: `{{ page.root|safe }}${table}{% if tree or tree1 %}/NCBITaxon:1{% endif %}?text=%QUERY&column=${col}&format=json`,
           wildcard: '%QUERY',
           transform: function (response) {
             // console.log("RES", response);
@@ -231,6 +231,7 @@
           }
         }
       });
+      url = `{{ page.root|safe }}${table}{% if tree or tree1 %}/NCBITaxon:1{% endif %}?text=%QUERY&column=${col}&format=json`
       $(node).typeahead({
         minLength: 0,
         hint: false,
@@ -253,8 +254,18 @@
         parent.className = parentCls + " is-invalid";
       }
     }
-    $('.typeahead').each(function () {configure_typeahead_form(this, "{{ table2_name or table_name }}");});
+    $('.typeahead').each(function () {configure_typeahead_form(this, "{{ table_name }}");});
+
     $('#tree-typeahead-form').bind('typeahead:selected', function (evt, item) {
+      window.location = `{{ page.root|safe }}{{ table_name }}/${item.id}`;
+    })
+
+    $('#tree1-typeahead-form').each(function () {configure_typeahead_form(this, "{{ table1_name }}");});
+    $('#tree1-typeahead-form').bind('typeahead:selected', function (evt, item) {
+      window.location = `{{ page.root|safe }}{{ table_name }}/${item.id}`;
+    })
+    $('#tree2-typeahead-form').each(function () {configure_typeahead_form(this, "{{ table2_name }}");});
+    $('#tree2-typeahead-form').bind('typeahead:selected', function (evt, item) {
       window.location = `{{ page.root|safe }}{{ table_name }}/${item.id}`;
     })
 
@@ -288,6 +299,9 @@
       $('#add-to-organism-core').hide();
     } else {
       $('#view-in-organism-core').hide();
+    }
+    if (!"{{ subject }}".startsWith("iedb-taxon:")) {
+      $('#view-in-iedb-taxa').hide();
     }
 
     $('td:contains("NCBITaxon:")').each(function () {

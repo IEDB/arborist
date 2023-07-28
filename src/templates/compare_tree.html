@@ -35,9 +35,14 @@
   <a id="view-in-organism-core" class="btn btn-success" role="button"
     href="{{ page.root }}organism_core?curie=eq.&quot;{{ subject }}&quot;">View in
     Organism Core</a>
+  <a id="view-in-iedb-taxa" class="btn btn-success" role="button"
+    href="{{ page.root }}iedb_taxa?iedb_id=eq.&quot;{{ subject|replace('iedb-taxon:','') }}&quot;">View in IEDB Taxa</a>
   {% if table_name != 'ncbitaxon' %}
   <form class="form" style="display: inline-block;">
-    <input id="tree-typeahead-form" class="search typeahead" type="input" placeholder="Search New Organism Tree..." />
+    <input id="tree1-typeahead-form" class="search" type="input" placeholder="Search {{ table1_name }}..." />
+  </form>
+  <form class="form" style="display: inline-block;">
+    <input id="tree2-typeahead-form" class="search" type="input" placeholder="Search {{ table2_name }}..." />
   </form>
   {% endif %}
 </div>
