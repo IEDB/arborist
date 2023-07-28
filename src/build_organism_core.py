@@ -1,5 +1,4 @@
 from argparse import ArgumentParser, FileType
-from assign_species import get_curie
 from sort_organism_core import read_core
 
 

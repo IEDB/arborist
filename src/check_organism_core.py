@@ -8,6 +8,44 @@ from assign_species import (
 )
 
 
+def check_tree(con, messages, row):
+    curie = row['curie']
+    if curie == 'NCBITaxon:1':
+        return
+
+    current = curie
+    found_root = False
+    while current:
+        # TODO: use WITH RECURSIVE query
+        parent = get_predicate(
+            con,
+            'rdfs:subClassOf',
+            current,
+            table='organism_tree'
+        )
+        if not parent:
+            break
+        if parent == 'NCBITaxon:1':
+            found_root = True
+            break
+        if parent == current:
+            print(f'Circular reference for {current}')
+            break
+        current = parent
+
+    if found_root:
+        return
+    messages.append({
+        'table': 'organism_core',
+        'row': row['row_number'],
+        'column': 'curie',
+        'value': curie,
+        'level': 'error',
+        'rule': 'check_organism_core: no path to root',
+        'message': 'Could not find a path to the root',
+    })
+
+
 def check_level(con, messages, row):
     if row['level']:
         return
@@ -61,6 +99,7 @@ def check_label(con, messages, row):
             'Maybe it was merged.'
         ),
     })
+
 
 def check_label_source_missing(con, messages, row):
     if row['label_source']:
@@ -120,14 +159,19 @@ def check_label_source_ncbi(con, messages, row):
         'level': 'warn',
         'rule': 'check_organism_core: label mismatch',
         'message': (
-            'Mismatching NCBI Taxonomy label: '
+            'Mismatching NCBI Taxonomy scientific name: '
             f'expected "{row["label"]}" found "{label}"'
         )
     })
+
     synonyms = get_synonyms(con, curie)
     for synonym_type, syns in synonyms.items():
         for synonym in syns:
-            if synonym == row['label']:
+            new_label = f'{label} ({synonym})'
+            syn_type = synonym_type
+            if synonym_type in synonym_types:
+                syn_type = synonym_types[synonym_type]
+            if new_label == row['label']:
                 messages.append({
                     'table': 'organism_core',
                     'row': row['row_number'],
@@ -135,7 +179,11 @@ def check_label_source_ncbi(con, messages, row):
                     'value': row['label_source'],
                     'level': 'info',
                     'rule': 'check_organism_core: label suggestion',
-                    'message': f'Found {synonym_type}: {synonym}',
+                    'message': (
+                        'Label source should be: '
+                        'NCBI Taxonony scientific name '
+                        f'({syn_type})'
+                    ),
                 })
 
 
@@ -170,6 +218,7 @@ def main():
         if not curie.startswith('NCBITaxon:'):
             continue
 
+        check_tree(con, messages, row)
         check_level(con, messages, row)
         check_label(con, messages, row)
         check_label_source_missing(con, messages, row)

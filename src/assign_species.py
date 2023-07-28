@@ -73,9 +73,9 @@ def get_other_curie(curie):
     return f'iedb-taxon:{taxon_id}-other'
 
 
-def get_predicate(con, predicate, curie):
+def get_predicate(con, predicate, curie, table='ncbitaxon'):
     cur = con.execute(
-        'SELECT object FROM ncbitaxon WHERE subject = ? AND predicate = ?',
+        f"SELECT object FROM '{table}' WHERE subject = ? AND predicate = ?",
         (curie, predicate)
     )
     res = cur.fetchone()
