@@ -129,6 +129,38 @@ def get_species(con, tree, curie):
         current = parent
 
 
+def get_synonyms(con, curie):
+    predicates = ['rdfs:label', 'oio:hasExactSynonym',
+                  'oio:hasRelatedSynonym', 'oio:hasBroadSynonym']
+    predicates = '","'.join(predicates)
+    predicates = f'"{predicates}"'
+    cur = con.execute(
+        'SELECT object, '
+        'json_extract('
+        'annotation, \'$."oio:hasSynonymType"[0].object\''
+        ') AS synonym_type '
+        'FROM ncbitaxon '
+        f'WHERE subject = ? AND predicate IN ({predicates})'
+        'ORDER BY object',
+        (curie,)
+    )
+
+    # Collect the synonyms by type and in alphabetical order
+    synonyms = {}
+    for result in cur.fetchall():
+        synonym = result[0]
+        synonym_type = result[1]
+        if not synonym_type:
+            continue
+        synonym_type = synonym_type.replace('ncbitaxon:', '')
+        if synonym_type not in synonyms:
+            synonyms[synonym_type] = [synonym]
+        else:
+            synonyms[synonym_type].append(synonym)
+
+    return synonyms
+
+
 def get_label_and_source(con, tree, curie):
     label = None
     label_source = None
@@ -138,39 +170,14 @@ def get_label_and_source(con, tree, curie):
     else:
         # TODO: common names, etc.
         label = get_predicate(con, 'rdfs:label', curie)
-        label_source = 'NCBI'
+        label_source = 'NCBI Taxonomy scientific name'
 
-        predicates = ['rdfs:label', 'oio:hasExactSynonym',
-                      'oio:hasRelatedSynonym', 'oio:hasBroadSynonym']
-        predicates = '","'.join(predicates)
-        predicates = f'"{predicates}"'
-        cur = con.execute(
-            'SELECT object, '
-            'json_extract('
-            'annotation, \'$."oio:hasSynonymType"[0].object\''
-            ') AS synonym_type '
-            'FROM ncbitaxon '
-            f'WHERE subject = ? AND predicate IN ({predicates})'
-            'ORDER BY object',
-            (curie,)
-        )
-
-        # Collect the synonyms by type and in alphabetical order
-        synonyms = {}
-        for result in cur.fetchall():
-            synonym = result[0]
-            synonym_type = result[1]
-            if not synonym_type:
-                continue
-            synonym_type = synonym_type.replace('ncbitaxon:', '')
-            if synonym_type not in synonym_types:
-                continue
-            if synonym_type not in synonyms:
-                synonyms[synonym_type] = synonym
         # Pick the best synonym type available
+        synonyms = get_synonyms(con, curie)
         for type, type_label in synonym_types.items():
             if type in synonyms:
-                synonym = synonyms[type]
+                synonyms[type].sort()
+                synonym = synonyms[type][0]
                 label = f'{label} ({synonym})'
                 label_source = (
                     f'NCBI Taxonomy scientific name ({type_label})'
@@ -304,7 +311,7 @@ def main():
     for curie in iedb_taxa:
         parent = tree[curie]['parent']
         if parent not in tree:
-            label, label_source = get_label_and_source(con, tree, curie)
+            label, label_source = get_label_and_source(con, tree, parent)
             rank = get_rank(con, parent)
             tree[parent] = {
                 'curie': parent,

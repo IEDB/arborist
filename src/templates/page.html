@@ -288,6 +288,19 @@
     } else {
       $('#view-in-organism-core').hide();
     }
+
+    $('td:contains("NCBITaxon:")').each(function () {
+      curie = $(this).contents().first().text().trim();
+      $(this).contents().first().replaceWith('<a href="{{ page.root|safe }}organism_tree_old organism_tree/' + curie + '">' + curie + '</a>');
+    })
+    $('td:contains("iedb-taxon:")').each(function () {
+      curie = $(this).contents().first().text().trim();
+      $(this).contents().first().replaceWith('<a href="{{ page.root|safe }}organism_tree_old organism_tree/' + curie + '">' + curie + '</a>');
+    })
+    $('td:contains("OBI:0100026")').each(function () {
+      curie = $(this).contents().first().text().trim();
+      $(this).contents().first().replaceWith('<a href="{{ page.root|safe }}organism_tree_old organism_tree/' + curie + '">' + curie + '</a>');
+    })
   </script>
   {% block body_end %}{% endblock %}
 </body>

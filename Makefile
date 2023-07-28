@@ -63,12 +63,13 @@ save: $(EXPORT) $(DB)
 	python3 src/sort_organism_core.py src/organism_core.tsv
 
 .PHONY: reload
-reload:
+reload: src/check_organism_core.py
 	sqlite3 $(DB) "DROP TABLE IF EXISTS 'column_conflict'"
 	sqlite3 $(DB) "DROP TABLE IF EXISTS 'column'"
 	sqlite3 $(DB) "DROP TABLE IF EXISTS 'datatype_conflict'"
 	sqlite3 $(DB) "DROP TABLE IF EXISTS 'datatype'"
 	$(NANOBOT) init
+	python3 $< $(DB)
 
 
 ### NCBI Taxonomy
