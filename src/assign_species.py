@@ -84,13 +84,22 @@ def get_predicate(con, predicate, curie, table='ncbitaxon'):
 
 
 def get_parents(con, tree, curie):
-    # TODO: multiple parents
+    parents = []
     if curie in tree:
-        if 'parents' in tree[curie]:
-            return tree[curie]['parents']
-        if 'parent' in tree[curie]:
-            return [tree[curie]['parent']]
-    return [get_predicate(con, 'rdfs:subClassOf', curie)]
+        row = tree[curie]
+        if 'parent' in row and row['parent']:
+            parents.append(row['parent'])
+        if 'parent2' in row and row['parent2']:
+            parents.append(row['parent2'])
+    if not parents:
+        cur = con.execute(
+            "SELECT object FROM 'ncbitaxon' "
+            'WHERE subject = ? AND predicate = "rdfs:subClassOf"',
+            (curie,)
+        )
+        for res in cur.fetchall():
+            parents.append(res[0])
+    return parents
 
 
 def get_parent(con, tree, curie):
@@ -290,7 +299,6 @@ def main():
         iedb_taxa.append(curie)
         rank = row['rank']
 
-        # TODO: multiple parents
         parents = []
         for id in row['parent_ids'].split(','):
             parents.append(get_curie(id))
@@ -306,10 +314,18 @@ def main():
             'iedb_synonyms': row['synonyms'],
             'source_table': 'iedb_taxa',
         }
+        if len(parents) == 2:
+            tree[curie]['parent2'] = parents[1]
+        elif len(parents) != 1:
+            print(
+                f'Wrong number of parents for {curie} {row["label"]}:',
+                parents
+            )
 
     # Add IEDB taxon parents and update parent labels
     for curie in iedb_taxa:
-        parent = tree[curie]['parent']
+        row = tree[curie]
+        parent = row['parent']
         if parent not in tree:
             label, label_source = get_label_and_source(con, tree, parent)
             rank = get_rank(con, parent)
@@ -321,7 +337,24 @@ def main():
                 'level': get_level(rank),
                 'source_table': 'iedb_taxa.parent',
             }
-        tree[curie]['parent_label'] = tree[parent]['label']
+        row['parent_label'] = tree[parent]['label']
+
+        if 'parent2' not in row or not row['parent2']:
+            continue
+
+        parent2 = row['parent2']
+        if parent2 not in tree:
+            label, label_source = get_label_and_source(con, tree, parent2)
+            rank = get_rank(con, parent2)
+            tree[parent2] = {
+                'curie': parent2,
+                'label': label,
+                'label_source': label_source,
+                'rank': rank,
+                'level': get_level(rank),
+                'source_table': 'iedb_taxa.parent2',
+            }
+        row['parent2_label'] = tree[parent2]['label']
 
     # Add all active taxa, and assign epitope counts
     for row in csv.DictReader(args.count, delimiter='\t'):
@@ -405,6 +438,7 @@ def main():
         'rank', 'level',
         'epitope_count',
         'parent', 'parent_label',
+        'parent2', 'parent2_label',
         'species', 'species_label',
         'source_table', 'use_other',
     ]

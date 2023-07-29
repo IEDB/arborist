@@ -126,6 +126,8 @@
                 </li>
                 <li><a class="dropdown-item" href="{{ page.root }}assets/organism_core.html">New Organism Core Tree</a>
                 <li><a class="dropdown-item" href="{{ page.root }}organism_tree/NCBITaxon:1">New Organism Tree</a>
+                <li><a class="dropdown-item" href="{{ page.root }}assets/organism-tree.owl">New Organism Tree OWL
+                    File</a>
                 <li><a class="dropdown-item" href="{{ page.root }}ncbitaxon organism_tree/NCBITaxon:1">Latest NCBI
                     Taxonomy vs New Organism Tree</a></li>
                 <li><a class="dropdown-item" href="{{ page.root }}organism_tree_old organism_tree/NCBITaxon:1">Old vs
@@ -315,6 +317,14 @@
     $('td:contains("OBI:0100026")').each(function () {
       curie = $(this).contents().first().text().trim();
       $(this).contents().first().replaceWith('<a href="{{ page.root|safe }}organism_tree_old organism_tree/' + curie + '">' + curie + '</a>');
+    })
+
+    $('[name="label_source"]').each(function () {
+      if ($(this).prop('value') == '') {
+        $(this).prop('value', 'NCBI Taxonony scientific name');
+        $(this).removeClass('is-invalid');
+        $(this).addClass('is-valid');
+      }
     })
   </script>
   {% block body_end %}{% endblock %}

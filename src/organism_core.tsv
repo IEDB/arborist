@@ -15,7 +15,9 @@ NCBITaxon:1578	Lactobacillus	NCBI Taxonomy scientific name		upper	NCBITaxon:9106
 NCBITaxon:1385	Bacillales	NCBI Taxonomy scientific name		upper	NCBITaxon:91061	Bacillus [class]	
 NCBITaxon:1386	Bacillus [genus]	IEDB		upper	NCBITaxon:1385	Bacillales	
 NCBITaxon:186801	Clostridia	NCBI Taxonomy scientific name		upper	NCBITaxon:1239	Bacillota (Firmicutes)	
-NCBITaxon:1496	Clostridium difficile	GenBank common name		species	NCBITaxon:186801	Clostridia	
+NCBITaxon:1485	Clostridium	NCBI Taxonomy scientific name		upper	NCBITaxon:186801	Clostridia	
+NCBITaxon:1496	Clostridium difficile	GenBank common name		species	NCBITaxon:1485	Clostridium	
+NCBITaxon:186802	Eubacteriales	NCBI Taxonomy scientific name		upper	NCBITaxon:186801	Clostridia	
 NCBITaxon:213849	Campylobacterales	NCBI Taxonomy scientific name		upper	NCBITaxon:2	Bacteria	
 NCBITaxon:204428	Chlamydiae	NCBI Taxonomy synonym		upper	NCBITaxon:2	Bacteria	
 NCBITaxon:32066	Fusobacteriota	NCBI Taxonomy scientific name		upper	NCBITaxon:2	Bacteria	
@@ -118,7 +120,6 @@ NCBITaxon:9788	Equid (horse)	singular of NCBI Taxonomy scientific name (singular
 NCBITaxon:314147	Glire (rodent or rabbit)	singular of NCBI Taxonomy scientific name (singular of GenBank common name)		upper	NCBITaxon:40674	Mammal	
 NCBITaxon:9986	Oryctolagus cuniculus (rabbit)	NCBI Taxonomy scientific name (GenBank common name)		species	NCBITaxon:314147	Glire (rodent or rabbit)	
 NCBITaxon:10008	Tamiasciurus	NCBI Taxonomy scientific name		upper	NCBITaxon:314147	Glire (rodent or rabbit)	
-NCBITaxon:10090	Mus musculus (mouse)	NCBI Taxonomy scientific name (NCBI common name)		species	NCBITaxon:314147	Glire (rodent or rabbit)	
 NCBITaxon:10114	Rattus (rat)	NCBI Taxonomy scientific name (NCBI common name)		upper	NCBITaxon:314147	Glire (rodent or rabbit)	
 NCBITaxon:10141	Cavia porcellus (guinea pig)	NCBI Taxonomy scientific name (NCBI common name)		species	NCBITaxon:314147	Glire (rodent or rabbit)	
 NCBITaxon:42414	Sigmodon (cotton rat)	NCBI Taxonomy scientific name (singular of GenBank common name)		upper	NCBITaxon:314147	Glire (rodent or rabbit)	
@@ -219,7 +220,7 @@ iedb-taxon:10002039	DNA virus	IEDB		upper	NCBITaxon:10239	Virus	TRUE
 NCBITaxon:10508	Adenovirus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002039	DNA virus	
 iedb-taxon:10002041	Bacteriophage (DNA)	IEDB		upper	iedb-taxon:10002039	DNA virus	
 NCBITaxon:10656	Tectiviridae (Tectivirus)	NCBI Taxonony scientific name (NCBI Taxonomy equivalent name)		upper	iedb-taxon:10002041	Bacteriophage (DNA)	
-NCBITaxon:10662	Myoviridae	NCBI Taxonomy scientific name		upper	iedb-taxon:10002041	Bacteriophage (DNA)	
+NCBITaxon:2731619	Caudoviricetes	NCBI Taxonomy scientific name		upper	iedb-taxon:10002041	Bacteriophage (DNA)	
 NCBITaxon:10699	Siphoviridae	NCBI Taxonomy scientific name		upper	iedb-taxon:10002041	Bacteriophage (DNA)	
 NCBITaxon:10744	Podoviridae	NCBI Taxonomy scientific name		upper	iedb-taxon:10002041	Bacteriophage (DNA)	
 NCBITaxon:10860	Inoviridae	NCBI Taxonomy scientific name		upper	iedb-taxon:10002041	Bacteriophage (DNA)	
@@ -507,7 +508,6 @@ NCBITaxon:1239567	Mamastrovirus 3 (Porcine astrovirus)	NCBI Taxonony scientific 
 NCBITaxon:1885248	Variegated squirrel bornavirus 1	NCBI Taxonomy scientific name		lower	iedb-taxon:10002040	RNA virus	
 NCBITaxon:1980519	Crimean-Congo hemorrhagic fever orthonairovirus	NCBI Taxonomy scientific name		species	iedb-taxon:10002040	RNA virus	
 iedb-taxon:10239-other	Other Virus	IEDB		upper	NCBITaxon:10239	Virus	
-NCBITaxon:131567	cellular organisms	NCBI Taxonomy scientific name		upper	OBI:0100026	Organism	
 NCBITaxon:32644	Unidentified	NCBI Taxonomy scientific name		upper	NCBITaxon:1	Root	
 NCBITaxon:28384	other sequences	NCBI Taxonomy scientific name		upper	NCBITaxon:1	Root	
 NCBITaxon:36549	Plasmid	singular of NCBI Taxonomy scientific name		upper	NCBITaxon:28384	other sequences	
@@ -536,6 +536,7 @@ iedb-taxon:10000493	Lymphocytic choriomeningitis virus UBC	IEDB		lower	NCBITaxon
 NCBITaxon:2905917	Pichinde virus	NCBI Taxonomy scientific name		lower	NCBITaxon:1653394	Mammarenavirus	
 NCBITaxon:674529	Bacteroides faecis	NCBI Taxonomy scientific name		species	NCBITaxon:816	Bacteroides	
 NCBITaxon:3042615	Paraglaciecola sp. T6c (Paraglaciecola atlantica T6c)	NCBI Taxonony scientific name (NCBI Taxonomy equivalent name)		species	iedb-taxon:1236-other	Other Gammaproteobacterium	
+NCBITaxon:10090	Mus musculus (mouse)	NCBI Taxonomy scientific name (NCBI common name)		species			
 iedb-taxon:10002871	Lassa Virus NIG08-A41 (Lassa virus (strain Nig08-A19))	IEDB		lower	NCBITaxon:3052310	Mammarenavirus lassaense	
 iedb-taxon:10001980	Mus musculus Ob.1A12 TCR Tg	IEDB		lower	iedb-taxon:10001539	Mus musculus TCR transgenic	
 iedb-taxon:10002780	Lassa Virus TGO2016 (Lassa virus (strain TGO2016))	IEDB		lower	NCBITaxon:3052310	Mammarenavirus lassaense	

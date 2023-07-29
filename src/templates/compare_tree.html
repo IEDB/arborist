@@ -37,14 +37,14 @@
     Organism Core</a>
   <a id="view-in-iedb-taxa" class="btn btn-success" role="button"
     href="{{ page.root }}iedb_taxa?iedb_id=eq.&quot;{{ subject|replace('iedb-taxon:','') }}&quot;">View in IEDB Taxa</a>
-  {% if table_name != 'ncbitaxon' %}
+  {% if table1_name != 'ncbitaxon' %}
   <form class="form" style="display: inline-block;">
     <input id="tree1-typeahead-form" class="search" type="input" placeholder="Search {{ table1_name }}..." />
   </form>
+  {% endif %}
   <form class="form" style="display: inline-block;">
     <input id="tree2-typeahead-form" class="search" type="input" placeholder="Search {{ table2_name }}..." />
   </form>
-  {% endif %}
 </div>
 
 

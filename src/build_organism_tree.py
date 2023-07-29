@@ -3,8 +3,6 @@ import logging
 import sqlite3
 
 from argparse import ArgumentParser, FileType
-from assign_species import get_curie
-from collections import defaultdict
 
 
 datatypes = ['_IRI', 'xsd:string', 'xsd:boolean', 'xsd:integer']
@@ -20,7 +18,9 @@ def write_triples(con, table, triples):
         elif len(triple) == 3:
             if ':' not in triple[2]:
                 raise Exception(
-                    'Object without datatype must be an IRI or CURIE: ', triple[2])
+                    'Object without datatype must be an IRI or CURIE: ',
+                    triple[2]
+                )
             triple.append('_IRI')
         elif len(triple) == 4 and triple[3] not in datatypes:
             raise Exception('Unexpected datatype in: ' + str(triple))
@@ -145,6 +145,11 @@ def main():
     else:
         logging.basicConfig(level=logging.WARNING, format=log_format)
 
+    synonym_type = (
+        '{"oio:hasSynonymType":['
+        '{"datatype":"xsd:string","meta":"owl:Axiom","object":"IEDB"}'
+        ']}'
+    )
     with sqlite3.connect(args.ldtab) as con:
         create_statement_table(con, 'organism_tree')
         triples = []
@@ -153,16 +158,32 @@ def main():
             triples += [
                 [curie, 'rdf:type', 'owl:Class'],
                 [curie, 'rdfs:label', row['label'], 'xsd:string'],
-                [curie, 'iedb-taxon:label-source', row['label_source'], 'xsd:string'],
+                [curie, 'iedb-taxon:label-source', row['label_source'],
+                    'xsd:string'],
                 [curie, 'iedb-taxon:level', row['level'], 'xsd:string'],
-                [curie, 'iedb-taxon:source-table', row['source_table'], 'xsd:string'],
+                [curie, 'iedb-taxon:source-table',
+                    row['source_table'], 'xsd:string'],
             ]
+            if row['iedb_synonyms']:
+                synonyms = [s.strip() for s in row['iedb_synonyms'].split(';')]
+                for synonym in synonyms:
+                    triples.append([
+                        curie,
+                        'oio:hasExactSynonym',
+                        synonym,
+                        'xsd:string',
+                        synonym_type,
+                    ]),
             if row['epitope_count']:
-                triples.append([curie, 'iedb-taxon:epitope-count', row['epitope_count'], 'xsd:integer']),
+                triples.append([curie, 'iedb-taxon:epitope-count',
+                               row['epitope_count'], 'xsd:integer']),
             if row['rank']:
-                triples.append([curie, 'ncbitaxon:has_rank', row['rank'], 'xsd:string'])
+                triples.append([curie, 'ncbitaxon:has_rank',
+                               row['rank'], 'xsd:string'])
             if row['parent']:
                 triples.append([curie, 'rdfs:subClassOf', row['parent']])
+            if row['parent2']:
+                triples.append([curie, 'rdfs:subClassOf', row['parent2']])
         write_triples(con, 'organism_tree', triples)
         copy_triples(con)
         index_statement_table(con, 'organism_tree')

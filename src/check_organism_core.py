@@ -13,28 +13,23 @@ def check_tree(con, messages, row):
     if curie == 'NCBITaxon:1':
         return
 
-    current = curie
-    found_root = False
-    while current:
-        # TODO: use WITH RECURSIVE query
-        parent = get_predicate(
-            con,
-            'rdfs:subClassOf',
-            current,
-            table='organism_tree'
+    cur = con.execute('''
+        WITH RECURSIVE ancestors(ancestor) AS (
+            VALUES (?)
+            UNION
+            SELECT object
+            FROM organism_tree, ancestors
+            WHERE organism_tree.subject = ancestors.ancestor
+              AND predicate = "rdfs:subClassOf"
         )
-        if not parent:
-            break
-        if parent == 'NCBITaxon:1':
-            found_root = True
-            break
-        if parent == current:
-            print(f'Circular reference for {current}')
-            break
-        current = parent
-
-    if found_root:
+        SELECT *
+        FROM ancestors
+        WHERE ancestor = "NCBITaxon:1";''',
+        (curie,)
+    )
+    if cur.fetchone():
         return
+
     messages.append({
         'table': 'organism_core',
         'row': row['row_number'],
@@ -43,6 +38,26 @@ def check_tree(con, messages, row):
         'level': 'error',
         'rule': 'check_organism_core: no path to root',
         'message': 'Could not find a path to the root',
+    })
+
+
+def check_parent(con, messages, row):
+    parent = row['parent']
+    if not parent:
+        return
+
+    label = get_predicate(con, 'rdfs:label', parent, table='organism_tree')
+    if label:
+        return
+
+    messages.append({
+        'table': 'organism_core',
+        'row': row['row_number'],
+        'column': 'parent',
+        'value': row['parent'],
+        'level': 'error',
+        'rule': 'check_organism_core: parent not in tree',
+        'message': 'The parent for this row is not in the organism tree',
     })
 
 
@@ -219,6 +234,7 @@ def main():
             continue
 
         check_tree(con, messages, row)
+        check_parent(con, messages, row)
         check_level(con, messages, row)
         check_label(con, messages, row)
         check_label_source_missing(con, messages, row)

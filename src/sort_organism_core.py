@@ -46,17 +46,9 @@ def main():
     fieldnames = list(sorted_rows[0].keys())
 
     missing = set(rows.keys()) - set([r['curie'] for r in sorted_rows])
-    missing_parents = {}
-    if len(missing) > 0:
-        for curie in missing:
-            row = rows[curie]
-            missing_parents[row['parent']] = row['parent_label']
-            print(f'Row not under root {curie} {row["label"]}')
-            sorted_rows.append(rows[curie])
-
-    print('MISSING PARENTS')
-    for curie, label in missing_parents.items():
-        print(curie, label)
+    print('INFO Rows without a path to Root:', len(missing))
+    for curie in missing:
+        sorted_rows.append(rows[curie])
 
     with open(args.core, 'w') as f:
         writer = csv.DictWriter(f, fieldnames,

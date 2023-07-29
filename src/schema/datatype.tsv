@@ -18,4 +18,4 @@ iedb_tax_id	natural_number	match(/1000\d{4}/)	an IEDB Taxonomy ID: a natural num
 iedb_tax_ids	line	match(/[\d,]+/)	a comma-separated list of IEDB Taxonomy IDs			
 tax_id	line	match(/(\d+|1000\d{4}|OBI:0100026)/)	an NCBI or IEDB taxon, or OBI 'organism'			
 taxon_CURIE	line	match(/(NCBITaxon:\d+|iedb-taxon:\d+(-other)?|OBI:0100026)/)	a CURIE for a NCBI or IEDB taxon, or OBI 'organism'			
-taxon_level	word	in('upper','species','lower')	the level of the taxon in the tree: upper, species, lower			
+taxon_level	word	in('upper','species','lower')	the level of the taxon in the tree: upper, species, lower			search

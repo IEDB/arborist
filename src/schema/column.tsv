@@ -25,10 +25,11 @@ iedb_taxa	synonyms		empty	semicolon_labels		a list of IEDB's synonyms, separated
 organism_core	curie			taxon_CURIE	primary	the NCBI or IEDB taxon ID
 organism_core	label			label	unique	the label for this taxon
 organism_core	label_source			label		the source of the label for this taxon
-organism_core	parent			taxon_CURIE	tree(curie)	the ID of the parent of this taxon
-organism_core	parent_label			label	tree(label)	the label of the parent of this taxon
+organism_core	iedb_synonyms		empty	semicolon_labels		a list of IEDB's synonyms, separated by semicolons
+organism_core	parent		empty	taxon_CURIE		the ID of the parent of this taxon
+organism_core	parent_label		empty	label		the label of the parent of this taxon
 organism_core	level			taxon_level		the level of the taxon: upper, species, lower
-organism_core	use_other		empty	boolean		true when an "Other X" node should collect outliers for this taxon
+organism_core	use_other		empty	boolean		true when an 'Other X' node should collect outliers for this taxon
 organism_tree_tsv	curie			taxon_CURIE	primary	the CURIE for this taxon
 organism_tree_tsv	label			label	unique	the label for this taxon
 organism_tree_tsv	label_source			label		the source for this label
@@ -37,7 +38,9 @@ organism_tree_tsv	level		empty	taxon_level		the level of the taxon: upper, speci
 organism_tree_tsv	epitope_count		empty	natural_number		the number of epitopes in IEDB for this taxon
 organism_tree_tsv	parent			CURIE		the parent for this taxon
 organism_tree_tsv	parent_label			label		the label of the parent
+organism_tree_tsv	parent2		empty	CURIE		the second parent for this taxon
+organism_tree_tsv	parent2_label		empty	label		the label of the second parent
 organism_tree_tsv	species		empty	CURIE		the species that this taxon belongs to (if any)
 organism_tree_tsv	species_label		empty	label		the label of the species
 organism_tree_tsv	source_table			label		the table that this node was generated from
-organism_tree_tsv	use_other		empty	boolean		true when an "Other X" node should collect outliers for this taxon
+organism_tree_tsv	use_other		empty	boolean		true when an 'Other X' node should collect outliers for this taxon
