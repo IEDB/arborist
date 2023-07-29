@@ -326,6 +326,10 @@
         $(this).addClass('is-valid');
       }
     })
+
+    {% if subject %}
+    $('[resource="{{ subject }}"]').css('font-weight', 'bold');
+    {% endif %}
   </script>
   {% block body_end %}{% endblock %}
 </body>
