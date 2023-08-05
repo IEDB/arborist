@@ -113,6 +113,12 @@ build/organism-tree.built: build/ncbitaxon.built src/build_organism_tree.py buil
 	# sqlite3 $(DB) "ANALYZE"
 	touch $@
 
+build/subspecies-tree.built: build/organism-tree.built src/build_subspecies_tree.py
+	sqlite3 $(DB) "DROP TABLE IF EXISTS subspecies_tree"
+	python $(word 2, $^) $(DB)
+	# sqlite3 $(DB) "ANALYZE"
+	touch $@
+
 build/organism-tree.ttl: build/organism-tree.built
 	rm -f $@
 	$(LDTAB) export $(DB) --table organism_tree $@
