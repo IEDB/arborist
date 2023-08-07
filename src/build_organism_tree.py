@@ -3,12 +3,13 @@ import logging
 import sqlite3
 
 from argparse import ArgumentParser, FileType
+from assign_species import get_taxon_id
 
 
 datatypes = ['_IRI', 'xsd:string', 'xsd:boolean', 'xsd:integer']
 
 
-def write_triples(con, table, triples):
+def insert_triples(con, table, triples):
     '''Given a SQLite database connection, a table name,
     and a list of triples to insert,
     insert those triples into the database table and commit.'''
@@ -60,6 +61,29 @@ def create_statement_table(con, table):
   'annotation' TEXT
 )''')
     con.commit()
+
+
+def insert_annotations(con, table):
+    '''Insert triples for annotation properties.'''
+    annotations = {
+        'ONTIE:0003615': 'has taxon ID',
+        'ONTIE:0003616': 'NCBI Taxonomy browser',
+        'ONTIE:0003617': 'has taxonomic rank',
+        'ONTIE:0003618': 'used in IEDB',
+        'oio:hasAlternativeId': 'has_alternative_id',
+        'oio:hasExactSynonym': 'has_exact_synonym',
+        'oio:hasBroadSynonym': 'has_broad_synonym',
+        'oio:hasRelatedSynonym': 'has_related_synonym',
+        'oio:hasLabelSource': 'has_label_source',
+        'oio:hasSynonymType': 'has_synonyms_type',
+    }
+    triples = []
+    for curie, label in annotations.items():
+        triples += [
+            [curie, 'rdf:type', 'owl:AnnotationProperty'],
+            [curie, 'rdfs:label', label, 'xsd:string'],
+        ]
+    insert_triples(con, table, triples)
 
 
 def index_statement_table(con, table):
@@ -152,6 +176,7 @@ def main():
     )
     with sqlite3.connect(args.ldtab) as con:
         create_statement_table(con, 'organism_tree')
+        insert_annotations(con, 'organism_tree')
         triples = []
         for row in csv.DictReader(args.organism_tree, delimiter='\t'):
             curie = row['curie']
@@ -164,6 +189,14 @@ def main():
                 [curie, 'iedb-taxon:source-table',
                     row['source_table'], 'xsd:string'],
             ]
+            taxon_id = get_taxon_id(curie)
+            if taxon_id:
+                triples.append(
+                    [curie, 'ONTIE:0003615', taxon_id, 'xsd:string'])
+                if curie.startswith('NCBITaxon:'):
+                    url = 'http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/'
+                    url += f'wwwtax.cgi?id={taxon_id}'
+                    triples.append([curie, 'ONTIE:0003616', url])
             if row['iedb_synonyms']:
                 synonyms = [s.strip() for s in row['iedb_synonyms'].split(';')]
                 for synonym in synonyms:
@@ -175,16 +208,19 @@ def main():
                         synonym_type,
                     ]),
             if row['epitope_count']:
-                triples.append([curie, 'iedb-taxon:epitope-count',
-                               row['epitope_count'], 'xsd:integer']),
+                triples += [
+                    [curie, 'iedb-taxon:epitope-count',
+                     row['epitope_count'], 'xsd:integer'],
+                    [curie, 'ONTIE:0003618', 'true', 'xsd:boolean'],
+                ]
             if row['rank']:
-                triples.append([curie, 'ncbitaxon:has_rank',
-                               row['rank'], 'xsd:string'])
+                triples.append(
+                    [curie, 'ONTIE:0003617', row['rank'], 'xsd:string'])
             if row['parent']:
                 triples.append([curie, 'rdfs:subClassOf', row['parent']])
             if row['parent2']:
                 triples.append([curie, 'rdfs:subClassOf', row['parent2']])
-        write_triples(con, 'organism_tree', triples)
+        insert_triples(con, 'organism_tree', triples)
         copy_triples(con)
         index_statement_table(con, 'organism_tree')
         # args.active_taxa.seek(0)

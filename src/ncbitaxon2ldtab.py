@@ -117,7 +117,7 @@ def convert_synonyms(tax_id, synonyms):
                 predicate,
                 synonym,
                 "xsd:string",
-                f"""{{"oio:hasSynonymType":[{{"datatype":"_IRI","meta":"owl:Axiom","object":"ncbitaxon:{synonym_type}"}}]}}"""
+                f"""{{"oio:hasSynonymType":[{{"datatype":"xsd:string","meta":"owl:Axiom","object":"{synonym_type}"}}]}}"""
             ])
     return pairs
 
@@ -175,7 +175,7 @@ def split_line(line):
 datatypes = ["_IRI", "xsd:string"]
 
 
-def write_triples(con, triples):
+def insert_triples(con, triples):
     for triple in triples:
         if len(triple) < 3:
             raise Exception("Not enough slots in triple: " + str(triple))
@@ -254,14 +254,14 @@ def convert(taxdmp_path, output_path, taxa=None):
         [s, "dct:license", "<https://creativecommons.org/publicdomain/zero/1.0/>"],
         [s, "rdfs:comment", "Built by https://github.com/obophenotype/ncbitaxon", "xsd:string"],
     ]
-    write_triples(con, triples)
+    insert_triples(con, triples)
 
     s = "obo:IAO_0000115"
     triples = [
         [s, "rdf:type", "owl:AnnotationProperty", "_IRI"],
         [s, "rdfs:label", "definition", "xsd:string"],
     ]
-    write_triples(con, triples)
+    insert_triples(con, triples)
 
     s = "ncbitaxon:has_rank"
     triples = [
@@ -271,7 +271,7 @@ def convert(taxdmp_path, output_path, taxa=None):
         [s, "rdfs:comment", "This is an abstract class for use with the NCBI taxonomy to name the depth of the node within the tree. The link between the node term and the rank is only visible if you are using an obo 1.3 aware browser/editor; otherwise this can be ignored", "xsd:string"],
         [s, "oio:hasOBONamespace", "ncbi_taxonomy", "xsd:string"],
     ]
-    write_triples(con, triples)
+    insert_triples(con, triples)
 
     for predicate, label in oio.items():
         s = f"oio:{predicate}"
@@ -279,7 +279,7 @@ def convert(taxdmp_path, output_path, taxa=None):
             [s, "rdf:type", "owl:AnnotationProperty"],
             [s, "rdfs:label", label, "xsd:string"],
         ]
-        write_triples(con, triples)
+        insert_triples(con, triples)
 
     for label, parent in predicates.items():
         predicate = label_to_id(label)
@@ -291,7 +291,7 @@ def convert(taxdmp_path, output_path, taxa=None):
             [s, "oio:hasScope", parent, "xsd:string"],
             [s, "rdfs:subPropertyOf", "oio:SynonymTypeProperty"],
         ]
-        write_triples(con, triples)
+        insert_triples(con, triples)
 
     with zipfile.ZipFile(taxdmp_path) as taxdmp:
         with taxdmp.open("names.dmp") as dmp:
@@ -360,7 +360,7 @@ def convert(taxdmp_path, output_path, taxa=None):
                     synonyms[tax_id],
                     citations[tax_id],
                 )
-                write_triples(con, triples)
+                insert_triples(con, triples)
 
         # TODO: delnodes
 
@@ -371,7 +371,7 @@ def convert(taxdmp_path, output_path, taxa=None):
         [s, "rdfs:comment", "This is an abstract class for use with the NCBI taxonomy to name the depth of the node within the tree. The link between the node term and the rank is only visible if you are using an obo 1.3 aware browser/editor; otherwise this can be ignored.", "xsd:string"],
         [s, "oio:hasOBONamespace", "ncbi_taxonomy", "xsd:string"],
     ]
-    write_triples(con, triples)
+    insert_triples(con, triples)
 
     for label in ranks:
         rank = label_to_id(label)
@@ -385,7 +385,7 @@ def convert(taxdmp_path, output_path, taxa=None):
             [s, "rdfs:subClassOf", "<http://purl.obolibrary.org/obo/NCBITaxon#_taxonomic_rank>"],
             [s, "oio:hasOBONamespace", "ncbi_taxonomy", "xsd:string"],
         ]
-        write_triples(con, triples)
+        insert_triples(con, triples)
 
 
 def main():

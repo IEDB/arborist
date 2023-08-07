@@ -116,62 +116,28 @@ build/organism-tree.built: build/ncbitaxon.built src/build_organism_tree.py buil
 build/subspecies-tree.built: build/organism-tree.built src/build_subspecies_tree.py
 	sqlite3 $(DB) "DROP TABLE IF EXISTS subspecies_tree"
 	python $(word 2, $^) $(DB)
-	# sqlite3 $(DB) "ANALYZE"
+	sqlite3 $(DB) "ANALYZE"
 	touch $@
 
 build/organism-tree.ttl: build/organism-tree.built
 	rm -f $@
 	$(LDTAB) export $(DB) --table organism_tree $@
 
+build/subspecies-tree.ttl: build/subspecies-tree.built
+	rm -f $@
+	$(LDTAB) export $(DB) --table subspecies_tree $@
 
+build/organism-tree.sorted.tsv: build/organism-tree.built
+	rm -f build/organism-tree.ldtab.tsv
+	$(LDTAB) export $(DB) --table organism_tree build/organism-tree.ldtab.tsv
+	cut -f4- build/organism-tree.ldtab.tsv | sort > $@
 
-# .PHONY: load
-# load: # src/schema/ build/organism-tree.owl build/subspecies-tree.owl build/protein-tree.owl
-# 	rm -rf $(NANOBOTDB)
-# 	$(NANOBOT) init
-# 	sqlite3 $(NANOBOTDB) < src/prefixes.sql
-# 	sed s/statement/organism_tree/g src/statement.sql | sqlite3 $(NANOBOTDB)
-# 	$(LDTAB) import $(NANOBOTDB) build/organism-tree.owl -t organism_tree
-# 	sed s/statement/subspecies_tree/g src/statement.sql | sqlite3 $(NANOBOTDB)
-# 	$(LDTAB) import $(NANOBOTDB) build/subspecies-tree.owl -t subspecies_tree
-# 	sed s/statement/protein_tree/g src/statement.sql | sqlite3 $(NANOBOTDB)
-# 	$(LDTAB) import $(NANOBOTDB) build/protein-tree.owl -t protein_tree
-# 	sqlite3 $(NANOBOTDB) ANALYZE
-
-# build/organism-tree.tsv: build/ldtab.db
-# 	rm -rf $@
-# 	$(LDTAB) export $< $@
-
-# build/organism-tree.sorted.tsv: build/organism-tree.tsv
-# 	sort $< > $@
-
-
-### Trees
-# Subset of NCBITaxonomy terms rebuilt to be easier for immunologists to browse
-
-#build/organism-tree.db: src/prefixes.sql src/build_tree.py build/ncbitaxon.db build/counts_full.tsv build/iedb_taxa.tsv build/ncbi_taxa.tsv build/taxon_parents.tsv build/top_level.tsv
-#	rm -rf $@
-#	sqlite3 $@ < $<
-#	python3 $(filter-out src/prefixes.sql,$^) $@ || (rm -rf $@ && exit 1)
-
-# build/subspecies-tree.db: src/prefixes.sql src/add_all_taxa.py build/organism-tree.db build/ncbitaxon.db build/ncbi_include.tsv
-# 	rm -rf $@
-# 	sqlite3 $@ < $<
-# 	python3 $(filter-out src/prefixes.sql,$^) $@ || (rm -rf $@ && exit 1)
-
-# build/%-tree.ttl: src/db2ttl.py build/%-tree.db
-# 	python3 $^ > $@
-
-# remove other organism, unclassifed, and bad SARS coronavirus node
 build/%-tree.owl: build/%-tree.ttl src/predicates.ttl
 	$(ROBOT) merge --input $< --input $(word 2,$^) \
 	annotate \
 	--ontology-iri https://ontology.iedb.org/ontology/$(notdir $@) \
 	--output $@
 
-
-### Other Products
-
-build/active-species.tsv: src/get_active_species.py build/organism-tree.db build/counts.tsv
-	python3 $^ $@
+build/active-species.tsv: src/get_active_species.py build/organism-tree.built
+	python3 $< $(DB) $@
 
