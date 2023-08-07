@@ -6,7 +6,10 @@ NCBITaxon:2	Bacteria	singular of NCBI Taxonomy scientific name		upper	OBI:010002
 NCBITaxon:201174	Actinobacterium	singular of NCBI Taxonomy scientific name		upper	NCBITaxon:2	Bacteria	
 NCBITaxon:1716	Corynebacterium	NCBI Taxonomy scientific name		upper	NCBITaxon:201174	Actinobacterium	
 NCBITaxon:1763	Mycobacterium	NCBI Taxonomy scientific name		upper	NCBITaxon:201174	Actinobacterium	
-NCBITaxon:1773	Mycobacterium tuberculosis	NCBI Taxonomy scientific name	M. tuberculosis;M tuberculosis;MTB;Tb	species	NCBITaxon:1763	Mycobacterium	
+NCBITaxon:77643	Mycobacterium tuberculosis complex (Mycobacterium complex)	NCBI Taxonony scientific name		upper	NCBITaxon:1763	Mycobacterium	
+NCBITaxon:1773	Mycobacterium tuberculosis	NCBI Taxonomy scientific name	M. tuberculosis;M tuberculosis;MTB;Tb	species	NCBITaxon:77643	Mycobacterium tuberculosis complex (Mycobacterium complex)	
+NCBITaxon:1764	Mycobacterium avium	NCBI Taxonony scientific name		upper	NCBITaxon:1763	Mycobacterium	
+NCBITaxon:1760	Actinomycetes (high G C Gram-positive bacteria)	NCBI Taxonony scientific name		upper	NCBITaxon:201174	Actinobacterium	
 NCBITaxon:1239	Bacillota (Firmicutes)	NCBI Taxonomy scientific name (NCBI Taxonomy equivalent name)		upper	NCBITaxon:2	Bacteria	
 NCBITaxon:91061	Bacillus [class]	IEDB		upper	NCBITaxon:1239	Bacillota (Firmicutes)	
 NCBITaxon:1279	Staphylococcus	NCBI Taxonomy scientific name		upper	NCBITaxon:91061	Bacillus [class]	
@@ -32,6 +35,8 @@ NCBITaxon:356	Rhizobiales	NCBI Taxonomy synonym		upper	NCBITaxon:28211	Alphaprot
 NCBITaxon:766	Rickettsiales	NCBI Taxonomy scientific name		upper	NCBITaxon:28211	Alphaproteobacterium	
 NCBITaxon:13687	Sphingomonas	NCBI Taxonomy scientific name		upper	NCBITaxon:28211	Alphaproteobacterium	
 NCBITaxon:28216	Betaproteobacterium	singular of NCBI Taxonomy scientific name		upper	NCBITaxon:1224	Proteobacterium (purple photosynthetic bacterium)	
+NCBITaxon:119060	Burkholderiaceae	NCBI Taxonony scientific name		upper	NCBITaxon:28216	Betaproteobacterium	
+NCBITaxon:2978683	Burkholderia orbicola	NCBI Taxonomy scientific name		species	NCBITaxon:119060	Burkholderiaceae	
 NCBITaxon:1236	Gammaproteobacterium	singular of NCBI Taxonomy scientific name		upper	NCBITaxon:1224	Proteobacterium (purple photosynthetic bacterium)	
 NCBITaxon:469	Acinetobacter	NCBI Taxonomy scientific name		upper	NCBITaxon:1236	Gammaproteobacterium	
 NCBITaxon:543	Enterobacteriaceae	NCBI Taxonomy scientific name		upper	NCBITaxon:1236	Gammaproteobacterium	
@@ -44,6 +49,9 @@ NCBITaxon:135623	Vibrionales	NCBI Taxonomy scientific name		upper	NCBITaxon:1236
 NCBITaxon:3042615	Paraglaciecola sp. T6c (Paraglaciecola atlantica T6c)	NCBI Taxonony scientific name (NCBI Taxonomy equivalent name)		species	NCBITaxon:1236	Gammaproteobacterium	
 NCBITaxon:724	Haemophilus	NCBI Taxonony scientific name		upper	NCBITaxon:1236	Gammaproteobacterium	
 NCBITaxon:629	Yersinia	NCBI Taxonony scientific name		upper	NCBITaxon:1236	Gammaproteobacterium	
+NCBITaxon:338	Xanthomonas	NCBI Taxonony scientific name		upper	NCBITaxon:1236	Gammaproteobacterium	
+NCBITaxon:445	Legionella	NCBI Taxonony scientific name		upper	NCBITaxon:1236	Gammaproteobacterium	
+NCBITaxon:22	Shewanella	NCBI Taxonony scientific name		upper	NCBITaxon:1236	Gammaproteobacterium	
 NCBITaxon:203692	Spirochaetia	NCBI Taxonomy scientific name		upper	NCBITaxon:2	Bacteria	
 iedb-taxon:2-other	Other Bacteria	IEDB		upper	NCBITaxon:2	Bacteria	
 NCBITaxon:976	Bacteroidete	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:2-other	Other Bacteria	
@@ -75,6 +83,9 @@ NCBITaxon:5543	Trichoderma	NCBI Taxonomy scientific name		upper	NCBITaxon:147538
 NCBITaxon:5599	Alternaria alternata	NCBI Taxonomy scientific name		species	NCBITaxon:147538	Pezizomycotina	
 NCBITaxon:5506	Fusarium	NCBI Taxonony scientific name		upper	NCBITaxon:147538	Pezizomycotina	
 NCBITaxon:5073	Penicillium	NCBI Taxonony scientific name		upper	NCBITaxon:147538	Pezizomycotina	
+NCBITaxon:5550	Trichophyton	NCBI Taxonony scientific name		upper	NCBITaxon:147538	Pezizomycotina	
+NCBITaxon:5455	Colletotrichum	NCBI Taxonony scientific name		upper	NCBITaxon:147538	Pezizomycotina	
+NCBITaxon:78156	Pseudogymnoascus	NCBI Taxonony scientific name		upper	NCBITaxon:147538	Pezizomycotina	
 NCBITaxon:1129544	Rhizophagus	NCBI Taxonomy scientific name		upper	NCBITaxon:4751	Fungus	
 NCBITaxon:4892	Saccharomycetales (budding yeast)	NCBI Taxonomy scientific name (singular of GenBank common name)		upper	NCBITaxon:4751	Fungus	
 NCBITaxon:4932	Saccharomyces cerevisiae (baker's yeast)	NCBI Taxonomy scientific name (GenBank common name)		species	NCBITaxon:4892	Saccharomycetales (budding yeast)	
@@ -307,8 +318,8 @@ NCBITaxon:11266	Filovirus	singular of NCBI Taxonomy scientific name		upper	iedb-
 NCBITaxon:11050	Flaviviridae family virus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002040	RNA virus	
 NCBITaxon:11051	Flavivirus	NCBI Taxonomy scientific name		upper	NCBITaxon:11050	Flaviviridae family virus	
 NCBITaxon:3052230	Hepatitis C virus	IEDB		species	NCBITaxon:11050	Flaviviridae family virus	
+NCBITaxon:578319	Recombinant HCV virus	singular of NCBI Taxonomy scientific name		lower	NCBITaxon:3052230	Hepatitis C virus	
 NCBITaxon:11095	Pestivirus	NCBI Taxonomy scientific name		upper	NCBITaxon:11050	Flaviviridae family virus	
-NCBITaxon:578319	Recombinant HCV virus	singular of NCBI Taxonomy scientific name		lower	NCBITaxon:11050	Flaviviridae family virus	
 NCBITaxon:3044782	Orthoflavivirus	NCBI Taxonony scientific name		upper	NCBITaxon:11050	Flaviviridae family virus	
 NCBITaxon:12475	Hepatitis delta virus (Hepatitis D virus)	NCBI Taxonony scientific name (NCBI Taxonomy equivalent name)		upper	iedb-taxon:10002040	RNA virus	
 iedb-taxon:10002045	Influenza virus	IEDB		upper	iedb-taxon:10002040	RNA virus	
@@ -324,6 +335,7 @@ NCBITaxon:12058	Picornavirus	singular of NCBI Taxonomy scientific name		upper	ie
 NCBITaxon:12110	Foot-and-mouth disease virus	NCBI Taxonomy scientific name		species	NCBITaxon:12058	Picornavirus	
 iedb-taxon:10002044	Plant virus (RNA)	IEDB		upper	iedb-taxon:10002040	RNA virus	
 NCBITaxon:2560196	Orthotospovirus	NCBI Taxonomy scientific name		upper	iedb-taxon:10002044	Plant virus (RNA)	
+NCBITaxon:3052571	Orthotospovirus citrullomaculosi	NCBI Taxonomy scientific name		species	NCBITaxon:2560196	Orthotospovirus	
 NCBITaxon:39729	Potyviridae	NCBI Taxonomy scientific name		upper	iedb-taxon:10002044	Plant virus (RNA)	
 NCBITaxon:39738	Tombusviridae	NCBI Taxonomy scientific name		upper	iedb-taxon:10002044	Plant virus (RNA)	
 NCBITaxon:39740	Bromoviridae	NCBI Taxonomy scientific name		upper	iedb-taxon:10002044	Plant virus (RNA)	
@@ -335,7 +347,6 @@ NCBITaxon:675064	Alphaflexiviridae	NCBI Taxonomy scientific name		upper	iedb-tax
 NCBITaxon:675068	Betaflexiviridae	NCBI Taxonomy scientific name		upper	iedb-taxon:10002044	Plant virus (RNA)	
 NCBITaxon:675071	Virgaviridae	NCBI Taxonomy scientific name		upper	iedb-taxon:10002044	Plant virus (RNA)	
 NCBITaxon:675072	Secoviridae	NCBI Taxonomy scientific name		upper	iedb-taxon:10002044	Plant virus (RNA)	
-NCBITaxon:3052571	Orthotospovirus citrullomaculosi	NCBI Taxonomy scientific name		species	iedb-taxon:10002044	Plant virus (RNA)	
 NCBITaxon:11632	Retrovirus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002040	RNA virus	
 NCBITaxon:11652	Primate lentivirus group	NCBI Taxonomy scientific name		upper	NCBITaxon:11632	Retrovirus	
 NCBITaxon:206037	Human endogenous retroviruses	NCBI Taxonony scientific name		upper	NCBITaxon:11632	Retrovirus	
@@ -544,7 +555,6 @@ NCBITaxon:28384	other sequences	NCBI Taxonomy scientific name		upper	NCBITaxon:1
 NCBITaxon:36549	Plasmid	singular of NCBI Taxonomy scientific name		upper	NCBITaxon:28384	other sequences	
 NCBITaxon:81077	Artificial sequence	NCBI Taxonomy scientific name		upper	NCBITaxon:28384	other sequences	
 iedb-taxon:10002311	Canine Distemper Virus strain Rockborn	IEDB		lower	NCBITaxon:3052342	Morbillivirus canis	
-NCBITaxon:119060	Burkholderiaceae	NCBI Taxonony scientific name		upper	NCBITaxon:1891241	Betaproteobacterium	
 iedb-taxon:10000461	Canine distemper virus FXNO	IEDB		lower	NCBITaxon:3052342	Morbillivirus canis	
 iedb-taxon:10001616	Guanarito virus strain INH-95551	IEDB		lower	NCBITaxon:3052307	Mammarenavirus guanaritoense (Guanarito arenavirus)	
 iedb-taxon:10002797	Crimean-Congo hemorrhagic fever virus strain Afg09-2990	IEDB		lower	NCBITaxon:3052518	Orthonairovirus haemorrhagiae	
@@ -555,7 +565,6 @@ iedb-taxon:10002764	Mus musculus HLA-B*44:01 Tg	IEDB		lower	iedb-taxon:10001564	
 NCBITaxon:1586324	Porcine deltacoronavirus	NCBI Taxonomy scientific name		lower	NCBITaxon:1965089	Coronavirus HKU15	
 iedb-taxon:10000492	Lymphocytic choriomeningitis virus ESC	IEDB		lower	NCBITaxon:3052303	Mammarenavirus choriomeningitidis	
 iedb-taxon:10001238	Puumala virus (strain Umea/hu)	IEDB		lower	NCBITaxon:3052493	Orthohantavirus puumalaense	
-NCBITaxon:2978683	Burkholderia orbicola	NCBI Taxonomy scientific name		species	NCBITaxon:119060	Burkholderiaceae	
 iedb-taxon:10000483	Puumala virus CG18-20	IEDB		lower	NCBITaxon:3052493	Orthohantavirus puumalaense	
 iedb-taxon:10001020	Peste-des-petits-ruminants virus (strain Nigeria 75/1)	IEDB		lower	NCBITaxon:2593991	Peste des petits ruminants virus	
 iedb-taxon:10002123	Peste-des-petits-ruminants virus China/Tibet/Geg/07-30	IEDB		lower	NCBITaxon:2593991	Peste des petits ruminants virus	
