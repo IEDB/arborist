@@ -13,7 +13,7 @@ path = "build/"
 [templates]
 path = "src/templates/"
 
-[actions.rebuild]
+[actions.rebuild_organism]
 label = "Rebuild New Organism Tree (~10s)"
 commands = [
   ["make", "save"],
@@ -21,10 +21,24 @@ commands = [
   ["make", "reload"]
 ]
 
-[actions.owl]
-label = "Rebuild New Organism Tree OWL file (~60s)"
+[actions.rebuild_subspecies]
+label = "Rebuild New Subspecies Tree (~20s)"
+commands = [
+  ["make", "save"],
+  ["make", "build/subspecies-tree.built"],
+]
+
+[actions.rebuild_organism_owl]
+label = "Rebuild New Organism Tree OWL file (~1m)"
 commands = [
   ["make", "save"],
   ["make", "build/organism-tree.owl"],
   ["make", "reload"]
+]
+
+[actions.rebuild_subspecies_owl]
+label = "Rebuild New Subspecies Tree OWL file (~6m)"
+commands = [
+  ["make", "save"],
+  ["make", "build/subspecies-tree.owl"],
 ]
