@@ -364,7 +364,7 @@ def main():
         elif curie.startswith('iedb-taxon:'):
             raise Exception(
                 'IEDB taxon should already have been added '
-                f'{curie} {row["label"]}'
+                f'{curie} {row.get("label") or "UNKNOWN"}'
             )
         else:
             label, label_source = get_label_and_source(con, tree, curie)

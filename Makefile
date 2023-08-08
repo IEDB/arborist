@@ -10,8 +10,7 @@ SHELL := bash
 .DELETE_ON_ERROR:
 .SUFFIXES:
 
-# all: build/organism-tree.owl build/subspecies-tree.owl build/active-species.tsv
-all: build/organism-tree.owl build/organism-tree-old.built
+all: build/organism-tree.owl build/subspecies-tree.owl build/active-species.tsv
 
 clean:
 	rm -rf build
@@ -75,7 +74,8 @@ reload: src/check_organism_core.py
 build/taxdmp.zip: | build
 	# curl -L -o $@ https://ftp.ncbi.nih.gov/pub/taxonomy/taxdmp.zip
 	# curl -L -o $@ https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump_archive/taxdmp_2023-06-01.zip
-	curl -L -o $@ https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump_archive/taxdmp_2023-07-01.zip
+	# curl -L -o $@ https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump_archive/taxdmp_2023-07-01.zip
+	curl -L -o $@ https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump_archive/taxdmp_2023-08-01.zip
 
 build/ncbitaxon.built: build/taxdmp.zip | $(DB)
 	sqlite3 $(DB) "DROP TABLE IF EXISTS ncbitaxon"
@@ -138,6 +138,6 @@ build/%-tree.owl: build/%-tree.ttl src/predicates.ttl
 	--ontology-iri https://ontology.iedb.org/ontology/$(notdir $@) \
 	--output $@
 
-build/active-species.tsv: src/get_active_species.py build/organism-tree.built
-	python3 $< $(DB) $@
+build/active-species.tsv: src/get_active_species.py build/organism-tree.built build/counts_full.tsv
+	python3 $< $(DB) build/counts_full.tsv $@
 
