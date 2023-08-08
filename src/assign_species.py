@@ -1,4 +1,5 @@
 import csv
+import json
 import logging
 import sqlite3
 
@@ -144,10 +145,7 @@ def get_synonyms(con, curie):
     predicates = '","'.join(predicates)
     predicates = f'"{predicates}"'
     cur = con.execute(
-        'SELECT object, '
-        'json_extract('
-        'annotation, \'$."oio:hasSynonymType"[0].object\''
-        ') AS synonym_type '
+        'SELECT object, annotation '
         'FROM ncbitaxon '
         f'WHERE subject = ? AND predicate IN ({predicates})'
         'ORDER BY object',
@@ -158,7 +156,11 @@ def get_synonyms(con, curie):
     synonyms = {}
     for result in cur.fetchall():
         synonym = result[0]
-        synonym_type = result[1]
+        try:
+            annotation = json.loads(result[1])
+            synonym_type = annotation['oio:hasSynonymType'][0]['object']
+        except Exception:
+            continue
         if not synonym_type:
             continue
         synonym_type = synonym_type.replace('ncbitaxon:', '')
