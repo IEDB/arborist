@@ -21,11 +21,21 @@ clean:
 build:
 	mkdir -p $@
 
-ROBOT := java -jar bin/robot.jar --prefix "iedb-taxon: https://ontology.iedb.org/taxon/" --prefix "ONTIE: https://ontology.iedb.org/ONTIE_"
-NANOBOT := /home/knocean/nanobot.rs/target/release/nanobot
+ROBOT := java -jar build/robot.jar --prefix "iedb-taxon: https://ontology.iedb.org/taxon/" --prefix "ONTIE: https://ontology.iedb.org/ONTIE_"
+LDTAB := java -jar build/ldtab.jar
+NANOBOT := build/nanobot
 EXPORT := build/export.py
-LDTAB := java -jar bin/ldtab.jar
 DB := build/nanobot.db
+
+build/robot.jar: | build
+	curl -L -o $@ "https://github.com/ontodev/robot/releases/download/v1.9.4/robot.jar"
+
+build/ldtab.jar: | build
+	curl -L -o $@ "https://github.com/ontodev/ldtab.clj/releases/download/v2022-05-23/ldtab.jar"
+
+build/nanobot: | build
+	-echo 'ERROR: Custom nanobot build required'
+	exit 1
 
 build/export.py: | build/
 	curl -L -o $@ "https://github.com/ontodev/valve.rs/raw/main/scripts/export.py"
