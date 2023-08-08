@@ -41,23 +41,6 @@ build/export.py: | build/
 	curl -L -o $@ "https://github.com/ontodev/valve.rs/raw/main/scripts/export.py"
 
 
-### IEDB Data
-
-# Tax ID -> epitope count
-build/counts.tsv: src/get-counts.sql | build
-	$(MIRROR_QUERY) < $< > $@
-
-build/ncbi_include.tsv: src/ncbi-active-taxa.sql | build
-	$(MIRROR_QUERY) < $< > $@
-
-# build/counts_full.tsv: src/combine_taxids.py build/counts.tsv build/ncbi_include.tsv
-# 	python3 $^ $@
-
-# Custom IEDB taxa
-# build/iedb_taxa.tsv: src/get-iedb-taxa.sql | build
-# 	$(MIRROR_QUERY) < $< > $@
-
-
 ### Nanobot Database
 
 $(DB): | build build/nanobot
