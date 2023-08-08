@@ -60,7 +60,7 @@ build/ncbi_include.tsv: src/ncbi-active-taxa.sql | build
 
 ### Nanobot Database
 
-$(DB): | build
+$(DB): | build build/nanobot
 	rm -f $@ build/*.built
 	$(NANOBOT) init
 
@@ -73,7 +73,7 @@ save: $(EXPORT) $(DB)
 
 DROPTABLES := active_species organism_tree_tsv organism_core iedb_taxa prefix column datatype table message
 .PHONY: reload
-reload: src/check_organism_core.py
+reload: src/check_organism_core.py | $(DB)
 	sqlite3 $(DB) $(foreach DT,$(DROPTABLES),"DROP VIEW IF EXISTS '$(DT)_view'" "DROP TABLE IF EXISTS '$(DT)_conflict'" "DROP TABLE IF EXISTS '$(DT)'")
 	$(NANOBOT) init
 	python3 $< $(DB)
@@ -100,7 +100,7 @@ build/ncbitaxon.built: build/taxdmp.zip | $(DB)
 ### Old Organism Tree
 
 # Load an existing organism-tree.owl
-build/organism-tree-old.built: build/ncbitaxon.built build/organism-tree-old.owl
+build/organism-tree-old.built: build/ncbitaxon.built build/organism-tree-old.owl | build/ldtab.jar
 	sqlite3 $(DB) "DROP TABLE IF EXISTS organism_tree_old"
 	sed s/statement/organism_tree_old/g src/statement.sql | sqlite3 $(DB)
 	$(LDTAB) import $(DB) $(word 2,$^) -t organism_tree_old
@@ -129,20 +129,20 @@ build/subspecies-tree.built: build/organism-tree.built src/build_subspecies_tree
 	sqlite3 $(DB) "ANALYZE"
 	touch $@
 
-build/organism-tree.ttl: build/organism-tree.built
+build/organism-tree.ttl: build/organism-tree.built | build/ldtab.jar
 	rm -f $@
 	$(LDTAB) export $(DB) --table organism_tree $@
 
-build/subspecies-tree.ttl: build/subspecies-tree.built
+build/subspecies-tree.ttl: build/subspecies-tree.built | build/ldtab.jar
 	rm -f $@
 	$(LDTAB) export $(DB) --table subspecies_tree $@
 
-build/organism-tree.sorted.tsv: build/organism-tree.built
+build/organism-tree.sorted.tsv: build/organism-tree.built | build/ldtab.jar
 	rm -f build/organism-tree.ldtab.tsv
 	$(LDTAB) export $(DB) --table organism_tree build/organism-tree.ldtab.tsv
 	cut -f4- build/organism-tree.ldtab.tsv | sort > $@
 
-build/%-tree.owl: build/%-tree.ttl src/predicates.ttl
+build/%-tree.owl: build/%-tree.ttl src/predicates.ttl | build/robot.jar
 	$(ROBOT) merge --input $< --input $(word 2,$^) \
 	annotate \
 	--ontology-iri https://ontology.iedb.org/ontology/$(notdir $@) \
