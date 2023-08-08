@@ -8,7 +8,7 @@ NCBITaxon:1716	Corynebacterium	NCBI Taxonomy scientific name		upper	NCBITaxon:20
 NCBITaxon:1763	Mycobacterium	NCBI Taxonomy scientific name		upper	NCBITaxon:201174	Actinobacterium	
 NCBITaxon:77643	Mycobacterium tuberculosis complex (Mycobacterium complex)	NCBI Taxonony scientific name		upper	NCBITaxon:1763	Mycobacterium	
 NCBITaxon:1773	Mycobacterium tuberculosis	NCBI Taxonomy scientific name	M. tuberculosis;M tuberculosis;MTB;Tb	species	NCBITaxon:77643	Mycobacterium tuberculosis complex (Mycobacterium complex)	
-NCBITaxon:1764	Mycobacterium avium	NCBI Taxonony scientific name		upper	NCBITaxon:1763	Mycobacterium	
+NCBITaxon:1764	Mycobacterium avium	NCBI Taxonony scientific name		species	NCBITaxon:1763	Mycobacterium	
 NCBITaxon:1760	Actinomycetes (high G C Gram-positive bacteria)	NCBI Taxonony scientific name		upper	NCBITaxon:201174	Actinobacterium	
 NCBITaxon:1239	Bacillota (Firmicutes)	NCBI Taxonomy scientific name (NCBI Taxonomy equivalent name)		upper	NCBITaxon:2	Bacteria	
 NCBITaxon:91061	Bacillus [class]	IEDB		upper	NCBITaxon:1239	Bacillota (Firmicutes)	
@@ -321,7 +321,7 @@ NCBITaxon:3052230	Hepatitis C virus	IEDB		species	NCBITaxon:11050	Flaviviridae f
 NCBITaxon:578319	Recombinant HCV virus	singular of NCBI Taxonomy scientific name		lower	NCBITaxon:3052230	Hepatitis C virus	
 NCBITaxon:11095	Pestivirus	NCBI Taxonomy scientific name		upper	NCBITaxon:11050	Flaviviridae family virus	
 NCBITaxon:3044782	Orthoflavivirus	NCBI Taxonony scientific name		upper	NCBITaxon:11050	Flaviviridae family virus	
-NCBITaxon:12475	Hepatitis delta virus (Hepatitis D virus)	NCBI Taxonony scientific name (NCBI Taxonomy equivalent name)		upper	iedb-taxon:10002040	RNA virus	
+NCBITaxon:12475	Hepatitis delta virus (Hepatitis D virus)	NCBI Taxonony scientific name (NCBI Taxonomy equivalent name)		species	iedb-taxon:10002040	RNA virus	
 iedb-taxon:10002045	Influenza virus	IEDB		upper	iedb-taxon:10002040	RNA virus	
 NCBITaxon:11320	Influenza A virus	NCBI Taxonomy scientific name		species	iedb-taxon:10002045	Influenza virus	
 NCBITaxon:11520	Influenza B virus (Influenza virus type B)	NCBI Taxonony scientific name (NCBI Taxonomy equivalent name)		species	iedb-taxon:10002045	Influenza virus	
