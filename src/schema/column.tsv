@@ -44,3 +44,8 @@ organism_tree_tsv	species		empty	CURIE		the species that this taxon belongs to (
 organism_tree_tsv	species_label		empty	label		the label of the species
 organism_tree_tsv	source_table			label		the table that this node was generated from
 organism_tree_tsv	use_other		empty	boolean		true when an 'Other X' node should collect outliers for this taxon
+active_species	Species Key			label	primary	the taxon ID and normalized label of this species, used for directory names
+active_species	Species ID			tax_id		the taxon ID of this species
+active_species	Species Label			label		the label for this species
+active_species	Active Taxa			tax_ids		a list of taxon IDs for taxa used by IEDB that fall under this species
+active_species	Group			taxon_group		a high-level grouping of taxa into kingdoms

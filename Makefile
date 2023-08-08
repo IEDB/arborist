@@ -71,7 +71,7 @@ save: $(EXPORT) $(DB)
 	python3 $(EXPORT) data $(DB) build/ $$(grep build src/schema/table.tsv | cut -f1 | tr '\n' ' ')
 	python3 src/sort_organism_core.py src/organism_core.tsv
 
-DROPTABLES := organism_tree_tsv organism_core iedb_taxa prefix column datatype table message
+DROPTABLES := active_species organism_tree_tsv organism_core iedb_taxa prefix column datatype table message
 .PHONY: reload
 reload: src/check_organism_core.py
 	sqlite3 $(DB) $(foreach DT,$(DROPTABLES),"DROP VIEW IF EXISTS '$(DT)_view'" "DROP TABLE IF EXISTS '$(DT)_conflict'" "DROP TABLE IF EXISTS '$(DT)'")
