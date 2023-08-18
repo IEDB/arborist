@@ -31,7 +31,7 @@ build/robot.jar: | build
 	curl -L -o $@ "https://github.com/ontodev/robot/releases/download/v1.9.4/robot.jar"
 
 build/ldtab.jar: | build
-	curl -L -o $@ "https://github.com/ontodev/ldtab.clj/releases/download/v2022-05-23/ldtab.jar"
+	curl -L -o $@ "https://github.com/ontodev/ldtab.clj/releases/download/v2023-08-19/ldtab.jar"
 
 build/nanobot: | build
 	-echo 'ERROR: Custom nanobot build required'
@@ -107,6 +107,14 @@ build/organism-tree-old.built: build/ncbitaxon.built build/organism-tree-old.owl
 	# sqlite3 $(DB) "ANALYZE"
 	touch $@
 
+# Load an existing subspecies-tree.owl
+build/subspecies-tree-old.built: build/ncbitaxon.built build/subspecies-tree-old.owl | build/ldtab.jar
+	sqlite3 $(DB) "DROP TABLE IF EXISTS subspecies_tree_old"
+	sed s/statement/subspecies_tree_old/g src/statement.sql | sqlite3 $(DB)
+	$(LDTAB) import $(DB) $(word 2,$^) -t subspecies_tree_old
+	# sqlite3 $(DB) "ANALYZE"
+	touch $@
+
 
 ### Organism Tree
 
@@ -126,7 +134,7 @@ build/organism-tree.built: build/ncbitaxon.built src/build_organism_tree.py buil
 build/subspecies-tree.built: build/organism-tree.built src/build_subspecies_tree.py
 	sqlite3 $(DB) "DROP TABLE IF EXISTS subspecies_tree"
 	python3 $(word 2, $^) $(DB)
-	sqlite3 $(DB) "ANALYZE"
+	# sqlite3 $(DB) "ANALYZE"
 	touch $@
 
 build/organism-tree.ttl: build/organism-tree.built | build/ldtab.jar

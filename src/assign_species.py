@@ -7,9 +7,9 @@ from argparse import ArgumentParser, FileType
 
 
 synonym_types = {
-    'common_name': 'NCBI Taxonomy common name',
-    'genbank_common_name': 'Genbank common name',
-    'equivalent_name': 'NCBI Taxonomy equivalent name',
+    'common name': 'NCBI Taxonomy common name',
+    'GenBank common name': 'GenBank common name',
+    'equivalent name': 'NCBI Taxonomy equivalent name',
 }
 
 upper_ranks = [

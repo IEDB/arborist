@@ -112,7 +112,7 @@ def convert_synonyms(tax_id, synonyms):
         if name_class in predicates:
             synonym = escape_literal(synonym)
             predicate = predicates[name_class]
-            synonym_type = label_to_id(name_class)
+            synonym_type = name_class.replace('genbank', 'GenBank')
             pairs.append([
                 predicate,
                 synonym,

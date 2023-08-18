@@ -76,6 +76,43 @@ WHERE ncbitaxon.subject = new_descendants.node
     con.commit()
 
     index_statement_table(con, 'subspecies_tree')
+    con.execute('ANALYZE')
+
+    # Add ONTIE:0003619 'has species' annotation property
+    con.execute('''
+    INSERT INTO subspecies_tree VALUES
+    (1, 0, 'iedb-taxon:subspecies_tree', 'ONTIE:0003619', 'rdf:type', 'owl:AnnotationProperty', '_IRI', NULL),
+    (1, 0, 'iedb-taxon:subspecies_tree', 'ONTIE:0003619', 'rdfs:label', 'has species', 'xsd:string', NULL);
+    ''')
+
+    # Add ONTIE:0003619 'has species' annotations
+    cur = con.execute(f'''
+WITH RECURSIVE species_descendants(species, node) AS (
+      SELECT subject AS species, subject AS node
+      FROM subspecies_tree
+      WHERE predicate = 'iedb-taxon:level'
+        AND object = 'species'
+    UNION
+      SELECT species, subject AS node
+      FROM subspecies_tree, species_descendants
+      WHERE species_descendants.node = subspecies_tree.object
+        AND subspecies_tree.predicate = 'rdfs:subClassOf'
+)
+INSERT INTO subspecies_tree
+SELECT
+    1 AS asserted,
+    0 AS retracted,
+    'iedb-taxon:subspecies_tree' AS graph,
+    node AS subject,
+    'ONTIE:0003619' AS predicate,
+    species AS object,
+    '_IRI' AS datatype,
+    NULL AS annotation
+FROM species_descendants
+WHERE species != node
+    ''')
+
+    con.commit()
 
 
 if __name__ == "__main__":
