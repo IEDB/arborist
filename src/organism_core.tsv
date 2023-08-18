@@ -165,7 +165,8 @@ NCBITaxon:314295	Hominoid (ape)	singular of NCBI Taxonomy scientific name (NCBI 
 NCBITaxon:9593	Gorilla gorilla	NCBI Taxonomy scientific name		species	NCBITaxon:314295	Hominoid (ape)	
 NCBITaxon:9600	Pongo pygmaeus (Bornean orangutan)	NCBI Taxonomy scientific name (GenBank common name)		species	NCBITaxon:314295	Hominoid (ape)	
 NCBITaxon:9601	Pongo abelii (Sumatran orangutan)	NCBI Taxonomy scientific name (GenBank common name)		species	NCBITaxon:314295	Hominoid (ape)	
-NCBITaxon:9606	Homo sapiens (human)	NCBI Taxonomy scientific name (GenBank common name)		species	NCBITaxon:314295	Hominoid (ape)	
+NCBITaxon:9605	Homo (humans)	NCBI Taxonomy scientific name (GenBank common name)		upper	NCBITaxon:314295	Hominoid (ape)	
+NCBITaxon:9606	Homo sapiens (human)	NCBI Taxonomy scientific name (GenBank common name)		species	NCBITaxon:9605	Homo (humans)	
 NCBITaxon:9479	Platyrrhini (New World monkey)	NCBI Taxonomy scientific name (singular of GenBank common name)		upper	NCBITaxon:9443	Primate	
 NCBITaxon:9481	Callithrix (marmoset)	NCBI Taxonomy scientific name (common name)		upper	NCBITaxon:9479	Platyrrhini (New World monkey)	
 NCBITaxon:9486	Saguinus (tamarin)	NCBI Taxonomy scientific name (common name)		upper	NCBITaxon:9479	Platyrrhini (New World monkey)	
