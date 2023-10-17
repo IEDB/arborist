@@ -26,8 +26,8 @@ organism_core	curie			taxon_CURIE	primary	the NCBI or IEDB taxon ID
 organism_core	label			label	unique	the label for this taxon
 organism_core	label_source			label		the source of the label for this taxon
 organism_core	iedb_synonyms		empty	semicolon_labels		a list of IEDB's synonyms, separated by semicolons
-organism_core	parent		empty	taxon_CURIE		the ID of the parent of this taxon
-organism_core	parent_label		empty	label		the label of the parent of this taxon
+organism_core	parent		empty	taxon_CURIE	from(organism_tree_tsv.curie)	the ID of the parent of this taxon
+organism_core	parent_label		empty	label	from(organism_tree_tsv.label)	the label of the parent of this taxon
 organism_core	level			taxon_level		the level of the taxon: upper, species, lower
 organism_core	use_other		empty	boolean		true when an 'Other X' node should collect outliers for this taxon
 organism_tree_tsv	curie			taxon_CURIE	primary	the CURIE for this taxon
@@ -45,7 +45,18 @@ organism_tree_tsv	species_label		empty	label		the label of the species
 organism_tree_tsv	source_table			label		the table that this node was generated from
 organism_tree_tsv	use_other		empty	boolean		true when an 'Other X' node should collect outliers for this taxon
 active_species	Species Key			label	primary	the taxon ID and normalized label of this species, used for directory names
-active_species	Species ID			tax_id		the taxon ID of this species
-active_species	Species Label			label		the label for this species
-active_species	Active Taxa			tax_ids		a list of taxon IDs for taxa used by IEDB that fall under this species
+active_species	Species ID			tax_id	unique	the taxon ID of this species
+active_species	Species Label			label	unique	the label for this species
+active_species	Active Taxa			tax_ids	unique	a list of taxon IDs for taxa used by IEDB that fall under this species
 active_species	Group			taxon_group		a high-level grouping of taxa into kingdoms
+proteomes	Species Key			label	primary	
+proteomes	Species ID			tax_id	unique	
+proteomes	Species Label			label	unique	
+proteomes	Active Taxa			tax_ids	unique	
+proteomes	Group			label		
+proteomes	Proteome Type		empty	label		
+proteomes	Proteome ID		empty	label	unique	
+proteomes	Proteome Organism ID		empty	label	unique	
+proteomes	Proteome Label		empty	label	unique	
+proteomes	Proteome Link		empty	label	unique	
+proteomes	Updated		empty	label		

@@ -306,6 +306,12 @@
       $('#add-to-organism-core').hide();
     } else {
       $('#view-in-organism-core').hide();
+      var parent_id = $('[resource="{{ subject }}"]').last().attr('about');
+      var parent_label = $('[resource="' + parent_id + '"]').last().text();
+      console.log(parent_id, parent_label);
+      var href = $('#add-to-organism-core').attr('href');
+      href = href + '&parent=' + parent_id + '&parent_label=' + parent_label;
+      $('#add-to-organism-core').attr('href', href);
     }
     if (!"{{ subject }}".startsWith("iedb-taxon:")) {
       $('#view-in-iedb-taxa').hide();

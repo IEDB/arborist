@@ -165,8 +165,7 @@ NCBITaxon:314295	Hominoid (ape)	singular of NCBI Taxonomy scientific name (NCBI 
 NCBITaxon:9593	Gorilla gorilla	NCBI Taxonomy scientific name		species	NCBITaxon:314295	Hominoid (ape)	
 NCBITaxon:9600	Pongo pygmaeus (Bornean orangutan)	NCBI Taxonomy scientific name (GenBank common name)		species	NCBITaxon:314295	Hominoid (ape)	
 NCBITaxon:9601	Pongo abelii (Sumatran orangutan)	NCBI Taxonomy scientific name (GenBank common name)		species	NCBITaxon:314295	Hominoid (ape)	
-NCBITaxon:9605	Homo (humans)	NCBI Taxonomy scientific name (GenBank common name)		upper	NCBITaxon:314295	Hominoid (ape)	
-NCBITaxon:9606	Homo sapiens (human)	NCBI Taxonomy scientific name (GenBank common name)		species	NCBITaxon:9605	Homo (humans)	
+NCBITaxon:9606	Homo sapiens (human)	NCBI Taxonomy scientific name (GenBank common name)		species	NCBITaxon:314295	Hominoid (ape)	
 NCBITaxon:9479	Platyrrhini (New World monkey)	NCBI Taxonomy scientific name (singular of GenBank common name)		upper	NCBITaxon:9443	Primate	
 NCBITaxon:9481	Callithrix (marmoset)	NCBI Taxonomy scientific name (common name)		upper	NCBITaxon:9479	Platyrrhini (New World monkey)	
 NCBITaxon:9486	Saguinus (tamarin)	NCBI Taxonomy scientific name (common name)		upper	NCBITaxon:9479	Platyrrhini (New World monkey)	
@@ -265,6 +264,15 @@ NCBITaxon:10310	Human herpesvirus 2	NCBI Taxonomy equivalent name	herpes virus 2
 NCBITaxon:10335	Human herpesvirus 3 (Varicella-zoster virus)	NCBI Taxonomy scientific name (GenBank common name)	herpes virus 3;HHV3;HSV-3;HSV3	species	NCBITaxon:10292	Herpesvirus	
 NCBITaxon:10359	Human herpesvirus 5 (Human cytomegalovirus)	NCBI Taxonomy scientific name (GenBank common name)	herpes virus 5;CMV;HHV5;HSV-5;HSV5	lower	NCBITaxon:10292	Herpesvirus	
 NCBITaxon:10376	Human herpesvirus 4 (Epstein Barr virus)	NCBI Taxonomy scientific name (GenBank common name)	herpes virus 4;EBV;HHV4;HSV-4;HSV4	species	NCBITaxon:10292	Herpesvirus	
+NCBITaxon:10390	Gallid alphaherpesvirus 2 (Gallid herpesvirus 2)	NCBI Taxonony scientific name		species	NCBITaxon:10292	Herpesvirus	
+NCBITaxon:10366	Murid betaherpesvirus 1 (Mouse cytomegalovirus 1)	NCBI Taxonony scientific name		species	NCBITaxon:10292	Herpesvirus	
+NCBITaxon:12657	Equid gammaherpesvirus 2 (Equid herpesvirus 2)	NCBI Taxonony scientific name		species	NCBITaxon:10292	Herpesvirus	
+NCBITaxon:33708	Murid gammaherpesvirus 4 (Murid herpesvirus 4)	NCBI Taxonony scientific name		species	NCBITaxon:10292	Herpesvirus	
+NCBITaxon:32604	Human betaherpesvirus 6B (Human herpes virus 6B)	NCBI Taxonony scientific name		species	NCBITaxon:10292	Herpesvirus	
+NCBITaxon:10320	Bovine alphaherpesvirus 1 (Bovine herpesvirus 1)	NCBI Taxonony scientific name		species	NCBITaxon:10292	Herpesvirus	
+NCBITaxon:10326	Equid alphaherpesvirus 1 (Equid herpesvirus 1)	NCBI Taxonony scientific name		species	NCBITaxon:10292	Herpesvirus	
+NCBITaxon:10331	Equid alphaherpesvirus 4 (Equid herpesvirus 4)	NCBI Taxonony scientific name		species	NCBITaxon:10292	Herpesvirus	
+NCBITaxon:10345	Suid alphaherpesvirus 1 (Alphaherpesvirus pseudorabies virus PRV)	NCBI Taxonony scientific name		species	NCBITaxon:10292	Herpesvirus	
 NCBITaxon:151340	Papillomavirus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002039	DNA virus	
 NCBITaxon:333750	Alphapapillomavirus	NCBI Taxonony scientific name		upper	NCBITaxon:151340	Papillomavirus	
 NCBITaxon:40119	Parvovirinae	NCBI Taxonomy scientific name		upper	iedb-taxon:10002039	DNA virus	
@@ -281,6 +289,8 @@ iedb-taxon:10002039-other	Other DNA virus	IEDB		upper	iedb-taxon:10002039	DNA vi
 NCBITaxon:10240	Poxvirus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002039	DNA virus	
 NCBITaxon:10780	Parvoviridae family virus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002039	DNA virus	
 NCBITaxon:39724	Circovirus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002039	DNA virus	
+NCBITaxon:133704	Porcine circovirus 1 (Porcine circovirus type 1)	NCBI Taxonony scientific name		species	NCBITaxon:39724	Circovirus	
+NCBITaxon:85708	Porcine circovirus 2 (Porcine circovirus Type II)	NCBI Taxonony scientific name		species	NCBITaxon:39724	Circovirus	
 NCBITaxon:687329	Anelloviridae	NCBI Taxonomy scientific name		upper	iedb-taxon:10002039	DNA virus	
 NCBITaxon:687331	Alphatorquevirus	NCBI Taxonomy scientific name		upper	NCBITaxon:687329	Anelloviridae	
 NCBITaxon:10479	Thermoproteus tenax virus 1 (Thermoproteus phage 1)	NCBI Taxonony scientific name (NCBI Taxonomy equivalent name)		lower	iedb-taxon:10002039	DNA virus	
@@ -316,12 +326,20 @@ iedb-taxon:10002042	Bacteriophage (RNA)	IEDB		upper	iedb-taxon:10002040	RNA viru
 NCBITaxon:10877	Cystoviridae	NCBI Taxonomy scientific name		upper	iedb-taxon:10002042	Bacteriophage (RNA)	
 NCBITaxon:2842319	Fiersvirida	NCBI Taxonomy scientific name		upper	iedb-taxon:10002042	Bacteriophage (RNA)	
 NCBITaxon:11266	Filovirus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002040	RNA virus	
+NCBITaxon:565995	Bundibugyo ebolavirus (Bundibugyo virus)	NCBI Taxonony scientific name		species	NCBITaxon:11266	Filovirus	
 NCBITaxon:11050	Flaviviridae family virus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002040	RNA virus	
 NCBITaxon:11051	Flavivirus	NCBI Taxonomy scientific name		upper	NCBITaxon:11050	Flaviviridae family virus	
 NCBITaxon:3052230	Hepatitis C virus	IEDB		species	NCBITaxon:11050	Flaviviridae family virus	
 NCBITaxon:578319	Recombinant HCV virus	singular of NCBI Taxonomy scientific name		lower	NCBITaxon:3052230	Hepatitis C virus	
 NCBITaxon:11095	Pestivirus	NCBI Taxonomy scientific name		upper	NCBITaxon:11050	Flaviviridae family virus	
 NCBITaxon:3044782	Orthoflavivirus	NCBI Taxonony scientific name		upper	NCBITaxon:11050	Flaviviridae family virus	
+NCBITaxon:64320	Zika virus	NCBI Taxonony scientific name		species	NCBITaxon:3044782	Orthoflavivirus	
+NCBITaxon:11089	Yellow fever virus (Flavivirus febricis)	NCBI Taxonony scientific name		species	NCBITaxon:3044782	Orthoflavivirus	
+NCBITaxon:11072	Japanese encephalitis virus (Japanese encephalitis (JE) virus)	NCBI Taxonony scientific name		species	NCBITaxon:3044782	Orthoflavivirus	
+NCBITaxon:11083	Powassan virus (Flavivirus powassan)	NCBI Taxonony scientific name		species	NCBITaxon:3044782	Orthoflavivirus	
+NCBITaxon:11082	West Nile virus	NCBI Taxonony scientific name		species	NCBITaxon:3044782	Orthoflavivirus	
+NCBITaxon:12637	Dengue virus	NCBI Taxonony scientific name		species	NCBITaxon:3044782	Orthoflavivirus	
+NCBITaxon:11084	Tick-borne encephalitis virus (FSME virus)	NCBI Taxonony scientific name		species	NCBITaxon:3044782	Orthoflavivirus	
 NCBITaxon:12475	Hepatitis delta virus (Hepatitis D virus)	NCBI Taxonony scientific name (NCBI Taxonomy equivalent name)		species	iedb-taxon:10002040	RNA virus	
 iedb-taxon:10002045	Influenza virus	IEDB		upper	iedb-taxon:10002040	RNA virus	
 NCBITaxon:11320	Influenza A virus	NCBI Taxonomy scientific name		species	iedb-taxon:10002045	Influenza virus	
@@ -332,6 +350,11 @@ NCBITaxon:1980442	Orthohantavirus	NCBI Taxonomy scientific name		upper	iedb-taxo
 NCBITaxon:11583	HoJo virus	NCBI Taxonomy scientific name		lower	NCBITaxon:1980442	Orthohantavirus	
 NCBITaxon:339351	unclassified Hantavirus	NCBI Taxonomy scientific name		upper	NCBITaxon:1980442	Orthohantavirus	
 NCBITaxon:11158	Paramyxovirus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002040	RNA virus	
+NCBITaxon:11234	Measles morbillivirus (Measles virus)	NCBI Taxonony scientific name (common name)	Measles virus	species	NCBITaxon:11158	Paramyxovirus	
+NCBITaxon:11241	Rinderpest morbillivirus (Rinderpest virus)	NCBI Taxonony scientific name		species	NCBITaxon:11158	Paramyxovirus	
+NCBITaxon:11240	Phocine morbillivirus (Phocine distemper virus)	NCBI Taxonony scientific name		species	NCBITaxon:11158	Paramyxovirus	
+NCBITaxon:2560319	Avian orthoavulavirus 1 (Avian Paramyxovirus Serotype I)	NCBI Taxonony scientific name		species	NCBITaxon:11158	Paramyxovirus	
+NCBITaxon:2560602	Mumps orthorubulavirus (Mumps virus)	NCBI Taxonony scientific name		species	NCBITaxon:11158	Paramyxovirus	
 NCBITaxon:12058	Picornavirus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002040	RNA virus	
 NCBITaxon:12110	Foot-and-mouth disease virus	NCBI Taxonomy scientific name		species	NCBITaxon:12058	Picornavirus	
 iedb-taxon:10002044	Plant virus (RNA)	IEDB		upper	iedb-taxon:10002040	RNA virus	
@@ -532,6 +555,7 @@ NCBITaxon:11002	Infectious pancreatic necrosis virus (infectious pancreatic necr
 NCBITaxon:11041	Rubella virus	NCBI Taxonomy scientific name		lower	iedb-taxon:10002040	RNA virus	
 NCBITaxon:11244	Pneumoviridae (Pneumovirinae)	NCBI Taxonony scientific name (NCBI Taxonomy equivalent name)		upper	iedb-taxon:10002040	RNA virus	
 NCBITaxon:11250	Human respiratory syncytial virus	NCBI Taxonomy scientific name		lower	NCBITaxon:11244	Pneumoviridae (Pneumovirinae)	
+NCBITaxon:162145	Human metapneumovirus	NCBI Taxonony scientific name		species	NCBITaxon:11244	Pneumoviridae (Pneumovirinae)	
 NCBITaxon:11318	Thogotovirus dhoriense (Dhori thogotovirus)	NCBI Taxonony scientific name (NCBI Taxonomy equivalent name)		species	iedb-taxon:10002040	RNA virus	
 NCBITaxon:11577	La Crosse virus (Bunyavirus la crosse)	NCBI Taxonony scientific name (NCBI Taxonomy equivalent name)		lower	iedb-taxon:10002040	RNA virus	
 NCBITaxon:11588	Rift Valley fever virus	NCBI Taxonomy scientific name		lower	iedb-taxon:10002040	RNA virus	
@@ -555,44 +579,45 @@ NCBITaxon:32644	Unidentified	NCBI Taxonomy scientific name		upper	NCBITaxon:1	Ro
 NCBITaxon:28384	other sequences	NCBI Taxonomy scientific name		upper	NCBITaxon:1	Root	
 NCBITaxon:36549	Plasmid	singular of NCBI Taxonomy scientific name		upper	NCBITaxon:28384	other sequences	
 NCBITaxon:81077	Artificial sequence	NCBI Taxonomy scientific name		upper	NCBITaxon:28384	other sequences	
-iedb-taxon:10002311	Canine Distemper Virus strain Rockborn	IEDB		lower	NCBITaxon:3052342	Morbillivirus canis	
-iedb-taxon:10000461	Canine distemper virus FXNO	IEDB		lower	NCBITaxon:3052342	Morbillivirus canis	
+iedb-taxon:10002311	Canine Distemper Virus strain Rockborn	IEDB		lower	NCBITaxon:3052342	Morbillivirus canis (Canine distemper virus)	
+iedb-taxon:10000461	Canine distemper virus FXNO	IEDB		lower	NCBITaxon:3052342	Morbillivirus canis (Canine distemper virus)	
 iedb-taxon:10001616	Guanarito virus strain INH-95551	IEDB		lower	NCBITaxon:3052307	Mammarenavirus guanaritoense (Guanarito arenavirus)	
-iedb-taxon:10002797	Crimean-Congo hemorrhagic fever virus strain Afg09-2990	IEDB		lower	NCBITaxon:3052518	Orthonairovirus haemorrhagiae	
-iedb-taxon:10002568	Crimean-Congo hemorrhagic fever virus Oman 199809166	IEDB		lower	NCBITaxon:3052518	Orthonairovirus haemorrhagiae	
-iedb-taxon:10002810	Canine distemper virus strain NJ(11)2	IEDB		lower	NCBITaxon:3052342	Morbillivirus canis	
-iedb-taxon:10002779	Lassa Virus Soromba-R (Lassa virus (strain Soromba-R))	IEDB		lower	NCBITaxon:3052310	Mammarenavirus lassaense	
+iedb-taxon:10002797	Crimean-Congo hemorrhagic fever virus strain Afg09-2990	IEDB		lower	NCBITaxon:3052518	Orthonairovirus haemorrhagiae (Crimean-Congo haemorrhagic fever virus)	
+iedb-taxon:10002568	Crimean-Congo hemorrhagic fever virus Oman 199809166	IEDB		lower	NCBITaxon:3052518	Orthonairovirus haemorrhagiae (Crimean-Congo haemorrhagic fever virus)	
+iedb-taxon:10002810	Canine distemper virus strain NJ(11)2	IEDB		lower	NCBITaxon:3052342	Morbillivirus canis (Canine distemper virus)	
+iedb-taxon:10002779	Lassa Virus Soromba-R (Lassa virus (strain Soromba-R))	IEDB		lower	NCBITaxon:3052310	Mammarenavirus lassaense (Lassa mammarenavirus)	
 iedb-taxon:10002764	Mus musculus HLA-B*44:01 Tg	IEDB		lower	iedb-taxon:10001564	Mus musculus HLA-B Transgenic	
 NCBITaxon:1586324	Porcine deltacoronavirus	NCBI Taxonomy scientific name		lower	NCBITaxon:1965089	Coronavirus HKU15	
-iedb-taxon:10000492	Lymphocytic choriomeningitis virus ESC	IEDB		lower	NCBITaxon:3052303	Mammarenavirus choriomeningitidis	
-iedb-taxon:10001238	Puumala virus (strain Umea/hu)	IEDB		lower	NCBITaxon:3052493	Orthohantavirus puumalaense	
-iedb-taxon:10000483	Puumala virus CG18-20	IEDB		lower	NCBITaxon:3052493	Orthohantavirus puumalaense	
-iedb-taxon:10001020	Peste-des-petits-ruminants virus (strain Nigeria 75/1)	IEDB		lower	NCBITaxon:2593991	Peste des petits ruminants virus	
-iedb-taxon:10002123	Peste-des-petits-ruminants virus China/Tibet/Geg/07-30	IEDB		lower	NCBITaxon:2593991	Peste des petits ruminants virus	
-iedb-taxon:10002566	Crimean-Congo hemorrhagic fever virus Turkey 200406546	IEDB		lower	NCBITaxon:3052518	Orthonairovirus haemorrhagiae	
-iedb-taxon:10000493	Lymphocytic choriomeningitis virus UBC	IEDB		lower	NCBITaxon:3052303	Mammarenavirus choriomeningitidis	
+iedb-taxon:10000492	Lymphocytic choriomeningitis virus ESC	IEDB		lower	NCBITaxon:3052303	Mammarenavirus choriomeningitidis (Lymphocytic choriomeningitis mammarenavirus)	
+iedb-taxon:10001238	Puumala virus (strain Umea/hu)	IEDB		lower	NCBITaxon:3052493	Orthohantavirus puumalaense (Puumala hantavirus)	
+iedb-taxon:10000483	Puumala virus CG18-20	IEDB		lower	NCBITaxon:3052493	Orthohantavirus puumalaense (Puumala hantavirus)	
+iedb-taxon:10001020	Peste-des-petits-ruminants virus (strain Nigeria 75/1)	IEDB		lower	NCBITaxon:2593991	Peste des petits ruminants virus (Peste-des-petits-ruminants)	
+iedb-taxon:10002123	Peste-des-petits-ruminants virus China/Tibet/Geg/07-30	IEDB		lower	NCBITaxon:2593991	Peste des petits ruminants virus (Peste-des-petits-ruminants)	
+iedb-taxon:10002566	Crimean-Congo hemorrhagic fever virus Turkey 200406546	IEDB		lower	NCBITaxon:3052518	Orthonairovirus haemorrhagiae (Crimean-Congo haemorrhagic fever virus)	
+iedb-taxon:10000493	Lymphocytic choriomeningitis virus UBC	IEDB		lower	NCBITaxon:3052303	Mammarenavirus choriomeningitidis (Lymphocytic choriomeningitis mammarenavirus)	
 NCBITaxon:674529	Bacteroides faecis	NCBI Taxonomy scientific name		species	NCBITaxon:816	Bacteroides	
 NCBITaxon:10090	Mus musculus (mouse)	NCBI Taxonomy scientific name (NCBI common name)		species			
-iedb-taxon:10002871	Lassa Virus NIG08-A41 (Lassa virus (strain Nig08-A19))	IEDB		lower	NCBITaxon:3052310	Mammarenavirus lassaense	
+iedb-taxon:10002871	Lassa Virus NIG08-A41 (Lassa virus (strain Nig08-A19))	IEDB		lower	NCBITaxon:3052310	Mammarenavirus lassaense (Lassa mammarenavirus)	
 iedb-taxon:10001980	Mus musculus Ob.1A12 TCR Tg	IEDB		lower	iedb-taxon:10001539	Mus musculus TCR transgenic	
-iedb-taxon:10002780	Lassa Virus TGO2016 (Lassa virus (strain TGO2016))	IEDB		lower	NCBITaxon:3052310	Mammarenavirus lassaense	
+iedb-taxon:10002780	Lassa Virus TGO2016 (Lassa virus (strain TGO2016))	IEDB		lower	NCBITaxon:3052310	Mammarenavirus lassaense (Lassa mammarenavirus)	
 iedb-taxon:10001336	Mus musculus MS2-3C8 TCR Tg	IEDB		lower	iedb-taxon:10001539	Mus musculus TCR transgenic	
-iedb-taxon:10000489	Lymphocytic choriomeningitis virus 8.7B23	IEDB		lower	NCBITaxon:3052303	Mammarenavirus choriomeningitidis	
-iedb-taxon:10002310	Canine Distemper Virus strain PS	IEDB		lower	NCBITaxon:3052342	Morbillivirus canis	
-iedb-taxon:10000532	Peste-des-petits-ruminants virus Sungri-96	IEDB		lower	NCBITaxon:2593991	Peste des petits ruminants virus	
-iedb-taxon:10002256	Peste-des-petits-ruminants virus Ivory Coast 1989	IEDB		lower	NCBITaxon:2593991	Peste des petits ruminants virus	
+iedb-taxon:10000489	Lymphocytic choriomeningitis virus 8.7B23	IEDB		lower	NCBITaxon:3052303	Mammarenavirus choriomeningitidis (Lymphocytic choriomeningitis mammarenavirus)	
+NCBITaxon:11216	Human respirovirus 3 (Human parainfluenza 3 virus)	NCBI Taxonony scientific name		species	NCBITaxon:186938	Respirovirus	
+iedb-taxon:10002310	Canine Distemper Virus strain PS	IEDB		lower	NCBITaxon:3052342	Morbillivirus canis (Canine distemper virus)	
+iedb-taxon:10000532	Peste-des-petits-ruminants virus Sungri-96	IEDB		lower	NCBITaxon:2593991	Peste des petits ruminants virus (Peste-des-petits-ruminants)	
+iedb-taxon:10002256	Peste-des-petits-ruminants virus Ivory Coast 1989	IEDB		lower	NCBITaxon:2593991	Peste des petits ruminants virus (Peste-des-petits-ruminants)	
 iedb-taxon:10002763	Mus musculus HLA-A*11:01 Tg	IEDB		lower	iedb-taxon:10001563	Mus musculus HLA-A Transgenic	
-iedb-taxon:10002793	Lassa Virus Nig08-A19 (Lassa virus (strain Nig08-A19))	IEDB		lower	NCBITaxon:3052310	Mammarenavirus lassaense	
-iedb-taxon:10000484	Puumala virus Kazan	IEDB		lower	NCBITaxon:3052493	Orthohantavirus puumalaense	
-iedb-taxon:10000490	Lymphocytic choriomeningitis virus A22.2b	IEDB		lower	NCBITaxon:3052303	Mammarenavirus choriomeningitidis	
-iedb-taxon:10000544	Sin Nombre virus NM H10	IEDB		lower	NCBITaxon:3052499	Orthohantavirus sinnombreense	
-iedb-taxon:10000491	Lymphocytic choriomeningitis virus Docile	IEDB		lower	NCBITaxon:3052303	Mammarenavirus choriomeningitidis	
-iedb-taxon:10002792	Lassa Virus LASV237-NIG-2010 (Lassa virus (strain LASV237-NIG-2010))	IEDB		lower	NCBITaxon:3052310	Mammarenavirus lassaense	
-iedb-taxon:10002671	Lassa virus Pinneo (Lassa virus (strain Pinneo))	IEDB		lower	NCBITaxon:3052310	Mammarenavirus lassaense	
-iedb-taxon:10002567	Crimean-Congo hemorrhagic fever virus Kosova Hoti	IEDB		lower	NCBITaxon:3052518	Orthonairovirus haemorrhagiae	
+iedb-taxon:10002793	Lassa Virus Nig08-A19 (Lassa virus (strain Nig08-A19))	IEDB		lower	NCBITaxon:3052310	Mammarenavirus lassaense (Lassa mammarenavirus)	
+iedb-taxon:10000484	Puumala virus Kazan	IEDB		lower	NCBITaxon:3052493	Orthohantavirus puumalaense (Puumala hantavirus)	
+iedb-taxon:10000490	Lymphocytic choriomeningitis virus A22.2b	IEDB		lower	NCBITaxon:3052303	Mammarenavirus choriomeningitidis (Lymphocytic choriomeningitis mammarenavirus)	
+iedb-taxon:10000544	Sin Nombre virus NM H10	IEDB		lower	NCBITaxon:3052499	Orthohantavirus sinnombreense (Sin Nombre hantavirus)	
+iedb-taxon:10000491	Lymphocytic choriomeningitis virus Docile	IEDB		lower	NCBITaxon:3052303	Mammarenavirus choriomeningitidis (Lymphocytic choriomeningitis mammarenavirus)	
+iedb-taxon:10002792	Lassa Virus LASV237-NIG-2010 (Lassa virus (strain LASV237-NIG-2010))	IEDB		lower	NCBITaxon:3052310	Mammarenavirus lassaense (Lassa mammarenavirus)	
+iedb-taxon:10002671	Lassa virus Pinneo (Lassa virus (strain Pinneo))	IEDB		lower	NCBITaxon:3052310	Mammarenavirus lassaense (Lassa mammarenavirus)	
+iedb-taxon:10002567	Crimean-Congo hemorrhagic fever virus Kosova Hoti	IEDB		lower	NCBITaxon:3052518	Orthonairovirus haemorrhagiae (Crimean-Congo haemorrhagic fever virus)	
 iedb-taxon:10002682	Porcine Deltacoronavirus ZJ17HZ0102/2017	IEDB		lower	NCBITaxon:1586324	Porcine deltacoronavirus	
-iedb-taxon:10002312	Canine Distemper Virus strain 3	IEDB		lower	NCBITaxon:3052342	Morbillivirus canis	
+iedb-taxon:10002312	Canine Distemper Virus strain 3	IEDB		lower	NCBITaxon:3052342	Morbillivirus canis (Canine distemper virus)	
 NCBITaxon:328814	Alistipes shahii	NCBI Taxonomy scientific name		species	NCBITaxon:239759	Alistipes	
-iedb-taxon:10002791	Lassa Virus LP (Lassa virus (strain LP))	IEDB		lower	NCBITaxon:3052310	Mammarenavirus lassaense	
-iedb-taxon:10002809	Canine distemper virus strain 851	IEDB		lower	NCBITaxon:3052342	Morbillivirus canis	
+iedb-taxon:10002791	Lassa Virus LP (Lassa virus (strain LP))	IEDB		lower	NCBITaxon:3052310	Mammarenavirus lassaense (Lassa mammarenavirus)	
+iedb-taxon:10002809	Canine distemper virus strain 851	IEDB		lower	NCBITaxon:3052342	Morbillivirus canis (Canine distemper virus)	
 iedb-taxon:10002078	Mus musculus HLA-DP2 Tg	IEDB		lower	iedb-taxon:10002846	Mus musculus HLA-DP Transgenic	
