@@ -57,12 +57,13 @@ def main():
     parser.add_argument("output", type=FileType("w"))
     args = parser.parse_args()
 
-    active_tax_ids = []
+    active_tax_ids = {}
     reader = csv.DictReader(args.counts, delimiter="\t")
     for row in reader:
-        active_tax_ids.append(row["source_organism_org_id"])
+        tax_id = row["source_organism_org_id"]
+        active_tax_ids[tax_id] = int(row['count'])
 
-    rows = []
+    rows = {}
     with sqlite3.connect(args.db) as conn:
         cur = conn.cursor()
         cur.execute(
@@ -100,7 +101,7 @@ def main():
             # Get the active taxa
             descendants = get_descendants(cur, curie)
             active_taxa = [
-                int(x.split(":")[1]) for x in descendants if x.split(":")[1] in active_tax_ids
+                int(x.split(":")[1]) for x in descendants if x.split(":")[1] in active_tax_ids.keys()
             ]
             if tax_id == 10002316:
                 # Add parent SARS Coronavirus to SARS-CoV1
@@ -109,6 +110,17 @@ def main():
                 # No taxa with epitopes, this is not active
                 continue
             active_taxa.sort()
+
+            epitope_count = 0
+            try:
+                epitope_count += int(active_tax_ids[tax_id])
+            except KeyError:
+                pass
+            for t in active_taxa:
+                try:
+                    epitope_count += active_tax_ids[str(t)]
+                except KeyError:
+                    pass
 
             # Get the group
             ancestors = get_ancestors(cur, curie)
@@ -131,21 +143,29 @@ def main():
             if not group:
                 print("ERROR: Unable to find a group for " + curie)
 
-            rows.append(
-                {
-                    "Species Key": species_key,
-                    "Species ID": tax_id,
-                    "Species Label": label,
-                    "Active Taxa": ", ".join([str(x) for x in active_taxa]),
-                    "Group": group,
-                }
-            )
+            rows[tax_id] = {
+                "Species Key": species_key,
+                "Species ID": tax_id,
+                "Species Label": label,
+                "Active Taxa": ", ".join([str(x) for x in active_taxa]),
+                "Group": group,
+                "Epitope Count": epitope_count,
+            }
 
-    rows = sorted(rows, key=lambda k: k["Species ID"])
+    for tax_id, row in rows.items():
+        active_taxa = row["Active Taxa"]
+        active_taxa = [x.strip() for x in active_taxa.split(',')]
+        for t in active_taxa:
+            if t == tax_id:
+                continue
+            if t in rows:
+                print(f'WARN: {t} is both a species and active for {tax_id}')
+
+    rows = sorted(rows.values(), key=lambda k: k["Species ID"])
 
     writer = csv.DictWriter(
         args.output,
-        fieldnames=["Species Key", "Species ID", "Species Label", "Active Taxa", "Group"],
+        rows[0].keys(),
         delimiter="\t",
         lineterminator="\n",
     )
