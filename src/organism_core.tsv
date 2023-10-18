@@ -313,6 +313,7 @@ NCBITaxon:1891729	Alphapolyomavirus mauratus (Hamster polyomavirus)	NCBI Taxonon
 NCBITaxon:1891730	Alphapolyomavirus muris (Murine polyomavirus)	NCBI Taxonony scientific name (NCBI Taxonomy equivalent name)		species	iedb-taxon:10002039	DNA virus	
 NCBITaxon:1891762	Betapolyomavirus hominis (BK polyomavirus)	NCBI Taxonony scientific name (NCBI Taxonomy equivalent name)		species	iedb-taxon:10002039	DNA virus	
 NCBITaxon:1891767	Betapolyomavirus macacae (Macaca mulatta polyomavirus 1)	NCBI Taxonony scientific name (NCBI Taxonomy equivalent name)		species	iedb-taxon:10002039	DNA virus	
+NCBITaxon:548681	Herpesvirales	NCBI Taxonony scientific name		upper	iedb-taxon:10002039	DNA virus	
 iedb-taxon:10002040	RNA virus	IEDB		upper	NCBITaxon:10239	Virus	TRUE
 NCBITaxon:11617	Arenaviridae	NCBI Taxonomy scientific name		upper	iedb-taxon:10002040	RNA virus	
 NCBITaxon:2905917	Pichinde virus	NCBI Taxonomy scientific name		lower	NCBITaxon:11617	Arenaviridae	

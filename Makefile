@@ -89,9 +89,7 @@ build/iedb_taxa.tsv: src/get-iedb-taxa.sql | build
 
 build/taxdmp.zip: | build
 	# curl -L -o $@ https://ftp.ncbi.nih.gov/pub/taxonomy/taxdmp.zip
-	# curl -L -o $@ https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump_archive/taxdmp_2023-06-01.zip
-	# curl -L -o $@ https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump_archive/taxdmp_2023-07-01.zip
-	curl -L -o $@ https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump_archive/taxdmp_2023-08-01.zip
+	curl -L -o $@ https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump_archive/taxdmp_2023-10-01.zip
 
 build/ncbitaxon.built: build/taxdmp.zip | $(DB)
 	sqlite3 $(DB) "DROP TABLE IF EXISTS ncbitaxon"
