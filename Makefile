@@ -24,6 +24,7 @@ build:
 ROBOT := java -jar build/robot.jar --prefix "iedb-taxon: https://ontology.iedb.org/taxon/" --prefix "ONTIE: https://ontology.iedb.org/ONTIE_"
 LDTAB := java -jar build/ldtab.jar
 NANOBOT := build/nanobot
+QSV := build/qsv
 EXPORT := build/export.py
 DB := build/nanobot.db
 
@@ -36,6 +37,11 @@ build/ldtab.jar: | build
 build/nanobot: | build
 	-echo 'ERROR: Custom nanobot build required'
 	exit 1
+
+# Download qsv binary for Linux ARM64
+build/qsv: | build/
+	curl -L -k -o build/qsv.zip "https://github.com/jqnatividad/qsv/releases/download/0.112.0/qsv-0.112.0-x86_64-unknown-linux-musl.zip"
+	cd build && unzip qsv.zip qsv
 
 build/export.py: | build/
 	curl -L -o $@ "https://github.com/ontodev/valve.rs/raw/main/scripts/export.py"
@@ -54,7 +60,7 @@ save: $(EXPORT) $(DB)
 	python3 $(EXPORT) data $(DB) build/ $$(grep build src/schema/table.tsv | cut -f1 | tr '\n' ' ')
 	python3 src/sort_organism_core.py src/organism_core.tsv
 
-DROPTABLES := active_species organism_tree_tsv organism_core iedb_taxa prefix column datatype table message
+DROPTABLES := proteomes active_species organism_core organism_tree_tsv iedb_taxa prefix column datatype table message
 .PHONY: reload
 reload: src/check_organism_core.py | $(DB)
 	sqlite3 $(DB) $(foreach DT,$(DROPTABLES),"DROP VIEW IF EXISTS '$(DT)_view'" "DROP TABLE IF EXISTS '$(DT)_conflict'" "DROP TABLE IF EXISTS '$(DT)'")
@@ -159,3 +165,6 @@ build/%-tree.owl: build/%-tree.ttl src/predicates.ttl | build/robot.jar
 build/active-species.tsv: src/get_active_species.py build/organism-tree.built build/counts_full.tsv
 	python3 $< $(DB) build/counts_full.tsv $@
 
+build/proteomes.tsv: build/active-species.tsv build/proteomes-20230902.tsv | $(QSV)
+	$(QSV) join 'Species Key' $< 'Species Key' $(word 2,$^) \
+	| $(QSV) select 1-6,11- --output $@
