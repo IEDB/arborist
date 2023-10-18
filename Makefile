@@ -165,4 +165,4 @@ build/active-species.tsv: src/get_active_species.py build/organism-tree.built bu
 
 build/proteomes.tsv: build/active-species.tsv build/proteomes-20230902.tsv | $(QSV)
 	$(QSV) join 'Species Key' $< 'Species Key' $(word 2,$^) \
-	| $(QSV) select 1-6,11- --output $@
+	| $(QSV) select 1-6,12- --output $@

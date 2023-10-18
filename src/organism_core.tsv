@@ -258,21 +258,6 @@ NCBITaxon:10860	Inoviridae	NCBI Taxonomy scientific name		upper	iedb-taxon:10002
 NCBITaxon:10442	Baculoviridae	NCBI Taxonomy scientific name		upper	iedb-taxon:10002039	DNA virus	
 NCBITaxon:10241	Chordopoxvirinae	NCBI Taxonomy scientific name		upper	iedb-taxon:10002039	DNA virus	
 NCBITaxon:10404	Hepadnavirus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002039	DNA virus	
-NCBITaxon:10292	Herpesvirus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002039	DNA virus	
-NCBITaxon:10298	Human herpesvirus 1	NCBI Taxonomy synonyn	herpes virus 1;HHV1	species	NCBITaxon:10292	Herpesvirus	
-NCBITaxon:10310	Human herpesvirus 2	NCBI Taxonomy equivalent name	herpes virus 2;HHV2;HSV-2	species	NCBITaxon:10292	Herpesvirus	
-NCBITaxon:10335	Human herpesvirus 3 (Varicella-zoster virus)	NCBI Taxonomy scientific name (GenBank common name)	herpes virus 3;HHV3;HSV-3;HSV3	species	NCBITaxon:10292	Herpesvirus	
-NCBITaxon:10359	Human herpesvirus 5 (Human cytomegalovirus)	NCBI Taxonomy scientific name (GenBank common name)	herpes virus 5;CMV;HHV5;HSV-5;HSV5	lower	NCBITaxon:10292	Herpesvirus	
-NCBITaxon:10376	Human herpesvirus 4 (Epstein Barr virus)	NCBI Taxonomy scientific name (GenBank common name)	herpes virus 4;EBV;HHV4;HSV-4;HSV4	species	NCBITaxon:10292	Herpesvirus	
-NCBITaxon:10390	Gallid alphaherpesvirus 2 (Gallid herpesvirus 2)	NCBI Taxonony scientific name		species	NCBITaxon:10292	Herpesvirus	
-NCBITaxon:10366	Murid betaherpesvirus 1 (Mouse cytomegalovirus 1)	NCBI Taxonony scientific name		species	NCBITaxon:10292	Herpesvirus	
-NCBITaxon:12657	Equid gammaherpesvirus 2 (Equid herpesvirus 2)	NCBI Taxonony scientific name		species	NCBITaxon:10292	Herpesvirus	
-NCBITaxon:33708	Murid gammaherpesvirus 4 (Murid herpesvirus 4)	NCBI Taxonony scientific name		species	NCBITaxon:10292	Herpesvirus	
-NCBITaxon:32604	Human betaherpesvirus 6B (Human herpes virus 6B)	NCBI Taxonony scientific name		species	NCBITaxon:10292	Herpesvirus	
-NCBITaxon:10320	Bovine alphaherpesvirus 1 (Bovine herpesvirus 1)	NCBI Taxonony scientific name		species	NCBITaxon:10292	Herpesvirus	
-NCBITaxon:10326	Equid alphaherpesvirus 1 (Equid herpesvirus 1)	NCBI Taxonony scientific name		species	NCBITaxon:10292	Herpesvirus	
-NCBITaxon:10331	Equid alphaherpesvirus 4 (Equid herpesvirus 4)	NCBI Taxonony scientific name		species	NCBITaxon:10292	Herpesvirus	
-NCBITaxon:10345	Suid alphaherpesvirus 1 (Alphaherpesvirus pseudorabies virus PRV)	NCBI Taxonony scientific name		species	NCBITaxon:10292	Herpesvirus	
 NCBITaxon:151340	Papillomavirus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002039	DNA virus	
 NCBITaxon:333750	Alphapapillomavirus	NCBI Taxonony scientific name		upper	NCBITaxon:151340	Papillomavirus	
 NCBITaxon:40119	Parvovirinae	NCBI Taxonomy scientific name		upper	iedb-taxon:10002039	DNA virus	
@@ -314,6 +299,21 @@ NCBITaxon:1891730	Alphapolyomavirus muris (Murine polyomavirus)	NCBI Taxonony sc
 NCBITaxon:1891762	Betapolyomavirus hominis (BK polyomavirus)	NCBI Taxonony scientific name (NCBI Taxonomy equivalent name)		species	iedb-taxon:10002039	DNA virus	
 NCBITaxon:1891767	Betapolyomavirus macacae (Macaca mulatta polyomavirus 1)	NCBI Taxonony scientific name (NCBI Taxonomy equivalent name)		species	iedb-taxon:10002039	DNA virus	
 NCBITaxon:548681	Herpesvirales	NCBI Taxonony scientific name		upper	iedb-taxon:10002039	DNA virus	
+NCBITaxon:10292	Herpesvirus	singular of NCBI Taxonomy scientific name		upper	NCBITaxon:548681	Herpesvirales	
+NCBITaxon:10298	Human herpesvirus 1	NCBI Taxonomy synonyn	herpes virus 1;HHV1	species	NCBITaxon:10292	Herpesvirus	
+NCBITaxon:10310	Human herpesvirus 2	NCBI Taxonomy equivalent name	herpes virus 2;HHV2;HSV-2	species	NCBITaxon:10292	Herpesvirus	
+NCBITaxon:10335	Human herpesvirus 3 (Varicella-zoster virus)	NCBI Taxonomy scientific name (GenBank common name)	herpes virus 3;HHV3;HSV-3;HSV3	species	NCBITaxon:10292	Herpesvirus	
+NCBITaxon:10359	Human herpesvirus 5 (Human cytomegalovirus)	NCBI Taxonomy scientific name (GenBank common name)	herpes virus 5;CMV;HHV5;HSV-5;HSV5	lower	NCBITaxon:10292	Herpesvirus	
+NCBITaxon:10376	Human herpesvirus 4 (Epstein Barr virus)	NCBI Taxonomy scientific name (GenBank common name)	herpes virus 4;EBV;HHV4;HSV-4;HSV4	species	NCBITaxon:10292	Herpesvirus	
+NCBITaxon:10390	Gallid alphaherpesvirus 2 (Gallid herpesvirus 2)	NCBI Taxonony scientific name		species	NCBITaxon:10292	Herpesvirus	
+NCBITaxon:10366	Murid betaherpesvirus 1 (Mouse cytomegalovirus 1)	NCBI Taxonony scientific name		species	NCBITaxon:10292	Herpesvirus	
+NCBITaxon:12657	Equid gammaherpesvirus 2 (Equid herpesvirus 2)	NCBI Taxonony scientific name		species	NCBITaxon:10292	Herpesvirus	
+NCBITaxon:33708	Murid gammaherpesvirus 4 (Murid herpesvirus 4)	NCBI Taxonony scientific name		species	NCBITaxon:10292	Herpesvirus	
+NCBITaxon:32604	Human betaherpesvirus 6B (Human herpes virus 6B)	NCBI Taxonony scientific name		species	NCBITaxon:10292	Herpesvirus	
+NCBITaxon:10320	Bovine alphaherpesvirus 1 (Bovine herpesvirus 1)	NCBI Taxonony scientific name		species	NCBITaxon:10292	Herpesvirus	
+NCBITaxon:10326	Equid alphaherpesvirus 1 (Equid herpesvirus 1)	NCBI Taxonony scientific name		species	NCBITaxon:10292	Herpesvirus	
+NCBITaxon:10331	Equid alphaherpesvirus 4 (Equid herpesvirus 4)	NCBI Taxonony scientific name		species	NCBITaxon:10292	Herpesvirus	
+NCBITaxon:10345	Suid alphaherpesvirus 1 (Alphaherpesvirus pseudorabies virus PRV)	NCBI Taxonony scientific name		species	NCBITaxon:10292	Herpesvirus	
 iedb-taxon:10002040	RNA virus	IEDB		upper	NCBITaxon:10239	Virus	TRUE
 NCBITaxon:11617	Arenaviridae	NCBI Taxonomy scientific name		upper	iedb-taxon:10002040	RNA virus	
 NCBITaxon:2905917	Pichinde virus	NCBI Taxonomy scientific name		lower	NCBITaxon:11617	Arenaviridae	
@@ -366,7 +366,7 @@ NCBITaxon:39738	Tombusviridae	NCBI Taxonomy scientific name		upper	iedb-taxon:10
 NCBITaxon:39740	Bromoviridae	NCBI Taxonomy scientific name		upper	iedb-taxon:10002044	Plant virus (RNA)	
 NCBITaxon:69973	Closteroviridae	NCBI Taxonomy scientific name		upper	iedb-taxon:10002044	Plant virus (RNA)	
 NCBITaxon:72539	Physalis mottle virus (Belladonna mottle virus(I)- Iowa strain)	NCBI Taxonony scientific name (NCBI Taxonomy equivalent name)		lower	iedb-taxon:10002044	Plant virus (RNA)	
-NCBITaxon:119163	Luteoviridae	NCBI Taxonomy scientific name		upper	iedb-taxon:10002044	Plant virus (RNA)	
+NCBITaxon:2732548	Tolivirales	NCBI Taxonomy scientific name		upper	iedb-taxon:10002044	Plant virus (RNA)	
 NCBITaxon:143901	Benyvirus	NCBI Taxonomy scientific name		upper	iedb-taxon:10002044	Plant virus (RNA)	
 NCBITaxon:675064	Alphaflexiviridae	NCBI Taxonomy scientific name		upper	iedb-taxon:10002044	Plant virus (RNA)	
 NCBITaxon:675068	Betaflexiviridae	NCBI Taxonomy scientific name		upper	iedb-taxon:10002044	Plant virus (RNA)	
