@@ -97,7 +97,7 @@ build/ncbitaxon.built: build/taxdmp.zip | $(DB)
 	sqlite3 $(DB) "CREATE INDEX idx_ncbitaxon_subject ON ncbitaxon(subject)"
 	sqlite3 $(DB) "CREATE INDEX idx_ncbitaxon_predicate ON ncbitaxon(predicate)"
 	sqlite3 $(DB) "CREATE INDEX idx_ncbitaxon_object ON ncbitaxon(object)"
-	sqlite3 $(DB) "ANALYZE"
+	sqlite3 $(DB) "ANALYZE ncbitaxon"
 	touch $@
 
 
@@ -108,7 +108,7 @@ build/organism-tree-old.built: build/ncbitaxon.built build/organism-tree-old.owl
 	sqlite3 $(DB) "DROP TABLE IF EXISTS organism_tree_old"
 	sed s/statement/organism_tree_old/g src/statement.sql | sqlite3 $(DB)
 	$(LDTAB) import $(DB) $(word 2,$^) -t organism_tree_old
-	# sqlite3 $(DB) "ANALYZE"
+	sqlite3 $(DB) "ANALYZE organism_tree_old"
 	touch $@
 
 # Load an existing subspecies-tree.owl
@@ -116,7 +116,7 @@ build/subspecies-tree-old.built: build/ncbitaxon.built build/subspecies-tree-old
 	sqlite3 $(DB) "DROP TABLE IF EXISTS subspecies_tree_old"
 	sed s/statement/subspecies_tree_old/g src/statement.sql | sqlite3 $(DB)
 	$(LDTAB) import $(DB) $(word 2,$^) -t subspecies_tree_old
-	# sqlite3 $(DB) "ANALYZE"
+	sqlite3 $(DB) "ANALYZE subspecies_tree_old"
 	touch $@
 
 
@@ -132,13 +132,13 @@ build/organism-tree.tsv: build/ncbitaxon.built src/assign_species.py src/organis
 build/organism-tree.built: build/ncbitaxon.built src/build_organism_tree.py build/organism-tree.tsv build/organism_core.html
 	sqlite3 $(DB) "DROP TABLE IF EXISTS organism_tree"
 	python3 $(word 2, $^) $(DB) $(filter %.tsv, $^)
-	# sqlite3 $(DB) "ANALYZE"
+	sqlite3 $(DB) "ANALYZE organism_tree"
 	touch $@
 
 build/subspecies-tree.built: build/organism-tree.built src/build_subspecies_tree.py
 	sqlite3 $(DB) "DROP TABLE IF EXISTS subspecies_tree"
 	python3 $(word 2, $^) $(DB)
-	# sqlite3 $(DB) "ANALYZE"
+	sqlite3 $(DB) "ANALYZE subspecies_tree"
 	touch $@
 
 build/organism-tree.ttl: build/organism-tree.built | build/ldtab.jar
