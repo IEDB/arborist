@@ -35,8 +35,8 @@ build/ldtab.jar: | build
 	curl -L -o $@ "https://github.com/ontodev/ldtab.clj/releases/download/v2023-08-19/ldtab.jar"
 
 build/nanobot: | build
-	-echo 'ERROR: Custom nanobot build required'
-	exit 1
+	curl -L -k -o $@ "https://github.com/ontodev/nanobot.rs/releases/download/v2023-10-26/nanobot-x86_64-unknown-linux-musl"
+	chmod +x $@
 
 # Download qsv binary for Linux ARM64
 build/qsv: | build/
