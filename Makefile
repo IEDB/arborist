@@ -51,6 +51,7 @@ build/export.py: | build/
 
 $(DB): | build build/nanobot
 	rm -f $@ build/*.built
+	echo 'curie	label	label_source	iedb_synonyms	rank	level	epitope_count	parent	parent_label	parent2	parent2_label	species	species_label	source_table	use_other' > build/organism-tree.tsv
 	$(NANOBOT) init
 
 .PHONY: save
