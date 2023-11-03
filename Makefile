@@ -164,6 +164,6 @@ build/%-tree.owl: build/%-tree.ttl src/predicates.ttl | build/robot.jar
 build/active-species.tsv: src/get_active_species.py build/organism-tree.built build/counts_full.tsv
 	python3 $< $(DB) build/counts_full.tsv $@
 
-b[uild/proteomes.tsv: build/active-species.tsv src/selected_proteomes.tsv | $(QSV)
+build/proteomes.tsv: build/active-species.tsv src/selected_proteomes.tsv | $(QSV)
 	$(QSV) join --left 'Species ID' $< 'Species ID' $(word 2,$^) \
 	| $(QSV) select 1-6,12- --output $@
