@@ -580,45 +580,13 @@ NCBITaxon:32644	Unidentified	NCBI Taxonomy scientific name		upper	NCBITaxon:1	Ro
 NCBITaxon:28384	other sequences	NCBI Taxonomy scientific name		upper	NCBITaxon:1	Root	
 NCBITaxon:36549	Plasmid	singular of NCBI Taxonomy scientific name		upper	NCBITaxon:28384	other sequences	
 NCBITaxon:81077	Artificial sequence	NCBI Taxonomy scientific name		upper	NCBITaxon:28384	other sequences	
-iedb-taxon:10002311	Canine Distemper Virus strain Rockborn	IEDB		lower	NCBITaxon:3052342	Morbillivirus canis (Canine distemper virus)	
-iedb-taxon:10000461	Canine distemper virus FXNO	IEDB		lower	NCBITaxon:3052342	Morbillivirus canis (Canine distemper virus)	
-iedb-taxon:10001616	Guanarito virus strain INH-95551	IEDB		lower	NCBITaxon:3052307	Mammarenavirus guanaritoense (Guanarito arenavirus)	
-iedb-taxon:10002797	Crimean-Congo hemorrhagic fever virus strain Afg09-2990	IEDB		lower	NCBITaxon:3052518	Orthonairovirus haemorrhagiae (Crimean-Congo haemorrhagic fever virus)	
-iedb-taxon:10002568	Crimean-Congo hemorrhagic fever virus Oman 199809166	IEDB		lower	NCBITaxon:3052518	Orthonairovirus haemorrhagiae (Crimean-Congo haemorrhagic fever virus)	
-iedb-taxon:10002810	Canine distemper virus strain NJ(11)2	IEDB		lower	NCBITaxon:3052342	Morbillivirus canis (Canine distemper virus)	
-iedb-taxon:10002779	Lassa Virus Soromba-R (Lassa virus (strain Soromba-R))	IEDB		lower	NCBITaxon:3052310	Mammarenavirus lassaense (Lassa mammarenavirus)	
-iedb-taxon:10002764	Mus musculus HLA-B*44:01 Tg	IEDB		lower	iedb-taxon:10001564	Mus musculus HLA-B Transgenic	
 NCBITaxon:1586324	Porcine deltacoronavirus	NCBI Taxonomy scientific name		lower	NCBITaxon:1965089	Coronavirus HKU15	
-iedb-taxon:10000492	Lymphocytic choriomeningitis virus ESC	IEDB		lower	NCBITaxon:3052303	Mammarenavirus choriomeningitidis (Lymphocytic choriomeningitis mammarenavirus)	
-iedb-taxon:10001238	Puumala virus (strain Umea/hu)	IEDB		lower	NCBITaxon:3052493	Orthohantavirus puumalaense (Puumala hantavirus)	
-iedb-taxon:10000483	Puumala virus CG18-20	IEDB		lower	NCBITaxon:3052493	Orthohantavirus puumalaense (Puumala hantavirus)	
 iedb-taxon:10001020	Peste-des-petits-ruminants virus (strain Nigeria 75/1)	IEDB		lower	NCBITaxon:2593991	Peste des petits ruminants virus (Peste-des-petits-ruminants)	
 iedb-taxon:10002123	Peste-des-petits-ruminants virus China/Tibet/Geg/07-30	IEDB		lower	NCBITaxon:2593991	Peste des petits ruminants virus (Peste-des-petits-ruminants)	
-iedb-taxon:10002566	Crimean-Congo hemorrhagic fever virus Turkey 200406546	IEDB		lower	NCBITaxon:3052518	Orthonairovirus haemorrhagiae (Crimean-Congo haemorrhagic fever virus)	
-iedb-taxon:10000493	Lymphocytic choriomeningitis virus UBC	IEDB		lower	NCBITaxon:3052303	Mammarenavirus choriomeningitidis (Lymphocytic choriomeningitis mammarenavirus)	
 NCBITaxon:674529	Bacteroides faecis	NCBI Taxonomy scientific name		species	NCBITaxon:816	Bacteroides	
 NCBITaxon:10090	Mus musculus (mouse)	NCBI Taxonomy scientific name (NCBI common name)		species			
-iedb-taxon:10002871	Lassa Virus NIG08-A41 (Lassa virus (strain Nig08-A19))	IEDB		lower	NCBITaxon:3052310	Mammarenavirus lassaense (Lassa mammarenavirus)	
-iedb-taxon:10001980	Mus musculus Ob.1A12 TCR Tg	IEDB		lower	iedb-taxon:10001539	Mus musculus TCR transgenic	
-iedb-taxon:10002780	Lassa Virus TGO2016 (Lassa virus (strain TGO2016))	IEDB		lower	NCBITaxon:3052310	Mammarenavirus lassaense (Lassa mammarenavirus)	
-iedb-taxon:10001336	Mus musculus MS2-3C8 TCR Tg	IEDB		lower	iedb-taxon:10001539	Mus musculus TCR transgenic	
-iedb-taxon:10000489	Lymphocytic choriomeningitis virus 8.7B23	IEDB		lower	NCBITaxon:3052303	Mammarenavirus choriomeningitidis (Lymphocytic choriomeningitis mammarenavirus)	
 NCBITaxon:11216	Human respirovirus 3 (Human parainfluenza 3 virus)	NCBI Taxonony scientific name		species	NCBITaxon:186938	Respirovirus	
-iedb-taxon:10002310	Canine Distemper Virus strain PS	IEDB		lower	NCBITaxon:3052342	Morbillivirus canis (Canine distemper virus)	
 iedb-taxon:10000532	Peste-des-petits-ruminants virus Sungri-96	IEDB		lower	NCBITaxon:2593991	Peste des petits ruminants virus (Peste-des-petits-ruminants)	
 iedb-taxon:10002256	Peste-des-petits-ruminants virus Ivory Coast 1989	IEDB		lower	NCBITaxon:2593991	Peste des petits ruminants virus (Peste-des-petits-ruminants)	
-iedb-taxon:10002763	Mus musculus HLA-A*11:01 Tg	IEDB		lower	iedb-taxon:10001563	Mus musculus HLA-A Transgenic	
-iedb-taxon:10002793	Lassa Virus Nig08-A19 (Lassa virus (strain Nig08-A19))	IEDB		lower	NCBITaxon:3052310	Mammarenavirus lassaense (Lassa mammarenavirus)	
-iedb-taxon:10000484	Puumala virus Kazan	IEDB		lower	NCBITaxon:3052493	Orthohantavirus puumalaense (Puumala hantavirus)	
-iedb-taxon:10000490	Lymphocytic choriomeningitis virus A22.2b	IEDB		lower	NCBITaxon:3052303	Mammarenavirus choriomeningitidis (Lymphocytic choriomeningitis mammarenavirus)	
-iedb-taxon:10000544	Sin Nombre virus NM H10	IEDB		lower	NCBITaxon:3052499	Orthohantavirus sinnombreense (Sin Nombre hantavirus)	
-iedb-taxon:10000491	Lymphocytic choriomeningitis virus Docile	IEDB		lower	NCBITaxon:3052303	Mammarenavirus choriomeningitidis (Lymphocytic choriomeningitis mammarenavirus)	
-iedb-taxon:10002792	Lassa Virus LASV237-NIG-2010 (Lassa virus (strain LASV237-NIG-2010))	IEDB		lower	NCBITaxon:3052310	Mammarenavirus lassaense (Lassa mammarenavirus)	
-iedb-taxon:10002671	Lassa virus Pinneo (Lassa virus (strain Pinneo))	IEDB		lower	NCBITaxon:3052310	Mammarenavirus lassaense (Lassa mammarenavirus)	
-iedb-taxon:10002567	Crimean-Congo hemorrhagic fever virus Kosova Hoti	IEDB		lower	NCBITaxon:3052518	Orthonairovirus haemorrhagiae (Crimean-Congo haemorrhagic fever virus)	
 iedb-taxon:10002682	Porcine Deltacoronavirus ZJ17HZ0102/2017	IEDB		lower	NCBITaxon:1586324	Porcine deltacoronavirus	
-iedb-taxon:10002312	Canine Distemper Virus strain 3	IEDB		lower	NCBITaxon:3052342	Morbillivirus canis (Canine distemper virus)	
 NCBITaxon:328814	Alistipes shahii	NCBI Taxonomy scientific name		species	NCBITaxon:239759	Alistipes	
-iedb-taxon:10002791	Lassa Virus LP (Lassa virus (strain LP))	IEDB		lower	NCBITaxon:3052310	Mammarenavirus lassaense (Lassa mammarenavirus)	
-iedb-taxon:10002809	Canine distemper virus strain 851	IEDB		lower	NCBITaxon:3052342	Morbillivirus canis (Canine distemper virus)	
-iedb-taxon:10002078	Mus musculus HLA-DP2 Tg	IEDB		lower	iedb-taxon:10002846	Mus musculus HLA-DP Transgenic	
