@@ -303,7 +303,7 @@ NCBITaxon:10292	Herpesvirus	singular of NCBI Taxonomy scientific name		upper	NCB
 NCBITaxon:10298	Human herpesvirus 1	NCBI Taxonomy synonyn	herpes virus 1;HHV1	species	NCBITaxon:10292	Herpesvirus	
 NCBITaxon:10310	Human herpesvirus 2	NCBI Taxonomy equivalent name	herpes virus 2;HHV2;HSV-2	species	NCBITaxon:10292	Herpesvirus	
 NCBITaxon:10335	Human herpesvirus 3 (Varicella-zoster virus)	NCBI Taxonomy scientific name (GenBank common name)	herpes virus 3;HHV3;HSV-3;HSV3	species	NCBITaxon:10292	Herpesvirus	
-NCBITaxon:10359	Human herpesvirus 5 (Human cytomegalovirus)	NCBI Taxonomy scientific name (GenBank common name)	herpes virus 5;CMV;HHV5;HSV-5;HSV5	lower	NCBITaxon:10292	Herpesvirus	
+NCBITaxon:10359	Human herpesvirus 5 (Human cytomegalovirus)	NCBI Taxonomy scientific name (GenBank common name)	herpes virus 5;CMV;HHV5;HSV-5;HSV5	species	NCBITaxon:10292	Herpesvirus	
 NCBITaxon:10376	Human herpesvirus 4 (Epstein Barr virus)	NCBI Taxonomy scientific name (GenBank common name)	herpes virus 4;EBV;HHV4;HSV-4;HSV4	species	NCBITaxon:10292	Herpesvirus	
 NCBITaxon:10390	Gallid alphaherpesvirus 2 (Gallid herpesvirus 2)	NCBI Taxonony scientific name		species	NCBITaxon:10292	Herpesvirus	
 NCBITaxon:10366	Murid betaherpesvirus 1 (Mouse cytomegalovirus 1)	NCBI Taxonony scientific name		species	NCBITaxon:10292	Herpesvirus	

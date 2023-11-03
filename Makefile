@@ -90,7 +90,7 @@ build/iedb_taxa.tsv: src/get-iedb-taxa.sql | build
 
 build/taxdmp.zip: | build
 	# curl -L -o $@ https://ftp.ncbi.nih.gov/pub/taxonomy/taxdmp.zip
-	curl -L -o $@ https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump_archive/taxdmp_2023-10-01.zip
+	curl -L -o $@ https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump_archive/taxdmp_2023-11-01.zip
 
 build/ncbitaxon.built: build/taxdmp.zip | $(DB)
 	sqlite3 $(DB) "DROP TABLE IF EXISTS ncbitaxon"
@@ -164,6 +164,6 @@ build/%-tree.owl: build/%-tree.ttl src/predicates.ttl | build/robot.jar
 build/active-species.tsv: src/get_active_species.py build/organism-tree.built build/counts_full.tsv
 	python3 $< $(DB) build/counts_full.tsv $@
 
-build/proteomes.tsv: build/active-species.tsv src/selected_proteomes.tsv | $(QSV)
+b[uild/proteomes.tsv: build/active-species.tsv src/selected_proteomes.tsv | $(QSV)
 	$(QSV) join --left 'Species ID' $< 'Species ID' $(word 2,$^) \
 	| $(QSV) select 1-6,12- --output $@
