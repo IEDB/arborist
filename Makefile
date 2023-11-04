@@ -66,7 +66,7 @@ DROPTABLES := proteomes active_species organism_core organism_tree_tsv iedb_taxa
 reload: src/check_organism_core.py | $(DB)
 	sqlite3 $(DB) $(foreach DT,$(DROPTABLES),"DROP VIEW IF EXISTS '$(DT)_view'" "DROP TABLE IF EXISTS '$(DT)_conflict'" "DROP TABLE IF EXISTS '$(DT)'")
 	$(NANOBOT) init
-	python3 $< $(DB)
+	-python3 $< $(DB)
 
 
 ### IEDB Data
