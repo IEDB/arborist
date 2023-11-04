@@ -357,6 +357,8 @@ NCBITaxon:11241	Rinderpest morbillivirus (Rinderpest virus)	NCBI Taxonony scient
 NCBITaxon:11240	Phocine morbillivirus (Phocine distemper virus)	NCBI Taxonony scientific name		species	NCBITaxon:11158	Paramyxovirus	
 NCBITaxon:2560319	Avian orthoavulavirus 1 (Avian Paramyxovirus Serotype I)	NCBI Taxonony scientific name		species	NCBITaxon:11158	Paramyxovirus	
 NCBITaxon:2560602	Mumps orthorubulavirus (Mumps virus)	NCBI Taxonony scientific name		species	NCBITaxon:11158	Paramyxovirus	
+NCBITaxon:186938	Respirovirus	NCBI Taxonony scientific name		upper	NCBITaxon:11158	Paramyxovirus	
+NCBITaxon:11216	Human respirovirus 3 (Human parainfluenza 3 virus)	NCBI Taxonony scientific name		species	NCBITaxon:186938	Respirovirus	
 NCBITaxon:12058	Picornavirus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002040	RNA virus	
 NCBITaxon:12110	Foot-and-mouth disease virus	NCBI Taxonomy scientific name		species	NCBITaxon:12058	Picornavirus	
 iedb-taxon:10002044	Plant virus (RNA)	IEDB		upper	iedb-taxon:10002040	RNA virus	
@@ -547,6 +549,9 @@ NCBITaxon:2720068	unclassified Sarbecovirus	NCBI Taxonomy scientific name		upper
 iedb-taxon:694002-other	Other Betacoronavirus	IEDB		upper	NCBITaxon:694002	Betacoronavirus	
 iedb-taxon:11118-other	Other Coronavirus	IEDB		upper	NCBITaxon:11118	Coronavirus	
 NCBITaxon:694013	Gammacoronavirus	NCBI Taxonomy scientific name		upper	iedb-taxon:11118-other	Other Coronavirus	
+NCBITaxon:1965089	Coronavirus HKU15	NCBI Taxonony scientific name		upper	iedb-taxon:11118-other	Other Coronavirus	
+NCBITaxon:1586324	Porcine deltacoronavirus	NCBI Taxonomy scientific name		species	NCBITaxon:1965089	Coronavirus HKU15	
+iedb-taxon:10002682	Porcine Deltacoronavirus ZJ17HZ0102/2017	IEDB		lower	NCBITaxon:1586324	Porcine deltacoronavirus	
 iedb-taxon:10002040-other	Other RNA virus	IEDB		upper	iedb-taxon:10002040	RNA virus	
 NCBITaxon:12283	Nodavirus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002040	RNA virus	
 NCBITaxon:76803	Arterivirus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002040	RNA virus	
@@ -581,10 +586,7 @@ NCBITaxon:32644	Unidentified	NCBI Taxonomy scientific name		upper	NCBITaxon:1	Ro
 NCBITaxon:28384	other sequences	NCBI Taxonomy scientific name		upper	NCBITaxon:1	Root	
 NCBITaxon:36549	Plasmid	singular of NCBI Taxonomy scientific name		upper	NCBITaxon:28384	other sequences	
 NCBITaxon:81077	Artificial sequence	NCBI Taxonomy scientific name		upper	NCBITaxon:28384	other sequences	
-iedb-taxon:10002682	Porcine Deltacoronavirus ZJ17HZ0102/2017	IEDB		lower	NCBITaxon:1586324	Porcine deltacoronavirus	
 iedb-taxon:10000532	Peste-des-petits-ruminants virus Sungri-96	IEDB		lower	NCBITaxon:2593991	Peste des petits ruminants virus (Peste-des-petits-ruminants)	
-NCBITaxon:11216	Human respirovirus 3 (Human parainfluenza 3 virus)	NCBI Taxonony scientific name		species	NCBITaxon:186938	Respirovirus	
-iedb-taxon:10002123	Peste-des-petits-ruminants virus China/Tibet/Geg/07-30	IEDB		lower	NCBITaxon:2593991	Peste des petits ruminants virus (Peste-des-petits-ruminants)	
-NCBITaxon:1586324	Porcine deltacoronavirus	NCBI Taxonomy scientific name		lower	NCBITaxon:1965089	Coronavirus HKU15	
 iedb-taxon:10001020	Peste-des-petits-ruminants virus (strain Nigeria 75/1)	IEDB		lower	NCBITaxon:2593991	Peste des petits ruminants virus (Peste-des-petits-ruminants)	
 iedb-taxon:10002256	Peste-des-petits-ruminants virus Ivory Coast 1989	IEDB		lower	NCBITaxon:2593991	Peste des petits ruminants virus (Peste-des-petits-ruminants)	
+iedb-taxon:10002123	Peste-des-petits-ruminants virus China/Tibet/Geg/07-30	IEDB		lower	NCBITaxon:2593991	Peste des petits ruminants virus (Peste-des-petits-ruminants)	
