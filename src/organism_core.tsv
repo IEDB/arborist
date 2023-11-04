@@ -172,6 +172,7 @@ NCBITaxon:9481	Callithrix (marmoset)	NCBI Taxonomy scientific name (common name)
 NCBITaxon:9486	Saguinus (tamarin)	NCBI Taxonomy scientific name (common name)		upper	NCBITaxon:9479	Platyrrhini (New World monkey)	
 NCBITaxon:9504	Aotus (night monkey)	NCBI Taxonomy scientific name (singular of GenBank common name)		upper	NCBITaxon:9479	Platyrrhini (New World monkey)	
 NCBITaxon:9506	Ateles (spider monkey)	NCBI Taxonomy scientific name (common name)		upper	NCBITaxon:9479	Platyrrhini (New World monkey)	
+NCBITaxon:38020	Callitrichinae sp. (marmosets)	NCBI Taxonony scientific name (synonym)		species	NCBITaxon:9479	Platyrrhini (New World monkey)	
 iedb-taxon:9443-other	Other Primate	IEDB		upper	NCBITaxon:9443	Primate	
 iedb-taxon:40674-other	Other Mammal	IEDB		upper	NCBITaxon:40674	Mammal	
 NCBITaxon:9823	Sus scrofa (pig)	NCBI Taxonomy scientific name (GenBank common name)		species	iedb-taxon:40674-other	Other Mammal	
