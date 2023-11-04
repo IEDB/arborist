@@ -26,8 +26,8 @@ organism_core	curie			taxon_CURIE	primary	the NCBI or IEDB taxon ID
 organism_core	label			label	unique	the label for this taxon
 organism_core	label_source			label		the source of the label for this taxon
 organism_core	iedb_synonyms		empty	semicolon_labels		a list of IEDB's synonyms, separated by semicolons
-organism_core	parent		empty	taxon_CURIE	from(organism_tree_tsv.curie)	the ID of the parent of this taxon
-organism_core	parent_label		empty	label	from(organism_tree_tsv.label)	the label of the parent of this taxon
+organism_core	parent		empty	taxon_CURIE	tree(curie)	the ID of the parent of this taxon
+organism_core	parent_label		empty	label	tree(label)	the label of the parent of this taxon
 organism_core	level			taxon_level		the level of the taxon: upper, species, lower
 organism_core	use_other		empty	boolean		true when an 'Other X' node should collect outliers for this taxon
 organism_tree_tsv	curie			taxon_CURIE	primary	the CURIE for this taxon
