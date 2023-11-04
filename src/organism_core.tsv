@@ -550,8 +550,8 @@ NCBITaxon:2720068	unclassified Sarbecovirus	NCBI Taxonomy scientific name		upper
 iedb-taxon:694002-other	Other Betacoronavirus	IEDB		upper	NCBITaxon:694002	Betacoronavirus	
 iedb-taxon:11118-other	Other Coronavirus	IEDB		upper	NCBITaxon:11118	Coronavirus	
 NCBITaxon:694013	Gammacoronavirus	NCBI Taxonomy scientific name		upper	iedb-taxon:11118-other	Other Coronavirus	
-NCBITaxon:1965089	Coronavirus HKU15	NCBI Taxonony scientific name		upper	iedb-taxon:11118-other	Other Coronavirus	
-NCBITaxon:1586324	Porcine deltacoronavirus	NCBI Taxonomy scientific name		species	NCBITaxon:1965089	Coronavirus HKU15	
+NCBITaxon:1965089	Coronavirus HKU15	NCBI Taxonony scientific name		species	iedb-taxon:11118-other	Other Coronavirus	
+NCBITaxon:1586324	Porcine deltacoronavirus	NCBI Taxonomy scientific name		lower	NCBITaxon:1965089	Coronavirus HKU15	
 iedb-taxon:10002682	Porcine Deltacoronavirus ZJ17HZ0102/2017	IEDB		lower	NCBITaxon:1586324	Porcine deltacoronavirus	
 iedb-taxon:10002040-other	Other RNA virus	IEDB		upper	iedb-taxon:10002040	RNA virus	
 NCBITaxon:12283	Nodavirus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002040	RNA virus	
