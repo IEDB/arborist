@@ -1,0 +1,118 @@
+table	column	label	nulltype	datatype	structure	description
+table	table			label	unique	name of this table
+table	path			line		path to the TSV file for this table, relative to the table.tsv file
+table	type		empty	table_type		type of this table, used for tables with special meanings
+table	description		empty	text		a description of this table
+column	table			label	from(table.table)	the table that this column belongs to
+column	column			label		the name of this column
+column	nulltype		empty	word	from(datatype.datatype)	the datatype for NULL values in this column
+column	datatype			word	from(datatype.datatype)	the datatype for this column
+column	structure		empty	label		schema information for this column
+column	description		empty	text		a description of this column
+datatype	datatype			word	primary	the name of this datatype
+datatype	parent		empty	word	tree(datatype)	the parent datatype
+datatype	condition		empty	line		the method for testing the datatype
+datatype	description		empty	text		a description of this datatype
+datatype	SQL type		empty	sql_type		the SQL type for representing this data
+datatype	HTML type		empty	html_type		the HTML type for viewing and editing this data
+source	source_id			natural_number	primary	
+source	accession			label		
+source	database			label		
+source	name			label		
+source	aliases		empty	label		
+source	chemical_type		empty	label		
+source	source_date		empty	label		
+source	sequence		empty	label		
+source	smiles_structure		empty	label		
+source	synonyms		empty	label		
+source	organism_id			tax_id		
+source	organism_name		empty	label		
+source	chebi_inchi		empty	label		
+source	chebi_info_update		empty	label		
+source	chebi_info_unavail		empty	label		
+source	parent_chebi_accession		empty	label		
+source	last_modified		empty	label		
+source	iri		empty	label		
+source	gene_name		empty	label		
+source	modified_date		empty	label		
+source	created_date		empty	label		
+object	object_id			natural_number	primary	
+object	reference_id			natural_number		
+object	object_type			label		
+object	object_sub_type		empty	label		
+object	object_description		empty	label		
+object	derivative_type		empty	label		
+object	organism_id		empty	tax_id		
+object	organism_name		empty	label		
+object	organism2_id		empty	tax_id		
+object	organism2_name		empty	label		
+object	region		empty	label		
+object	starting_position		empty	label		
+object	ending_position		empty	label		
+object	cell_name		empty	label		
+object	cell_type		empty	label		
+object	tissue_type		empty	label		
+object	origin		empty	label		
+object	mol1_seq		empty	label		
+object	mol1_modified_seq		empty	label		
+object	mol1_modification		empty	label		
+object	mol1_source_id		empty	natural_number	from(source.source_id)	
+object	mol1_name		empty	label		
+object	mol1_accession		empty	label		
+object	mol2_modified_seq		empty	label		
+object	mol2_modification		empty	label		
+object	mol2_source_id		empty	natural_number	from(source.source_id)	
+object	mol2_name		empty	label		
+object	mol2_accession		empty	label		
+object	mol2_chemical_type		empty	label		
+object	source_molecule_name		empty	label		
+object	mult_chain_mol_name		empty	label		
+object	carrier_id		empty	label		
+object	antigen_id		empty	label		
+object	immunogen_id		empty	label		
+object	epitope_id		empty	natural_number		
+object	mol2_starting_position		empty	label		
+object	mol2_ending_position		empty	label		
+object	splice_frag1_seq		empty	label		
+object	splice_frag2_seq		empty	label		
+object	modified_date		empty	label		
+object	created_date		empty	label		
+epitope	epitope_id			natural_number	primary	
+epitope	reference_id			natural_number		
+epitope	e_name			label		
+epitope	e_location			label		
+epitope	e_region_domain_flag		empty	label		
+epitope	e_comments		empty	label		
+epitope	e_object_id		empty	natural_number	from(object.object_id)	
+epitope	e_object_sub_type		empty	label		
+epitope	e_object_mol_name		empty	label		
+epitope	e_object_organism_name		empty	label		
+epitope	e_object_desc		empty	label		
+epitope	related_object_id		empty	natural_number	from(object.object_id)	
+epitope	related_object_type		empty	label		
+epitope	related_object_sub_type		empty	label		
+epitope	related_object_mol_name		empty	label		
+epitope	related_object_organism_name		empty	label		
+epitope	related_object_desc		empty	label		
+epitope	e_ev		empty	label		
+epitope	e_ref_start		empty	label		
+epitope	e_ref_end		empty	label		
+epitope	e_ref_region		empty	label		
+epitope	dst_row_id		empty	label		
+epitope	protein_mutation_position		empty	label		
+epitope	protein_mutation_aa		empty	label		
+epitope	protein_wildtype_aa		empty	label		
+epitope	dna_mutation_position		empty	label		
+epitope	dna_mutant_base		empty	label		
+epitope	dna_wildtype_base		empty	label		
+epitope	nt_mut_flag		empty	label		
+epitope	modified_date		empty	label		
+epitope	created_date		empty	label		
+peptide_source	Accession			label	from(source.accession)	
+peptide_source	Name			label		
+peptide_source	Sequence			label		
+peptide_source	Organism ID			tax_id		
+peptide	Sequence			label		
+peptide	Source Name			label		
+peptide	Accession			label	from(peptide_source.Accession)	
+peptide	Organism ID			tax_id		

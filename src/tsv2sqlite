@@ -1,0 +1,52 @@
+#!/bin/sh
+#
+# Quickly load TSV into a SQLite database
+# that has already been configured using VALVE.
+#
+# This requires adding the row_number column,
+# running SQLite .import,
+# then replacing certain empty strings with NULLs.
+
+DB=$1
+TSV=$2
+
+TABLE=$(basename "$TSV" .tsv)
+NEW_TSV=$(dirname "$TSV")"/$TABLE.tmp.tsv"
+
+QSV=build/qsv
+SQLITE=sqlite3
+PRAGMAS="PRAGMA journal_mode = OFF;
+PRAGMA synchronous = 0;
+PRAGMA cache_size = 1000000;
+PRAGMA locking_mode = EXCLUSIVE;
+PRAGMA temp_store = MEMORY;"
+
+fail() {
+  echo "ERROR: $1"
+  exit 1
+}
+
+mkdir -p build/
+
+# Add row_number column to the table
+HEADERS=$($QSV headers --just-names "$TSV" | tr '\n' ',')
+$QSV enum --new-column row_number "$TSV" \
+| $QSV select "row_number,$HEADERS" \
+  --output "$NEW_TSV"
+
+# Load table into SQLite
+$SQLITE "$DB" "$PRAGMAS" \
+  ".mode tabs" \
+  ".import --skip 1 '$NEW_TSV' '$TABLE'" \
+  || fail "Failed to load $TSV into $DB"
+rm "$NEW_TSV"
+
+# For all columns with 'empty' nulltype,
+# replace empty strings with NULL.
+COLUMNS=$($SQLITE "$DB" "SELECT \"column\" FROM \"column\" WHERE \"table\" = '$TABLE' AND \"nulltype\" = 'empty'")
+for COLUMN in $COLUMNS; do
+  $SQLITE "$DB" \
+    "$PRAGMAS" \
+    "UPDATE \"$TABLE\" SET \"$COLUMN\" = NULL WHERE \"$COLUMN\" = ''" \
+    || fail "Failed to fix NULLs in $COLUMN"
+done

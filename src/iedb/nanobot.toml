@@ -1,0 +1,14 @@
+[nanobot]
+config_version = 1
+
+[logging]
+level = "DEBUG"
+
+[database]
+connection = "nanobot.db"
+
+[valve]
+path = "table.tsv"
+
+[templates]
+path = "../../src/templates/"

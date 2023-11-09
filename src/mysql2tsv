@@ -1,0 +1,42 @@
+#!/bin/sh
+#
+# Fetch a SQL result from MySQL/MariaDB
+# and store it in TSV format
+# without extra carriage returns and newlines,
+# and replacing NULL with the empty string.
+# Uses the `mysql --quick` streaming option.
+# Uses `sed` and `qsv` for formatting.
+# Requires environment variables to be set:
+# MYSQL_HOST MYSQL_PORT MYSQL_USER MYSQL_PASSWORD MYSQL_DATABASE
+#
+# Example: ./mysql2tsv "SELECT * FROM epitope ORDER BY epitope_id" iedb/epitope.tsv
+
+MYSQL_QUERY=${1:?'Please include a SQL query string or filename'}
+TSV_FILE=${2:?'Please provide a TSV file name'}
+
+MYSQL_HOST=${MYSQL_HOST:?'Please set MYSQL_HOST'}
+MYSQL_PORT=${MYSQL_PORT:-'3306'}
+MYSQL_USER=${MYSQL_USER:?'Please set MYSQL_USER'}
+MYSQL_PASSWORD=${MYSQL_PASSWORD:?'Please set MYSQL_PASSWORD'}
+MYSQL_DATABASE=${MYSQL_DATABASE:?'Please set MYSQL_DATABASE'}
+
+# Maybe read query from file
+if [ -f "${MYSQL_QUERY}" ]; then
+  MYSQL_QUERY=$(cat "${MYSQL_QUERY}")
+fi
+
+mysql \
+  --host="${MYSQL_HOST}" \
+  --port="${MYSQL_PORT}" \
+  --user="${MYSQL_USER}" \
+  --password="${MYSQL_PASSWORD}" \
+  "${MYSQL_DATABASE}" \
+  --execute "${MYSQL_QUERY}" \
+  --quick \
+| sed "s/\r//g" \
+| sed "s/\n/ /g" \
+| build/qsv replace --quiet \
+  --delimiter '\t' \
+  --output "${TSV_FILE}" \
+  'NULL' '' \
+|| exit 0

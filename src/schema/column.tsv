@@ -60,3 +60,8 @@ proteomes	Proteome Organism ID		empty	label	unique
 proteomes	Proteome Label		empty	label	unique	
 proteomes	Proteome Link		empty	label	unique	
 proteomes	Updated		empty	label		
+epitope_object	mol1_seq		empty	label		
+epitope_object	region		empty	label		
+epitope_object	mol2_name		empty	label		
+epitope_object	mol2_accession		empty	label		
+epitope_object	organism2_id		empty	natural_number		

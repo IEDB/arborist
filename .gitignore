@@ -1,5 +1,6 @@
 bin/
 build/
+cache/
 .venv/
 junk/
 __pycache__/

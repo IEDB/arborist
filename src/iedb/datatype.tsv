@@ -1,0 +1,23 @@
+datatype	parent	condition	description	SQLite type	PostgreSQL type	HTML type
+text			any text	TEXT	TEXT	textarea
+empty	text	equals('')	the empty string	NULL	NULL	
+line	text	exclude(/\\\\\\\n/)	one line of text			text
+label	line	match(/(\S|\S.*\S)/)	text that does not begin or end with whitespace			
+word	label	exclude(/\W/)	a single word: letters, numbers, underscore			
+table_type	word	in('table', 'column', 'datatype')	a VALVE table type			search
+sql_type	word	in('NULL', 'TEXT', 'INT')	a SQL type			search
+html_type	word	in('text', 'textarea', 'search', 'radio', 'number', 'select')	an HTML form type			search
+prefix	word	match(/[\w-]+/)	a prefix for a CURIE			
+IRI	line	exclude(/\s/)	an Internationalized Resource Identifier			
+CURIE	line	match(/[\w-]+:[\w-]+/)	a Compact Uniform Resource Identifier			
+semicolon_labels	line	match(/(\S|\S.*\S)/)	a semicolon-separated list of labels			
+boolean	word	in('TRUE', 'FALSE')	TRUE or FALSE			
+natural_number	word	match(/\d+/)	an integer greater than zero	INTEGER	INTEGER	
+ncbi_tax_id	natural_number	match(/\d+/)	an NCBI Taxonomy ID: a natural number			
+iedb_tax_id	natural_number	match(/1000\d{4}/)	an IEDB Taxonomy ID: a natural number greather than or equal to 10,000,000			
+iedb_tax_ids	line	match(/[\d,]+/)	a comma-separated list of IEDB Taxonomy IDs			
+tax_id	line	match(/(\d+|1000\d{4}|OBI:0100026)/)	an NCBI or IEDB taxon, or OBI 'organism'			
+tax_ids	line	match(/[\d, ]+/)	a comma-separated list of taxonomy IDs			
+taxon_CURIE	line	match(/(NCBITaxon:\d+|iedb-taxon:\d+(-other)?|OBI:0100026)/)	a CURIE for a NCBI or IEDB taxon, or OBI 'organism'			
+taxon_level	word	in('upper','species','lower')	the level of the taxon in the tree: upper, species, lower			search
+taxon_group	word	in('archeobacterium', 'bacterium', 'plant', 'vertebrate', 'other-eukaryote', 'virus', 'other')	the general taxonomic group for this taxon			search
