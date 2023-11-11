@@ -33,6 +33,8 @@ SHELL := bash
 .DELETE_ON_ERROR:
 .SUFFIXES:
 
+export PATH := bin:$(PATH)
+
 
 ### Main Tasks
 #
@@ -43,10 +45,11 @@ usage:
 	@echo "Arborist: build trees for the IEDB"
 	@echo ""
 	@echo "TASKS"
-	@echo "  help     print this message"
+	@echo "  deps     install dependencies"
 	@echo "  all      build all trees"
 	@echo "  clean    remove all build files"
 	@echo "  clobber  remove all cached files"
+	@echo "  usage    print this message"
 
 .PHONY: all
 all: build/organism-tree.owl build/subspecies-tree.owl build/active-species.tsv
@@ -65,33 +68,95 @@ bin/ build/ cache/:
 
 ### Install Dependencies
 #
-# Install required software,
-# including ROBOT, LDTab, Nanobot, QSV.
+# For each software dependency
+# we use Make's `ifeq` macro and `command -v <name>`
+# to check if the dependency is already on the PATH
+# (including `bin/`).
+# If not, then we define a Make task to install it to `bin/`,
+# and add that dependency to `deps`.
 
-ROBOT := java -jar build/robot.jar --prefix "iedb-taxon: https://ontology.iedb.org/taxon/" --prefix "ONTIE: https://ontology.iedb.org/ONTIE_"
-LDTAB := java -jar build/ldtab.jar
-NANOBOT := build/nanobot
-QSV := build/qsv
-EXPORT := build/export.py
-DB := build/nanobot.db
+.PHONY: deps
+deps:
 
-build/robot.jar: | build/
-	curl -L -o $@ "https://github.com/ontodev/robot/releases/download/v1.9.4/robot.jar"
+# Require SQLite
+ifeq (, $(shell command -v sqlite3))
+$(error 'Please install SQLite')
+endif
 
-build/ldtab.jar: | build/
-	curl -L -o $@ "https://github.com/ontodev/ldtab.clj/releases/download/v2023-08-19/ldtab.jar"
+# Require Java
+ifeq (, $(shell command -v java))
+$(error 'Please install Java, so we can run ROBOT and LDTab')
+endif
 
-build/nanobot: | build/
-	curl -L -k -o $@ "https://github.com/ontodev/nanobot.rs/releases/download/v2023-10-26/nanobot-x86_64-unknown-linux-musl"
+# Install ROBOT if not already present
+ifeq (, $(shell command -v robot))
+bin/robot.jar: | bin/
+	curl -L -o $@ 'https://github.com/ontodev/robot/releases/download/v1.9.4/robot.jar'
+bin/robot: bin/robot.jar
+	curl -L -o $@ 'https://raw.githubusercontent.com/ontodev/robot/master/bin/robot'
 	chmod +x $@
+deps: bin/robot
+endif
 
-# Download qsv binary for Linux ARM64
-build/qsv: | build/
-	curl -L -k -o build/qsv.zip "https://github.com/jqnatividad/qsv/releases/download/0.118.0/qsv-0.118.0-x86_64-unknown-linux-musl.zip"
+# Install LDTab if not already present
+ifeq (, $(shell command -v ldtab))
+bin/ldtab.jar: | bin/
+	curl -L -o $@ 'https://github.com/ontodev/ldtab.clj/releases/download/v2023-08-19/ldtab.jar'
+bin/ldtab: bin/ldtab.jar
+	echo '#!/bin/sh' > $@
+	echo 'java -jar build/ldtab.jar' >> $@
+	chmod +x $@
+deps: bin/ldtab
+endif
+
+# Install Nanobot if not already present
+ifeq (, $(shell command -v nanobot))
+bin/nanobot: | bin/
+	curl -L -k -o $@ 'https://github.com/ontodev/nanobot.rs/releases/download/v2023-10-26/nanobot-x86_64-unknown-linux-musl'
+	chmod +x $@
+deps: bin/nanobot
+endif
+
+# Install valve-export script if not already present
+ifeq (, $(shell command -v valve-export))
+bin/valve-export: | bin/
+	curl -L -o $@ 'https://github.com/ontodev/valve.rs/raw/main/scripts/export.py'
+	chmod +x $@
+deps: valve-export
+endif
+
+# Install valve-export script if not already present
+ifeq (, $(shell command -v qsv))
+bin/qsv: | bin/ build/
+	curl -L -k -o build/qsv.zip 'https://github.com/jqnatividad/qsv/releases/download/0.118.0/qsv-0.118.0-x86_64-unknown-linux-musl.zip'
 	cd build && unzip qsv.zip qsv
+	mv build/qsv $@
+deps: bin/qsv
+endif
 
-build/export.py: | build/
-	curl -L -o $@ "https://github.com/ontodev/valve.rs/raw/main/scripts/export.py"
+# Install BLAST if not already present
+ifeq (, $(shell command -v blastp))
+BLAST_VERSION := 2.15.0
+build/ncbi-blast.tar.gz: | build/
+	curl -L -o $@ 'https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/$(BLAST_VERSION)/ncbi-blast-$(BLAST_VERSION)+-x64-linux.tar.gz'
+bin/blastp bin/makeblastdb: build/ncbi-blast.tar.gz | bin/
+	cd build/ && tar -zxvf $(notdir $<) ncbi-blast-$(BLAST_VERSION)+/$@
+	mv build/ncbi-blast-$(BLAST_VERSION)+/$@ $@
+deps: bin/blastp bin/makeblastdb
+endif
+
+# Install hmmer if not already present
+ifeq (, $(shell command -v hmmscan))
+HMMER_VERSION := 3.4
+build/hmmer-$(HMMER_VERSION).tar.gz: | build/
+	curl -L -o $@ 'http://eddylab.org/software/hmmer/hmmer-$(HMMER_VERSION).tar.gz'
+build/hmmer-$(HMMER_VERSION): build/hmmer-$(HMMER_VERSION).tar.gz
+	cd build/ && tar xvf $(notdir $<)
+bin/hmmscan: build/hmmer-$(HMMER_VERSION) | bin/
+	cd $< && ./configure --prefix $(shell pwd)/$< && make install
+	cp $</$@ $@
+deps: bin/hmmscan
+endif
 
 
 ### 1. Fetch IEDB Data
