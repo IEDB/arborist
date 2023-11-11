@@ -1,7 +1,7 @@
 table	path	type	description
-table	table.tsv	table	All of the tables in this project.
-column	column.tsv	column	Columns for all of the tables.
-datatype	datatype.tsv	datatype	Datatypes for all of the columns
+table	../../src/iedb/table.tsv	table	All of the tables in this project.
+column	../../src/iedb/column.tsv	column	Columns for all of the tables.
+datatype	../../src/iedb/datatype.tsv	datatype	Datatypes for all of the columns
 source	source.tsv		
 object	object.tsv		
 epitope	epitope.tsv		

@@ -5,13 +5,13 @@ config_version = 1
 level = "DEBUG"
 
 [database]
-connection = "build/nanobot.db"
+connection = "nanobot.db"
 
-[assets]
-path = "build/"
+[valve]
+path = "../../src/arborist/table.tsv"
 
 [templates]
-path = "src/templates/"
+path = "../../src/templates/"
 
 [actions.rebuild_organism]
 label = "Rebuild New Organism Tree (~10s)"

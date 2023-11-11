@@ -1,0 +1,10 @@
+table	path	type	description
+table	../../src/arborist/table.tsv	table	All of the tables in this project.
+column	../../src/arborist/column.tsv	column	Columns for all of the tables.
+datatype	../../src/arborist/datatype.tsv	datatype	Datatypes for all of the columns
+prefix	../../src/arborist/prefix.tsv		Prefixes used for CURIEs
+iedb_taxa	iedb_taxa.tsv		Biological taxa for the IEDB that extend the NCBI Taxonomy
+organism_core	../../src/arborist/organism_core.tsv		the core structure of the organism tree
+organism_tree_tsv	organism-tree.tsv		the taxa used by IEDB, with their assigned species and upper nodes
+active_species	active-species.tsv		the species for which the IEDB attempts to find proteomes
+proteomes	proteomes.tsv		the selected proteomes for the active species
