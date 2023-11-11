@@ -13,8 +13,6 @@ TSV=$2
 TABLE=$(basename "$TSV" .tsv)
 NEW_TSV=$(dirname "$TSV")"/$TABLE.tmp.tsv"
 
-QSV=build/qsv
-SQLITE=sqlite3
 PRAGMAS="PRAGMA journal_mode = OFF;
 PRAGMA synchronous = 0;
 PRAGMA cache_size = 1000000;
@@ -26,16 +24,18 @@ fail() {
   exit 1
 }
 
-mkdir -p build/
+command -v sqlite3 > /dev/null || fail 'Please install sqlite3'
+command -v qsv > /dev/null || PATH="bin:$PATH"
+command -v qsv > /dev/null || fail 'Please install qsv'
 
 # Add row_number column to the table
-HEADERS=$($QSV headers --just-names "$TSV" | tr '\n' ',')
-$QSV enum --new-column row_number "$TSV" \
-| $QSV select "row_number,$HEADERS" \
+HEADERS=$(qsv headers --just-names "$TSV" | tr '\n' ',')
+qsv enum --new-column row_number "$TSV" \
+| qsv select "row_number,$HEADERS" \
   --output "$NEW_TSV"
 
 # Load table into SQLite
-$SQLITE "$DB" "$PRAGMAS" \
+sqlite3 "$DB" "$PRAGMAS" \
   ".mode tabs" \
   ".import --skip 1 '$NEW_TSV' '$TABLE'" \
   || fail "Failed to load $TSV into $DB"
@@ -43,9 +43,9 @@ rm "$NEW_TSV"
 
 # For all columns with 'empty' nulltype,
 # replace empty strings with NULL.
-COLUMNS=$($SQLITE "$DB" "SELECT \"column\" FROM \"column\" WHERE \"table\" = '$TABLE' AND \"nulltype\" = 'empty'")
+COLUMNS=$(sqlite3 "$DB" "SELECT \"column\" FROM \"column\" WHERE \"table\" = '$TABLE' AND \"nulltype\" = 'empty'")
 for COLUMN in $COLUMNS; do
-  $SQLITE "$DB" \
+  sqlite3 "$DB" \
     "$PRAGMAS" \
     "UPDATE \"$TABLE\" SET \"$COLUMN\" = NULL WHERE \"$COLUMN\" = ''" \
     || fail "Failed to fix NULLs in $COLUMN"

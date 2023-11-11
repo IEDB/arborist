@@ -17,6 +17,10 @@ if [ -f "${SQLITE_QUERY}" ]; then
   SQLITE_QUERY=$(cat "${SQLITE_QUERY}")
 fi
 
+command -v sqlite3 > /dev/null || fail 'Please install sqlite3'
+command -v qsv > /dev/null || PATH="bin:$PATH"
+command -v qsv > /dev/null || fail 'Please install qsv'
+
 sqlite3 \
   "${SQLITE_DATABASE}" \
   ".headers on" \
@@ -24,7 +28,7 @@ sqlite3 \
   "${SQLITE_QUERY}" \
 | sed "s/\r//g" \
 | sed "s/\n/ /g" \
-| build/qsv replace --quiet \
+| qsv replace --quiet \
   --delimiter '\t' \
   --output "${TSV_FILE}" \
   'NULL' '' \

@@ -20,10 +20,18 @@ MYSQL_USER=${MYSQL_USER:?'Please set MYSQL_USER'}
 MYSQL_PASSWORD=${MYSQL_PASSWORD:?'Please set MYSQL_PASSWORD'}
 MYSQL_DATABASE=${MYSQL_DATABASE:?'Please set MYSQL_DATABASE'}
 
+fail() {
+  echo "ERROR: $1"
+  exit 1
+}
+
 # Maybe read query from file
 if [ -f "${MYSQL_QUERY}" ]; then
   MYSQL_QUERY=$(cat "${MYSQL_QUERY}")
 fi
+
+command -v qsv > /dev/null || PATH="bin:$PATH"
+command -v qsv > /dev/null || fail 'Please install qsv'
 
 mysql \
   --host="${MYSQL_HOST}" \
@@ -35,7 +43,7 @@ mysql \
   --quick \
 | sed "s/\r//g" \
 | sed "s/\n/ /g" \
-| build/qsv replace --quiet \
+| qsv replace --quiet \
   --delimiter '\t' \
   --output "${TSV_FILE}" \
   'NULL' '' \
