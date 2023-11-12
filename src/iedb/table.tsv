@@ -2,6 +2,8 @@ table	path	type	description
 table	../../src/iedb/table.tsv	table	All of the tables in this project.
 column	../../src/iedb/column.tsv	column	Columns for all of the tables.
 datatype	../../src/iedb/datatype.tsv	datatype	Datatypes for all of the columns
+ncbi_include	ncbi_include.tsv		
+iedb_taxa	iedb_taxa.tsv		
 source	source.tsv		
 object	object.tsv		
 epitope	epitope.tsv		

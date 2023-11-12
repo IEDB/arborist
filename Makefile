@@ -1,4 +1,3 @@
-### Arborist Makefile
 #
 # James A. Overton <james@overton.ca>
 #
@@ -65,8 +64,8 @@ deps:
 all: deps iedb ncbitaxon organism
 
 .PHONY: serve
-serve: build/arborist/nanobot.db
-	cd build/arborist/ && nanobot serve
+serve: src/util/serve.py
+	python3 $<
 
 .PHONY: clean
 clean:
@@ -326,7 +325,8 @@ build/arborist/active-species.tsv: src/organism/get_active_species.py build/arbo
 	python3 $< $| $(filter %.tsv, $^) $@
 
 .PHONY: organism
-organism: build/arborist/organism_core.html build/arborist/organism-tree.owl build/arborist/subspecies-tree.owl build/arborist/active-species.tsv
+organism: build/arborist/organism_core.html build/arborist/organism-tree.owl build/arborist/subspecies-tree.owl build/arborist/active-species.tsv build/arborist/proteome.tsv
+	make reload
 
 
 ### 4. Select Proteomes for each active species

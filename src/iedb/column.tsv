@@ -15,6 +15,12 @@ datatype	condition		empty	line		the method for testing the datatype
 datatype	description		empty	text		a description of this datatype
 datatype	SQL type		empty	sql_type		the SQL type for representing this data
 datatype	HTML type		empty	html_type		the HTML type for viewing and editing this data
+ncbi_include	taxon_id			natural_number		
+iedb_taxa	iedb_id			iedb_tax_id	primary	the IEDB taxon ID, starting at 10,000,000
+iedb_taxa	parent_ids			iedb_tax_ids		a comma-separated list of parent taxa
+iedb_taxa	label			label	unique	the label for the IEDB taxon
+iedb_taxa	rank			label		the rank of the IEDB taxon
+iedb_taxa	synonyms		empty	semicolon_labels		a list of IEDB's synonyms, separated by semicolons
 source	source_id			natural_number	primary	
 source	accession			label		
 source	database			label		

@@ -7,6 +7,9 @@ level = "DEBUG"
 [database]
 connection = "nanobot.db"
 
+[assets]
+path = "."
+
 [valve]
 path = "../../src/arborist/table.tsv"
 
