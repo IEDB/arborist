@@ -60,8 +60,8 @@ def main():
     active_tax_ids = {}
     reader = csv.DictReader(args.counts, delimiter="\t")
     for row in reader:
-        tax_id = row["source_organism_org_id"]
-        active_tax_ids[tax_id] = int(row['count'])
+        tax_id = row["Organism ID"]
+        active_tax_ids[tax_id] = int(row['Count'])
 
     rows = {}
     with sqlite3.connect(args.db) as conn:

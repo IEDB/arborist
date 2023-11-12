@@ -111,8 +111,8 @@ epitope	created_date		empty	label
 peptide_source	Accession			label	from(source.accession)	
 peptide_source	Name			label		
 peptide_source	Sequence			label		
-peptide_source	Organism ID			tax_id		
+peptide_source	Organism ID			natural_number		
 peptide	Sequence			label		
 peptide	Source Name			label		
 peptide	Accession			label	from(peptide_source.Accession)	
-peptide	Organism ID			tax_id		
+peptide	Organism ID			natural_number		

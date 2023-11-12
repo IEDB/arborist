@@ -360,9 +360,9 @@ def main():
 
     # Add all active taxa, and assign epitope counts
     for row in csv.DictReader(args.count, delimiter='\t'):
-        curie = get_curie(row['source_organism_org_id'])
+        curie = get_curie(row['Organism ID'])
         if curie in tree:
-            tree[curie]['epitope_count'] = row['count']
+            tree[curie]['epitope_count'] = row['Count']
         elif curie.startswith('iedb-taxon:'):
             raise Exception(
                 'IEDB taxon should already have been added '
@@ -377,7 +377,7 @@ def main():
                 'label_source': label_source,
                 'rank': rank,
                 'level': get_level(rank),
-                'epitope_count': row['count'],
+                'epitope_count': row['Count'],
                 'source_table': 'count',
             }
 

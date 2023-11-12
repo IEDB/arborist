@@ -31,6 +31,7 @@ SHELL := bash
 .SHELLFLAGS := -eu -o pipefail -c
 .DEFAULT_GOAL := usage
 .DELETE_ON_ERROR:
+.PRECIOUS:
 .SUFFIXES:
 
 export PATH := $(shell pwd)/bin:$(PATH)
@@ -48,6 +49,7 @@ usage:
 	@echo "  deps        install dependencies"
 	@echo "  iedb        load IEDB data"
 	@echo "  ncbitaxon   build the NCBI Taxonomy"
+	@echo "  organism    build organism and subspecies trees"
 	@echo "  all         build all trees"
 	@echo "  serve       run web interface on localhost:3000"
 	@echo "  clean       remove all build files"
@@ -60,11 +62,11 @@ deps:
 
 .PHONY: all
 # all: build/organism-tree.owl build/subspecies-tree.owl build/active-species.tsv
-all: iedb ncbitaxon
+all: deps iedb ncbitaxon organism
 
 .PHONY: serve
-serve: build/iedb/nanobot.db
-	cd build/iedb/ && nanobot serve
+serve: build/arborist/nanobot.db
+	cd build/arborist/ && nanobot serve
 
 .PHONY: clean
 clean:
@@ -72,7 +74,7 @@ clean:
 
 .PHONY: clobber
 clobber:
-	rm -rf bin build cache
+	rm -rf bin build cache current
 
 bin/ build/ cache/ curent/:
 	mkdir -p $@
@@ -89,7 +91,12 @@ bin/ build/ cache/ curent/:
 
 # Require SQLite
 ifeq ($(shell command -v sqlite3),)
-$(error 'Please install SQLite')
+$(error 'Please install SQLite 3')
+endif
+
+# Require Python
+ifeq ($(shell command -v python3),)
+$(error 'Please install Python 3, so we can run various scripts')
 endif
 
 # Require Java
@@ -113,7 +120,7 @@ bin/ldtab.jar: | bin/
 	curl -L -o $@ 'https://github.com/ontodev/ldtab.clj/releases/download/v2023-08-19/ldtab.jar'
 bin/ldtab: bin/ldtab.jar
 	echo '#!/bin/sh' > $@
-	echo 'java -jar build/ldtab.jar' >> $@
+	echo 'java -jar "$$(dirname $$0)/ldtab.jar" "$$@"' >> $@
 	chmod +x $@
 deps: bin/ldtab
 endif
@@ -131,13 +138,14 @@ ifeq ($(shell command -v valve-export),)
 bin/valve-export: | bin/
 	curl -L -o $@ 'https://github.com/ontodev/valve.rs/raw/main/scripts/export.py'
 	chmod +x $@
-deps: valve-export
+deps: bin/valve-export
 endif
 
-# Install valve-export script if not already present
+# Install QSV if not already present
 ifeq ($(shell command -v qsv),)
+QSV_VERSION := 0.118.0
 bin/qsv: | bin/ build/
-	curl -L -k -o build/qsv.zip 'https://github.com/jqnatividad/qsv/releases/download/0.118.0/qsv-0.118.0-x86_64-unknown-linux-musl.zip'
+	curl -L -k -o build/qsv.zip 'https://github.com/jqnatividad/qsv/releases/download/$(QSV_VERSION)/qsv-$(QSV_VERSION)-x86_64-unknown-linux-musl.zip'
 	cd build && unzip qsv.zip qsv
 	mv build/qsv $@
 deps: bin/qsv
@@ -154,7 +162,7 @@ bin/blastp bin/makeblastdb: build/ncbi-blast.tar.gz | bin/
 deps: bin/blastp bin/makeblastdb
 endif
 
-# Install hmmer if not already present
+# Install HMMER if not already present
 ifeq ($(shell command -v hmmscan),)
 HMMER_VERSION := 3.4
 build/hmmer-$(HMMER_VERSION).tar.gz: | build/
@@ -182,34 +190,40 @@ build/iedb/nanobot.toml: src/iedb/nanobot.toml | build/iedb/
 
 # Update the cached IEDB data if current/iedb/ is not yet set.
 # Requires MySQL/MariaDB connection details.
-.PRECIOUS: current/iedb/%
 current/iedb/%:
-	@echo "Updating cached IEDB data..."
-	src/iedb/update-cache
+	src/iedb/update-cache "$$IEDB_MYSQL_DATABASE"
+
+# Unzip an IEDB table from the cache into the build directory,
+build/iedb/%.tsv: current/iedb/%.tsv.gz
+	zcat $< > $@
 
 # Load IEDB tables into SQLite using Nanobot.
+# For some tables we just create a header row, with no data rows,
+# then remove those files after Nanobot has initialized.
 # TODO: This task will be much simpler with planned VALVE features.
 build/iedb/nanobot.db: build/iedb/nanobot.toml
-build/iedb/nanobot.db: current/iedb/ncbi_include.tsv.gz
-build/iedb/nanobot.db: current/iedb/iedb_taxa.tsv.gz
+build/iedb/nanobot.db: build/iedb/ncbi_include.tsv
+build/iedb/nanobot.db: build/iedb/iedb_taxa.tsv
 build/iedb/nanobot.db: current/iedb/source.tsv.gz
 build/iedb/nanobot.db: current/iedb/object.tsv.gz
 build/iedb/nanobot.db: current/iedb/epitope.tsv.gz
 	rm -f $@
-	zcat current/iedb/ncbi_include.tsv.gz > build/iedb/ncbi_include.tsv
-	zcat current/iedb/iedb_taxa.tsv.gz > build/iedb/iedb_taxa.tsv
 	zcat current/iedb/source.tsv.gz | head -n1 > build/iedb/source.tsv || exit 0
 	zcat current/iedb/object.tsv.gz | head -n1 > build/iedb/object.tsv || exit 0
 	zcat current/iedb/epitope.tsv.gz | head -n1 > build/iedb/epitope.tsv || exit 0
-	echo 'Accession	Name	Sequence	Organism ID' > build/iedb/peptide_source.tsv
 	echo 'Sequence	Source Name	Accession	Organism ID' > build/iedb/peptide.tsv
+	echo 'Accession	Name	Sequence	Organism ID' > build/iedb/peptide_source.tsv
 	cd build/iedb/ && nanobot init
+	rm -f build/iedb/source.tsv
+	rm -f build/iedb/object.tsv
+	rm -f build/iedb/epitope.tsv
+	rm -f build/iedb/peptide.tsv
+	rm -f build/iedb/peptide_source.tsv
 
-# Unzip an IEDB table from the cache into the build directory,
-# then load it into SQLite.
-build/iedb/%.built: current/iedb/%.tsv.gz | build/iedb/nanobot.db
-	zcat current/iedb/$*.tsv.gz > build/iedb/$*.tsv
-	src/util/tsv2sqlite $| build/iedb/$*.tsv
+# Load a table in SQLite, without VALVE validation.
+build/iedb/%.built: build/iedb/%.tsv | build/iedb/nanobot.db
+	sqlite3 $| "DELETE FROM '$*'"
+	src/util/tsv2sqlite $| $<
 	touch $@
 
 # Extract tables of peptides and sources from SQLite tables.
@@ -220,22 +234,15 @@ build/iedb/peptide.tsv: src/iedb/peptide.sql build/iedb/epitope.built build/iedb
 build/iedb/peptide_source.tsv: src/iedb/peptide_source.sql build/iedb/source.built | build/iedb/nanobot.db
 	src/util/sqlite2tsv $| $< $@
 
-# Load the tables of peptides and sources into SQLite.
-build/iedb/peptide.built: build/iedb/peptide.tsv | build/iedb/nanobot.db
-	src/util/tsv2sqlite $| $<
-	touch $@
-
-build/iedb/peptide_source.built: build/iedb/peptide_source.tsv | build/iedb/nanobot.db
-	src/util/tsv2sqlite $| $<
-	touch $@
-
 .PHONY: iedb
 iedb: build/iedb/peptide.built build/iedb/peptide_source.built
 
 
 ### 1. Build NCBI Taxonomy
 #
-# 
+# Set up a Nanobot instance.
+# Fetch the NCBI Taxonomy `taxdmp.zip` file
+# and use it to populate a table.
 
 build/arborist/:
 	mkdir -p $@
@@ -243,24 +250,12 @@ build/arborist/:
 build/arborist/nanobot.toml: src/arborist/nanobot.toml | build/arborist/
 	cp $< $@
 
+# Initialize a Nanobot database.
+# Create an empty organism-tree.tsv.
 build/arborist/nanobot.db: build/arborist/nanobot.toml src/arborist/*.tsv
 	rm -f $@
-	echo 'curie	label	label_source	iedb_synonyms	rank	level	epitope_count	parent	parent_label	parent2	parent2_label	species	species_label	source_table	use_other' > build/arborist/organism-tree.tsv
+	# echo 'curie	label	label_source	iedb_synonyms	rank	level	epitope_count	parent	parent_label	parent2	parent2_label	species	species_label	source_table	use_other' > build/arborist/organism-tree.tsv
 	cd build/arborist/ && nanobot init
-
-.PHONY: save
-save: build/arborist/nanobot.db
-	valve-export data build/arborist/nanobot.db src/schema/ table column datatype
-	valve-export data build/arborist/nanobot.db src/ organism_core
-	valve-export data build/arborist/nanobot.db build/ $$(grep build src/schema/table.tsv | cut -f1 | tr '\n' ' ')
-	python3 src/sort_organism_core.py src/organism_core.tsv
-
-DROPTABLES := epitope_object proteomes active_species organism_core organism_tree_tsv iedb_taxa prefix column datatype table message history
-.PHONY: reload
-reload: src/check_organism_core.py | build/arborist/nanobot.db
-	sqlite3 build/arborist/nanobot.db $(foreach DT,$(DROPTABLES),"DROP VIEW IF EXISTS '$(DT)_view'" "DROP TABLE IF EXISTS '$(DT)_conflict'" "DROP TABLE IF EXISTS '$(DT)'")
-	nanobot init
-	-python3 $< build/arborist/nanobot.db
 
 cache/ncbitaxon/:
 	mkdir $@
@@ -286,65 +281,59 @@ build/arborist/ncbitaxon.built: src/organism/ncbitaxon2ldtab.py current/taxdmp.z
 ncbitaxon: build/arborist/ncbitaxon.built
 
 
-### 3. Build Organism Tree and determine active species
+### 3. Build Organism Tree
+#
+# Build the organism tree from organism_core, IEDB taxa, and active NCBI taxo.
+# Determine all the active species.
+# Build the subspecies tree by adding all descendants of active species
+# from the full NCBI Taxonomy.
 
-# TODO: Replace with local queries
+# TODO: Check that this is a reasonable way to count.
+build/arborist/peptide-count.tsv: src/organism/peptide-count.sql build/iedb/peptide.built | build/iedb/nanobot.db
+	src/util/sqlite2tsv $| $< $@
 
-# Tax ID -> epitope count
-build/counts.tsv: src/get-counts.sql | build/
-	$(MIRROR_QUERY) < $< > $@
-
-build/counts_full.tsv: src/combine_taxids.py build/counts.tsv build/ncbi_include.tsv
+# Render the organism_core as HTML.
+build/arborist/organism_core.html: src/organism/render_organism_core.py src/organism/organism_core.tsv | build/arborist/
 	python3 $^ $@
 
-build/organism_core.html: src/build_organism_core.py src/organism_core.tsv
-	python3 $^ $@
-
-build/organism-tree.tsv: build/ncbitaxon.built src/assign_species.py src/organism_core.tsv build/iedb_taxa.tsv build/counts_full.tsv
-	python3 $(word 2, $^) build/arborist/nanobot.db $(filter %.tsv, $^) $@
+# Build a new organism tree.
+build/arborist/organism-tree.tsv: src/organism/assign_species.py build/arborist/ncbitaxon.built src/organism/organism_core.tsv build/iedb/iedb_taxa.tsv build/arborist/peptide-count.tsv | build/arborist/nanobot.db
+	python3 $< $| $(filter %.tsv, $^) $@
 	qsv sort $@ --output $@
 
-# Build a new organism tree
-build/organism-tree.built: build/ncbitaxon.built src/build_organism_tree.py build/organism-tree.tsv build/organism_core.html
-	sqlite3 build/arborist/nanobot.db "DROP TABLE IF EXISTS organism_tree"
-	python3 $(word 2, $^) build/arborist/nanobot.db $(filter %.tsv, $^)
-	sqlite3 build/arborist/nanobot.db "ANALYZE organism_tree"
+# Convert the organism tree to an LDTab table in SQLite.
+build/arborist/organism-tree.built: src/organism/build_organism_tree.py build/arborist/organism-tree.tsv | build/arborist/nanobot.db
+	sqlite3 $| "DROP TABLE IF EXISTS organism_tree"
+	python3 $< $| $(filter %.tsv, $^)
 	touch $@
 
-build/subspecies-tree.built: build/organism-tree.built src/build_subspecies_tree.py
-	sqlite3 build/arborist/nanobot.db "DROP TABLE IF EXISTS subspecies_tree"
-	python3 $(word 2, $^) build/arborist/nanobot.db
-	sqlite3 build/arborist/nanobot.db "ANALYZE subspecies_tree"
+build/arborist/subspecies-tree.built: src/organism/build_subspecies_tree.py build/arborist/organism-tree.built | build/arborist/nanobot.db
+	sqlite3 $| "DROP TABLE IF EXISTS subspecies_tree"
+	python3 $< $|
 	touch $@
 
-build/organism-tree.ttl: build/organism-tree.built | build/ldtab.jar
+build/arborist/%-tree.ttl: build/arborist/%-tree.built | build/arborist/nanobot.db
 	rm -f $@
-	ldtab export build/arborist/nanobot.db --table organism_tree $@
+	ldtab export $| --table $*_tree $@
 
-build/subspecies-tree.ttl: build/subspecies-tree.built | build/ldtab.jar
-	rm -f $@
-	ldtab export build/arborist/nanobot.db --table subspecies_tree $@
-
-build/organism-tree.sorted.tsv: build/organism-tree.built | build/ldtab.jar
-	rm -f build/organism-tree.ldtab.tsv
-	ldtab export build/arborist/nanobot.db --table organism_tree build/organism-tree.ldtab.tsv
-	cut -f4- build/organism-tree.ldtab.tsv | sort > $@
-
-build/%-tree.owl: build/%-tree.ttl src/predicates.ttl | build/robot.jar
+build/arborist/%-tree.owl: build/arborist/%-tree.ttl src/organism/predicates.ttl
 	robot merge --input $< --input $(word 2,$^) \
 	annotate \
 	--ontology-iri https://ontology.iedb.org/ontology/$(notdir $@) \
 	--output $@
 
-build/active-species.tsv: src/get_active_species.py build/organism-tree.built build/counts_full.tsv
-	python3 $< build/arborist/nanobot.db build/counts_full.tsv $@
+build/arborist/active-species.tsv: src/organism/get_active_species.py build/arborist/organism-tree.built build/arborist/peptide-count.tsv | build/arborist/nanobot.db
+	python3 $< $| $(filter %.tsv, $^) $@
 
-build/proteomes.tsv: build/active-species.tsv src/selected_proteomes.tsv
-	qsv join --left 'Species ID' $< 'Species ID' $(word 2,$^) \
-	| qsv select 1-6,12- --output $@
+.PHONY: organism
+organism: build/arborist/organism_core.html build/arborist/organism-tree.owl build/arborist/subspecies-tree.owl build/arborist/active-species.tsv
 
 
 ### 4. Select Proteomes for each active species
+
+build/arborist/proteome.tsv: build/arborist/active-species.tsv src/proteome/proteome.tsv
+	qsv join --left 'Species ID' $< 'Species ID' $(word 2,$^) \
+	| qsv select 1-6,12- --output $@
 
 build/allergens.csv: | build/
 	curl -L -o $@ 'http://www.allergen.org/csv.php?table=joint'
@@ -381,24 +370,44 @@ dengue: build/12637/epitope_assignments.tsv
 ### 7. Build Molecule Tree
 
 
+
+### Nanobot Actions
+#
+# Editing operations for the Nanobot Arborist database.
+
+.PHONY: save
+save: | build/arborist/nanobot.db
+	valve-export data $| src/arborist/ table column datatype
+	valve-export data $| src/organism/ organism_core
+	valve-export data $| build/arborist/ $$(grep build src/arborist/table.tsv | cut -f1 | tr '\n' ' ')
+	python3 src/organism/sort_organism_core.py src/organism/organism_core.tsv
+
+DROPTABLES := proteomes active_species organism_core organism_tree_tsv prefix column datatype table message history
+.PHONY: reload
+reload: src/organism/check_organism_core.py | build/arborist/nanobot.db
+	sqlite3 $| $(foreach DT,$(DROPTABLES),"DROP VIEW IF EXISTS '$(DT)_text_view'" "DROP VIEW IF EXISTS '$(DT)_view'" "DROP TABLE IF EXISTS '$(DT)_conflict'" "DROP TABLE IF EXISTS '$(DT)'")
+	cd $(dir $|) && nanobot init
+	-python3 $< $|
+
+
 ### Comparisons
 #
 # These tasks build other trees for comparison.
 
 # Load an existing organism-tree.owl
-build/organism-tree-old.built: build/ncbitaxon.built build/organism-tree-old.owl | build/ldtab.jar
-	sqlite3 build/arborist/nanobot.db "DROP TABLE IF EXISTS organism_tree_old"
-	sed s/statement/organism_tree_old/g src/statement.sql | sqlite3 build/arborist/nanobot.db
-	ldtab import build/arborist/nanobot.db $(word 2,$^) -t organism_tree_old
-	sqlite3 build/arborist/nanobot.db "ANALYZE organism_tree_old"
+build/arborist/organism-tree-old.built: build/arborist/organism-tree-old.owl | build/arborist/nanobot.db
+	sqlite3 $| "DROP TABLE IF EXISTS organism_tree_old"
+	sed s/statement/organism_tree_old/g src/statement.sql | sqlite3 $|
+	ldtab import $| $(word 2,$^) -t organism_tree_old
+	sqlite3 $| "ANALYZE organism_tree_old"
 	touch $@
 
 # Load an existing subspecies-tree.owl
-build/subspecies-tree-old.built: build/ncbitaxon.built build/subspecies-tree-old.owl | build/ldtab.jar
-	sqlite3 build/arborist/nanobot.db "DROP TABLE IF EXISTS subspecies_tree_old"
-	sed s/statement/subspecies_tree_old/g src/statement.sql | sqlite3 build/arborist/nanobot.db
-	ldtab import build/arborist/nanobot.db $(word 2,$^) -t subspecies_tree_old
-	sqlite3 build/arborist/nanobot.db "ANALYZE subspecies_tree_old"
+arboirst/build/arboirst/subspecies-tree-old.built: build/arboirst/subspecies-tree-old.owl | build/arborist/nanobot.db
+	sqlite3 $| "DROP TABLE IF EXISTS subspecies_tree_old"
+	sed s/statement/subspecies_tree_old/g src/statement.sql | sqlite3 $|
+	ldtab import $| $(word 2,$^) -t subspecies_tree_old
+	sqlite3 $| "ANALYZE subspecies_tree_old"
 	touch $@
 
 

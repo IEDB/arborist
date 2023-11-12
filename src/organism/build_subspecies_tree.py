@@ -76,7 +76,7 @@ WHERE ncbitaxon.subject = new_descendants.node
     con.commit()
 
     index_statement_table(con, 'subspecies_tree')
-    con.execute('ANALYZE')
+    con.execute('ANALYZE subspecies_tree')
 
     # Add ONTIE:0003619 'has species' annotation property
     con.execute('''

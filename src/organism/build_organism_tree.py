@@ -93,7 +93,7 @@ def index_statement_table(con, table):
     cur.execute(f'CREATE INDEX idx_{table}_subject ON {table}(subject)')
     cur.execute(f'CREATE INDEX idx_{table}_predicate ON {table}(predicate)')
     cur.execute(f'CREATE INDEX idx_{table}_object ON {table}(object)')
-    # cur.execute('ANALYZE')
+    cur.execute(f'ANALYZE {table}')
     con.commit()
 
 

@@ -1,22 +1,25 @@
 #!/bin/sh
 
-# Fetch the IEDB data required by Arborist as TSV.
+# Fetch the IEDB data required by Arborist as TSV,
+# cache it in a named directory,
+# and update the `current/iedb` symlink.
 
-DATABASE=${DATABASE:-$1}
-DATABASE=${DATABASE:?'Please provide a database name'}
-CACHE="cache/iedb/${DATABASE}"
+NAME=${1:?'Please provide a cache directory name'}
+CACHE="cache/iedb/${NAME}"
+
+if [ -d "${CACHE}" ]; then
+  echo "ERROR: ${CACHE} already exists"
+  exit 1
+fi
+
+mkdir -p "${CACHE}/" || exit 1
 
 fail() {
   echo "ERROR: $1"
+  echo "Removing ${CACHE}"
+  rm -rf "${CACHE}"
   exit 1
 }
-
-if [ -d "${CACHE}" ]; then
-  fail "${CACHE} already exists"
-fi
-
-mkdir -p "${CACHE}/"
-export MYSQL_DATABASE="${DATABASE}"
 
 fetch() {
   NAME="$1"
@@ -36,7 +39,7 @@ for TABLE in epitope source object; do
   fetch "${TABLE}" "SELECT * FROM ${TABLE} ORDER BY ${TABLE}_id"
 done
 
-echo "Linking current/iedb/ to ${CACHE}"
+echo "Linking current/iedb to ${CACHE}"
 mkdir -p current
 cd current || fail 'Could not cd to current/'
 rm -f iedb
