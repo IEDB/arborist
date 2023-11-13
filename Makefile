@@ -1,4 +1,4 @@
-#
+# Arborist Makefile
 # James A. Overton <james@overton.ca>
 #
 # Arborist builds "trees" that drive various IEDB finders.
@@ -49,6 +49,8 @@ usage:
 	@echo "  iedb        load IEDB data"
 	@echo "  ncbitaxon   build the NCBI Taxonomy"
 	@echo "  organism    build organism and subspecies trees"
+	@echo "  proteome    select proteomes"
+	@echo "  protein     built protein tree"
 	@echo "  all         build all trees"
 	@echo "  serve       run web interface on localhost:3000"
 	@echo "  clean       remove all build files"
@@ -60,7 +62,6 @@ usage:
 deps:
 
 .PHONY: all
-# all: build/organism-tree.owl build/subspecies-tree.owl build/active-species.tsv
 all: deps iedb ncbitaxon organism
 
 .PHONY: serve
@@ -330,45 +331,70 @@ organism: build/arborist/organism_core.html build/arborist/organism-tree.owl bui
 
 
 ### 4. Select Proteomes for each active species
+#
+# Create a directory for any active species.
+# Use the active_taxa column to get all descendant taxa.
+# Copy peptides and sources into the directory.
+# Select a proteome for that species,
+# fetching FASTA and XML annotations.
 
+# TODO: Use previously selected proteomes or force refresh.
 build/arborist/proteome.tsv: build/arborist/active-species.tsv src/proteome/proteome.tsv
 	qsv join --left 'Species ID' $< 'Species ID' $(word 2,$^) \
 	| qsv select 1-6,12- --output $@
 
+# TODO: QSV is not happy with their CSV input.
 build/allergens.csv: | build/
 	curl -L -o $@ 'http://www.allergen.org/csv.php?table=joint'
 
 build/allergens.tsv: build/allergens.csv
 	qsv input $< --output $@
 
-build/%/:
+build/species/%/:
 	mkdir -p $@
 
-build/%/taxa.txt: build/active-species.tsv | build/%/
-	awk 'BEGIN {FS="\t"} $$2==$* {print $$4}' build/active-species.tsv | \
+# Get active taxa list as a regular expression pattern of alternates,
+# for use by `qsv select`, e.g. 1053|11057|11059|11060|...
+build/species/%/taxa.txt: build/arborist/active-species.tsv | build/species/%/
+	awk 'BEGIN {FS="\t"} $$2==$* {print $$4}' $< | \
 	sed 's/, /|/g' > $@
 
-build/%/epitopes.tsv: build/epitope_object.tsv build/%/taxa.txt
-	qsv search --select 'Organism ID' `cat build/$*/taxa.txt` $< --output $@
+build/species/%/epitopes.tsv: build/iedb/peptide.tsv build/species/%/taxa.txt
+	qsv search --select 'Organism ID' `cat build/species/$*/taxa.txt` $< --output $@
 
-build/%/sources.tsv: build/sources.tsv build/%/taxa.txt
-	qsv search --select 'Organism ID' `cat build/$*/taxa.txt` $< --output $@
+build/species/%/sources.tsv: build/iedb/peptide_source.tsv build/species/%/taxa.txt
+	qsv search --select 'Organism ID' `cat build/species/$*/taxa.txt` $< --output $@
 
-build/%/proteome.tsv: build/%/epitopes.tsv build/%/sources.tsv
+# TODO!!!
+build/species/%/proteome.tsv: build/species/%/epitopes.tsv build/species/%/sources.tsv
 	protein_tree/protein_tree/select_proteome.py -t $*
 
+# Use Dengue as an example.
+.PHONY: dengue
+dengue: build/species/12637/proteome.tsv
 
-### 5. Assign Proteins
+# TODO!!!
+.PHONY: proteome
+proteome: dengue
+
+
+### 5. TODO Assign Proteins
 
 build/%/epitope_assignments.tsv: build/%/epitopes.tsv build/%/sources.tsv build/%/proteome.tsv
 	protein_tree/protein_tree/run.py -t $*
 
-.PHONY: dengue
-dengue: build/12637/epitope_assignments.tsv
+.PHONY: protein
+protein:
+	$(error 'TODO!')
 
-### 6. Build Protein Tree
-### 7. Build Molecule Tree
-
+### 6. TODO Build Protein Tree
+### 7. TODO Build Molecule Tree
+# 8. TODO Build Assay Tree
+# 9. TODO Build Disease Tree
+#
+# TODO: geolocation tree, MHC tree
+# TODO: merged SoT tree
+# TODO: test data, symlink?
 
 
 ### Nanobot Actions
