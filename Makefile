@@ -28,7 +28,7 @@
 MAKEFLAGS += --warn-undefined-variables
 SHELL := bash
 .SHELLFLAGS := -eu -o pipefail -c
-.DEFAULT_GOAL := usage
+.DEFAULT_GOAL := help
 .DELETE_ON_ERROR:
 .PRECIOUS:
 .SUFFIXES:
@@ -40,22 +40,22 @@ export PATH := $(shell pwd)/bin:$(PATH)
 #
 # The main tasks for running Arborist.
 
-.PHONY: usage
-usage:
+.PHONY: help
+help:
 	@echo "Arborist: build trees for the IEDB"
 	@echo ""
 	@echo "TASKS"
 	@echo "  deps        install dependencies"
 	@echo "  iedb        load IEDB data"
 	@echo "  ncbitaxon   build the NCBI Taxonomy"
-	@echo "  organism    build organism and subspecies trees"
+	@echo "  organism    build the organism and subspecies trees"
 	@echo "  proteome    select proteomes"
-	@echo "  protein     built protein tree"
+	@echo "  protein     build the protein tree"
 	@echo "  all         build all trees"
-	@echo "  serve       run web interface on localhost:3000"
+	@echo "  serve       run the web interface on localhost:3000"
 	@echo "  clean       remove all build files"
 	@echo "  clobber     remove all generated files"
-	@echo "  usage       print this message"
+	@echo "  help        print this message"
 
 # Dependencies are added to this list below.
 .PHONY: deps
@@ -74,7 +74,8 @@ clean:
 
 .PHONY: clobber
 clobber:
-	rm -rf bin build cache current
+	chmod +w -R cache/
+	rm -rf bin/ build/ cache/ current/
 
 bin/ build/ cache/ curent/:
 	mkdir -p $@
@@ -92,6 +93,11 @@ bin/ build/ cache/ curent/:
 # Require SQLite
 ifeq ($(shell command -v sqlite3),)
 $(error 'Please install SQLite 3')
+endif
+
+# Require MySQL or MariaDB
+ifeq ($(shell command -v mysql),)
+$(error "Please install 'mysql' from MySQL or MariaDB")
 endif
 
 # Require Python
@@ -262,6 +268,7 @@ cache/ncbitaxon/:
 
 TAXDMP_VERSION:= $(shell date +"%Y-%m-01")
 
+# Fetch the taxdmp.zip for this month.
 cache/ncbitaxon/taxdmp_$(TAXDMP_VERSION).zip: | cache/ncbitaxon/ current/
 	curl -L -o $@ https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump_archive/taxdmp_$(TAXDMP_VERSION).zip
 

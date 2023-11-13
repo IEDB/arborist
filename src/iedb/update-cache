@@ -39,6 +39,9 @@ for TABLE in epitope source object; do
   fetch "${TABLE}" "SELECT * FROM ${TABLE} ORDER BY ${TABLE}_id"
 done
 
+# Protect the files and directory from accidental change or deletion.
+chmod a-w -R "${CACHE}"
+
 echo "Linking current/iedb to ${CACHE}"
 mkdir -p current
 cd current || fail 'Could not cd to current/'
