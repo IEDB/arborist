@@ -372,17 +372,15 @@ build/species/%/epitopes.tsv: build/iedb/peptide.tsv build/species/%/taxa.txt
 build/species/%/sources.tsv: build/iedb/peptide_source.tsv build/species/%/taxa.txt
 	qsv search --select 'Organism ID' `cat build/species/$*/taxa.txt` $< --output $@
 
-# TODO!!!
 build/species/%/proteome.tsv: build/species/%/epitopes.tsv build/species/%/sources.tsv
 	src/protein_tree/src/select_proteome.py -b build/ -t $*
 
-# Use Dengue as an example.
-.PHONY: dengue
-dengue: build/species/12637/proteome.tsv
+TAXON_IDS := $(shell awk 'NR>1 {print $$2}' build/arborist/active-species.tsv)
 
-# TODO!!!
 .PHONY: proteome
-proteome: dengue
+proteome:
+	@$(foreach id,$(TAXON_IDS),make build/species/$(id)/proteome.tsv;)
+	@touch build/arborist/proteomes.built
 
 
 ### 5. TODO Assign Proteins
