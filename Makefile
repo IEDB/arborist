@@ -372,25 +372,28 @@ build/species/%/epitopes.tsv: build/iedb/peptide.tsv build/species/%/taxa.txt
 build/species/%/sources.tsv: build/iedb/peptide_source.tsv build/species/%/taxa.txt
 	qsv search --select 'Organism ID' `cat build/species/$*/taxa.txt` $< --output $@
 
-build/species/%/proteome.tsv: build/species/%/epitopes.tsv build/species/%/sources.tsv
+.PRECIOUS: build/species/%/epitopes.tsv build/species/%/sources.tsv
+
+build/species/%/proteome.fasta: build/species/%/epitopes.tsv build/species/%/sources.tsv
 	src/protein_tree/src/select_proteome.py -b build/ -t $*
 
 TAXON_IDS := $(shell awk 'NR>1 {print $$2}' build/arborist/active-species.tsv)
 
 .PHONY: proteome
 proteome:
-	@$(foreach id,$(TAXON_IDS),make build/species/$(id)/proteome.tsv;)
+	@$(foreach id,$(TAXON_IDS),make build/species/$(id)/proteome.fasta;)
 	@touch build/arborist/proteomes.built
 
 
 ### 5. TODO Assign Proteins
 
-build/%/epitope_assignments.tsv: build/%/epitopes.tsv build/%/sources.tsv build/%/proteome.tsv
-	protein_tree/protein_tree/run.py -t $*
+build/species/%/source_assignments.tsv: build/species/%/epitopes.tsv build/species/%/sources.tsv build/species/%/proteome.tsv
+	src/protein_tree/src/run.py -b build/ -t $*
 
 .PHONY: protein
 protein:
-	$(error 'TODO!')
+	@$(foreach id,$(TAXON_IDS),make build/species/$(id)/source_assignments.tsv;)
+	@touch build/arborist/proteins.built
 
 ### 6. TODO Build Protein Tree
 ### 7. TODO Build Molecule Tree
