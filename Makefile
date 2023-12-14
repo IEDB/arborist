@@ -374,7 +374,7 @@ build/species/%/sources.tsv: build/iedb/peptide_source.tsv build/species/%/taxa.
 
 # TODO!!!
 build/species/%/proteome.tsv: build/species/%/epitopes.tsv build/species/%/sources.tsv
-	protein_tree/protein_tree/select_proteome.py -t $*
+	src/protein_tree/src/select_proteome.py -b build/ -t $*
 
 # Use Dengue as an example.
 .PHONY: dengue
