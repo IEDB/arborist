@@ -244,7 +244,7 @@ build/iedb/peptide_source.tsv: src/iedb/peptide_source.sql build/iedb/source.bui
 iedb: build/iedb/peptide.built build/iedb/peptide_source.built
 
 
-### 1. Build NCBI Taxonomy
+### 2. Build NCBI Taxonomy
 #
 # Set up a Nanobot instance.
 # Fetch the NCBI Taxonomy `taxdmp.zip` file
@@ -377,7 +377,7 @@ build/species/%/sources.tsv: build/iedb/peptide_source.tsv build/species/%/taxa.
 build/species/%/proteome.fasta: build/species/%/epitopes.tsv build/species/%/sources.tsv
 	src/protein_tree/src/select_proteome.py -b build/ -t $*
 
-TAXON_IDS := $(shell awk 'NR>1 {print $$2}' build/arborist/active-species.tsv)
+TAXON_IDS = $(shell awk 'NR>1 {print $$2}' build/arborist/active-species.tsv)
 
 .PHONY: proteome
 proteome:
