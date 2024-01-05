@@ -57,7 +57,7 @@ fi
 command -v qsv > /dev/null || PATH="bin:$PATH"
 command -v qsv > /dev/null || fail 'Please install qsv'
 
-mysql \
+mariadb \
   --default-character-set=utf8 \
   --host="${IEDB_MYSQL_HOST}" \
   --port="${IEDB_MYSQL_PORT}" \

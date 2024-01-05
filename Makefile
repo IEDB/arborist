@@ -96,8 +96,8 @@ $(error 'Please install SQLite 3')
 endif
 
 # Require MySQL or MariaDB
-ifeq ($(shell command -v mysql),)
-$(error "Please install 'mysql' from MySQL or MariaDB")
+ifeq ($(shell command -v mariadb),)
+$(error "Please install 'mariadb' from MariaDB")
 endif
 
 # Require Python
