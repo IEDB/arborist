@@ -374,15 +374,11 @@ build/species/%/sources.tsv: build/iedb/peptide_source.tsv build/species/%/taxa.
 
 .PRECIOUS: build/species/%/epitopes.tsv build/species/%/sources.tsv
 
-build/species/%/proteome.fasta: build/species/%/epitopes.tsv build/species/%/sources.tsv
-	src/protein_tree/src/select_proteome.py -b build/ -t $*
-
-TAXON_IDS = $(shell awk 'NR>1 {print $$2}' build/arborist/active-species.tsv)
+build/arborist/proteomes.built:
+	python3 src/protein_tree/protein_tree/select_proteome.py -b build/ -a
 
 .PHONY: proteome
-proteome:
-	@$(foreach id,$(TAXON_IDS),make build/species/$(id)/proteome.fasta;)
-	@touch build/arborist/proteomes.built
+proteome: build/arborist/proteomes.built
 
 
 ### 5. TODO Assign Proteins
