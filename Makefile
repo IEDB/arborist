@@ -381,15 +381,17 @@ build/arborist/proteomes.built:
 proteome: build/arborist/proteomes.built
 
 
-### 5. TODO Assign Proteins
+### 5. Build Protein Tree
+### TODO: Create actual tree - right now it just does the assignments
 
-build/species/%/source_assignments.tsv: build/species/%/epitopes.tsv build/species/%/sources.tsv build/species/%/proteome.tsv
-	src/protein_tree/src/run.py -b build/ -t $*
+# build/species/%/source_assignments.tsv: build/species/%/epitopes.tsv build/species/%/sources.tsv build/species/%/proteome.tsv
+# 	src/protein_tree/src/assign_gene_protein.py -b build/ -a
+
+build/arborist/protein_tree.built:
+	src/protein_tree/protein_tree/assign.py -b build/ -B bin/ -a
 
 .PHONY: protein
-protein:
-	@$(foreach id,$(TAXON_IDS),make build/species/$(id)/source_assignments.tsv;)
-	@touch build/arborist/proteins.built
+protein: build/arborist/protein_tree.built
 
 ### 6. TODO Build Protein Tree
 ### 7. TODO Build Molecule Tree
