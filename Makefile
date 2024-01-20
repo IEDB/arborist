@@ -350,13 +350,6 @@ build/arborist/proteome.tsv: build/arborist/active-species.tsv src/proteome/prot
 	qsv join --left 'Species ID' $< 'Species ID' $(word 2,$^) \
 	| qsv select 1-6,12- --output $@
 
-# TODO: QSV is not happy with their CSV input.
-build/allergens.csv: | build/
-	curl -L -o $@ 'http://www.allergen.org/csv.php?table=joint'
-
-build/allergens.tsv: src/util/csv2tsv.py build/allergens.csv
-	python3 $^ $@
-
 build/species/%/:
 	mkdir -p $@
 
@@ -374,7 +367,7 @@ build/species/%/sources.tsv: build/iedb/peptide_source.tsv build/species/%/taxa.
 
 .PRECIOUS: build/species/%/epitopes.tsv build/species/%/sources.tsv
 
-build/arborist/proteomes.built:
+build/arborist/proteomes.built: build/arborist/proteome.tsv
 	python3 src/protein_tree/protein_tree/select_proteome.py -b build/ -a
 
 .PHONY: proteome
@@ -387,8 +380,18 @@ proteome: build/arborist/proteomes.built
 # build/species/%/source_assignments.tsv: build/species/%/epitopes.tsv build/species/%/sources.tsv build/species/%/proteome.tsv
 # 	src/protein_tree/src/assign_gene_protein.py -b build/ -a
 
-build/arborist/protein_tree.built:
-	src/protein_tree/protein_tree/assign.py -b build/ -B bin/ -a
+# TODO: QSV is not happy with their CSV input.
+build/arborist/allergens.csv: | build/
+	curl -L -o $@ 'http://www.allergen.org/csv.php?table=joint'
+
+build/arborist/allergens.tsv: src/util/csv2tsv.py build/arborist/allergens.csv
+	python3 $^ $@
+
+build/arborist/manual-parents.tsv: build/arborist/allergens.tsv
+	wget --no-check-certificate 'https://docs.google.com/spreadsheets/d/16M0RyUBEw_fW09x0U2X1vIXrek_dl2qMvqcOA7xI0WU/export?format=tsv&gid=2087231134' -O $@
+
+build/arborist/protein_tree.built: build/arborist/allergens.tsv build/arborist/manual-parents.tsv
+	src/protein_tree/protein_tree/assign.py -b build/ -a
 
 .PHONY: protein
 protein: build/arborist/protein_tree.built
