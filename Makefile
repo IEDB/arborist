@@ -96,8 +96,8 @@ $(error 'Please install SQLite 3')
 endif
 
 # Require MySQL or MariaDB
-ifeq ($(shell command -v mysql),)
-$(error "Please install 'mysql' from MySQL or MariaDB")
+ifeq ($(shell command -v mariadb),)
+$(error "Please install 'mariadb' from MariaDB")
 endif
 
 # Require Python
@@ -354,8 +354,8 @@ build/arborist/proteome.tsv: build/arborist/active-species.tsv src/proteome/prot
 build/allergens.csv: | build/
 	curl -L -o $@ 'http://www.allergen.org/csv.php?table=joint'
 
-build/allergens.tsv: build/allergens.csv
-	qsv input $< --output $@
+build/allergens.tsv: src/util/csv2tsv.py build/allergens.csv
+	python3 $^ $@
 
 build/species/%/:
 	mkdir -p $@
