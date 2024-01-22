@@ -388,7 +388,7 @@ build/arborist/allergens.tsv: src/util/csv2tsv.py build/arborist/allergens.csv
 	python3 $^ $@
 
 build/arborist/manual-parents.tsv: build/arborist/allergens.tsv
-	wget --no-check-certificate 'https://docs.google.com/spreadsheets/d/16M0RyUBEw_fW09x0U2X1vIXrek_dl2qMvqcOA7xI0WU/export?format=tsv&gid=2087231134' -O $@
+	wget --no-check-certificate 'https://docs.google.com/spreadsheets/d/1VUDYmmnQURRnuqyVxZGyF8JCgAIiooaKCmi3_mf03o8/export?format=tsv&gid=2087231134' -O $@
 
 build/arborist/protein_tree.built: build/arborist/allergens.tsv build/arborist/manual-parents.tsv
 	src/protein_tree/protein_tree/assign.py -b build/ -a
