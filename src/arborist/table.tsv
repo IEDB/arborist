@@ -7,3 +7,5 @@ organism_core	../../src/organism/organism_core.tsv		the core structure of the or
 organism_tree_tsv	organism-tree.tsv		the taxa used by IEDB, with their assigned species and upper nodes
 active_species	active-species.tsv		the species for which the IEDB attempts to find proteomes
 proteome	proteome.tsv		the selected proteomes for the active species
+peptide_assignments	all-peptide-assignments.tsv		the proteins and genes assigned to each peptide
+source_assignments	all-source-assignments.tsv		the proteins and genes assigned to each source

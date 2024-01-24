@@ -415,7 +415,7 @@ save: | build/arborist/nanobot.db
 	valve-export data $| build/arborist/ $$(grep build src/arborist/table.tsv | cut -f1 | tr '\n' ' ')
 	python3 src/organism/sort_organism_core.py src/organism/organism_core.tsv
 
-DROPTABLES := proteomes active_species organism_core organism_tree_tsv prefix column datatype table message history
+DROPTABLES := peptide_assignments source_assignments proteomes active_species organism_core organism_tree_tsv prefix column datatype table message history
 .PHONY: reload
 reload: src/organism/check_organism_core.py | build/arborist/nanobot.db
 	sqlite3 $| $(foreach DT,$(DROPTABLES),"DROP VIEW IF EXISTS '$(DT)_text_view'" "DROP VIEW IF EXISTS '$(DT)_view'" "DROP TABLE IF EXISTS '$(DT)_conflict'" "DROP TABLE IF EXISTS '$(DT)'")
