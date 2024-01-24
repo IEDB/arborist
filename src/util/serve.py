@@ -54,8 +54,7 @@ def index():
         'Subspecies Tree': 'subspecies_tree/NCBITaxon:1',
         'Active Species': 'active_species',
         'Proteome': 'proteome',
-        'Peptide Assignments Table': 'peptide_assignments',
-        'Source Assignments Table': 'source_assignments'
+        'Protein Tree Table': 'protein_tree_tsv',
     }
     for name, href in arborist.items():
         output.append(f'      <li><a href="/arborist/{href}">{name}</a></li>')
