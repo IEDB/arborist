@@ -55,3 +55,24 @@ proteome	Proteome Organism ID		empty	label	unique
 proteome	Proteome Label		empty	label	unique	
 proteome	Proteome Link		empty	label	unique	
 proteome	Updated		empty	label		
+peptide_assignments	Species Taxon ID
+peptide_assignments	Species Name
+peptide_assignments	Accession
+peptide_assignments	Sequence
+peptide_assignments	Source Name
+peptide_assignments	Organism ID
+peptide_assignments	Assigned Gene
+peptide_assignments	Assigned Protein ID
+peptide_assignments	Assigned Protein Name
+peptide_assignments	ARC Assignment
+source_assignments	Species Taxon ID
+source_assignments	Species Name
+source_assignments	Accession
+source_assignments	Name
+source_assignments	Organism ID
+source_assignments	Length
+source_assignments	Assigned Gene
+source_assignments	Assigned Protein ID
+source_assignments	Assigned Protein Name
+source_assignments	Assignment Score
+source_assignments	ARC Assignment
