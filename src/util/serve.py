@@ -56,7 +56,8 @@ def index():
         'Proteome': 'proteome',
         'Peptide Assignments': 'peptide_assignments',
         'Source Assignments': 'source_assignments',
-        'Protein Tree': 'protein_tree/NCBITaxon:1'
+        'Protein Tree (Old)': 'protein_tree_old/NCBITaxon:1',
+        'Protein Tree (New)': 'protein_tree_new/NCBITaxon:1'
     }
     for name, href in arborist.items():
         output.append(f'      <li><a href="/arborist/{href}">{name}</a></li>')

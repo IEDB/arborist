@@ -56,8 +56,8 @@ proteome	Proteome Label		empty	label	unique
 proteome	Proteome Link		empty	label	unique	
 proteome	Updated		empty	label		
 peptide_assignments	Species Taxon ID			tax_id	primary	
-peptide_assignments	Species Name			label	unique	
-peptide_assignments	Accession			label	unique	
+peptide_assignments	Species Name			label		
+peptide_assignments	Accession			label		
 peptide_assignments	Sequence			label		
 peptide_assignments	Source Name			label		
 peptide_assignments	Organism ID			tax_id		
@@ -66,8 +66,8 @@ peptide_assignments	Assigned Protein ID		empty	label
 peptide_assignments	Assigned Protein Name		empty	label		
 peptide_assignments	ARC Assignment		empty	label		
 source_assignments	Species Taxon ID			tax_id	primary	
-source_assignments	Species Name			label	unique	
-source_assignments	Accession			label	unique	
+source_assignments	Species Name			label		
+source_assignments	Accession			label		
 source_assignments	Name			label		
 source_assignments	Organism ID			tax_id		
 source_assignments	Length			natural_number		
