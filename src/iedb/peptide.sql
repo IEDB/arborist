@@ -1,7 +1,8 @@
 SELECT DISTINCT
+  epitope.epitope_id AS 'Epitope ID',
   object.mol1_seq AS 'Sequence',
+  object.mol2_accession AS 'Source Accession',
   object.mol2_name AS 'Source Name',
-  object.mol2_accession AS 'Accession',
   object.organism2_id AS 'Organism ID'
 FROM epitope, object
 WHERE epitope.e_object_id = object.object_id
@@ -12,9 +13,10 @@ WHERE epitope.e_object_id = object.object_id
 UNION
 
 SELECT DISTINCT
+  epitope.epitope_id AS 'Epitope ID',
   object.region AS 'Sequence',
+  object.mol2_accession AS 'Source Accession',
   object.mol2_name AS 'Source Name',
-  object.mol2_accession AS 'Accession',
   object.organism2_id AS 'Organism ID'
 FROM epitope, object
 WHERE epitope.related_object_id = object.object_id
@@ -25,10 +27,11 @@ WHERE epitope.related_object_id = object.object_id
 UNION
 
 SELECT DISTINCT
-  object.mol1_seq AS 'Sequence',
-  object.mol1_name AS 'Source Name',
-  object.mol1_accession AS 'Accession',
-  object.organism_id AS 'Organism ID'
+  epitope.epitope_id AS 'Epitope ID',
+  object.region AS 'Sequence',
+  object.mol2_accession AS 'Source Accession',
+  object.mol2_name AS 'Source Name',
+  object.organism2_id AS 'Organism ID'
 FROM epitope, object
 WHERE epitope.related_object_id = object.object_id
   AND object.mol1_seq IS NOT NULL
