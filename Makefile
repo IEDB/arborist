@@ -393,7 +393,7 @@ build/arborist/manual-parents.tsv: build/arborist/allergens.tsv
 build/arborist/protein_tree.built: build/arborist/allergens.tsv build/arborist/manual-parents.tsv
 	src/protein_tree/protein_tree/assign.py -b build/ -a
 	src/protein_tree/protein_tree/combine_assignments.py build/
-	src/protein_tree/protein_tree/build.py -build/
+	src/protein_tree/protein_tree/build.py build/
 
 .PHONY: protein
 protein: build/arborist/protein_tree.built
