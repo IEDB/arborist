@@ -1,3 +1,0 @@
-[submodule "src/protein_tree"]
-	path = src/protein_tree
-	url = https://github.com/danielmarrama/protein_tree.git
