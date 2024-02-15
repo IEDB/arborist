@@ -244,7 +244,7 @@ build/iedb/peptide_source.tsv: src/iedb/peptide_source.sql build/iedb/source.bui
 iedb: build/iedb/peptide.built build/iedb/peptide_source.built
 
 
-### 1. Build NCBI Taxonomy
+### 2. Build NCBI Taxonomy
 #
 # Set up a Nanobot instance.
 # Fetch the NCBI Taxonomy `taxdmp.zip` file
@@ -350,13 +350,6 @@ build/arborist/proteome.tsv: build/arborist/active-species.tsv src/proteome/prot
 	qsv join --left 'Species ID' $< 'Species ID' $(word 2,$^) \
 	| qsv select 1-6,12- --output $@
 
-# TODO: QSV is not happy with their CSV input.
-build/allergens.csv: | build/
-	curl -L -o $@ 'http://www.allergen.org/csv.php?table=joint'
-
-build/allergens.tsv: src/util/csv2tsv.py build/allergens.csv
-	python3 $^ $@
-
 build/species/%/:
 	mkdir -p $@
 
@@ -372,27 +365,38 @@ build/species/%/epitopes.tsv: build/iedb/peptide.tsv build/species/%/taxa.txt
 build/species/%/sources.tsv: build/iedb/peptide_source.tsv build/species/%/taxa.txt
 	qsv search --select 'Organism ID' `cat build/species/$*/taxa.txt` $< --output $@
 
-# TODO!!!
-build/species/%/proteome.tsv: build/species/%/epitopes.tsv build/species/%/sources.tsv
-	protein_tree/protein_tree/select_proteome.py -t $*
+.PRECIOUS: build/species/%/epitopes.tsv build/species/%/sources.tsv
 
-# Use Dengue as an example.
-.PHONY: dengue
-dengue: build/species/12637/proteome.tsv
+build/arborist/proteomes.built: build/arborist/proteome.tsv
+	python3 src/protein_tree/protein_tree/select_proteome.py -b build/ -a
 
-# TODO!!!
 .PHONY: proteome
-proteome: dengue
+proteome: build/arborist/proteomes.built
 
 
-### 5. TODO Assign Proteins
+### 5. Build Protein Tree
+### TODO: Create actual tree - right now it just does the assignments
 
-build/%/epitope_assignments.tsv: build/%/epitopes.tsv build/%/sources.tsv build/%/proteome.tsv
-	protein_tree/protein_tree/run.py -t $*
+# build/species/%/source_assignments.tsv: build/species/%/epitopes.tsv build/species/%/sources.tsv build/species/%/proteome.tsv
+# 	src/protein_tree/src/assign_gene_protein.py -b build/ -a
+
+# TODO: QSV is not happy with their CSV input.
+build/arborist/allergens.csv: | build/
+	curl -L -o $@ 'http://www.allergen.org/csv.php?table=joint'
+
+build/arborist/allergens.tsv: src/util/csv2tsv.py build/arborist/allergens.csv
+	python3 $^ $@
+
+build/arborist/manual-parents.tsv: build/arborist/allergens.tsv
+	wget --no-check-certificate 'https://docs.google.com/spreadsheets/d/1VUDYmmnQURRnuqyVxZGyF8JCgAIiooaKCmi3_mf03o8/export?format=tsv&gid=2087231134' -O $@
+
+build/arborist/protein_tree.built: build/arborist/allergens.tsv build/arborist/manual-parents.tsv
+	src/protein_tree/protein_tree/assign.py -b build/ -a
+	src/protein_tree/protein_tree/combine_assignments.py build/
+	src/protein_tree/protein_tree/build.py build/
 
 .PHONY: protein
-protein:
-	$(error 'TODO!')
+protein: build/arborist/protein_tree.built
 
 ### 6. TODO Build Protein Tree
 ### 7. TODO Build Molecule Tree
