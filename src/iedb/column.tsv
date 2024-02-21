@@ -114,11 +114,15 @@ epitope	dna_wildtype_base		empty	label
 epitope	nt_mut_flag		empty	label		
 epitope	modified_date		empty	label		
 epitope	created_date		empty	label		
+peptide_source	Source ID			natural_number	from(source.source_id)	
 peptide_source	Accession			label	from(source.accession)	
+peptide_source	Database			label		
 peptide_source	Name			label		
+peptide_source	Aliases			label		
 peptide_source	Sequence			label		
 peptide_source	Organism ID			natural_number		
+peptide	Epitope ID			natural_number	from(epitope.epitope_id)	
 peptide	Sequence			label		
+peptide	Source Accession			label	from(peptide_source.Accession)	
 peptide	Source Name			label		
-peptide	Accession			label	from(peptide_source.Accession)	
 peptide	Organism ID			natural_number		
