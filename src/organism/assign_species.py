@@ -196,7 +196,8 @@ def get_label_and_source(con, tree, curie):
                 break
 
     if not label:
-        raise Exception(f'No label found for {curie}')
+        # raise Exception(f'No label found for {curie}')
+        print(f'WARN: No label found for {curie}')
 
     return label, label_source
 

@@ -96,7 +96,7 @@ $(error 'Please install SQLite 3')
 endif
 
 # Require MySQL or MariaDB
-ifeq ($(shell command -v mariadb),)
+ifeq ($(shell command -v mysql),)
 $(error "Please install 'mariadb' from MariaDB")
 endif
 
@@ -123,7 +123,7 @@ endif
 # Install LDTab if not already present
 ifeq ($(shell command -v ldtab),)
 bin/ldtab.jar: | bin/
-	curl -L -o $@ 'https://github.com/ontodev/ldtab.clj/releases/download/v2023-08-19/ldtab.jar'
+	curl -L -o $@ 'https://github.com/ontodev/ldtab.clj/releases/download/v2023-12-21/ldtab.jar'
 bin/ldtab: bin/ldtab.jar
 	echo '#!/bin/sh' > $@
 	echo 'java -jar "$$(dirname $$0)/ldtab.jar" "$$@"' >> $@
@@ -217,8 +217,20 @@ build/iedb/nanobot.db: current/iedb/epitope.tsv.gz
 	zcat current/iedb/source.tsv.gz | head -n1 > build/iedb/source.tsv || exit 0
 	zcat current/iedb/object.tsv.gz | head -n1 > build/iedb/object.tsv || exit 0
 	zcat current/iedb/epitope.tsv.gz | head -n1 > build/iedb/epitope.tsv || exit 0
-	echo 'Sequence	Source Name	Accession	Organism ID' > build/iedb/peptide.tsv
-	echo 'Accession	Name	Sequence	Organism ID' > build/iedb/peptide_source.tsv
+	# create peptide.tsv with just headers
+	qsv search --select table 'peptide\b' src/iedb/column.tsv \
+	| qsv select column \
+	| qsv behead \
+	| tr '\n' '\t' \
+	| sed 's/	$$//' \
+	> build/iedb/peptide.tsv
+	# create peptide_source.tsv with just headers
+	qsv search --select table 'peptide_source\b' src/iedb/column.tsv \
+	| qsv select column \
+	| qsv behead \
+	| tr '\n' '\t' \
+	| sed 's/	$$//' \
+	> build/iedb/peptide_source.tsv
 	cd build/iedb/ && nanobot init
 	rm -f build/iedb/source.tsv
 	rm -f build/iedb/object.tsv
@@ -319,6 +331,14 @@ build/arborist/subspecies-tree.built: src/organism/build_subspecies_tree.py buil
 	python3 $< $|
 	touch $@
 
+# Export sorted LDTab TSV files.
+build/arborist/%-tree-ldtab.tsv: build/arborist/%-tree.built | build/arborist/nanobot.db
+	rm -f $@
+	ldtab export $| --table $*_tree $@
+	mv $@ $@-tmp.tsv
+	qsv sort $@-tmp.tsv --output $@
+	rm $@-tmp.tsv
+
 build/arborist/%-tree.ttl: build/arborist/%-tree.built | build/arborist/nanobot.db
 	rm -f $@
 	ldtab export $| --table $*_tree $@
@@ -333,7 +353,10 @@ build/arborist/active-species.tsv: src/organism/get_active_species.py build/arbo
 	python3 $< $| $(filter %.tsv, $^) $@
 
 .PHONY: organism
-organism: build/arborist/organism_core.html build/arborist/organism-tree.owl build/arborist/subspecies-tree.owl build/arborist/active-species.tsv build/arborist/proteome.tsv
+organism: build/arborist/organism_core.html
+organism: build/arborist/organism-tree-ldtab.tsv build/arborist/subspecies-tree-ldtab.tsv
+organism: build/arborist/organism-tree.owl build/arborist/subspecies-tree.owl
+organism: build/arborist/active-species.tsv build/arborist/proteome.tsv
 	make reload
 
 
@@ -392,17 +415,26 @@ build/arborist/manual-parents.tsv: build/arborist/allergens.tsv
 
 build/arborist/protein_tree.built: build/arborist/allergens.tsv build/arborist/manual-parents.tsv
 	src/protein_tree/protein_tree/assign.py -b build/ -a
-	src/protein_tree/protein_tree/combine_assignments.py build/
-	src/protein_tree/protein_tree/build.py build/
 
 .PHONY: protein
 protein: build/arborist/protein_tree.built
 
 ### 6. TODO Build Protein Tree
 ### 7. TODO Build Molecule Tree
-# 8. TODO Build Assay Tree
-# 9. TODO Build Disease Tree
-#
+### 8. TODO Build Assay Tree
+
+### 9. Build Disease Tree
+
+build/disease-tree.tsv: build/disease-tree.owl | build/arborist/nanobot.db
+	sqlite3 $| "DROP TABLE IF EXISTS disease_tree"
+	ldtab init $| --table disease_tree
+	ldtab import $| $< --table disease_tree
+	sqlite3 $| "CREATE INDEX idx_disease_tree_subject ON disease_tree(subject)"
+	sqlite3 $| "CREATE INDEX idx_disease_tree_predicate ON disease_tree(predicate)"
+	sqlite3 $| "CREATE INDEX idx_disease_tree_object ON disease_tree(object)"
+	sqlite3 $| "ANALYZE disease_tree"
+	ldtab export $| $@ --table disease_tree
+
 # TODO: geolocation tree, MHC tree
 # TODO: merged SoT tree
 # TODO: test data, symlink?
@@ -434,17 +466,29 @@ reload: src/organism/check_organism_core.py | build/arborist/nanobot.db
 # Load an existing organism-tree.owl
 build/arborist/organism-tree-old.built: build/arborist/organism-tree-old.owl | build/arborist/nanobot.db
 	sqlite3 $| "DROP TABLE IF EXISTS organism_tree_old"
-	sed s/statement/organism_tree_old/g src/statement.sql | sqlite3 $|
+	ldtab init $| --table organism_tree_old
 	ldtab import $| $(word 2,$^) -t organism_tree_old
 	sqlite3 $| "ANALYZE organism_tree_old"
 	touch $@
 
 # Load an existing subspecies-tree.owl
-arboirst/build/arboirst/subspecies-tree-old.built: build/arboirst/subspecies-tree-old.owl | build/arborist/nanobot.db
+build/arborist/subspecies-tree-old.built: build/arboirst/subspecies-tree-old.owl | build/arborist/nanobot.db
 	sqlite3 $| "DROP TABLE IF EXISTS subspecies_tree_old"
-	sed s/statement/subspecies_tree_old/g src/statement.sql | sqlite3 $|
-	ldtab import $| $(word 2,$^) -t subspecies_tree_old
+	ldtab init $| --table subspecies_tree_old
+	ldtab import $| $< --table subspecies_tree_old
 	sqlite3 $| "ANALYZE subspecies_tree_old"
+	touch $@
+
+# Load an existing molecule-tree.owl
+build/arborist/molecule-tree-old.built: molecule-tree-20240211.owl | build/arborist/nanobot.db
+	$(eval TABLE := molecule_tree_old)
+	sqlite3 $| "DROP TABLE IF EXISTS $(TABLE)"
+	ldtab init $| --table $(TABLE)
+	ldtab import $| $< --table $(TABLE)
+	sqlite3 $| "CREATE INDEX idx_$(TABLE)_subject ON $(TABLE)(subject)"
+	sqlite3 $| "CREATE INDEX idx_$(TABLE)_predicate ON $(TABLE)(predicate)"
+	sqlite3 $| "CREATE INDEX idx_$(TABLE)_object ON $(TABLE)(object)"
+	sqlite3 $| "ANALYZE $(TABLE)"
 	touch $@
 
 

@@ -7,7 +7,7 @@ import csv
 import os
 import subprocess
 
-from bottle import get, post, request, response, run, HTTPError
+from bottle import get, post, request, response, run, static_file, HTTPError
 from jinja2 import Environment, FileSystemLoader
 
 env = Environment(
@@ -54,7 +54,10 @@ def index():
         'Subspecies Tree': 'subspecies_tree/NCBITaxon:1',
         'Active Species': 'active_species',
         'Proteome': 'proteome',
-        'Protein Tree Table': 'protein_tree_tsv',
+        'Protein Tree (Old)': 'protein_tree_old/NCBITaxon:1',
+        'Protein Tree (New)': 'protein_tree_new/NCBITaxon:1',
+        'Molecule Tree (Old)': 'molecule_tree_old/BFO:0000040',
+        'Disease Tree': 'disease_tree/DOID:4'
     }
     for name, href in arborist.items():
         output.append(f'      <li><a href="/arborist/{href}">{name}</a></li>')
@@ -91,6 +94,11 @@ def nanobot(method, dataset, path):
     for the given dataset, and path."""
     if method not in ['GET', 'POST']:
         raise HTTPError(f'Bad method {method}')
+
+    arborist_dir = 'build/arborist/'
+    filepath = os.path.join(arborist_dir, path)
+    if path.endswith('.tsv') and os.path.isfile(filepath):
+        static_file(path, root=arborist_dir)
 
     result = subprocess.run(
         [os.path.join(os.getcwd(), 'bin/nanobot')],
