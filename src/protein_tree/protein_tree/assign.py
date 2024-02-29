@@ -346,30 +346,41 @@ class GeneAndProteinAssigner:
     merged_df['Database'] = merged_df['Protein ID'].map(self.uniprot_id_to_database_map)
     merged_df['Isoform Count'] = merged_df['Protein ID'].map(self.uniprot_id_to_isoform_count_map)
 
-    # Step 1: isolate matches to the assigned gene
+    # Step 1: Isolate matches to the assigned gene
     merged_df = merged_df[merged_df['Gene'] == merged_df['Gene_assigned']]
 
-    # Step 2 and 3: Filter for SwissProt entries and lowest isoform count
+    # Step 2: Filter for SwissProt entries
     swissprot_df = merged_df[merged_df['Database'] == 'sp']
-    swissprot_df = swissprot_df.sort_values(by=['Peptide', 'Isoform Count'])
-    swissprot_df = swissprot_df.drop_duplicates(subset=['Peptide'], keep='first')
-    no_swissprot_peptides = set(merged_df['Peptide']) - set(swissprot_df['Peptide'])
-    no_swissprot_df = merged_df[merged_df['Peptide'].isin(no_swissprot_peptides)]
 
-    # Step 4: Sort by protein existence level
-    no_swissprot_df = no_swissprot_df.sort_values(by=['Peptide', 'Protein Existence Level', 'Isoform Count'])
-    no_swissprot_df = no_swissprot_df.drop_duplicates(subset=['Peptide'], keep='first')
+    # Step 3: Sort by isoform count and PE levels
+    swissprot_df = swissprot_df.sort_values(by=['Peptide', 'Source', 'Isoform Count', 'Protein Existence Level'])
+    swissprot_df = swissprot_df.drop_duplicates(subset=['Peptide', 'Source'], keep='first')
 
-    # Combine the two DataFrames to get the final list of peptides with their best isoform IDs
+    # Identify peptide and source combinations not in SwissProt entries
+    no_swissprot_combinations = merged_df[['Peptide', 'Source']].merge(
+        swissprot_df[['Peptide', 'Source']], on=['Peptide', 'Source'], how='left', indicator=True
+    ).query('_merge == "left_only"').drop(columns=['_merge'])
+
+    # Step 4: Filter for non-SwissProt peptide and source ombinations and sort by PE levels
+    no_swissprot_df = merged_df.merge(
+        no_swissprot_combinations, on=['Peptide', 'Source']
+    ).sort_values(by=['Peptide', 'Source', 'Protein Existence Level', 'Isoform Count'])
+
+    no_swissprot_df = no_swissprot_df.drop_duplicates(subset=['Peptide', 'Source'], keep='first')
+
+    # combine dfs to get final assignments
     final_df = pd.concat([swissprot_df, no_swissprot_df])
-    best_isoform_df = final_df.groupby('Peptide').agg({'Protein ID': 'first'}).reset_index()
+
+    # Since we want to keep 'Source', ensure it's included when creating the 'best_isoform_df'
+    best_isoform_df = final_df.groupby(['Peptide', 'Source']).agg({'Protein ID': 'first'}).reset_index()
     best_isoform_df.rename(columns={'Protein ID': 'Best Isoform ID'}, inplace=True)
     best_isoform_df = best_isoform_df.dropna(subset=['Best Isoform ID'])
 
+    # Perform the merge using both 'Peptide' and 'Source' as keys
     final_assignment_df = pd.merge(
       best_isoform_df,
       peptide_source_map_df,
-      on='Peptide',
+      on=['Peptide', 'Source'],
       how='left'
     )
 
