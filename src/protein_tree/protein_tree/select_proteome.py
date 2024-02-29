@@ -110,7 +110,7 @@ class ProteomeSelector:
     regexes = {
       'protein_id': re.compile(r"\|([^|]*)\|"),    # between | and |
       'protein_name': re.compile(r"\s(.+?)\sOS"),  # between space and space before OS
-      'gene': re.compile(r"GN=(.+?)\s"),           # between GN= and space
+      'gene': re.compile(r"GN=([^\s]+?)(?=\s|$)"), # between GN= and space or end of line
       'pe_level': re.compile(r"PE=(.+?)\s"),       # between PE= and space
     }
 
@@ -146,7 +146,9 @@ class ProteomeSelector:
     
     columns = ['Protein ID', 'Protein Name', 'Gene', 'Protein Existence Level', 'Gene Priority', 'Sequence', 'Database']
     proteome = pd.DataFrame(proteome_data, columns=columns)
-    proteome = proteome[['Database', 'Gene', 'Protein ID', 'Protein Name', 'Protein Existence Level', 'Gene Priority', 'Sequence']]
+    
+    proteome['Isoform Count'] = proteome['Protein ID'].apply(lambda x: x.split('-')[1] if '-' in x else '1')
+    proteome = proteome[['Database', 'Gene', 'Protein ID', 'Isoform Count', 'Protein Name', 'Protein Existence Level', 'Gene Priority', 'Sequence']]
     proteome.to_csv(f'{self.species_path}/proteome.tsv', sep='\t', index=False)
   
   def _parse_proteome_xml(self, xml) -> pd.DataFrame:
