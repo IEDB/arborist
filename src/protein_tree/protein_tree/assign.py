@@ -51,19 +51,16 @@ class GeneAndProteinAssigner:
       selector.proteome_to_tsv()
       self.proteome = pd.read_csv(f'{self.species_path}/proteome.tsv', sep='\t')
 
-    self.uniprot_id_to_gene_map = dict( # create UniProt ID -> gene map
-      zip(
-        self.proteome['Protein ID'], 
-        self.proteome['Gene']
-      )
-    )
-    # create UniProt ID -> protein name map
-    self.uniprot_id_to_name_map = dict(
-      zip(
-        self.proteome['Protein ID'], 
-        self.proteome['Protein Name']
-      )
-    )
+      proteome_maps = {
+        'uniprot_id_to_gene_map': 'Gene',
+        'uniprot_id_to_name_map': 'Protein Name',
+        'uniprot_id_to_database_map': 'Database',
+        'uniprot_id_to_isoform_count_map': 'Isoform Count'
+      }
+
+      for map_name, column_name in proteome_maps.items():
+        setattr(self, map_name, dict(zip(self.proteome['Protein ID'], self.proteome[column_name])))
+
 
   def assign(self, sources_df: pd.DataFrame, peptides_df: pd.DataFrame) -> None:
     """Overall function to assign genes and parent proteins to sources and peptides.
@@ -291,8 +288,13 @@ class GeneAndProteinAssigner:
     Preprocess the proteome and then search all the peptides within
     the proteome using PEPMatch. Then, assign the parent protein
     to each peptide by selecting the best isoform of the assigned gene for
-    its source.
-    """
+    its source. The proccess is as follows:
+
+    1. Limit matches to the assigned gene for its source antigen. 
+    2. Select entries from SwissProt database from "Database" column.
+    3. If there are duplicates, use the lowest isoform count.
+    4. If there are no SwissProt entries, use the lowest protein existence level for TrEMBL entries."""
+    
     self._preprocess_proteome_if_needed()
 
     # search all peptides within the proteome using PEPMatch
@@ -340,22 +342,42 @@ class GeneAndProteinAssigner:
       suffixes=('', '_assigned')
     )
 
-    # isolate only those peptides that match to the assigned gene for their source
+    # add additional proteome data to merged_df
+    merged_df['Database'] = merged_df['Protein ID'].map(self.uniprot_id_to_database_map)
+    merged_df['Isoform Count'] = merged_df['Protein ID'].map(self.uniprot_id_to_isoform_count_map)
+
+    # Step 1: isolate matches to the assigned gene
     merged_df = merged_df[merged_df['Gene'] == merged_df['Gene_assigned']]
 
-    # now, get the isoform of the assigned gene with the best protein existence level
-    best_isoform_indices = merged_df.groupby(['Gene', 'Query Sequence'])['Protein Existence Level'].idxmin()
-    best_isoforms = merged_df.loc[best_isoform_indices, ['Gene', 'Query Sequence', 'Protein ID']].set_index(['Gene', 'Query Sequence'])['Protein ID']
-    merged_df['Best Isoform ID'] = merged_df.set_index(['Gene', 'Query Sequence']).index.map(best_isoforms)
-    
-    # drop any unassigned peptides that couldn't be assigned an isoform
-    merged_df = merged_df.dropna(subset=['Best Isoform ID'])
+    # Step 2 and 3: Filter for SwissProt entries and lowest isoform count
+    swissprot_df = merged_df[merged_df['Database'] == 'sp']
+    swissprot_df = swissprot_df.sort_values(by=['Peptide', 'Isoform Count'])
+    swissprot_df = swissprot_df.drop_duplicates(subset=['Peptide'], keep='first')
+    no_swissprot_peptides = set(merged_df['Peptide']) - set(swissprot_df['Peptide'])
+    no_swissprot_df = merged_df[merged_df['Peptide'].isin(no_swissprot_peptides)]
 
-    # Update the protein assignment with the best isoform
+    # Step 4: Sort by protein existence level
+    no_swissprot_df = no_swissprot_df.sort_values(by=['Peptide', 'Protein Existence Level', 'Isoform Count'])
+    no_swissprot_df = no_swissprot_df.drop_duplicates(subset=['Peptide'], keep='first')
+
+    # Combine the two DataFrames to get the final list of peptides with their best isoform IDs
+    final_df = pd.concat([swissprot_df, no_swissprot_df])
+    best_isoform_df = final_df.groupby('Peptide').agg({'Protein ID': 'first'}).reset_index()
+    best_isoform_df.rename(columns={'Protein ID': 'Best Isoform ID'}, inplace=True)
+    best_isoform_df = best_isoform_df.dropna(subset=['Best Isoform ID'])
+
+    final_assignment_df = pd.merge(
+      best_isoform_df,
+      peptide_source_map_df,
+      on='Peptide',
+      how='left'
+    )
+
+    # update the protein assignment with the best isoform ID
     self.peptide_protein_assignment.update(
       dict(zip(
-        zip(merged_df['Source'], merged_df['Query Sequence']),
-        merged_df['Best Isoform ID']))
+        zip(final_assignment_df['Source'], final_assignment_df['Peptide']),
+        final_assignment_df['Best Isoform ID']))
     )
 
   def _run_arc(self, sources_df: pd.DataFrame) -> None:
