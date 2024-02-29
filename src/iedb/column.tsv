@@ -119,6 +119,7 @@ peptide_source	Accession			label	from(source.accession)
 peptide_source	Database			label		
 peptide_source	Name			label		
 peptide_source	Aliases			label		
+peptide_source	Synonyms			label		
 peptide_source	Sequence			label		
 peptide_source	Organism ID			natural_number		
 peptide	Epitope ID			natural_number	from(epitope.epitope_id)	
