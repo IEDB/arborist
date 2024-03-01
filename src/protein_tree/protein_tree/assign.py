@@ -51,15 +51,15 @@ class GeneAndProteinAssigner:
       selector.proteome_to_tsv()
       self.proteome = pd.read_csv(f'{self.species_path}/proteome.tsv', sep='\t')
 
-      proteome_maps = {
-        'uniprot_id_to_gene_map': 'Gene',
-        'uniprot_id_to_name_map': 'Protein Name',
-        'uniprot_id_to_database_map': 'Database',
-        'uniprot_id_to_isoform_count_map': 'Isoform Count'
-      }
+    proteome_maps = {
+      'uniprot_id_to_gene_map': 'Gene',
+      'uniprot_id_to_name_map': 'Protein Name',
+      'uniprot_id_to_database_map': 'Database',
+      'uniprot_id_to_isoform_count_map': 'Isoform Count'
+    }
 
-      for map_name, column_name in proteome_maps.items():
-        setattr(self, map_name, dict(zip(self.proteome['Protein ID'], self.proteome[column_name])))
+    for map_name, column_name in proteome_maps.items():
+      setattr(self, map_name, dict(zip(self.proteome['Protein ID'], self.proteome[column_name])))
 
 
   def assign(self, sources_df: pd.DataFrame, peptides_df: pd.DataFrame) -> None:
