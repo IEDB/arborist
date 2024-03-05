@@ -444,8 +444,24 @@ build/arborist/protein-tree.owl: build/arborist/protein-tree.ttl
 .PHONY: protein
 protein: build/arborist/protein_tree.owl
 
+
 ### 7. TODO Build Molecule Tree
+
+build/arborist/molecule-tree.owl: nonpeptide-tree-20240305.owl build/arborist/protein-tree.owl
+	robot remove \
+	--input $< \
+	--term BFO:0000023 \
+	--select "self descendants" \
+	merge \
+	--input $(word 2,$^) \
+	annotate \
+	--ontology-iri https://ontology.iedb.org/ontology/molecule-tree.owl \
+	--version-iri https://ontology.iedb.org/ontology/$(shell date +%Y-%m-%d)/molecule-tree.owl \
+	--output $@
+
+
 ### 8. TODO Build Assay Tree
+
 
 ### 9. Build Disease Tree
 
