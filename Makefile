@@ -413,13 +413,37 @@ build/arborist/allergens.tsv: src/util/csv2tsv.py build/arborist/allergens.csv
 build/arborist/manual-parents.tsv: build/arborist/allergens.tsv
 	wget --no-check-certificate 'https://docs.google.com/spreadsheets/d/1VUDYmmnQURRnuqyVxZGyF8JCgAIiooaKCmi3_mf03o8/export?format=tsv&gid=2087231134' -O $@
 
-build/arborist/protein_tree.built: build/arborist/allergens.tsv build/arborist/manual-parents.tsv
-	src/protein_tree/protein_tree/assign.py -b build/ -a
+build/arborist/protein_tree.assigned: build/arborist/allergens.tsv build/arborist/manual-parents.tsv
+	python src/protein_tree/protein_tree/assign.py -b build/ -a
+	touch $@
+
+
+### 6. Build Protein Tree
+
+build/arborist/all-peptide-assignments.tsv: build/arborist/protein_tree.assigned
+	python src/protein_tree/protein_tree/combine_assignments.py build/
+
+build/arborist/protein_tree.built: build/arborist/all-peptide-assignments.tsv | build/arborist/nanobot.db
+	python src/protein_tree/protein_tree/build.py build/
+	sqlite3 $| "CREATE INDEX idx_protein_tree_old_subject ON protein_tree_old(subject)"
+	sqlite3 $| "CREATE INDEX idx_protein_tree_old_predicate ON protein_tree_old(predicate)"
+	sqlite3 $| "CREATE INDEX idx_protein_tree_old_object ON protein_tree_old(object)"
+	sqlite3 $| "ANALYZE protein_tree_old"
+	sqlite3 $| "CREATE INDEX idx_protein_tree_new_subject ON protein_tree_new(subject)"
+	sqlite3 $| "CREATE INDEX idx_protein_tree_new_predicate ON protein_tree_new(predicate)"
+	sqlite3 $| "CREATE INDEX idx_protein_tree_new_object ON protein_tree_new(object)"
+	sqlite3 $| "ANALYZE protein_tree_new"
+	touch $@
+
+build/arborist/protein-tree.ttl: build/arborist/protein_tree.built | build/arborist/nanobot.db
+	ldtab export $| $@ --table protein_tree_old
+
+build/arborist/protein-tree.owl: build/arborist/protein-tree.ttl
+	robot convert -i $< -o $@
 
 .PHONY: protein
-protein: build/arborist/protein_tree.built
+protein: build/arborist/protein_tree.owl
 
-### 6. TODO Build Protein Tree
 ### 7. TODO Build Molecule Tree
 ### 8. TODO Build Assay Tree
 
