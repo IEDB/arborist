@@ -35,10 +35,10 @@ def main():
     except FileNotFoundError:
       continue
 
-    peptides_df['Species Taxon ID'] = species_data['Species Taxon ID'].iloc[0]
+    peptides_df['Species Taxon ID'] = species
     peptides_df['Species Name'] = species_data['Species Name'].iloc[0]
 
-    sources_df['Species Taxon ID'] = species_data['Species Taxon ID'].iloc[0]
+    sources_df['Species Taxon ID'] = species
     sources_df['Species Name'] = species_data['Species Name'].iloc[0]
 
     # rearrange columns to put taxon ID and species name first
