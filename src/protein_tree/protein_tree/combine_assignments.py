@@ -30,8 +30,12 @@ def main():
       peptides_df = pd.read_csv(species / 'peptide-assignments.tsv', sep='\t')
       sources_df = pd.read_csv(species / 'source-assignments.tsv', sep='\t')
       species_data = pd.read_csv(species / 'species-data.tsv', sep='\t')
+      proteome = pd.read_csv(species / 'proteome.tsv', sep='\t')
     except FileNotFoundError:
       continue
+    
+    proteome['Sequence Length'] = proteome['Sequence'].apply(len)
+    id_to_len_map = proteome.set_index('Protein ID')['Sequence Length'].to_dict()
 
     peptides_df['Species Taxon ID'] = species.name
     peptides_df['Species Name'] = species_data['Species Name'].iloc[0]
@@ -40,7 +44,7 @@ def main():
     sources_df['Species Name'] = species_data['Species Name'].iloc[0]
     sources_df['Proteome ID'] = species_data['Proteome ID'].iloc[0]
     sources_df['Proteome Label'] = species_data['Proteome Taxon'].iloc[0]
-
+    sources_df['Parent Sequence Length'] = sources_df['Assigned Protein ID'].map(id_to_len_map)
 
     all_peptides_df = pd.concat([all_peptides_df, peptides_df])
     all_sources_df = pd.concat([all_sources_df, sources_df])
