@@ -19,31 +19,28 @@ def main():
 
   args = parser.parse_args()
   build_path = Path(args.build_path)
+  species_path = build_path / 'species'
 
   print('Combining all peptide and source assignments...\n')
 
-  active_species = pd.read_csv(build_path / 'arborist' / 'active-species.tsv', sep='\t')
   all_peptides_df, all_sources_df = pd.DataFrame(), pd.DataFrame()
   
-  for species in active_species['Species ID']:
-    species_path = build_path / 'species' / f'{species}'
-
+  for species in species_path.iterdir():
     try:
-      peptides_df = pd.read_csv(species_path / 'peptide-assignments.tsv', sep='\t')
-      sources_df = pd.read_csv(species_path / 'source-assignments.tsv', sep='\t')
-      species_data = pd.read_csv(species_path / 'species-data.tsv', sep='\t')
+      peptides_df = pd.read_csv(species / 'peptide-assignments.tsv', sep='\t')
+      sources_df = pd.read_csv(species / 'source-assignments.tsv', sep='\t')
+      species_data = pd.read_csv(species / 'species-data.tsv', sep='\t')
     except FileNotFoundError:
       continue
 
-    peptides_df['Species Taxon ID'] = species_data['Species Taxon ID'].iloc[0]
+    peptides_df['Species Taxon ID'] = species.name
     peptides_df['Species Name'] = species_data['Species Name'].iloc[0]
 
-    sources_df['Species Taxon ID'] = species_data['Species Taxon ID'].iloc[0]
+    sources_df['Species Taxon ID'] = species.name
     sources_df['Species Name'] = species_data['Species Name'].iloc[0]
+    sources_df['Proteome ID'] = species_data['Proteome ID'].iloc[0]
+    sources_df['Proteome Label'] = species_data['Proteome Taxon'].iloc[0]
 
-    # rearrange columns to put taxon ID and species name first
-    peptides_df = peptides_df[['Species Taxon ID', 'Species Name'] + peptides_df.columns[:-2].tolist()]
-    sources_df = sources_df[['Species Taxon ID', 'Species Name'] + sources_df.columns[:-2].tolist()]
 
     all_peptides_df = pd.concat([all_peptides_df, peptides_df])
     all_sources_df = pd.concat([all_sources_df, sources_df])
