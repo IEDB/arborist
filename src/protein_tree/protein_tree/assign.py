@@ -117,7 +117,6 @@ class GeneAndProteinAssigner:
     peptides_df.loc[:, 'ARC Assignment'] = peptides_df['Source Accession'].map(self.source_arc_assignment)
 
     peptides_df.drop_duplicates(subset=['Source Accession', 'Sequence'], inplace=True) # drop duplicate peptides
-    sources_df.drop(columns=['Sequence'], inplace=True) # drop sequence column for output
 
     self._remove_files()
     
