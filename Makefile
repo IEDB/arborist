@@ -420,10 +420,12 @@ build/arborist/protein_tree.assigned: build/arborist/allergens.tsv build/arboris
 
 ### 6. Build Protein Tree
 
-build/arborist/all-peptide-assignments.tsv: build/arborist/protein_tree.assigned
+build/arborist/all-peptide-assignments.tsv build/arborist/all-source-assignments.tsv build/arborist/parent-proteins.tsv build/parents/source-parents.tsv: build/arborist/protein_tree.assigned
 	python src/protein_tree/protein_tree/combine_assignments.py build/
 
 build/arborist/protein_tree.built: build/arborist/all-peptide-assignments.tsv | build/arborist/nanobot.db
+	sqlite3 $| "DROP TABLE IF EXISTS protein_tree_old"
+	sqlite3 $| "DROP TABLE IF EXISTS protein_tree_new"
 	python src/protein_tree/protein_tree/build.py build/
 	sqlite3 $| "CREATE INDEX idx_protein_tree_old_subject ON protein_tree_old(subject)"
 	sqlite3 $| "CREATE INDEX idx_protein_tree_old_predicate ON protein_tree_old(predicate)"
@@ -436,6 +438,7 @@ build/arborist/protein_tree.built: build/arborist/all-peptide-assignments.tsv | 
 	touch $@
 
 build/arborist/protein-tree.ttl: build/arborist/protein_tree.built | build/arborist/nanobot.db
+	rm -f $@
 	ldtab export $| $@ --table protein_tree_old
 
 build/arborist/protein-tree.owl: build/arborist/protein-tree.ttl
@@ -478,6 +481,12 @@ build/disease-tree.tsv: build/disease-tree.owl | build/arborist/nanobot.db
 # TODO: geolocation tree, MHC tree
 # TODO: merged SoT tree
 # TODO: test data, symlink?
+
+
+build/proteins/latest/: build/disease-tree.owl build/arborist/molecule-tree.owl build/arborist/parent-proteins.tsv build/arborist/source-parents.tsv
+	rm -rf $@
+	mkdir -p $@
+	cp $^ $@
 
 
 ### Nanobot Actions
@@ -530,5 +539,4 @@ build/arborist/molecule-tree-old.built: molecule-tree-20240211.owl | build/arbor
 	sqlite3 $| "CREATE INDEX idx_$(TABLE)_object ON $(TABLE)(object)"
 	sqlite3 $| "ANALYZE $(TABLE)"
 	touch $@
-
 
