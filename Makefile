@@ -445,7 +445,7 @@ build/arborist/protein-tree.owl: build/arborist/protein-tree.ttl
 	robot convert -i $< -o $@
 
 .PHONY: protein
-protein: build/arborist/protein_tree.owl
+protein: build/arborist/protein-tree.owl
 
 
 ### 7. TODO Build Molecule Tree
