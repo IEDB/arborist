@@ -30,6 +30,7 @@ faldo	http://biohackathon.org/resource/faldo#
 ONTIE	https://ontology.iedb.org/ontology/ONTIE_
 iedb-protein	https://ontology.iedb.org/taxon-protein/
 iedb-src	https://ontology.iedb.org/protein/
+iedb-taxon	https://ontology.iedb.org/taxon/
 CoVIC	https://cvdb.ontodev.com/antibody/
 ds	https://cvdb.ontodev.com/dataset/
 org	https://cvdb.ontodev.com/organization/
