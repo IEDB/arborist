@@ -51,6 +51,7 @@ help:
 	@echo "  organism    build the organism and subspecies trees"
 	@echo "  proteome    select proteomes"
 	@echo "  protein     build the protein tree"
+	@echo "  leidos      copy files for Leidos"
 	@echo "  all         build all trees"
 	@echo "  serve       run the web interface on localhost:3000"
 	@echo "  clean       remove all build files"
@@ -63,6 +64,9 @@ deps:
 
 .PHONY: all
 all: deps iedb ncbitaxon organism
+
+.PHONY: leidos
+leidos: build/organisms/latest/ build/proteins/latest/
 
 .PHONY: serve
 serve: src/util/serve.py
@@ -271,7 +275,7 @@ build/arborist/nanobot.toml: src/arborist/nanobot.toml | build/arborist/
 # Initialize a Nanobot database.
 # Create an empty organism-tree.tsv.
 build/arborist/nanobot.db: build/arborist/nanobot.toml src/arborist/*.tsv
-	rm -f $@
+	rm -f $@ $(dir $@)/*.built
 	# echo 'curie	label	label_source	iedb_synonyms	rank	level	epitope_count	parent	parent_label	parent2	parent2_label	species	species_label	source_table	use_other' > build/arborist/organism-tree.tsv
 	cd build/arborist/ && nanobot init
 
@@ -284,8 +288,9 @@ TAXDMP_VERSION:= $(shell date +"%Y-%m-01")
 cache/ncbitaxon/taxdmp_$(TAXDMP_VERSION).zip: | cache/ncbitaxon/ current/
 	curl -L -o $@ https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump_archive/taxdmp_$(TAXDMP_VERSION).zip
 
-current/taxdmp.zip: | cache/ncbitaxon/taxdmp_$(TAXDMP_VERSION).zip
-	cd current/ && ln -s ../$| taxdmp.zip
+current/taxdmp.zip: cache/ncbitaxon/taxdmp_$(TAXDMP_VERSION).zip
+	rm -f $@
+	cd current/ && ln -s ../$< taxdmp.zip
 
 build/arborist/ncbitaxon.built: src/organism/ncbitaxon2ldtab.py current/taxdmp.zip | build/arborist/nanobot.db
 	sqlite3 $| "DROP TABLE IF EXISTS ncbitaxon"
@@ -359,6 +364,11 @@ organism: build/arborist/organism-tree.owl build/arborist/subspecies-tree.owl
 organism: build/arborist/active-species.tsv build/arborist/proteome.tsv
 	make reload
 
+build/organisms/latest/: build/arborist/subspecies-tree.owl
+	rm -rf $@
+	mkdir -p $@
+	cp $^ $@
+	chmod 644 $@*
 
 ### 4. Select Proteomes for each active species
 #
@@ -444,6 +454,9 @@ build/arborist/protein-tree.ttl: build/arborist/protein_tree.built | build/arbor
 build/arborist/protein-tree.owl: build/arborist/protein-tree.ttl
 	robot convert -i $< -o $@
 
+build/arborist/epitope-mappings_new.tsv: build/arborist/epitope-mappings.tsv
+	qsv slice --start -10 $< --output $@
+
 .PHONY: protein
 protein: build/arborist/protein-tree.owl
 
@@ -461,6 +474,12 @@ build/arborist/molecule-tree.owl: nonpeptide-tree-20240305.owl build/arborist/pr
 	--ontology-iri https://ontology.iedb.org/ontology/molecule-tree.owl \
 	--version-iri https://ontology.iedb.org/ontology/$(shell date +%Y-%m-%d)/molecule-tree.owl \
 	--output $@
+
+build/proteins/latest/: build/disease-tree.owl build/arborist/molecule-tree.owl build/arborist/parent-proteins.tsv build/arborist/source-parents.tsv build/arborist/epitope-mappings.tsv build/arborist/epitope-mappings_new.tsv
+	rm -rf $@
+	mkdir -p $@
+	cp $^ $@
+	chmod 644 $@*
 
 
 ### 8. TODO Build Assay Tree
@@ -481,12 +500,6 @@ build/disease-tree.tsv: build/disease-tree.owl | build/arborist/nanobot.db
 # TODO: geolocation tree, MHC tree
 # TODO: merged SoT tree
 # TODO: test data, symlink?
-
-
-build/proteins/latest/: build/disease-tree.owl build/arborist/molecule-tree.owl build/arborist/parent-proteins.tsv build/arborist/source-parents.tsv
-	rm -rf $@
-	mkdir -p $@
-	cp $^ $@
 
 
 ### Nanobot Actions
