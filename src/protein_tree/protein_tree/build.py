@@ -118,8 +118,8 @@ def main():
       connection
     )
 
-    # Filter out subjects with iedb-taxon:level "lower"
-    lower_subjects = tree_df[tree_df['object'] == 'lower']['subject']
+    # Filter out subjects with iedb-taxon:level "lower" or blank.
+    lower_subjects = tree_df[tree_df['object'].isin(['lower', ''])]['subject']
     tree_df = tree_df[-tree_df['subject'].isin(lower_subjects)]
 
     # Relabel 'taxon' to 'taxon protein'.
