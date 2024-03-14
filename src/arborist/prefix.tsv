@@ -28,6 +28,7 @@ UC	http://purl.uniprot.org/core/
 PRO	http://purl.uniprot.org/annotation/PRO_
 faldo	http://biohackathon.org/resource/faldo#
 ONTIE	https://ontology.iedb.org/ontology/ONTIE_
+iedb-nonpeptide	https://ontology.iedb.org/nonpeptide/
 iedb-protein	https://ontology.iedb.org/taxon-protein/
 iedb-src	https://ontology.iedb.org/protein/
 iedb-taxon	https://ontology.iedb.org/taxon/
