@@ -51,6 +51,8 @@ help:
 	@echo "  organism    build the organism and subspecies trees"
 	@echo "  proteome    select proteomes"
 	@echo "  protein     build the protein tree"
+	@echo "  molecule    build the molecule tree"
+	@echo "  leidos      copy files for Leidos"
 	@echo "  all         build all trees"
 	@echo "  serve       run the web interface on localhost:3000"
 	@echo "  clean       remove all build files"
@@ -61,8 +63,12 @@ help:
 .PHONY: deps
 deps:
 
+# TODO: add protein molecule
 .PHONY: all
 all: deps iedb ncbitaxon organism
+
+.PHONY: leidos
+leidos: build/organisms/latest/ build/proteins/latest/
 
 .PHONY: serve
 serve: src/util/serve.py
@@ -271,8 +277,7 @@ build/arborist/nanobot.toml: src/arborist/nanobot.toml | build/arborist/
 # Initialize a Nanobot database.
 # Create an empty organism-tree.tsv.
 build/arborist/nanobot.db: build/arborist/nanobot.toml src/arborist/*.tsv
-	rm -f $@
-	# echo 'curie	label	label_source	iedb_synonyms	rank	level	epitope_count	parent	parent_label	parent2	parent2_label	species	species_label	source_table	use_other' > build/arborist/organism-tree.tsv
+	rm -f $@ $(dir $@)*.built
 	cd build/arborist/ && nanobot init
 
 cache/ncbitaxon/:
@@ -284,8 +289,9 @@ TAXDMP_VERSION:= $(shell date +"%Y-%m-01")
 cache/ncbitaxon/taxdmp_$(TAXDMP_VERSION).zip: | cache/ncbitaxon/ current/
 	curl -L -o $@ https://ftp.ncbi.nih.gov/pub/taxonomy/taxdump_archive/taxdmp_$(TAXDMP_VERSION).zip
 
-current/taxdmp.zip: | cache/ncbitaxon/taxdmp_$(TAXDMP_VERSION).zip
-	cd current/ && ln -s ../$| taxdmp.zip
+current/taxdmp.zip: cache/ncbitaxon/taxdmp_$(TAXDMP_VERSION).zip
+	rm -f $@
+	cd current/ && ln -s ../$< taxdmp.zip
 
 build/arborist/ncbitaxon.built: src/organism/ncbitaxon2ldtab.py current/taxdmp.zip | build/arborist/nanobot.db
 	sqlite3 $| "DROP TABLE IF EXISTS ncbitaxon"
@@ -359,6 +365,11 @@ organism: build/arborist/organism-tree.owl build/arborist/subspecies-tree.owl
 organism: build/arborist/active-species.tsv build/arborist/proteome.tsv
 	make reload
 
+build/organisms/latest/: build/arborist/subspecies-tree.owl
+	rm -rf $@
+	mkdir -p $@
+	cp $^ $@
+	chmod 644 $@*
 
 ### 4. Select Proteomes for each active species
 #
@@ -413,36 +424,40 @@ build/arborist/allergens.tsv: src/util/csv2tsv.py build/arborist/allergens.csv
 build/arborist/manual-parents.tsv: build/arborist/allergens.tsv
 	wget --no-check-certificate 'https://docs.google.com/spreadsheets/d/1VUDYmmnQURRnuqyVxZGyF8JCgAIiooaKCmi3_mf03o8/export?format=tsv&gid=2087231134' -O $@
 
-build/arborist/protein_tree.assigned: build/arborist/allergens.tsv build/arborist/manual-parents.tsv
+build/arborist/protein-tree.assigned: build/arborist/allergens.tsv build/arborist/manual-parents.tsv
 	python src/protein_tree/protein_tree/assign.py -b build/ -a
 	touch $@
 
 
 ### 6. Build Protein Tree
 
-build/arborist/all-peptide-assignments.tsv build/arborist/all-source-assignments.tsv build/arborist/parent-proteins.tsv build/parents/source-parents.tsv: build/arborist/protein_tree.assigned
+build/arborist/all-peptide-assignments.tsv build/arborist/all-source-assignments.tsv build/arborist/parent-proteins.tsv build/parents/source-parents.tsv: build/arborist/protein-tree.assigned
 	python src/protein_tree/protein_tree/combine_assignments.py build/
 
-build/arborist/protein_tree.built: build/arborist/all-peptide-assignments.tsv | build/arborist/nanobot.db
-	sqlite3 $| "DROP TABLE IF EXISTS protein_tree_old"
-	sqlite3 $| "DROP TABLE IF EXISTS protein_tree_new"
-	python src/protein_tree/protein_tree/build.py build/
-	sqlite3 $| "CREATE INDEX idx_protein_tree_old_subject ON protein_tree_old(subject)"
-	sqlite3 $| "CREATE INDEX idx_protein_tree_old_predicate ON protein_tree_old(predicate)"
-	sqlite3 $| "CREATE INDEX idx_protein_tree_old_object ON protein_tree_old(object)"
-	sqlite3 $| "ANALYZE protein_tree_old"
-	sqlite3 $| "CREATE INDEX idx_protein_tree_new_subject ON protein_tree_new(subject)"
-	sqlite3 $| "CREATE INDEX idx_protein_tree_new_predicate ON protein_tree_new(predicate)"
-	sqlite3 $| "CREATE INDEX idx_protein_tree_new_object ON protein_tree_new(object)"
-	sqlite3 $| "ANALYZE protein_tree_new"
+build/arborist/protein-tree.built: src/protein_tree/protein_tree/build.py build/arborist/all-peptide-assignments.tsv build/arborist/organism-tree.built
+	$(eval DB := build/arborist/nanobot.db)
+	sqlite3 $(DB) 'DROP TABLE IF EXISTS protein_tree_old'
+	sqlite3 $(DB) 'DROP TABLE IF EXISTS protein_tree_new'
+	python $< build/
+	sqlite3 $(DB) 'CREATE INDEX idx_protein_tree_old_subject ON protein_tree_old(subject)'
+	sqlite3 $(DB) 'CREATE INDEX idx_protein_tree_old_predicate ON protein_tree_old(predicate)'
+	sqlite3 $(DB) 'CREATE INDEX idx_protein_tree_old_object ON protein_tree_old(object)'
+	sqlite3 $(DB) 'ANALYZE protein_tree_old'
+	sqlite3 $(DB) 'CREATE INDEX idx_protein_tree_new_subject ON protein_tree_new(subject)'
+	sqlite3 $(DB) 'CREATE INDEX idx_protein_tree_new_predicate ON protein_tree_new(predicate)'
+	sqlite3 $(DB) 'CREATE INDEX idx_protein_tree_new_object ON protein_tree_new(object)'
+	sqlite3 $(DB) 'ANALYZE protein_tree_new'
 	touch $@
 
-build/arborist/protein-tree.ttl: build/arborist/protein_tree.built | build/arborist/nanobot.db
+build/arborist/protein-tree.ttl: build/arborist/protein-tree.built | build/arborist/nanobot.db
 	rm -f $@
 	ldtab export $| $@ --table protein_tree_old
 
 build/arborist/protein-tree.owl: build/arborist/protein-tree.ttl
 	robot convert -i $< -o $@
+
+build/arborist/epitope-mappings_new.tsv: build/arborist/epitope-mappings.tsv
+	qsv slice --start -10 $< --output $@
 
 .PHONY: protein
 protein: build/arborist/protein-tree.owl
@@ -461,6 +476,27 @@ build/arborist/molecule-tree.owl: nonpeptide-tree-20240305.owl build/arborist/pr
 	--ontology-iri https://ontology.iedb.org/ontology/molecule-tree.owl \
 	--version-iri https://ontology.iedb.org/ontology/$(shell date +%Y-%m-%d)/molecule-tree.owl \
 	--output $@
+
+build/arborist/molecule-tree.built: build/arborist/molecule-tree.owl
+	$(eval DB := build/arborist/nanobot.db)
+	$(eval TABLE := molecule_tree)
+	sqlite3 $(DB) 'DROP TABLE IF EXISTS $(TABLE)'
+	ldtab init $(DB) --table $(TABLE)
+	ldtab import $(DB) $< --table $(TABLE)
+	sqlite3 $(DB) 'CREATE INDEX idx_$(TABLE)_subject ON $(TABLE)(subject)'
+	sqlite3 $(DB) 'CREATE INDEX idx_$(TABLE)_predicate ON $(TABLE)(predicate)'
+	sqlite3 $(DB) 'CREATE INDEX idx_$(TABLE)_object ON $(TABLE)(object)'
+	sqlite3 $(DB) 'ANALYZE $(TABLE)'
+	touch $@
+
+.PHONY: molecule
+molecule: build/arborist/molecule-tree.built
+
+build/proteins/latest/: build/disease-tree.owl build/arborist/molecule-tree.owl build/arborist/parent-proteins.tsv build/arborist/source-parents.tsv build/arborist/epitope-mappings.tsv build/arborist/epitope-mappings_new.tsv
+	rm -rf $@
+	mkdir -p $@
+	cp $^ $@
+	chmod 644 $@*
 
 
 ### 8. TODO Build Assay Tree
@@ -481,12 +517,6 @@ build/disease-tree.tsv: build/disease-tree.owl | build/arborist/nanobot.db
 # TODO: geolocation tree, MHC tree
 # TODO: merged SoT tree
 # TODO: test data, symlink?
-
-
-build/proteins/latest/: build/disease-tree.owl build/arborist/molecule-tree.owl build/arborist/parent-proteins.tsv build/arborist/source-parents.tsv
-	rm -rf $@
-	mkdir -p $@
-	cp $^ $@
 
 
 ### Nanobot Actions
@@ -514,29 +544,29 @@ reload: src/organism/check_organism_core.py | build/arborist/nanobot.db
 
 # Load an existing organism-tree.owl
 build/arborist/organism-tree-old.built: build/arborist/organism-tree-old.owl | build/arborist/nanobot.db
-	sqlite3 $| "DROP TABLE IF EXISTS organism_tree_old"
+	sqlite3 $| 'DROP TABLE IF EXISTS organism_tree_old'
 	ldtab init $| --table organism_tree_old
 	ldtab import $| $(word 2,$^) -t organism_tree_old
-	sqlite3 $| "ANALYZE organism_tree_old"
+	sqlite3 $| 'ANALYZE organism_tree_old'
 	touch $@
 
 # Load an existing subspecies-tree.owl
 build/arborist/subspecies-tree-old.built: build/arboirst/subspecies-tree-old.owl | build/arborist/nanobot.db
-	sqlite3 $| "DROP TABLE IF EXISTS subspecies_tree_old"
+	sqlite3 $| 'DROP TABLE IF EXISTS subspecies_tree_old'
 	ldtab init $| --table subspecies_tree_old
 	ldtab import $| $< --table subspecies_tree_old
-	sqlite3 $| "ANALYZE subspecies_tree_old"
+	sqlite3 $| 'ANALYZE subspecies_tree_old'
 	touch $@
 
 # Load an existing molecule-tree.owl
 build/arborist/molecule-tree-old.built: molecule-tree-20240211.owl | build/arborist/nanobot.db
 	$(eval TABLE := molecule_tree_old)
-	sqlite3 $| "DROP TABLE IF EXISTS $(TABLE)"
+	sqlite3 $| 'DROP TABLE IF EXISTS $(TABLE)'
 	ldtab init $| --table $(TABLE)
 	ldtab import $| $< --table $(TABLE)
-	sqlite3 $| "CREATE INDEX idx_$(TABLE)_subject ON $(TABLE)(subject)"
-	sqlite3 $| "CREATE INDEX idx_$(TABLE)_predicate ON $(TABLE)(predicate)"
-	sqlite3 $| "CREATE INDEX idx_$(TABLE)_object ON $(TABLE)(object)"
-	sqlite3 $| "ANALYZE $(TABLE)"
+	sqlite3 $| 'CREATE INDEX idx_$(TABLE)_subject ON $(TABLE)(subject)'
+	sqlite3 $| 'CREATE INDEX idx_$(TABLE)_predicate ON $(TABLE)(predicate)'
+	sqlite3 $| 'CREATE INDEX idx_$(TABLE)_object ON $(TABLE)(object)'
+	sqlite3 $| 'ANALYZE $(TABLE)'
 	touch $@
 
