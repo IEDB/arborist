@@ -126,7 +126,7 @@ def main():
     tree_df.loc[(tree_df['subject'].str.startswith('iedb-protein:')) & (tree_df['predicate'] == 'rdfs:label'), 'object'] = tree_df['object'] + ' protein'
 
     # Add top-level 'protein'
-    new_rows = owl_class('PR:000000001', 'protein', 'owl:Thing')
+    new_rows = owl_class('PR:000000001', 'protein', 'BFO:0000040')
     tree_df = pd.concat([tree_df, pd.DataFrame(new_rows)], ignore_index=True)
 
     # Re-parent children of 'organism' to 'protein'
