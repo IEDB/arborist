@@ -114,7 +114,7 @@ def main():
         datatype,
         annotation
       FROM organism_tree
-      WHERE subject NOT IN ('NCBITaxon:1', 'OBI:0100026')''',
+      WHERE subject NOT IN ('NCBITaxon:1', 'NCBITaxon:28384', 'OBI:0100026')''',
       connection
     )
 
@@ -129,7 +129,9 @@ def main():
     new_rows = owl_class('PR:000000001', 'protein', 'BFO:0000040')
     tree_df = pd.concat([tree_df, pd.DataFrame(new_rows)], ignore_index=True)
 
-    # Re-parent children of 'organism' to 'protein'
+    # Re-parent children of 'Root' and 'organism' to 'protein'
+    tree_df.loc[tree_df['object'] == 'iedb-protein:1', 'object'] = 'PR:000000001'
+    tree_df.loc[tree_df['object'] == 'iedb-protein:28384', 'object'] = 'PR:000000001'
     tree_df.loc[tree_df['object'] == 'OBI:0100026', 'object'] = 'PR:000000001'
 
     old_df = build_old_tree(tree_df, peptide_assignments)
