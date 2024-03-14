@@ -56,7 +56,9 @@ def index():
         'Proteome': 'proteome',
         'Protein Tree (Old)': 'protein_tree_old/NCBITaxon:1',
         'Protein Tree (New)': 'protein_tree_new/NCBITaxon:1',
+        'Molecule Tree (New)': 'molecule_tree/BFO:0000040',
         'Molecule Tree (Old)': 'molecule_tree_old/BFO:0000040',
+        'Molecule Trees Compared': 'molecule_tree_old molecule_tree/BFO:0000040',
         'Disease Tree': 'disease_tree/DOID:4'
     }
     for name, href in arborist.items():
