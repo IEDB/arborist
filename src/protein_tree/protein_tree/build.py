@@ -42,8 +42,8 @@ def build_old_tree(tree_df, peptide_assignments):
   for _, row in peptide_assignments.iterrows():
     new_rows.extend(
       owl_class(
-        f"UP:{row['Parent Antigen Gene Isoform ID']}",
-        f"{row['Parent Antigen Gene Isoform Name']} (UniProt:{row['Parent Antigen Gene Isoform ID']})",
+        f"UP:{row['Parent Antigen ID']}",
+        f"{row['Parent Antigen Name']} (UniProt:{row['Parent Antigen ID']})",
         f"iedb-protein:{row['Species Taxon ID']}"
     ))
 
