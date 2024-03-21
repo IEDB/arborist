@@ -91,7 +91,7 @@ def main():
   build_path = Path(args.build_path)
 
   peptide_assignments = pd.read_csv(build_path / 'arborist' / 'all-peptide-assignments.tsv', sep='\t')
-  peptide_assignments.drop_duplicates(subset=['Parent Antigen Gene Isoform ID'], inplace=True)
+  peptide_assignments.drop_duplicates(subset=['Parent Antigen ID'], inplace=True)
 
   with sqlite3.connect(build_path / 'arborist' / 'nanobot.db') as connection:
     # Copy the organism_tree, but replace each taxon with 'taxon protein'.
