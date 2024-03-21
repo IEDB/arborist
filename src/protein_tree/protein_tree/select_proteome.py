@@ -352,9 +352,9 @@ class ProteomeSelector:
   
   def get_fragment_data(self, proteome_id) -> None:
     """Get the fragment data for a proteome from UniProt API which includes:
-    chains, peptides, propeptides, signal peptides, and transit peptides."""
+    chains, initiator methionine, peptides, propeptides, signal peptides, and transit peptides."""
 
-    url = f'https://rest.uniprot.org/uniprotkb/stream?format=json&query=proteome:{proteome_id}&fields=ft_chain,ft_peptide,ft_propep,ft_signal,ft_transit'
+    url = f'https://rest.uniprot.org/uniprotkb/stream?format=json&query=proteome:{proteome_id}&fields=ft_chain,ft_init_met,ft_peptide,ft_propep,ft_signal,ft_transit'
     try:
       r = requests.get(url)
       r.raise_for_status()
