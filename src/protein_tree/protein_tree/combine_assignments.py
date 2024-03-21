@@ -66,7 +66,7 @@ def combine_assignments(build_path):
   print(f'Source success rate: {source_success_count / source_count * 100:.2f}%')
 
 
-def generate_leidos_tables(build_path):
+def generate_protein_tables(build_path):
   def protein_strategy(row):
     if pd.notnull(row['ARC Assignment']):
       return 'antigen-receptor-classifier'
@@ -104,10 +104,16 @@ def generate_leidos_tables(build_path):
     'Assigned Protein Name': 'Name',
     'Parent Sequence': 'Sequence'
   }, inplace=True)
+
+  source_parents.drop_duplicates(subset=['Accession'], inplace=True)
   parent_proteins.drop_duplicates(subset=['Accession'], inplace=True)
 
   source_parents.to_csv(build_path / 'arborist' / 'source-parents.tsv', sep='\t', index=False)
   parent_proteins.to_csv(build_path / 'arborist' / 'parent-proteins.tsv', sep='\t', index=False)
+
+
+def generate_epitope_tables(build_path):
+  pass
 
 def main():  
   parser = argparse.ArgumentParser()
@@ -124,7 +130,8 @@ def main():
 
   print('Combining all peptide and source assignments...\n')
   combine_assignments(build_path)
-  generate_leidos_tables(build_path)
+  generate_protein_tables(build_path)
+  generate_epitope_tables(build_path)
 
 
 if __name__ == '__main__':
