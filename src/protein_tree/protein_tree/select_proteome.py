@@ -349,6 +349,19 @@ class ProteomeSelector:
     proteome_taxon = self.proteome_list[self.proteome_list['upid'] == proteome_id]['taxonomy'].iloc[0]
 
     return proteome_id, proteome_taxon
+  
+  def get_fragment_data(self, proteome_id) -> None:
+    """Get the fragment data for a proteome from UniProt API which includes:
+    chains, peptides, propeptides, signal peptides, and transit peptides."""
+
+    url = f'https://rest.uniprot.org/uniprotkb/stream?format=json&query=proteome:{proteome_id}&fields=ft_chain,ft_peptide,ft_propep,ft_signal,ft_transit'
+    try:
+      r = requests.get(url)
+      r.raise_for_status()
+      with open(f'{self.species_path}/fragment-data.json', 'w') as f:
+        f.write(r.text)
+    except (requests.exceptions.ChunkedEncodingError, requests.exceptions.ReadTimeout):
+      self.get_fragment_data(proteome_id)
 
   def _remove_other_proteomes(self, proteome_id: str) -> None:
     """Remove the proteome FASTA files that are not the chosen proteome for that
@@ -419,6 +432,7 @@ def run(taxon_id: int, species_name: str, group: str, all_taxa: list, build_path
 
   proteome_data = Selector.select_best_proteome(peptides_df)
   Selector.proteome_to_tsv()
+  Selector.get_fragment_data(proteome_data[0])
 
   # sanity check to make sure proteome.fasta is not empty
   if (species_path / 'proteome.fasta').stat().st_size == 0:
