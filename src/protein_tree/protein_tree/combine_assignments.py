@@ -121,7 +121,7 @@ def generate_protein_tables(build_path, all_sources_df):
 
 def generate_epitope_tables(build_path, all_peptides_df, all_sources_df):
   epitope_mappings = all_peptides_df[[
-    'Epitope ID', 'Sequence', 'Epitope start', 'Epitope end', 'Source Accesion',
+    'Epitope ID', 'Sequence', 'Starting Position', 'Ending Position' 'Epitope end', 'Source Accesion',
     'Parent Antigen ID', 'Parent start', 'Parent end'
   ]]
 
@@ -139,8 +139,8 @@ def generate_epitope_tables(build_path, all_peptides_df, all_sources_df):
   epitope_mappings.rename(columns={
     'Epitope ID': 'epitope_id',
     'Sequence': 'epitope_seq',
-    'Epitope start': 'epitope_start',
-    'Epitope end': 'epitope_end',
+    'Starting Position': 'epitope_start',
+    'Ending Position': 'epitope_end',
     'Source Accesion': 'source_accession',
     'Parent Antigen ID': 'parent_accession',
     'Parent start': 'parent_start',
