@@ -1,6 +1,8 @@
 SELECT DISTINCT
   epitope.epitope_id AS 'Epitope ID',
   object.mol1_seq AS 'Sequence',
+  object.starting_position AS 'Starting Position',
+  object.ending_position AS 'Ending Position',
   object.mol2_accession AS 'Source Accession',
   object.mol2_name AS 'Source Name',
   object.organism2_id AS 'Organism ID'
@@ -15,6 +17,8 @@ UNION
 SELECT DISTINCT
   epitope.epitope_id AS 'Epitope ID',
   object.region AS 'Sequence',
+  object.starting_position AS 'Starting Position',
+  object.ending_position AS 'Ending Position',
   object.mol2_accession AS 'Source Accession',
   object.mol2_name AS 'Source Name',
   object.organism2_id AS 'Organism ID'
@@ -29,6 +33,8 @@ UNION
 SELECT DISTINCT
   epitope.epitope_id AS 'Epitope ID',
   object.region AS 'Sequence',
+  object.starting_position AS 'Starting Position',
+  object.ending_position AS 'Ending Position',
   object.mol2_accession AS 'Source Accession',
   object.mol2_name AS 'Source Name',
   object.organism2_id AS 'Organism ID'
