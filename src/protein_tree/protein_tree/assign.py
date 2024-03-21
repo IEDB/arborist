@@ -111,8 +111,9 @@ class GeneAndProteinAssigner:
     peptides_df.loc[:, 'Parent Antigen Gene'] = peptides_df['Source Accession'].map(self.source_gene_assignment)
     peptides_df.loc[:, 'Parent Antigen Gene'] = peptides_df['Parent Antigen Gene'].fillna(peptides_df['Source Accession'].map(self.source_arc_assignment))
     peptides_df.set_index(['Source Accession', 'Sequence'], inplace=True)
-    peptides_df.loc[:, 'Parent Antigen Gene Isoform ID'] = peptides_df.index.map(self.peptide_protein_assignment)
-    peptides_df.loc[:, 'Parent Antigen Gene Isoform Name'] = peptides_df['Parent Antigen Gene Isoform ID'].map(self.uniprot_id_to_name_map)
+    peptides_df.loc[:, 'Parent Antigen Gene Isoform ID'] = peptides_df.index.map(self.peptide_protein_assignment[0])
+    peptides_df.loc[:, 'Parent Start'] = peptides_df.index.map(self.peptide_protein_assignment[1])
+    peptides_df.loc[:, 'Parent End'] = peptides_df.index.map(self.peptide_protein_assignment[2])
     peptides_df.reset_index(inplace=True)
     peptides_df.loc[:, 'ARC Assignment'] = peptides_df['Source Accession'].map(self.source_arc_assignment)
 
@@ -382,12 +383,15 @@ class GeneAndProteinAssigner:
       on=['Peptide', 'Source'],
       how='left'
     )
-
+  
     # update the protein assignment with the best isoform ID
     self.peptide_protein_assignment.update(
-      dict(zip(
-        zip(final_assignment_df['Source'], final_assignment_df['Peptide']),
-        final_assignment_df['Best Isoform ID']))
+      dict(
+        zip(
+          zip(final_assignment_df['Source'], final_assignment_df['Peptide']),
+          (final_assignment_df['Best Isoform ID'], final_assignment_df['Index start'], final_assignment_df['Index end'])
+        )
+      )
     )
 
   def _run_arc(self, sources_df: pd.DataFrame) -> None:

@@ -143,8 +143,8 @@ def generate_epitope_tables(build_path, all_peptides_df, all_sources_df):
     'Ending Position': 'epitope_end',
     'Source Accesion': 'source_accession',
     'Parent Antigen ID': 'parent_accession',
-    'Parent start': 'parent_start',
-    'Parent end': 'parent_end'
+    'Parent Start': 'parent_start',
+    'Parent End': 'parent_end'
   }, inplace=True)
 
   epitope_mappings = epitope_mappings[[
