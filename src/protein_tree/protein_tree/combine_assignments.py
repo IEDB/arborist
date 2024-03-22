@@ -90,12 +90,11 @@ def generate_protein_tables(build_path, all_sources_df):
   all_sources_df.loc[all_sources_df['Assigned Protein ID'].notnull(), 'Parent Protein Database'] = 'UniProt'
 
   source_parents = all_sources_df[[
-    'Source ID', 'Accession', 'Database', 'Name', 'Aliases', 'Synonyms', 'Organism ID', 
+    'Source ID', 'Accession', 'Database', 'Name', 'Aliases', 'Synonyms', 'Taxon ID', 
     'Species Taxon ID', 'Species Name', 'Proteome ID', 'Proteome Label', 'Protein Strategy', 
     'Parent IRI', 'Parent Protein Database', 'Assigned Protein ID', 'Parent Sequence Length'
   ]]
   source_parents.rename(columns={
-    'Organism ID': 'Taxon ID',
     'Species Taxon ID': 'Species ID',
     'Species Name': 'Species Label',
     'Assigned Protein ID': 'Parent Protein Accession',
@@ -121,8 +120,8 @@ def generate_protein_tables(build_path, all_sources_df):
 
 def generate_epitope_tables(build_path, all_peptides_df, all_sources_df):
   epitope_mappings = all_peptides_df[[
-    'Epitope ID', 'Sequence', 'Starting Position', 'Ending Position' 'Epitope end', 'Source Accesion',
-    'Parent Antigen ID', 'Parent start', 'Parent end'
+    'Epitope ID', 'Sequence', 'Starting Position', 'Ending Position', 'Source Accession',
+    'Parent Antigen ID', 'Parent Start', 'Parent End'
   ]]
 
   epitope_mappings['parent_seq'] = epitope_mappings['Parent Antigen ID'].map(all_sources_df.set_index('Assigned Protein ID')['Parent Sequence'].to_dict())
@@ -141,7 +140,7 @@ def generate_epitope_tables(build_path, all_peptides_df, all_sources_df):
     'Sequence': 'epitope_seq',
     'Starting Position': 'epitope_start',
     'Ending Position': 'epitope_end',
-    'Source Accesion': 'source_accession',
+    'Source Accession': 'source_accession',
     'Parent Antigen ID': 'parent_accession',
     'Parent Start': 'parent_start',
     'Parent End': 'parent_end'
@@ -171,9 +170,7 @@ def main():
 
   print('Combining all peptide and source assignments...\n')
   combine_assignments(build_path)
-  generate_protein_tables(build_path)
-  generate_epitope_tables(build_path)
-
+  generate_leidos_tables(build_path)
 
 if __name__ == '__main__':
   main()
