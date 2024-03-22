@@ -67,6 +67,14 @@ def combine_assignments(build_path):
 
 
 def generate_leidos_tables(build_path):
+  all_peptides_df = pd.read_csv('build/arborist/all-peptide-assignments.tsv', sep='\t')
+  all_sources_df = pd.read_csv('build/arborist/all-source-assignments.tsv', sep='\t')
+  
+  generate_protein_tables(build_path, all_sources_df)
+  generate_epitope_tables(build_path, all_peptides_df, all_sources_df)
+
+
+def generate_protein_tables(build_path, all_sources_df):
   def protein_strategy(row):
     if pd.notnull(row['ARC Assignment']):
       return 'antigen-receptor-classifier'
@@ -77,24 +85,22 @@ def generate_leidos_tables(build_path):
     else:
       return 'manual'
 
-  all_sources = pd.read_csv('build/arborist/all-source-assignments.tsv', sep='\t')
-  all_sources['Protein Strategy'] = all_sources.apply(protein_strategy, axis=1)
-  all_sources.loc[all_sources['Assigned Protein ID'].notnull(), 'Parent IRI'] = all_sources['Assigned Protein ID'].apply(lambda x: f'http://www.uniprot.org/uniprot/{x}')
-  all_sources.loc[all_sources['Assigned Protein ID'].notnull(), 'Parent Protein Database'] = 'UniProt'
+  all_sources_df['Protein Strategy'] = all_sources_df.apply(protein_strategy, axis=1)
+  all_sources_df.loc[all_sources_df['Assigned Protein ID'].notnull(), 'Parent IRI'] = all_sources_df['Assigned Protein ID'].apply(lambda x: f'http://www.uniprot.org/uniprot/{x}')
+  all_sources_df.loc[all_sources_df['Assigned Protein ID'].notnull(), 'Parent Protein Database'] = 'UniProt'
 
-  source_parents = all_sources[[
-    'Source ID', 'Accession', 'Database', 'Name', 'Aliases', 'Synonyms', 'Organism ID', 
+  source_parents = all_sources_df[[
+    'Source ID', 'Accession', 'Database', 'Name', 'Aliases', 'Synonyms', 'Taxon ID', 
     'Species Taxon ID', 'Species Name', 'Proteome ID', 'Proteome Label', 'Protein Strategy', 
     'Parent IRI', 'Parent Protein Database', 'Assigned Protein ID', 'Parent Sequence Length'
   ]]
   source_parents.rename(columns={
-    'Organism ID': 'Taxon ID',
     'Species Taxon ID': 'Species ID',
     'Species Name': 'Species Label',
     'Assigned Protein ID': 'Parent Protein Accession',
   }, inplace=True)
 
-  parent_proteins = all_sources[[
+  parent_proteins = all_sources_df[[
     'Assigned Protein ID', 'Parent Protein Database', 'Assigned Protein Name',
     'Proteome ID', 'Proteome Label', 'Parent Sequence'
   ]]
@@ -104,10 +110,50 @@ def generate_leidos_tables(build_path):
     'Assigned Protein Name': 'Name',
     'Parent Sequence': 'Sequence'
   }, inplace=True)
+
+  source_parents.drop_duplicates(subset=['Accession'], inplace=True)
   parent_proteins.drop_duplicates(subset=['Accession'], inplace=True)
 
   source_parents.to_csv(build_path / 'arborist' / 'source-parents.tsv', sep='\t', index=False)
   parent_proteins.to_csv(build_path / 'arborist' / 'parent-proteins.tsv', sep='\t', index=False)
+
+
+def generate_epitope_tables(build_path, all_peptides_df, all_sources_df):
+  epitope_mappings = all_peptides_df[[
+    'Epitope ID', 'Sequence', 'Starting Position', 'Ending Position', 'Source Accession',
+    'Parent Antigen ID', 'Parent Start', 'Parent End'
+  ]]
+
+  epitope_mappings['parent_seq'] = epitope_mappings['Parent Antigen ID'].map(all_sources_df.set_index('Assigned Protein ID')['Parent Sequence'].to_dict())
+  epitope_mappings['identity_alignment'] = 1.0
+  epitope_mappings['similarity_alignment'] = 1.0
+  epitope_mappings['gaps_source_alignment'] = 0.0
+  epitope_mappings['gaps_parent_alignment'] = 0.0
+  epitope_mappings['all_gaps'] = 0.0
+
+  epitope_mappings['source_alignment'] = epitope_mappings['Sequence']
+  epitope_mappings['parent_alignment'] = epitope_mappings['Sequence']
+  epitope_mappings['parent_alignment_modified'] = epitope_mappings['Sequence']
+
+  epitope_mappings.rename(columns={
+    'Epitope ID': 'epitope_id',
+    'Sequence': 'epitope_seq',
+    'Starting Position': 'epitope_start',
+    'Ending Position': 'epitope_end',
+    'Source Accession': 'source_accession',
+    'Parent Antigen ID': 'parent_accession',
+    'Parent Start': 'parent_start',
+    'Parent End': 'parent_end'
+  }, inplace=True)
+
+  epitope_mappings = epitope_mappings[[
+    'epitope_id', 'epitope_seq', 'epitope_start', 'epitope_end', 'source_accession',
+    'parent_accession', 'parent_start', 'parent_end', 'identity_alignment',
+    'similarity_alignment', 'gaps_source_alignment', 'gaps_parent_alignment',
+    'all_gaps', 'source_alignment', 'parent_alignment', 'parent_alignment_modified'
+  ]]
+  epitope_mappings.to_csv(build_path / 'arborist' / 'epitope-mappings.tsv', sep='\t', index=False)
+
 
 def main():  
   parser = argparse.ArgumentParser()
@@ -125,7 +171,6 @@ def main():
   print('Combining all peptide and source assignments...\n')
   combine_assignments(build_path)
   generate_leidos_tables(build_path)
-
 
 if __name__ == '__main__':
   main()

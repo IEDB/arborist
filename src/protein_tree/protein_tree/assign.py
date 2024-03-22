@@ -110,9 +110,19 @@ class GeneAndProteinAssigner:
     peptides_df.loc[:, 'Parent Antigen Name'] = peptides_df['Parent Antigen ID'].map(self.uniprot_id_to_name_map)
     peptides_df.loc[:, 'Parent Antigen Gene'] = peptides_df['Source Accession'].map(self.source_gene_assignment)
     peptides_df.loc[:, 'Parent Antigen Gene'] = peptides_df['Parent Antigen Gene'].fillna(peptides_df['Source Accession'].map(self.source_arc_assignment))
+    
     peptides_df.set_index(['Source Accession', 'Sequence'], inplace=True)
-    peptides_df.loc[:, 'Parent Antigen Gene Isoform ID'] = peptides_df.index.map(self.peptide_protein_assignment)
-    peptides_df.loc[:, 'Parent Antigen Gene Isoform Name'] = peptides_df['Parent Antigen Gene Isoform ID'].map(self.uniprot_id_to_name_map)
+
+    peptides_df['Parent Antigen Gene Isoform ID'] = peptides_df.index.map(
+        lambda x: self.peptide_protein_assignment.get(x)[0] if self.peptide_protein_assignment.get(x) is not None else None
+    )
+    peptides_df['Parent Start'] = peptides_df.index.map(
+        lambda x: self.peptide_protein_assignment.get(x)[1] if self.peptide_protein_assignment.get(x) is not None else None
+    )
+    peptides_df['Parent End'] = peptides_df.index.map(
+        lambda x: self.peptide_protein_assignment.get(x)[2] if self.peptide_protein_assignment.get(x) is not None else None
+    )
+
     peptides_df.reset_index(inplace=True)
     peptides_df.loc[:, 'ARC Assignment'] = peptides_df['Source Accession'].map(self.source_arc_assignment)
 
@@ -378,16 +388,19 @@ class GeneAndProteinAssigner:
     # Perform the merge using both 'Peptide' and 'Source' as keys
     final_assignment_df = pd.merge(
       best_isoform_df,
-      peptide_source_map_df,
+      final_df[['Peptide', 'Source', 'Index start', 'Index end']],
       on=['Peptide', 'Source'],
       how='left'
     )
 
     # update the protein assignment with the best isoform ID
     self.peptide_protein_assignment.update(
-      dict(zip(
-        zip(final_assignment_df['Source'], final_assignment_df['Peptide']),
-        final_assignment_df['Best Isoform ID']))
+      dict(
+        zip(
+          zip(final_assignment_df['Source'], final_assignment_df['Peptide']),
+          zip(final_assignment_df['Best Isoform ID'], final_assignment_df['Index start'], final_assignment_df['Index end'])
+        )
+      )
     )
 
   def _run_arc(self, sources_df: pd.DataFrame) -> None:
@@ -489,7 +502,7 @@ def run(taxon_id, species_name, group, all_taxa, build_path, all_peptides, all_s
     num_threads=num_threads,
     build_path=build_path,
   )
-
+  
   assigner_data, peptide_assignments, source_assignments = Assigner.assign(sources_df, peptides_df)
   num_sources, num_peptides, num_matched_sources, num_matched_peptides = assigner_data
 
