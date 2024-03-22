@@ -116,13 +116,15 @@ class GeneAndProteinAssigner:
     peptides_df['Parent Antigen Gene Isoform ID'] = peptides_df.index.map(
         lambda x: self.peptide_protein_assignment.get(x)[0] if self.peptide_protein_assignment.get(x) is not None else None
     )
+    peptides_df.loc[:, 'Parent Antigen Gene Isoform Name'] = peptides_df['Parent Antigen Gene Isoform ID'].map(self.uniprot_id_to_name_map)
+    
     peptides_df['Parent Start'] = peptides_df.index.map(
         lambda x: self.peptide_protein_assignment.get(x)[1] if self.peptide_protein_assignment.get(x) is not None else None
     )
     peptides_df['Parent End'] = peptides_df.index.map(
         lambda x: self.peptide_protein_assignment.get(x)[2] if self.peptide_protein_assignment.get(x) is not None else None
     )
-
+    
     peptides_df.reset_index(inplace=True)
     peptides_df.loc[:, 'ARC Assignment'] = peptides_df['Source Accession'].map(self.source_arc_assignment)
 
