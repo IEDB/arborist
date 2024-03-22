@@ -146,22 +146,24 @@ def main():
         datatype,
         annotation
       FROM organism_tree
-      WHERE subject NOT IN ('NCBITaxon:1', 'OBI:0100026')''',
+      WHERE subject NOT IN ('NCBITaxon:1', 'NCBITaxon:28384', 'OBI:0100026')''',
       connection
     )
 
-    # Filter out subjects with iedb-taxon:level "lower"
-    lower_subjects = tree_df[tree_df['object'] == 'lower']['subject']
+    # Filter out subjects with iedb-taxon:level "lower" or blank.
+    lower_subjects = tree_df[tree_df['object'].isin(['lower', ''])]['subject']
     tree_df = tree_df[-tree_df['subject'].isin(lower_subjects)]
 
     # Relabel 'taxon' to 'taxon protein'.
     tree_df.loc[(tree_df['subject'].str.startswith('iedb-protein:')) & (tree_df['predicate'] == 'rdfs:label'), 'object'] = tree_df['object'] + ' protein'
 
     # Add top-level 'protein'
-    new_rows = owl_class('PR:000000001', 'protein', 'owl:Thing')
+    new_rows = owl_class('PR:000000001', 'protein', 'BFO:0000040')
     tree_df = pd.concat([tree_df, pd.DataFrame(new_rows)], ignore_index=True)
 
-    # Re-parent children of 'organism' to 'protein'
+    # Re-parent children of 'Root' and 'organism' to 'protein'
+    tree_df.loc[tree_df['object'] == 'iedb-protein:1', 'object'] = 'PR:000000001'
+    tree_df.loc[tree_df['object'] == 'iedb-protein:28384', 'object'] = 'PR:000000001'
     tree_df.loc[tree_df['object'] == 'OBI:0100026', 'object'] = 'PR:000000001'
 
     old_df = build_old_tree(tree_df, source_assignments)
