@@ -35,16 +35,42 @@ def owl_class(subject, label, parent):
   ]
 
 
-def build_old_tree(tree_df, peptide_assignments):
+def build_old_tree(tree_df, source_assignments):
   """Given dataframes for the tree and peptide_assignments,
   insert LDTab rows for each protein under its 'species protein' parent."""
+  
   new_rows = []
-  for _, row in peptide_assignments.iterrows():
+  nan_proteins = source_assignments['Assigned Protein ID'].isna()
+  
+  # add parent entries as triplicate rows
+  for _, row in source_assignments[~nan_proteins].iterrows():
     new_rows.extend(
       owl_class(
-        f"UP:{row['Parent Antigen ID']}",
-        f"{row['Parent Antigen Name']} (UniProt:{row['Parent Antigen ID']})",
+        f"UP:{row['Assigned Protein ID']}",
+        f"{row['Assigned Protein Name']} (UniProt:{row['Assigned Protein ID']})",
         f"iedb-protein:{row['Species Taxon ID']}"
+    ))
+
+  # create "Other" node for each certain species
+  species_with_nan = source_assignments[nan_proteins]['Species Taxon ID'].unique()
+  species_id_to_name = {id: name for id, name in zip(source_assignments['Species Taxon ID'], source_assignments['Species Name'])}
+  for species_id in species_with_nan: 
+    species_name = species_id_to_name[species_id]
+    new_rows.extend(
+      owl_class(
+        f"iedb-protein:{species_id}-other",
+        f"Other {species_name} protein",
+        f"iedb-protein:{species_id}"
+      )
+    )
+
+  # add proteins without a parent to the "Other" node
+  for _, row in source_assignments[nan_proteins].iterrows():
+    new_rows.extend(
+      owl_class(
+        f"UP:{row['Accession']}" if row['Database'] == 'UniProt' else f"NCBI:{row['Accession']}",
+        f"{row['Name']} [{row['Accession']}]",
+        f"iedb-protein:{row['Species Taxon ID']}-other"
     ))
 
   tree_df = pd.concat([tree_df, pd.DataFrame(new_rows)], ignore_index=True)
@@ -56,7 +82,9 @@ def build_new_tree(tree_df, peptide_assignments):
   """Given dataframes for the tree and peptide_assignments,
   insert LDTab rows for each gene under its 'species protein' parent,
   and each protein under its gene."""
+ 
   new_rows = []
+  
   for _, row in peptide_assignments.iterrows():
     # WARN: This produces many duplicates?
     new_rows.extend(
@@ -65,6 +93,7 @@ def build_new_tree(tree_df, peptide_assignments):
         f"{row['Parent Antigen Gene']}",
         f"iedb-protein:{row['Species Taxon ID']}"
       ))
+    
     new_rows.extend(
       owl_class(
         f"UP:{row['Parent Antigen Gene Isoform ID']}",
@@ -89,6 +118,9 @@ def main():
 
   args = parser.parse_args()
   build_path = Path(args.build_path)
+
+  source_assignments = pd.read_csv(build_path / 'arborist' / 'all-source-assignments.tsv', sep='\t')
+  source_assignments.drop_duplicates(subset=['Assigned Protein ID'], inplace=True)
 
   peptide_assignments = pd.read_csv(build_path / 'arborist' / 'all-peptide-assignments.tsv', sep='\t')
   peptide_assignments.drop_duplicates(subset=['Parent Antigen ID'], inplace=True)
@@ -132,7 +164,7 @@ def main():
     # Re-parent children of 'organism' to 'protein'
     tree_df.loc[tree_df['object'] == 'OBI:0100026', 'object'] = 'PR:000000001'
 
-    old_df = build_old_tree(tree_df, peptide_assignments)
+    old_df = build_old_tree(tree_df, source_assignments)
     new_df = build_new_tree(tree_df, peptide_assignments)
   
     old_df.to_sql('protein_tree_old', connection, if_exists='replace', index=False)
