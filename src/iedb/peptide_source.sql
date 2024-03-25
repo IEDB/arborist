@@ -6,7 +6,8 @@ SELECT DISTINCT
   aliases AS 'Aliases',
   synonyms AS 'Synonyms',
   sequence AS 'Sequence',
-  organism_id AS 'Taxon ID',
-  organism_name AS 'Taxon Name'
+  organism_id AS 'Organism ID',
+  organism_name AS 'Organism Name',
+  iri as 'IRI'
 FROM source
 WHERE sequence IS NOT NULL

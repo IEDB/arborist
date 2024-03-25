@@ -90,7 +90,7 @@ def generate_protein_tables(build_path, all_sources_df):
   all_sources_df.loc[all_sources_df['Assigned Protein ID'].notnull(), 'Parent Protein Database'] = 'UniProt'
 
   source_parents = all_sources_df[[
-    'Source ID', 'Accession', 'Database', 'Name', 'Aliases', 'Synonyms', 'Taxon ID', 
+    'Source ID', 'Accession', 'Database', 'Name', 'Aliases', 'Synonyms', 'Organism ID', 
     'Species Taxon ID', 'Species Name', 'Proteome ID', 'Proteome Label', 'Protein Strategy', 
     'Parent IRI', 'Parent Protein Database', 'Assigned Protein ID', 'Parent Sequence Length'
   ]]
