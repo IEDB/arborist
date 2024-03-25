@@ -255,6 +255,9 @@ build/iedb/%.built: build/iedb/%.tsv | build/iedb/nanobot.db
 build/iedb/peptide.tsv: src/iedb/peptide.sql build/iedb/epitope.built build/iedb/object.built | build/iedb/nanobot.db
 	src/util/sqlite2tsv $| $< $@
 
+build/iedb/structure.tsv: src/iedb/structure.sql build/iedb/epitope.built build/iedb/object.built | build/iedb/nanobot.db
+	src/util/sqlite2tsv $| $< $@
+
 build/iedb/peptide_source.tsv: src/iedb/peptide_source.sql build/iedb/source.built | build/iedb/nanobot.db
 	src/util/sqlite2tsv $| $< $@
 
