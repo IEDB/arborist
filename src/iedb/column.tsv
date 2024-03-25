@@ -121,7 +121,9 @@ peptide_source	Name			label
 peptide_source	Aliases			label		
 peptide_source	Synonyms			label		
 peptide_source	Sequence			label		
-peptide_source	Organism ID			natural_number		
+peptide_source	Organism ID			tax_id		
+peptide_source	Organism Name			label		
+peptide_source	IRI			label		
 peptide	Epitope ID			natural_number	from(epitope.epitope_id)	
 peptide	Sequence			label		
 peptide	Starting Position			natural_number		
