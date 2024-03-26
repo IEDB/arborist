@@ -109,6 +109,7 @@ class ProteomeSelector:
 
     regexes = {
       'protein_id': re.compile(r"\|([^|]*)\|"),    # between | and |
+      'entry_name': re.compile(r"\|([^\|]*?)\s"),   # between | and space
       'protein_name': re.compile(r"\s(.+?)\sOS"),  # between space and space before OS
       'gene': re.compile(r"GN=([^\s]+?)(?=\s|$)"), # between GN= and space or end of line
       'pe_level': re.compile(r"PE=(.+?)\s"),       # between PE= and space
@@ -144,11 +145,11 @@ class ProteomeSelector:
       
       proteome_data.append(metadata)
     
-    columns = ['Protein ID', 'Protein Name', 'Gene', 'Protein Existence Level', 'Gene Priority', 'Sequence', 'Database']
+    columns = ['Protein ID', 'Entry Name', 'Protein Name', 'Gene', 'Protein Existence Level', 'Gene Priority', 'Sequence', 'Database']
     proteome = pd.DataFrame(proteome_data, columns=columns)
     
     proteome['Isoform Count'] = proteome['Protein ID'].apply(lambda x: x.split('-')[1] if '-' in x else '1')
-    proteome = proteome[['Database', 'Gene', 'Protein ID', 'Isoform Count', 'Protein Name', 'Protein Existence Level', 'Gene Priority', 'Sequence']]
+    proteome = proteome[['Database', 'Gene', 'Protein ID', 'Entry Name', 'Isoform Count', 'Protein Name', 'Protein Existence Level', 'Gene Priority', 'Sequence']]
     proteome.to_csv(f'{self.species_path}/proteome.tsv', sep='\t', index=False)
   
   def _parse_proteome_xml(self, xml) -> pd.DataFrame:
@@ -362,6 +363,18 @@ class ProteomeSelector:
         f.write(r.text)
     except (requests.exceptions.ChunkedEncodingError, requests.exceptions.ReadTimeout):
       self.get_fragment_data(proteome_id)
+  
+  def get_synonym_data(self, proteome_id) -> None:
+    """Get the synonym names of each protein for a proteome from UniProt API."""
+
+    url = f'https://rest.uniprot.org/uniprotkb/stream?format=json&query=proteome:{proteome_id}&fields=protein_name'
+    try:
+      r = requests.get(url)
+      r.raise_for_status()
+      with open(f'{self.species_path}/synonym-data.json', 'w') as f:
+        f.write(r.text)
+    except (requests.exceptions.ChunkedEncodingError, requests.exceptions.ReadTimeout):
+      self.get_synonym_data(proteome_id)
 
   def _remove_other_proteomes(self, proteome_id: str) -> None:
     """Remove the proteome FASTA files that are not the chosen proteome for that
@@ -432,7 +445,10 @@ def run(taxon_id: int, species_name: str, group: str, all_taxa: list, build_path
 
   proteome_data = Selector.select_best_proteome(peptides_df)
   Selector.proteome_to_tsv()
-  Selector.get_fragment_data(proteome_data[0])
+
+  if proteome_data[2] != 'Orphans': # get fragment and synonym data for proteome
+    Selector.get_fragment_data(proteome_data[0])
+    Selector.get_synonym_data(proteome_data[0])
 
   # sanity check to make sure proteome.fasta is not empty
   if (species_path / 'proteome.fasta').stat().st_size == 0:
