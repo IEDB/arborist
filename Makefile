@@ -65,7 +65,7 @@ deps:
 
 # TODO: add protein molecule
 .PHONY: all
-all: deps iedb ncbitaxon organism
+all: deps iedb ncbitaxon organism protein molecule leidos
 
 .PHONY: leidos
 leidos: build/organisms/latest/ build/proteins/latest/
@@ -507,14 +507,19 @@ build/proteins/latest/: build/disease-tree.owl build/arborist/molecule-tree.owl 
 
 ### 9. Build Disease Tree
 
+# Copy disease-tree.owl from production.
+# TODO: Build proper disease tree
+build/disease-tree.owl: | build/
+	curl -L -k -o $@ 'https://10.0.7.92/proteins/latest/disease-tree.owl'
+
 build/disease-tree.tsv: build/disease-tree.owl | build/arborist/nanobot.db
-	sqlite3 $| "DROP TABLE IF EXISTS disease_tree"
+	sqlite3 $| 'DROP TABLE IF EXISTS disease_tree'
 	ldtab init $| --table disease_tree
 	ldtab import $| $< --table disease_tree
-	sqlite3 $| "CREATE INDEX idx_disease_tree_subject ON disease_tree(subject)"
-	sqlite3 $| "CREATE INDEX idx_disease_tree_predicate ON disease_tree(predicate)"
-	sqlite3 $| "CREATE INDEX idx_disease_tree_object ON disease_tree(object)"
-	sqlite3 $| "ANALYZE disease_tree"
+	sqlite3 $| 'CREATE INDEX idx_disease_tree_subject ON disease_tree(subject)'
+	sqlite3 $| 'CREATE INDEX idx_disease_tree_predicate ON disease_tree(predicate)'
+	sqlite3 $| 'CREATE INDEX idx_disease_tree_object ON disease_tree(object)'
+	sqlite3 $| 'ANALYZE disease_tree'
 	ldtab export $| $@ --table disease_tree
 
 # TODO: geolocation tree, MHC tree
@@ -562,7 +567,7 @@ build/arborist/subspecies-tree-old.built: build/arboirst/subspecies-tree-old.owl
 	touch $@
 
 # Load an existing molecule-tree.owl
-build/arborist/molecule-tree-old.built: molecule-tree-20240211.owl | build/arborist/nanobot.db
+build/arborist/molecule-tree-old.built: molecule-tree-20240317.owl | build/arborist/nanobot.db
 	$(eval TABLE := molecule_tree_old)
 	sqlite3 $| 'DROP TABLE IF EXISTS $(TABLE)'
 	ldtab init $| --table $(TABLE)
