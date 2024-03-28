@@ -65,7 +65,7 @@ deps:
 
 # TODO: add protein molecule
 .PHONY: all
-all: deps iedb ncbitaxon organism protein molecule leidos
+all: deps iedb ncbitaxon organism protein molecule disease leidos
 
 .PHONY: leidos
 leidos: build/organisms/latest/ build/proteins/latest/
@@ -521,6 +521,9 @@ build/disease-tree.tsv: build/disease-tree.owl | build/arborist/nanobot.db
 	sqlite3 $| 'CREATE INDEX idx_disease_tree_object ON disease_tree(object)'
 	sqlite3 $| 'ANALYZE disease_tree'
 	ldtab export $| $@ --table disease_tree
+
+.PHONY: disease
+disease: build/disease-tree.tsv
 
 # TODO: geolocation tree, MHC tree
 # TODO: merged SoT tree
