@@ -8,8 +8,8 @@ import gzip
 import pandas as pd
 import xml.etree.ElementTree as ET
 
+from typing import Iterator
 from Bio import SeqIO
-from io import StringIO
 from pathlib import Path
 from pepmatch import Preprocessor, Matcher
 
@@ -264,7 +264,7 @@ class ProteomeSelector:
       taxon_id (int): Taxon ID for the species.
       species_path (Path): Path to species directory.
     """
-    def get_protein_batches(batch_url: str) -> requests.Response:
+    def get_protein_batches(batch_url: str) -> Iterator[requests.Response]:
       while batch_url:
         try:
           r = requests.get(batch_url)
