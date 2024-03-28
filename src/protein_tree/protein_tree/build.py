@@ -119,8 +119,13 @@ def main():
   args = parser.parse_args()
   build_path = Path(args.build_path)
 
+  # drop duplicates in source_assignments but keep NaNs
   source_assignments = pd.read_csv(build_path / 'arborist' / 'all-source-assignments.tsv', sep='\t')
-  source_assignments.drop_duplicates(subset=['Assigned Protein ID'], inplace=True)
+  isna = source_assignments['Assigned Protein ID'].isna()
+  source_assignments = pd.concat([
+    source_assignments[isna],
+    source_assignments[~isna].drop_duplicates(subset=['Assigned Protein ID'])
+  ]).reset_index(drop=True)
 
   peptide_assignments = pd.read_csv(build_path / 'arborist' / 'all-peptide-assignments.tsv', sep='\t')
   peptide_assignments.drop_duplicates(subset=['Parent Antigen ID'], inplace=True)
