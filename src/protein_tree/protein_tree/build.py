@@ -41,13 +41,14 @@ def build_old_tree(tree_df, source_assignments):
   
   new_rows = []
   nan_proteins = source_assignments['Assigned Protein ID'].isna()
-  
+  species_seen = set()
+
   # add parent entries as triplicate rows
   for _, row in source_assignments[~nan_proteins].iterrows():
+    
     if row['ARC Assignment'] in ['TCR', 'BCR']:
-      new_rows.extend(
-        create_antigen_receptor_node(row, new_rows)
-      )
+      new_rows.extend(create_antigen_receptor_node(row, new_rows, species_seen))
+      species_seen.add(row['Species Taxon ID'])
     else:
       new_rows.extend(
         owl_class(
@@ -63,7 +64,7 @@ def build_old_tree(tree_df, source_assignments):
   return tree_df
 
 
-def create_antigen_receptor_node(source_assignment_row, new_rows):
+def create_antigen_receptor_node(source_assignment_row, new_rows, species_seen):
   """Given a row from the source_assignments dataframe that is an antigen receptor
   (TCR or BCR), return a list of triples for the antigen receptor node and create the node
   if it does not already exist."""
@@ -71,14 +72,14 @@ def create_antigen_receptor_node(source_assignment_row, new_rows):
   antigen_receptor = source_assignment_row['ARC Assignment']
   antigen_receptor_name = 'T Cell Receptor' if antigen_receptor == 'TCR' else 'B Cell Receptor / Immunoglobulin'
 
-  antigen_receptor_node = owl_class(
-    f"iedb-protein:{source_assignment_row['Species Taxon ID']}-{antigen_receptor.lower()}",
-    f"{antigen_receptor_name} chain",
-    f"iedb-protein:{source_assignment_row['Species Taxon ID']}"
-  )
-
-  if antigen_receptor_node not in new_rows:
-    new_rows.extend(antigen_receptor_node)
+  if source_assignment_row['Species Taxon ID'] not in species_seen:
+    new_rows.extend(
+      owl_class(
+        f"iedb-protein:{source_assignment_row['Species Taxon ID']}-{antigen_receptor.lower()}",
+        f"{antigen_receptor_name} chain",
+        f"iedb-protein:{source_assignment_row['Species Taxon ID']}"
+      )
+    )
 
   assignment_node = owl_class(
     f"{antigen_receptor}:{source_assignment_row['Accession']}",
