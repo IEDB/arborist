@@ -73,7 +73,7 @@ def create_antigen_receptor_node(source_assignment_row, new_rows):
 
   antigen_receptor_node = owl_class(
     f"iedb-protein:{source_assignment_row['Species Taxon ID']}-{antigen_receptor.lower()}",
-    f"{antigen_receptor_name}",
+    f"{antigen_receptor_name} chain",
     f"iedb-protein:{source_assignment_row['Species Taxon ID']}"
   )
 
