@@ -5,6 +5,7 @@ import os
 import csv
 import requests
 import gzip
+import json
 import pandas as pd
 import xml.etree.ElementTree as ET
 
@@ -371,8 +372,19 @@ class ProteomeSelector:
     try:
       r = requests.get(url)
       r.raise_for_status()
-      with open(f'{self.species_path}/synonym-data.json', 'w') as f:
-        f.write(r.text)
+      data = r.json()
+
+      uniprot_alternative_names = {}
+      for result in data["results"]:
+        uniprot_id = result["primaryAccession"]
+        alternative_names = [name["fullName"]["value"] for name in result["proteinDescription"].get("alternativeNames", []) if "fullName" in name and "value" in name["fullName"]]
+        if alternative_names:
+          uniprot_alternative_names[uniprot_id] = alternative_names
+
+      if len(uniprot_alternative_names) != 0:
+        with open(f'{self.species_path}/synonym-data.json', 'w') as f:
+          json.dump(uniprot_alternative_names, f, indent=4)
+
     except (requests.exceptions.ChunkedEncodingError, requests.exceptions.ReadTimeout):
       self.get_synonym_data(proteome_id)
 
