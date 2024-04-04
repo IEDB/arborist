@@ -482,17 +482,20 @@ class GeneAndProteinAssigner:
         self.uniprot_id_to_name_map[k] = manual_protein_name_map[k]
 
   def _update_synonyms(self, row: pd.Series) -> None:
+    """Update the synonyms for a source if they exist in the synonym data and the
+    proteome data."""
     uniprot_id = row['Assigned Protein ID']
+    entry_name = self.proteome[self.proteome['Protein ID'] == uniprot_id]['Entry Name'].iloc[0]
     if uniprot_id in self.synonym_data.keys():
       new_synonyms = self.synonym_data[uniprot_id]
       if pd.notnull(row['Synonyms']):
         existing_synonyms = row['Synonyms'].split(', ')
-        all_synonyms = list(set(existing_synonyms + new_synonyms))
+        all_synonyms = list(set(existing_synonyms + new_synonyms)) + [entry_name]
       else:
-        all_synonyms = new_synonyms
+        all_synonyms = new_synonyms + [entry_name]
       return ', '.join(all_synonyms)
-    return row['Synonyms']
-
+    return entry_name
+  
   def _remove_files(self) -> None:
     """Delete all the files that were created when making the BLAST database."""
     for extension in ['pdb', 'phr', 'pin', 'pjs', 'pot', 'psq', 'ptf', 'pto']:
