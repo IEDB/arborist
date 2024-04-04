@@ -58,9 +58,9 @@ def build_old_tree(tree_df, source_assignments):
       ))
 
       new_rows.extend(add_reviewed_status(row))
-      # new_rows.extend(add_synonyms(row))
-      # new_rows.extend(add_accession(row))
-      # new_rows.extend(add_source_database(row))
+      new_rows.extend(add_synonyms(row))
+      new_rows.extend(add_accession(row))
+      new_rows.extend(add_source_database(row))
 
   new_rows.extend(create_other_nodes(source_assignments[nan_proteins]))
 
@@ -96,6 +96,8 @@ def create_antigen_receptor_node(source_assignment_row, new_rows, species_seen):
 
 
 def add_reviewed_status(row):
+  """Given a row from the source_assignments dataframe, return a triple
+  of the reviewed status of the protein."""
   return [triple(
     f"UP:{row['Assigned Protein ID']}",
     "UC:reviewed",
@@ -105,15 +107,41 @@ def add_reviewed_status(row):
 
 
 def add_synonyms(row):
-  pass
+  """Given a row from the source_assignments dataframe, return a list of triples
+  for the synonyms of the protein."""
+  synonyms = []
+  for synonym in row['Synonyms'].split(', '):
+    synonyms.append(triple(
+      f"UP:{row['Assigned Protein ID']}",
+      "ONTIE:0003622",
+      synonym,
+      datatype="xsd:string"
+    ))
+  return synonyms
 
 
 def add_accession(row):
-  pass
+  return [triple(
+    f"UP:{row['Assigned Protein ID']}",
+    "ONTIE:0003623",
+    row['Assigned Protein ID'],
+    datatype="xsd:string"
+  ),
+  triple(
+    f"UP:{row['Assigned Protein ID']}",
+    "ONTIE:0003624",
+    f"http://www.uniprot.org/uniprot/{row['Assigned Protein ID']}",
+    datatype="xsd:string"
+  )]
 
 
 def add_source_database(row):
-  pass
+  return [triple(
+    f"UP:{row['Assigned Protein ID']}",
+    "ONTIE:0003625",
+    "UniProt",
+    datatype="xsd:string"
+  )]
 
 
 def create_other_nodes(not_assigned_sources):
