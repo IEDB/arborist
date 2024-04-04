@@ -362,7 +362,7 @@ class ProteomeSelector:
       r = requests.get(url)
       r.raise_for_status()
       data = r.json()
-      
+
       fragments = {}
       for entry in data["results"]:
 
@@ -375,7 +375,7 @@ class ProteomeSelector:
             end = feature["location"]["end"]["value"]
             fragment_list.append(f"{feature_type}-{start}-{end}")
 
-          if fragment_list:
+          if len(fragment_list) > 1:
             fragments[uniprot_id] = ", ".join(fragment_list)
         except KeyError:
           continue

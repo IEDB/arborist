@@ -62,11 +62,17 @@ class GeneAndProteinAssigner:
     for map_name, column_name in proteome_maps.items():
       setattr(self, map_name, dict(zip(self.proteome['Protein ID'], self.proteome[column_name])))
 
-    try:
+    try: # read in synonym data for proteins
       with open(f'{self.species_path}/synonym-data.json', 'r') as f:
         self.synonym_data = json.load(f)
     except FileNotFoundError:
       self.synonym_data = {}
+
+    try: # read in fragment data for proteins
+      with open(f'{self.species_path}/fragment-data.json', 'r') as f:
+        self.fragment_data = json.load(f)
+    except FileNotFoundError:
+      self.fragment_data = {}
 
 
   def assign(self, sources_df: pd.DataFrame, peptides_df: pd.DataFrame) -> None:
@@ -113,6 +119,7 @@ class GeneAndProteinAssigner:
     sources_df.loc[:, 'Assignment Score'] = sources_df['Accession'].map(self.source_assignment_score)
     sources_df.loc[:, 'ARC Assignment'] = sources_df['Accession'].map(self.source_arc_assignment)
     sources_df['Synonyms'] = sources_df.apply(self._update_synonyms, axis=1)
+    sources_df['Fragments'] = sources_df['Assigned Protein ID'].map(self.fragment_data)
 
     # map peptide peptide sources to assignments above and then PEPMatch assignments
     peptides_df.loc[:, 'Parent Antigen ID'] = peptides_df['Source Accession'].map(self.source_protein_assignment)
