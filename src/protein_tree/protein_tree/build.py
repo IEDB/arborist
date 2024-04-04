@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
-import pandas as pd
+
+import json
 import sqlite3
 import argparse
+import pandas as pd
 
 from pathlib import Path
 
@@ -103,15 +105,19 @@ def create_antigen_receptor_node(source_assignment_row, new_rows, species_seen):
 def add_fragments(row):
   """Given a row from the source_assignments dataframe, return a list of triples
   for the fragments of the protein."""
+
   if pd.isna(row['Fragments']):
     return []
   
+  with open(Path(__file__).parent.parent / 'data' / 'fragment-type.json', 'r') as f:
+    fragment_type_map = json.load(f)
   fragment_count = 0
   fragment_rows = []
 
   for fragment in row['Fragments'].split(', '):
 
     fragment_type = fragment.split('-')[0]
+    fragment_type = fragment_type_map[fragment_type]
     fragment_start = fragment.split('-')[1]
     fragment_end = fragment.split('-')[2]
 
