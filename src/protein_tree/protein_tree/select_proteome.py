@@ -357,25 +357,31 @@ class ProteomeSelector:
     chains, initiator methionine, peptides, propeptides, signal peptides, and transit peptides."""
 
     url = f'https://rest.uniprot.org/uniprotkb/stream?format=json&query=proteome:{proteome_id}&fields=ft_chain,ft_peptide,ft_propep,ft_signal,ft_transit'
+    
     try:
       r = requests.get(url)
       r.raise_for_status()
       data = r.json()
-
+      
       fragments = {}
       for entry in data["results"]:
-        uniprot_id = entry["primaryAccession"]
-        fragment_list = []
-        for feature in entry["features"]:
-          feature_type = feature["type"]
-          start = feature["location"]["start"]["value"]
-          end = feature["location"]["end"]["value"]
-          fragment_list.append(f"{feature_type}-{start}-{end}")
 
-        if fragment_list:
-          fragments[uniprot_id] = ", ".join(fragment_list)
-          with open(f'{self.species_path}/fragment-data.json', 'w') as f:
-            json.dump(fragments, f, indent=4)
+        try: # some entries do not have features
+          uniprot_id = entry["primaryAccession"]
+          fragment_list = []
+          for feature in entry["features"]:
+            feature_type = feature["type"]
+            start = feature["location"]["start"]["value"]
+            end = feature["location"]["end"]["value"]
+            fragment_list.append(f"{feature_type}-{start}-{end}")
+
+          if fragment_list:
+            fragments[uniprot_id] = ", ".join(fragment_list)
+        except KeyError:
+          continue
+      
+      with open(f'{self.species_path}/fragment-data.json', 'w') as f:
+        json.dump(fragments, f, indent=4)
 
     except (requests.exceptions.ChunkedEncodingError, requests.exceptions.ReadTimeout):
       self.get_fragment_data(proteome_id)
