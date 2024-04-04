@@ -102,6 +102,7 @@ class GeneAndProteinAssigner:
     sources_df.loc[:, 'Assigned Gene'] = sources_df['Assigned Gene'].fillna(sources_df['Accession'].map(self.source_arc_assignment))
     sources_df.loc[:, 'Assigned Protein ID'] = sources_df['Accession'].map(self.source_protein_assignment)
     sources_df.loc[:, 'Assigned Protein Name'] = sources_df['Assigned Protein ID'].map(self.uniprot_id_to_name_map)
+    sources_df.loc[:, 'Assigned Protein Reviewed'] = sources_df['Assigned Protein ID'].map(self.uniprot_id_to_database_map)
     sources_df.loc[:, 'Assignment Score'] = sources_df['Accession'].map(self.source_assignment_score)
     sources_df.loc[:, 'ARC Assignment'] = sources_df['Accession'].map(self.source_arc_assignment)
 

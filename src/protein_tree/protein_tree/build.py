@@ -57,6 +57,11 @@ def build_old_tree(tree_df, source_assignments):
           f"iedb-protein:{row['Species Taxon ID']}"
       ))
 
+      new_rows.extend(add_reviewed_status(row))
+      # new_rows.extend(add_synonyms(row))
+      # new_rows.extend(add_accession(row))
+      # new_rows.extend(add_source_database(row))
+
   new_rows.extend(create_other_nodes(source_assignments[nan_proteins]))
 
   tree_df = pd.concat([tree_df, pd.DataFrame(new_rows)], ignore_index=True)
@@ -88,6 +93,27 @@ def create_antigen_receptor_node(source_assignment_row, new_rows, species_seen):
   )
 
   return assignment_node
+
+
+def add_reviewed_status(row):
+  return [triple(
+    f"UP:{row['Assigned Protein ID']}",
+    "UC:reviewed",
+    "true" if row["Assigned Protein Reviewed"] == "sp" else "false",
+    datatype="xsd:boolean"
+  )]
+
+
+def add_synonyms(row):
+  pass
+
+
+def add_accession(row):
+  pass
+
+
+def add_source_database(row):
+  pass
 
 
 def create_other_nodes(not_assigned_sources):
