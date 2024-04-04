@@ -57,10 +57,15 @@ def build_old_tree(tree_df, source_assignments):
           f"iedb-protein:{row['Species Taxon ID']}"
       ))
 
-      new_rows.extend(add_reviewed_status(row))
-      new_rows.extend(add_synonyms(row))
-      new_rows.extend(add_accession(row))
-      new_rows.extend(add_source_database(row))
+    # fragments
+    new_rows.extend(add_fragments(row))
+    
+    # annotations
+    new_rows.extend(add_reviewed_status(row))
+    new_rows.extend(add_synonyms(row))
+    new_rows.extend(add_accession(row))
+    new_rows.extend(add_source_database(row))
+
 
   new_rows.extend(create_other_nodes(source_assignments[nan_proteins]))
 
@@ -95,6 +100,29 @@ def create_antigen_receptor_node(source_assignment_row, new_rows, species_seen):
   return assignment_node
 
 
+def add_fragments(row):
+  """Given a row from the source_assignments dataframe, return a list of triples
+  for the fragments of the protein."""
+  if pd.isna(row['Fragments']):
+    return []
+  
+  fragment_count = 0
+  fragment_rows = []
+  for fragment in row['Fragments'].split(', '):
+
+    fragment_type = fragment.split('-')[0]
+    fragment_start = fragment.split('-')[1]
+    fragment_end = fragment.split('-')[2]
+
+    fragment_rows.extend(owl_class(
+      f"UP:{row['Assigned Protein ID']}#{fragment_count+1}",
+      f"{fragment_type} ({fragment_start}-{fragment_end})",
+      f"UP:{row['Assigned Protein ID']}"
+    ))
+    fragment_count += 1
+
+  return fragment_rows
+
 def add_reviewed_status(row):
   """Given a row from the source_assignments dataframe, return a triple
   of the reviewed status of the protein."""
@@ -121,6 +149,8 @@ def add_synonyms(row):
 
 
 def add_accession(row):
+  """Given a row from the source_assignments dataframe, return a list of triples
+  for the accession of the protein and the URL to the UniProt entry."""
   return [triple(
     f"UP:{row['Assigned Protein ID']}",
     "ONTIE:0003623",
@@ -136,6 +166,8 @@ def add_accession(row):
 
 
 def add_source_database(row):
+  """Given a row from the source_assignments dataframe, return a triple
+  for the source database of the protein (always UniProt)."""
   return [triple(
     f"UP:{row['Assigned Protein ID']}",
     "ONTIE:0003625",
