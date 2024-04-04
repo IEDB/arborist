@@ -4,6 +4,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 import os
+import json
 import glob
 import pandas as pd
 
@@ -61,6 +62,12 @@ class GeneAndProteinAssigner:
     for map_name, column_name in proteome_maps.items():
       setattr(self, map_name, dict(zip(self.proteome['Protein ID'], self.proteome[column_name])))
 
+    try:
+      with open(f'{self.species_path}/synonym-data.json', 'r') as f:
+        self.synonym_data = json.load(f)
+    except FileNotFoundError:
+      self.synonym_data = {}
+
 
   def assign(self, sources_df: pd.DataFrame, peptides_df: pd.DataFrame) -> None:
     """Overall function to assign genes and parent proteins to sources and peptides.
@@ -105,6 +112,7 @@ class GeneAndProteinAssigner:
     sources_df.loc[:, 'Assigned Protein Reviewed'] = sources_df['Assigned Protein ID'].map(self.uniprot_id_to_database_map)
     sources_df.loc[:, 'Assignment Score'] = sources_df['Accession'].map(self.source_assignment_score)
     sources_df.loc[:, 'ARC Assignment'] = sources_df['Accession'].map(self.source_arc_assignment)
+    sources_df['Synonyms'] = sources_df.apply(self._update_synonyms, axis=1)
 
     # map peptide peptide sources to assignments above and then PEPMatch assignments
     peptides_df.loc[:, 'Parent Antigen ID'] = peptides_df['Source Accession'].map(self.source_protein_assignment)
@@ -472,6 +480,18 @@ class GeneAndProteinAssigner:
         self.source_protein_assignment[k] = manual_protein_id_map[k]
         self.source_assignment_score[k] = -1
         self.uniprot_id_to_name_map[k] = manual_protein_name_map[k]
+
+  def _update_synonyms(self, row: pd.Series) -> None:
+    uniprot_id = row['Assigned Protein ID']
+    if uniprot_id in self.synonym_data.keys():
+      new_synonyms = self.synonym_data[uniprot_id]
+      if pd.notnull(row['Synonyms']):
+        existing_synonyms = row['Synonyms'].split(', ')
+        all_synonyms = list(set(existing_synonyms + new_synonyms))
+      else:
+        all_synonyms = new_synonyms
+      return ', '.join(all_synonyms)
+    return row['Synonyms']
 
   def _remove_files(self) -> None:
     """Delete all the files that were created when making the BLAST database."""
