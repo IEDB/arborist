@@ -54,6 +54,7 @@ def index():
         'Subspecies Tree': 'subspecies_tree/NCBITaxon:1',
         'Active Species': 'active_species',
         'Proteome': 'proteome',
+        'MHC Restriction Ontology': 'mro/obo:GO_0042611',
         'Protein Tree (Old)': 'protein_tree_old/PR:000000001',
         'Protein Tree (New)': 'protein_tree_new/PR:000000001',
         'Molecule Tree (New)': 'molecule_tree/BFO:0000040',
