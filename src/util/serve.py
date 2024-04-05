@@ -3,7 +3,7 @@
 # Serve HCC-KB development and curation site,
 # calling Nanobot to do the hard work.
 
-import csv
+import argparse
 import os
 import subprocess
 
@@ -25,7 +25,7 @@ def index():
         'and upstream databases</p>',
         '<ul>',
         '  <li>',
-        '    <a href="/iedb/table">IEDB</a> upstream tables:',
+        '    <a href="iedb/table">IEDB</a> upstream tables:',
         '    <ul>',
     ]
     iedb = [
@@ -38,12 +38,12 @@ def index():
         'peptide_source'
     ]
     for entry in iedb:
-        output.append(f'    <li><a href="/iedb/{entry}">{entry}</a></li>')
+        output.append(f'    <li><a href="iedb/{entry}">{entry}</a></li>')
     output += [
         '    </ul>',
         '  </li>',
         '  <li>',
-        '    <a href="/arborist/table">Arborist</a> tables and trees: ',
+        '    <a href="arborist/table">Arborist</a> tables and trees: ',
         '    <ul>',
     ]
     arborist = {
@@ -58,11 +58,12 @@ def index():
         'Protein Tree (New)': 'protein_tree_new/PR:000000001',
         'Molecule Tree (New)': 'molecule_tree/BFO:0000040',
         'Molecule Tree (Old)': 'molecule_tree_old/BFO:0000040',
-        'Molecule Trees Compared': 'molecule_tree_old molecule_tree/BFO:0000040',
+        'Molecule Trees Compared':
+        'molecule_tree_old%20molecule_tree/BFO:0000040',
         'Disease Tree': 'disease_tree/DOID:4'
     }
     for name, href in arborist.items():
-        output.append(f'      <li><a href="/arborist/{href}">{name}</a></li>')
+        output.append(f'      <li><a href="arborist/{href}">{name}</a></li>')
     output += [
         '    </ul>',
         '  </li>',
@@ -150,4 +151,14 @@ def render(content):
     )
 
 
-run(host='0.0.0.0', port=3000)
+def main():
+    parser = argparse.ArgumentParser(description='Serve Arborist web site')
+    parser.add_argument('port', type=int, nargs='?', default=3000,
+                        help='The port to serve')
+    args = parser.parse_args()
+
+    run(host='0.0.0.0', port=args.port)
+
+
+if __name__ == '__main__':
+    main()
