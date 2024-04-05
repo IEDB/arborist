@@ -434,6 +434,24 @@ build/arborist/protein-tree.assigned: build/arborist/allergens.tsv build/arboris
 
 ### 6. Build Protein Tree
 
+build/arborist/mro.owl: | build/arborist/
+	curl -L -o $@ 'http://purl.obolibrary.org/obo/mro/2023-12-21/mro.owl'
+
+build/arborist/mro.built: build/arborist/mro.owl | build/arborist/nanobot.db
+	$(eval DB := build/arborist/nanobot.db)
+	$(eval TABLE := mro)
+	sqlite3 $(DB) 'DROP TABLE IF EXISTS $(TABLE)'
+	ldtab init $(DB) --table $(TABLE)
+	ldtab import $(DB) $< --table $(TABLE)
+	sqlite3 $(DB) 'CREATE INDEX idx_$(TABLE)_subject ON $(TABLE)(subject)'
+	sqlite3 $(DB) 'CREATE INDEX idx_$(TABLE)_predicate ON $(TABLE)(predicate)'
+	sqlite3 $(DB) 'CREATE INDEX idx_$(TABLE)_object ON $(TABLE)(object)'
+	sqlite3 $(DB) 'ANALYZE $(TABLE)'
+	touch $@
+
+.PHONY: mro
+mro: build/arborist/mro.built
+
 build/arborist/all-peptide-assignments.tsv build/arborist/all-source-assignments.tsv build/arborist/parent-proteins.tsv build/parents/source-parents.tsv: build/arborist/protein-tree.assigned
 	python src/protein_tree/protein_tree/combine_assignments.py build/
 
