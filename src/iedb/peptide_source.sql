@@ -10,4 +10,3 @@ SELECT DISTINCT
   organism_name AS 'Organism Name',
   iri as 'IRI'
 FROM source
-WHERE sequence IS NOT NULL
