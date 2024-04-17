@@ -491,8 +491,12 @@ class GeneAndProteinAssigner:
   def _update_synonyms(self, row: pd.Series) -> None:
     """Update the synonyms for a source if they exist in the synonym data and the
     proteome data."""
+    
     uniprot_id = row['Assigned Protein ID']
+    if pd.isnull(uniprot_id):
+      return None
     entry_name = self.proteome[self.proteome['Protein ID'] == uniprot_id]['Entry Name'].iloc[0]
+    
     if uniprot_id in self.synonym_data.keys():
       new_synonyms = self.synonym_data[uniprot_id]
       if pd.notnull(row['Synonyms']):
