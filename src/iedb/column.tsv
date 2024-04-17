@@ -111,7 +111,6 @@ epitope	protein_wildtype_aa		empty	label
 epitope	dna_mutation_position		empty	label		
 epitope	dna_mutant_base		empty	label		
 epitope	dna_wildtype_base		empty	label		
-epitope	nt_mut_flag		empty	label		
 epitope	modified_date		empty	label		
 epitope	created_date		empty	label		
 peptide_source	Source ID			natural_number	from(source.source_id)	
