@@ -65,7 +65,7 @@ class GeneAndProteinAssigner:
     try: # read in synonym data for proteins
       with open(f'{self.species_path}/synonym-data.json', 'r') as f:
         self.synonym_data = json.load(f)
-    except FileNotFoundError:
+    except (FileNotFoundError, json.JSONDecodeError):
       self.synonym_data = {}
 
     try: # read in fragment data for proteins
@@ -110,14 +110,25 @@ class GeneAndProteinAssigner:
     self._assign_peptides(peptides_df)
     print('Done.\n')
 
-    # map peptide sources to their BLAST matches and ARC assignments
-    sources_df.loc[:, 'Assigned Gene'] = sources_df['Accession'].map(self.source_gene_assignment)
-    sources_df.loc[:, 'Assigned Gene'] = sources_df['Assigned Gene'].fillna(sources_df['Accession'].map(self.source_arc_assignment))
+    # map peptide sources to their BLAST matches
+    sources_df.loc[:, 'Assigned Gene'] = sources_df['Accession'].map(self.source_gene_assignment)    
+    sources_df.loc[:, 'Assigned Gene'] = sources_df['Assigned Gene'].fillna(
+      sources_df['Accession'].map(self.source_arc_assignment).apply(lambda x: x[0] if pd.notna(x) else x)
+    )
     sources_df.loc[:, 'Assigned Protein ID'] = sources_df['Accession'].map(self.source_protein_assignment)
     sources_df.loc[:, 'Assigned Protein Name'] = sources_df['Assigned Protein ID'].map(self.uniprot_id_to_name_map)
     sources_df.loc[:, 'Assigned Protein Reviewed'] = sources_df['Assigned Protein ID'].map(self.uniprot_id_to_database_map)
     sources_df.loc[:, 'Assignment Score'] = sources_df['Accession'].map(self.source_assignment_score)
-    sources_df.loc[:, 'ARC Assignment'] = sources_df['Accession'].map(self.source_arc_assignment)
+    
+    # map peptide sources to their ARC assignments
+    sources_df.loc[:, 'ARC Assignment'] = sources_df['Accession'].map(
+      self.source_arc_assignment).apply(lambda x: x[0] if pd.notna(x) else x)
+    sources_df.loc[:, 'ARC Chain Type'] = sources_df['Accession'].map(
+      self.source_arc_assignment).apply(lambda x: x[1] if pd.notna(x) else x)
+    sources_df.loc[:, 'ARC MHC Allele'] = sources_df['Accession'].map(
+      self.source_arc_assignment).apply(lambda x: x[2] if pd.notna(x) else x)
+    
+    # add synonyms and fragment data for sources
     sources_df['Synonyms'] = sources_df.apply(self._update_synonyms, axis=1)
     sources_df['Fragments'] = sources_df['Assigned Protein ID'].map(self.fragment_data)
 
@@ -460,7 +471,7 @@ class GeneAndProteinAssigner:
     # Update source to ARC assignment dictionary
     arc_results_df = pd.read_csv(f'{self.species_path}/ARC_results.tsv', sep='\t')
     if not arc_results_df.dropna(subset=['class']).empty:
-      self.source_arc_assignment = arc_results_df.set_index('id')['class'].to_dict()
+      self.source_arc_assignment = arc_results_df.set_index('id')[['class', 'chain_type', 'calc_mhc_allele']].apply(tuple, axis=1).to_dict()
 
   def _assign_allergens(self) -> None:
     """Get allergen data from allergen.org and then assign allergens to sources."""
@@ -496,7 +507,7 @@ class GeneAndProteinAssigner:
     if pd.isnull(uniprot_id):
       return None
     entry_name = self.proteome[self.proteome['Protein ID'] == uniprot_id]['Entry Name'].iloc[0]
-    
+
     if uniprot_id in self.synonym_data.keys():
       new_synonyms = self.synonym_data[uniprot_id]
       if pd.notnull(row['Synonyms']):
