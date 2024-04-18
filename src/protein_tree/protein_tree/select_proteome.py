@@ -402,9 +402,8 @@ class ProteomeSelector:
         if alternative_names:
           uniprot_alternative_names[uniprot_id] = alternative_names
 
-      if len(uniprot_alternative_names) != 0:
-        with open(f'{self.species_path}/synonym-data.json', 'w') as f:
-          json.dump(uniprot_alternative_names, f, indent=4)
+      with open(f'{self.species_path}/synonym-data.json', 'w') as f:
+        json.dump(uniprot_alternative_names, f, indent=4)
 
     except (requests.exceptions.ChunkedEncodingError, requests.exceptions.ReadTimeout):
       self.get_synonym_data(proteome_id)
