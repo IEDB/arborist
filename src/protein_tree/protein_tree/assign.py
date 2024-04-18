@@ -222,8 +222,7 @@ class GeneAndProteinAssigner:
     seq_records = [] # create seq records of sources with ID and sequence
     for i, row in sources_df.iterrows():
 
-      # if there is no sequence, use empty string
-      if pd.isnull(row['Sequence']):
+      if pd.isnull(row['Sequence']): # if there is no sequence, use empty string
         continue
 
       seq_records.append(
@@ -441,7 +440,7 @@ class GeneAndProteinAssigner:
     try:
       past_arc_results_df = pd.read_csv(f'{self.species_path}/ARC_results.tsv', sep='\t')
       past_arc_ids = set(past_arc_results_df['id'])
-      arc_sources_df = sources_df[~sources_df['Accession'].isin(past_arc_ids)]
+      arc_sources_df = sources_df[(~sources_df['Accession'].isin(past_arc_ids)) & (sources_df['Sequence'].notnull())]
       past_results = True
     except FileNotFoundError:
       arc_sources_df = sources_df
@@ -456,7 +455,7 @@ class GeneAndProteinAssigner:
           threads=self.num_threads,
         ).classify_seqfile(f'{self.species_path}/ARC_sources.fasta')
 
-      new_arc_results_df = pd.read_csv(f'{self.species_path}/ARC_temp_results.tsv', sep='\t')
+        new_arc_results_df = pd.read_csv(f'{self.species_path}/ARC_temp_results.tsv', sep='\t')
 
       if past_results:
         combined_results_df = pd.concat([past_arc_results_df, new_arc_results_df])
@@ -504,6 +503,7 @@ class GeneAndProteinAssigner:
     proteome data."""
     
     uniprot_id = row['Assigned Protein ID']
+    
     if pd.isnull(uniprot_id) or uniprot_id not in self.proteome['Protein ID'].values:
       return None
 
