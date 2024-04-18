@@ -504,8 +504,9 @@ class GeneAndProteinAssigner:
     proteome data."""
     
     uniprot_id = row['Assigned Protein ID']
-    if pd.isnull(uniprot_id):
+    if pd.isnull(uniprot_id) or uniprot_id not in self.proteome['Protein ID'].values:
       return None
+
     entry_name = self.proteome[self.proteome['Protein ID'] == uniprot_id]['Entry Name'].iloc[0]
 
     if uniprot_id in self.synonym_data.keys():
