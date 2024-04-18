@@ -92,12 +92,14 @@ def generate_protein_tables(build_path, all_sources_df):
   source_parents = all_sources_df[[
     'Source ID', 'Accession', 'Database', 'Name', 'Aliases', 'Synonyms', 'Organism ID', 
     'Species Taxon ID', 'Species Name', 'Proteome ID', 'Proteome Label', 'Protein Strategy', 
-    'Parent IRI', 'Parent Protein Database', 'Assigned Protein ID', 'Parent Sequence Length'
+    'Parent IRI', 'Parent Protein Database', 'Assigned Protein ID', 'Parent Sequence Length',
+    'Assigned Gene'
   ]]
   source_parents.rename(columns={
     'Species Taxon ID': 'Species ID',
     'Species Name': 'Species Label',
     'Assigned Protein ID': 'Parent Protein Accession',
+    'Assigned Gene': 'Parent Protein Gene'
   }, inplace=True)
 
   parent_proteins = all_sources_df[[
