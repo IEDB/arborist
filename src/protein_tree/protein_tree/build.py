@@ -106,12 +106,14 @@ def add_fragments(row):
   """Given a row from the source_assignments dataframe, return a list of triples
   for the fragments of the protein."""
 
-  if pd.isna(row['Fragments']):
-    return []
+  if pd.isna(row['Fragments']): return []
   
   with open(Path(__file__).parent.parent / 'data' / 'fragment-type.json', 'r') as f:
     fragment_type_map = json.load(f)
-  fragment_count = 0
+  
+  fragment_count = len(row['Fragments'].split(', '))
+  if fragment_count < 2: return []
+
   fragment_rows = []
 
   for fragment in row['Fragments'].split(', '):
