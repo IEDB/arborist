@@ -121,6 +121,12 @@ def add_fragments(row):
     fragment_start = fragment.split('-')[1]
     fragment_end = fragment.split('-')[2]
 
+    try:
+      int(fragment_start)
+      int(fragment_end)
+    except ValueError:
+      continue
+
     fragment_rows.extend(owl_class(
       f"UP:{row['Assigned Protein ID']}:{fragment_count+1}",
       f"{fragment_type} ({fragment_start}-{fragment_end})",
@@ -130,19 +136,19 @@ def add_fragments(row):
     fragment_rows.extend(
       [triple(
         f"UP:{row['Assigned Protein ID']}:{fragment_count+1}",
-        "has starting position",
+        "ONTIE:0003627",
         fragment_start,
         datatype="xsd:integer"
       ),
       triple(
         f"UP:{row['Assigned Protein ID']}:{fragment_count+1}",
-        "has ending position",
+        "ONTIE:0003628",
         fragment_end,
         datatype="xsd:integer"
       ),
       triple(
         f"UP:{row['Assigned Protein ID']}:{fragment_count+1}",
-        "has sort name",
+        "ONTIE:0003620",
         f"{fragment_count+1} {fragment_type} ({fragment_start}-{fragment_end})",
         datatype="xsd:string"
       )]
@@ -167,10 +173,11 @@ def add_synonyms(row):
   """Given a row from the source_assignments dataframe, return a list of triples
   for the synonyms of the protein."""
   synonyms = []
+  if pd.isna(row['Synonyms']): return synonyms
   for synonym in row['Synonyms'].split(', '):
     synonyms.append(triple(
       f"UP:{row['Assigned Protein ID']}",
-      "has synonym",
+      "ONTIE:0003622",
       synonym,
       datatype="xsd:string"
     ))
@@ -182,13 +189,13 @@ def add_accession(row):
   for the accession of the protein and the URL to the UniProt entry."""
   return [triple(
     f"UP:{row['Assigned Protein ID']}",
-    "has accession",
+    "ONTIE:0003623",
     row['Assigned Protein ID'],
     datatype="xsd:string"
   ),
   triple(
     f"UP:{row['Assigned Protein ID']}",
-    "has accession IRI",
+    "ONTIE:0003624",
     f"http://www.uniprot.org/uniprot/{row['Assigned Protein ID']}",
     datatype="xsd:string"
   )]
@@ -199,7 +206,7 @@ def add_source_database(row):
   for the source database of the protein (always UniProt)."""
   return [triple(
     f"UP:{row['Assigned Protein ID']}",
-    "source database",
+    "ONTIE:0003625",
     "UniProt",
     datatype="xsd:string"
   )]
