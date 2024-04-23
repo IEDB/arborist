@@ -82,6 +82,7 @@ def create_antigen_receptor_node(source_assignment_row, new_rows, species_seen):
   if it does not already exist."""
 
   antigen_receptor = source_assignment_row['ARC Assignment']
+  antigen_receptor = 'ab' if antigen_receptor == 'BCR' else antigen_receptor
   antigen_receptor_name = 'T Cell Receptor' if antigen_receptor == 'TCR' else 'B Cell Receptor / Immunoglobulin'
 
   if source_assignment_row['Species Taxon ID'] not in species_seen:
