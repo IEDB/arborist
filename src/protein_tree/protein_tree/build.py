@@ -48,7 +48,7 @@ def build_old_tree(tree_df, source_assignments):
   # add parent entries as triplicate rows
   for _, row in source_assignments[~nan_proteins].iterrows():
     
-    if row['ARC Assignment'] in ['TCR', 'BCR']:
+    if row['ARC Assignment'] in ['TCR', 'BCR', 'MHC-I', 'MHC-II']:
       new_rows.extend(create_antigen_receptor_node(row, new_rows, species_seen))
       species_seen.add(row['Species Taxon ID'])
     else:
@@ -83,7 +83,15 @@ def create_antigen_receptor_node(source_assignment_row, new_rows, species_seen):
 
   antigen_receptor = source_assignment_row['ARC Assignment']
   antigen_receptor = 'ab' if antigen_receptor == 'BCR' else antigen_receptor
-  antigen_receptor_name = 'T Cell Receptor' if antigen_receptor == 'TCR' else 'B Cell Receptor / Immunoglobulin'
+  
+  if antigen_receptor == 'TCR':
+    antigen_receptor_name = 'T Cell Receptor'
+  elif antigen_receptor == 'BCR':
+    antigen_receptor_name = 'B Cell Receptor / Immunoglobulin'
+  elif antigen_receptor == 'MHC-I':
+    antigen_receptor_name = 'Major Histocompatibility Complex I'
+  elif antigen_receptor == 'MHC-II':
+    antigen_receptor_name = 'Major Histocompatibility Complex II'
 
   if source_assignment_row['Species Taxon ID'] not in species_seen:
     new_rows.extend(
