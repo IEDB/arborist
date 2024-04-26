@@ -83,10 +83,10 @@ def create_antigen_receptor_node(source_assignment_row, new_rows, species_seen):
 
   antigen_receptor = source_assignment_row['ARC Assignment']
   antigen_receptor = 'ab' if antigen_receptor == 'BCR' else antigen_receptor
-  
+
   if antigen_receptor == 'TCR':
     antigen_receptor_name = 'T Cell Receptor'
-  elif antigen_receptor == 'BCR':
+  elif antigen_receptor == 'ab':
     antigen_receptor_name = 'B Cell Receptor / Immunoglobulin'
   elif antigen_receptor == 'MHC-I':
     antigen_receptor_name = 'Major Histocompatibility Complex I'
