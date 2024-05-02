@@ -136,7 +136,7 @@ class GeneAndProteinAssigner:
     peptides_df.loc[:, 'Parent Antigen ID'] = peptides_df['Source Accession'].map(self.source_protein_assignment)
     peptides_df.loc[:, 'Parent Antigen Name'] = peptides_df['Parent Antigen ID'].map(self.uniprot_id_to_name_map)
     peptides_df.loc[:, 'Parent Antigen Gene'] = peptides_df['Source Accession'].map(self.source_gene_assignment)
-    peptides_df.loc[:, 'Parent Antigen Gene'] = peptides_df['Parent Antigen Gene'].fillna(peptides_df['Source Accession'].map(self.source_arc_assignment))
+    # peptides_df.loc[:, 'Parent Antigen Gene'] = peptides_df['Parent Antigen Gene'].fillna(peptides_df['Source Accession'].map(self.source_arc_assignment))
     
     peptides_df.set_index(['Source Accession', 'Sequence'], inplace=True)
 
@@ -153,8 +153,18 @@ class GeneAndProteinAssigner:
     )
     
     peptides_df.reset_index(inplace=True)
-    peptides_df.loc[:, 'ARC Assignment'] = peptides_df['Source Accession'].map(self.source_arc_assignment)
 
+    # map peptides to their ARC assignments
+    peptides_df.loc[:, 'ARC Assignment'] = peptides_df['Source Accession'].map(
+      self.source_arc_assignment).apply(lambda x: x[0] if pd.notna(x) else x)
+    peptides_df.loc[:, 'ARC Chain Type'] = peptides_df['Source Accession'].map(
+      self.source_arc_assignment).apply(lambda x: x[1] if pd.notna(x) else x)
+    peptides_df.loc[:, 'ARC MHC Allele'] = peptides_df['Source Accession'].map(
+      self.source_arc_assignment).apply(lambda x: x[2] if pd.notna(x) else x)
+    
+    # fill empty gene assignments with the ARC assignment column
+    peptides_df.loc[:, 'Parent Antigen Gene'] = peptides_df['Parent Antigen Gene'].fillna(peptides_df['ARC Assignment'])
+                                                                                          
     peptides_df.drop_duplicates(subset=['Source Accession', 'Sequence'], inplace=True) # drop duplicate peptides
 
     self._remove_files()
