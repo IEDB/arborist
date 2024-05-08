@@ -495,7 +495,21 @@ class GeneAndProteinAssigner:
     """Get manual assignments from manual-parents.tsv and then assign
     genes and proteins to sources.
     """
+    def replace_allergen_parent(row):
+      if row['Parent Database'] == 'IUIS':
+        # print(row['Parent Accession'])
+        return allergen_map.get(str(row['Parent Accession']), row['Parent Accession'])
+      return row['Parent Accession']
+    
     manual_df = pd.read_csv(self.build_path / 'arborist' / 'manual-parents.tsv', sep='\t')
+
+    # replace IUIS allergen IDs with UniProt IDs in manual assignments
+    allergen_df = pd.read_csv(self.build_path / 'arborist' / 'allergens.tsv', sep='\t')
+    allergen_df['AllergenID'] = allergen_df['AllergenID'].fillna(-1).astype('Int64').astype(str)
+    allergen_map = allergen_df.set_index('AllergenID')['AccProtein'].to_dict()
+    manual_df['Parent Accession'] = manual_df.apply(replace_allergen_parent, axis=1)
+
+    # print(manual_df['Parent Accession'].to_list())
 
     manual_gene_map = manual_df.set_index('Accession')['Accession Gene'].to_dict()
     manual_protein_id_map = manual_df.set_index('Accession')['Parent Accession'].to_dict()
