@@ -346,11 +346,12 @@ class GeneAndProteinAssigner:
 
     # search all peptides within the proteome using PEPMatch
     all_peptides = peptides_df['Sequence'].unique().tolist()
+    all_peptides = [x for x in all_peptides if type(x) == str] # remove NaNs
     all_matches_df = Matcher(
       query = all_peptides,
       proteome_file = f'{self.species_path}/proteome.fasta',
-      max_mismatches = 0, 
-      k = 5, 
+      max_mismatches = 0,
+      k = 5,
       preprocessed_files_path = f'{self.species_path}', 
       best_match=False, 
       output_format='dataframe',
