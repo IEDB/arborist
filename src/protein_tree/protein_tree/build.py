@@ -123,6 +123,7 @@ def add_fragments(row):
   fragment_count = len(row['Fragments'].split(', '))
   if fragment_count < 2: return []
 
+  fragment_count = 0
   fragment_rows = []
 
   for fragment in row['Fragments'].split(', '):
@@ -139,26 +140,26 @@ def add_fragments(row):
       continue
 
     fragment_rows.extend(owl_class(
-      f"UP:{row['Assigned Protein ID']}:{fragment_count+1}",
+      f"UP:{row['Assigned Protein ID']}-fragment-{fragment_count+1}",
       f"{fragment_type} ({fragment_start}-{fragment_end})",
       f"UP:{row['Assigned Protein ID']}"
     ))
 
     fragment_rows.extend(
       [triple(
-        f"UP:{row['Assigned Protein ID']}:{fragment_count+1}",
+        f"UP:{row['Assigned Protein ID']}-fragment-{fragment_count+1}",
         "ONTIE:0003627",
         fragment_start,
         datatype="xsd:integer"
       ),
       triple(
-        f"UP:{row['Assigned Protein ID']}:{fragment_count+1}",
+        f"UP:{row['Assigned Protein ID']}-fragment-{fragment_count+1}",
         "ONTIE:0003628",
         fragment_end,
         datatype="xsd:integer"
       ),
       triple(
-        f"UP:{row['Assigned Protein ID']}:{fragment_count+1}",
+        f"UP:{row['Assigned Protein ID']}-fragment-{fragment_count+1}",
         "ONTIE:0003620",
         f"{fragment_count+1} {fragment_type} ({fragment_start}-{fragment_end})",
         datatype="xsd:string"
