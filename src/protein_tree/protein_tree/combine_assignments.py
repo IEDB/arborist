@@ -42,6 +42,9 @@ def combine_assignments(build_path):
   all_peptides_df['Parent Antigen Gene'].fillna(all_peptides_df['ARC Assignment'], inplace=True)
   all_sources_df['Assigned Gene'].fillna(all_sources_df['ARC Assignment'], inplace=True)
 
+  # make sure no extra spaces are in assigned protein ID column
+  all_sources_df['Assigned Protein ID'] = all_sources_df['Assigned Protein ID'].str.split(' ').str[0]
+
   # write to files
   all_peptides_df.to_csv(build_path / 'arborist' / 'all-peptide-assignments.tsv', sep='\t', index=False)
   all_sources_df.to_csv(build_path / 'arborist' / 'all-source-assignments.tsv', sep='\t', index=False)
