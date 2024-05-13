@@ -40,14 +40,15 @@ def owl_class(subject, label, parent):
 def build_old_tree(tree_df, source_assignments):
   """Given dataframes for the tree and peptide_assignments,
   insert LDTab rows for each protein under its 'species protein' parent."""
-  
+
+  source_assignments['Assigned Protein Name'].fillna(source_assignments['Name'], inplace=True)
+    
   new_rows = []
   nan_proteins = source_assignments['Assigned Protein ID'].isna()
   species_seen = set()
 
   # add parent entries as triplicate rows
   for _, row in source_assignments[~nan_proteins].iterrows():
-    
     if row['ARC Assignment'] in ['TCR', 'BCR', 'MHC-I', 'MHC-II']:
       new_rows.extend(create_antigen_receptor_node(row, new_rows, species_seen))
       species_seen.add(row['Species Taxon ID'])
@@ -67,7 +68,6 @@ def build_old_tree(tree_df, source_assignments):
     new_rows.extend(add_synonyms(row))
     new_rows.extend(add_accession(row))
     new_rows.extend(add_source_database(row))
-
 
   new_rows.extend(create_other_nodes(source_assignments[nan_proteins]))
 
@@ -101,9 +101,10 @@ def create_antigen_receptor_node(source_assignment_row, new_rows, species_seen):
         f"iedb-protein:{source_assignment_row['Species Taxon ID']}"
       )
     )
-
+  
+  prefix = 'UP' if source_assignment_row['Database'] == 'UniProt' else 'NCBI'
   assignment_node = owl_class(
-    f"{antigen_receptor}:{source_assignment_row['Accession']}",
+    f"{prefix}:{source_assignment_row['Accession']}",
     f"{source_assignment_row['Name']} [{source_assignment_row['Accession']}]",
     f"iedb-protein:{source_assignment_row['Species Taxon ID']}-{antigen_receptor.lower()}"
   )
@@ -187,10 +188,11 @@ def add_synonyms(row):
   synonyms = []
   if pd.isna(row['Synonyms']): return synonyms
   for synonym in row['Synonyms'].split(', '):
+    if '@' in synonym or '{' in synonym: continue
     synonyms.append(triple(
       f"UP:{row['Assigned Protein ID']}",
       "ONTIE:0003622",
-      synonym,
+      synonym.split(' ')[0],
       datatype="xsd:string"
     ))
   return synonyms
