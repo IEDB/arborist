@@ -8,13 +8,14 @@
 # 1. Fetch IEDB data: requires MySQL connection
 # 2. Build NCBI Taxonomy
 # 3. Build Organism Tree and determine active species
-# 4. TODO Select Proteomes for each active species
-# 5. TODO Assign Proteins
-# 6. TODO Build Protein Tree
+# 4. Select Proteomes for each active species
+# 5. Assign Proteins
+# 6. Build Protein Tree
 # 7. TODO Build Molecule Tree
 # 8. TODO Build Assay Tree
 # 9. TODO Build Disease Tree
 #
+# TODO: test suite
 # TODO: geolocation tree, MHC tree
 # TODO: merged SoT tree
 # TODO: test data, symlink?
@@ -63,7 +64,6 @@ help:
 .PHONY: deps
 deps:
 
-# TODO: add protein molecule
 .PHONY: all
 all: deps iedb ncbitaxon organism protein molecule disease leidos
 
@@ -83,7 +83,7 @@ clobber:
 	chmod +w -R cache/
 	rm -rf bin/ build/ cache/ current/
 
-bin/ build/ cache/ curent/:
+bin/ build/ cache/ current/:
 	mkdir -p $@
 
 
@@ -251,19 +251,18 @@ build/iedb/%.built: build/iedb/%.tsv | build/iedb/nanobot.db
 	touch $@
 
 # Extract tables of peptides and sources from SQLite tables.
-# NOTE: This could be done directly in SQLite, but we want TSV copies.
 build/iedb/peptide.tsv: src/iedb/peptide.sql build/iedb/epitope.built build/iedb/object.built | build/iedb/nanobot.db
-	src/util/sqlite2tsv $| $< $@
-
-build/iedb/structure.tsv: src/iedb/structure.sql build/iedb/epitope.built build/iedb/object.built | build/iedb/nanobot.db
 	src/util/sqlite2tsv $| $< $@
 
 build/iedb/peptide_source.tsv: src/iedb/peptide_source.sql build/iedb/source.built | build/iedb/nanobot.db
 	src/util/sqlite2tsv $| $< $@
 
-.PHONY: iedb
-iedb: build/iedb/peptide.built build/iedb/peptide_source.built
+build/iedb/structure.tsv: build/iedb/peptide.tsv
+	zcat current/iedb/structure.tsv.gz | cut -f1,2 > $@
+	src/util/map_structure_ids.py $@ $<
 
+.PHONY: iedb
+iedb: build/iedb/peptide.built build/iedb/peptide_source.built build/iedb/structure.tsv
 
 ### 2. Build NCBI Taxonomy
 #
