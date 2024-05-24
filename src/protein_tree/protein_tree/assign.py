@@ -298,6 +298,10 @@ class GeneAndProteinAssigner:
     # take out "-#" portion of the target UniProt ID because these are isoforms and 
     # won't be mapped properly to gene symbols
     blast_results_df['Target'] = blast_results_df['Target'].str.split('-').str[0]
+
+    # drop fragment proteins
+    blast_results_df['Target Name'] = blast_results_df['Target'].map(self.uniprot_id_to_name_map)
+    blast_results_df = blast_results_df[~blast_results_df['Target Name'].str.contains('(Fragment)')]
     
     # map target UniProt IDs to gene symbols
     blast_results_df['Target Gene Symbol'] = blast_results_df['Target'].map(self.uniprot_id_to_gene_map)
