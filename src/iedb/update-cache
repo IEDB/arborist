@@ -35,7 +35,7 @@ fetch ncbi_include \
 
 fetch iedb_taxa "SELECT * FROM iedb_taxa_view ORDER BY iedb_id"
 
-for TABLE in epitope source object; do
+for TABLE in epitope source object structure; do
   fetch "${TABLE}" "SELECT * FROM ${TABLE} ORDER BY ${TABLE}_id"
 done
 
