@@ -186,18 +186,12 @@ class ProteomeSelector:
 
     If there are no proteomes, return empty DataFrame.
     """
-    url = f'https://rest.uniprot.org/proteomes/stream?format=xml&query=organism_id:{self.taxon_id}'
+    # URL to get proteome list for a species - use proteome_type:1 first
+    proteome_list_url = f'https://rest.uniprot.org/proteomes/stream?format=xml&query=taxonomy_id:{self.taxon_id}'
     try:
-      r = requests.get(url)
+      r = requests.get(proteome_list_url)
       r.raise_for_status()
       proteome_list = self._parse_proteome_xml(r.text)
-
-      if proteome_list.empty: # check for children proteomes
-        url = f'https://rest.uniprot.org/proteomes/stream?format=xml&query=taxonomy_id:{self.taxon_id}'
-        r = requests.get(url)
-        r.raise_for_status()
-        proteome_list = self._parse_proteome_xml(r.text)
-
     except (requests.exceptions.ChunkedEncodingError, requests.exceptions.ReadTimeout):
       proteome_list = self._get_proteome_list()
 
