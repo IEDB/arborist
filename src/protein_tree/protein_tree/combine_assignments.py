@@ -43,6 +43,7 @@ def combine_assignments(build_path):
   all_sources_df['Assigned Gene'].fillna(all_sources_df['ARC Assignment'], inplace=True)
 
   # make sure no extra spaces are in assigned protein ID column
+  all_peptides_df['Parent ID'] = all_peptides_df['Parent ID'].str.split(' ').str[0]
   all_sources_df['Assigned Protein ID'] = all_sources_df['Assigned Protein ID'].str.split(' ').str[0]
 
   # write to files
@@ -73,51 +74,53 @@ def generate_leidos_tables(build_path):
   all_peptides_df = pd.read_csv('build/arborist/all-peptide-assignments.tsv', sep='\t')
   all_sources_df = pd.read_csv('build/arborist/all-source-assignments.tsv', sep='\t')
   
-  generate_protein_tables(build_path, all_sources_df)
+  generate_protein_tables(build_path, all_peptides_df, all_sources_df)
   generate_epitope_tables(build_path, all_peptides_df, all_sources_df)
 
 
-def generate_protein_tables(build_path, all_sources_df):
+def generate_protein_tables(build_path, all_peptides_df, all_sources_df):
   def protein_strategy(row):
-    if pd.notnull(row['ARC Assignment']):
+    if pd.notnull(row['ARC Assignment_y']):
       return 'antigen-receptor-classifier'
-    elif row['Assignment Score'] > 80:
+    elif row['Source Assignment Score'] > 90:
       return 'strong-blast-match'
-    elif row['Assignment Score'] <= 80:
+    elif row['Source Assignment Score'] <= 90:
       return 'weak-blast-match'
     else:
       return 'manual'
+  
+  df = pd.merge(all_peptides_df, all_sources_df, how='left', left_on='Source Accession', right_on='Accession')
+  df['Protein Strategy'] = df.apply(protein_strategy, axis=1)
+  df.loc[df['Parent ID'].notnull(), 'Parent IRI'] = df['Parent ID'].apply(lambda x: f'http://www.uniprot.org/uniprot/{x}')
+  df.loc[df['Parent ID'].notnull(), 'Parent Protein Database'] = 'UniProt'
 
-  all_sources_df['Protein Strategy'] = all_sources_df.apply(protein_strategy, axis=1)
-  all_sources_df.loc[all_sources_df['Assigned Protein ID'].notnull(), 'Parent IRI'] = all_sources_df['Assigned Protein ID'].apply(lambda x: f'http://www.uniprot.org/uniprot/{x}')
-  all_sources_df.loc[all_sources_df['Assigned Protein ID'].notnull(), 'Parent Protein Database'] = 'UniProt'
-
-  source_parents = all_sources_df[[
-    'Source ID', 'Accession', 'Database', 'Name', 'Aliases', 'Synonyms', 'Organism ID', 
-    'Species Taxon ID', 'Species Name', 'Proteome ID', 'Proteome Label', 'Protein Strategy', 
-    'Parent IRI', 'Parent Protein Database', 'Assigned Protein ID', 'Parent Sequence Length',
-    'Assigned Gene'
+  source_parents = df[[
+    'Source ID', 'Source Accession', 'Source Database', 'Source Name', 'Aliases', 'Synonyms', 'Organism ID_x', 
+    'Species Taxon ID_x', 'Species Name_x', 'Proteome ID', 'Proteome Label', 'Protein Strategy', 
+    'Parent IRI', 'Parent Protein Database', 'Parent ID', 'Parent Sequence Length', 'Assigned Gene'
   ]]
   source_parents.rename(columns={
-    'Species Taxon ID': 'Species ID',
-    'Species Name': 'Species Label',
-    'Assigned Protein ID': 'Parent Protein Accession',
+    'Species Taxon ID_x': 'Species ID',
+    'Species Name_x': 'Species Label',
+    'Parent ID': 'Parent Protein Accession',
     'Assigned Gene': 'Parent Protein Gene'
   }, inplace=True)
 
-  parent_proteins = all_sources_df[[
-    'Assigned Protein ID', 'Parent Protein Database', 'Assigned Protein Name',
+  parent_proteins = df[[
+    'Parent ID', 'Parent Protein Database', 'Parent Name',
     'Proteome ID', 'Proteome Label', 'Parent Sequence'
   ]]
   parent_proteins.rename(columns={
-    'Assigned Protein ID': 'Accession',
+    'Parent ID': 'Accession',
     'Parent Protein Database': 'Database',
-    'Assigned Protein Name': 'Name',
+    'Parent Name': 'Name',
     'Parent Sequence': 'Sequence'
   }, inplace=True)
 
-  source_parents.drop_duplicates(subset=['Accession'], inplace=True)
+  source_parents.drop_duplicates(subset=['Source Accession'], inplace=True)
+  source_parents.dropna(subset=['Parent IRI'], inplace=True)
   parent_proteins.drop_duplicates(subset=['Accession'], inplace=True)
+  parent_proteins.dropna(subset=['Accession'], inplace=True)
 
   source_parents.to_csv(build_path / 'arborist' / 'source-parents.tsv', sep='\t', index=False)
   parent_proteins.to_csv(build_path / 'arborist' / 'parent-proteins.tsv', sep='\t', index=False)
@@ -128,7 +131,7 @@ def generate_epitope_tables(build_path, all_peptides_df, all_sources_df):
     'Epitope ID', 'Sequence', 'Starting Position', 'Ending Position', 'Source Accession',
     'Parent Antigen ID', 'Parent Start', 'Parent End'
   ]]
-
+  
   epitope_mappings['parent_seq'] = epitope_mappings['Parent Antigen ID'].map(all_sources_df.set_index('Assigned Protein ID')['Parent Sequence'].to_dict())
   epitope_mappings['identity_alignment'] = 1.0
   epitope_mappings['similarity_alignment'] = 1.0

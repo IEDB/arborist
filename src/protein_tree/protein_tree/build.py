@@ -37,51 +37,48 @@ def owl_class(subject, label, parent):
   ]
 
 
-def build_old_tree(tree_df, source_assignments):
+def build_old_tree(tree_df, peptide_assignments):
   """Given dataframes for the tree and peptide_assignments,
   insert LDTab rows for each protein under its 'species protein' parent."""
 
-  source_assignments['Assigned Protein Name'].fillna(source_assignments['Name'], inplace=True)
-    
-  new_rows = []
-  nan_proteins = source_assignments['Assigned Protein ID'].isna()
-  species_seen = set()
+  peptide_assignments['Parent Name'].fillna(peptide_assignments['Source Name'], inplace=True)
 
-  # add parent entries as triplicate rows
-  for _, row in source_assignments[~nan_proteins].iterrows():
-    if row['ARC Assignment'] in ['TCR', 'BCR', 'MHC-I', 'MHC-II']:
-      new_rows.extend(create_antigen_receptor_node(row, new_rows, species_seen))
-      species_seen.add(row['Species Taxon ID'])
+  new_rows = []
+  species_seen = set()
+  for parent_id, group in peptide_assignments.dropna(subset=['Parent ID']).groupby('Parent ID'):
+    if group['ARC Assignment'].iloc[0] in ['TCR', 'BCR', 'MHC-I', 'MHC-II']:
+      new_rows.extend(create_antigen_receptor_node(group, new_rows, species_seen))
+      species_seen.add(group['Species Taxon ID'].iloc[0])
     else:
       new_rows.extend(
         owl_class(
-          f"UP:{row['Assigned Protein ID']}",
-          f"{row['Assigned Protein Name']} (UniProt:{row['Assigned Protein ID']})",
-          f"iedb-protein:{row['Species Taxon ID']}"
+          f"UP:{parent_id}",
+          f"{group['Parent Name'].iloc[0]} (UniProt:{parent_id})",
+          f"iedb-protein:{group['Species Taxon ID'].iloc[0]}"
       ))
 
     # fragments
-    new_rows.extend(add_fragments(row))
+    new_rows.extend(add_fragments(parent_id, group))
     
     # annotations
-    new_rows.extend(add_reviewed_status(row))
-    new_rows.extend(add_synonyms(row))
-    new_rows.extend(add_accession(row))
-    new_rows.extend(add_source_database(row))
+    new_rows.extend(add_reviewed_status(parent_id, group))
+    new_rows.extend(add_synonyms(parent_id, group))
+    new_rows.extend(add_accession(parent_id))
+    new_rows.extend(add_source_database(parent_id))
 
-  new_rows.extend(create_other_nodes(source_assignments[nan_proteins]))
+  new_rows.extend(create_other_nodes(peptide_assignments[peptide_assignments['Parent ID'].isna()]))
 
   tree_df = pd.concat([tree_df, pd.DataFrame(new_rows)], ignore_index=True)
 
   return tree_df
 
 
-def create_antigen_receptor_node(source_assignment_row, new_rows, species_seen):
+def create_antigen_receptor_node(group, new_rows, species_seen):
   """Given a row from the source_assignments dataframe that is an antigen receptor
   (TCR or BCR), return a list of triples for the antigen receptor node and create the node
   if it does not already exist."""
 
-  antigen_receptor = source_assignment_row['ARC Assignment']
+  antigen_receptor = group['ARC Assignment'].iloc[0]
   antigen_receptor = 'ab' if antigen_receptor == 'BCR' else antigen_receptor
 
   if antigen_receptor == 'TCR':
@@ -93,41 +90,42 @@ def create_antigen_receptor_node(source_assignment_row, new_rows, species_seen):
   elif antigen_receptor == 'MHC-II':
     antigen_receptor_name = 'Major Histocompatibility Complex II'
 
-  if source_assignment_row['Species Taxon ID'] not in species_seen:
+  species_id = group['Species Taxon ID'].iloc[0]
+  if species_id not in species_seen:
     new_rows.extend(
       owl_class(
-        f"iedb-protein:{source_assignment_row['Species Taxon ID']}-{antigen_receptor.lower()}",
+        f"iedb-protein:{species_id}-{antigen_receptor.lower()}",
         f"{antigen_receptor_name} chain",
-        f"iedb-protein:{source_assignment_row['Species Taxon ID']}"
+        f"iedb-protein:{species_id}"
       )
     )
   
-  prefix = 'UP' if source_assignment_row['Database'] == 'UniProt' else 'NCBI'
+  prefix = 'UP' if group['Source Database'].iloc[0] == 'UniProt' else 'NCBI'
   assignment_node = owl_class(
-    f"{prefix}:{source_assignment_row['Accession']}",
-    f"{source_assignment_row['Name']} [{source_assignment_row['Accession']}]",
-    f"iedb-protein:{source_assignment_row['Species Taxon ID']}-{antigen_receptor.lower()}"
+    f"{prefix}:{group['Source Accession'].iloc[0]}",
+    f"{group['Source Name'].iloc[0]} [{group['Source Accession'].iloc[0]}]",
+    f"iedb-protein:{species_id}-{antigen_receptor.lower()}"
   )
 
   return assignment_node
 
 
-def add_fragments(row):
+def add_fragments(parent_id, group):
   """Given a row from the source_assignments dataframe, return a list of triples
   for the fragments of the protein."""
 
-  if pd.isna(row['Fragments']): return []
+  if pd.isna(group['Fragments'].iloc[0]): return []
   
   with open(Path(__file__).parent.parent / 'data' / 'fragment-type.json', 'r') as f:
     fragment_type_map = json.load(f)
   
-  fragment_count = len(row['Fragments'].split(', '))
+  fragment_count = len(group['Fragments'].iloc[0].split(', '))
   if fragment_count < 2: return []
 
   fragment_count = 0
   fragment_rows = []
 
-  for fragment in row['Fragments'].split(', '):
+  for fragment in group['Fragments'].iloc[0].split(', '):
 
     fragment_type = fragment.split('-')[0]
     fragment_type = fragment_type_map[fragment_type]
@@ -141,26 +139,26 @@ def add_fragments(row):
       continue
 
     fragment_rows.extend(owl_class(
-      f"UP:{row['Assigned Protein ID']}-fragment-{fragment_count+1}",
+      f"UP:{parent_id}-fragment-{fragment_count+1}",
       f"{fragment_type} ({fragment_start}-{fragment_end})",
-      f"UP:{row['Assigned Protein ID']}"
+      f"UP:{parent_id}"
     ))
 
     fragment_rows.extend(
       [triple(
-        f"UP:{row['Assigned Protein ID']}-fragment-{fragment_count+1}",
+        f"UP:{parent_id}-fragment-{fragment_count+1}",
         "ONTIE:0003627",
         fragment_start,
         datatype="xsd:integer"
       ),
       triple(
-        f"UP:{row['Assigned Protein ID']}-fragment-{fragment_count+1}",
+        f"UP:{parent_id}-fragment-{fragment_count+1}",
         "ONTIE:0003628",
         fragment_end,
         datatype="xsd:integer"
       ),
       triple(
-        f"UP:{row['Assigned Protein ID']}-fragment-{fragment_count+1}",
+        f"UP:{parent_id}-fragment-{fragment_count+1}",
         "ONTIE:0003620",
         f"{fragment_count+1} {fragment_type} ({fragment_start}-{fragment_end})",
         datatype="xsd:string"
@@ -171,26 +169,26 @@ def add_fragments(row):
 
   return fragment_rows
 
-def add_reviewed_status(row):
+def add_reviewed_status(parent_id, group):
   """Given a row from the source_assignments dataframe, return a triple
   of the reviewed status of the protein."""
   return [triple(
-    f"UP:{row['Assigned Protein ID']}",
+    f"UP:{parent_id}",
     "UC:reviewed",
-    "true" if row["Assigned Protein Reviewed"] == "sp" else "false",
+    "true" if group["Assigned Protein Reviewed"].iloc[0] == "sp" else "false",
     datatype="xsd:boolean"
   )]
 
 
-def add_synonyms(row):
+def add_synonyms(parent_id, group):
   """Given a row from the source_assignments dataframe, return a list of triples
   for the synonyms of the protein."""
   synonyms = []
-  if pd.isna(row['Synonyms']): return synonyms
-  for synonym in row['Synonyms'].split(', '):
+  if pd.isna(group['Source Synonyms'].iloc[0]): return synonyms
+  for synonym in group['Source Synonyms'].iloc[0].split(', '):
     if '@' in synonym or '{' in synonym: continue
     synonyms.append(triple(
-      f"UP:{row['Assigned Protein ID']}",
+      f"UP:{parent_id}",
       "ONTIE:0003622",
       synonym.split(' ')[0],
       datatype="xsd:string"
@@ -198,41 +196,41 @@ def add_synonyms(row):
   return synonyms
 
 
-def add_accession(row):
+def add_accession(parent_id):
   """Given a row from the source_assignments dataframe, return a list of triples
   for the accession of the protein and the URL to the UniProt entry."""
   return [triple(
-    f"UP:{row['Assigned Protein ID']}",
+    f"UP:{parent_id}",
     "ONTIE:0003623",
-    row['Assigned Protein ID'],
+    parent_id,
     datatype="xsd:string"
   ),
   triple(
-    f"UP:{row['Assigned Protein ID']}",
+    f"UP:{parent_id}",
     "ONTIE:0003624",
-    f"http://www.uniprot.org/uniprot/{row['Assigned Protein ID']}",
+    f"http://www.uniprot.org/uniprot/{parent_id}",
     datatype="xsd:string"
   )]
 
 
-def add_source_database(row):
+def add_source_database(parent_id):
   """Given a row from the source_assignments dataframe, return a triple
   for the source database of the protein (always UniProt)."""
   return [triple(
-    f"UP:{row['Assigned Protein ID']}",
+    f"UP:{parent_id}",
     "ONTIE:0003625",
     "UniProt",
     datatype="xsd:string"
   )]
 
 
-def create_other_nodes(not_assigned_sources):
+def create_other_nodes(not_assigned):
   """Given a dataframe of sources without an assigned protein,
   return a list of triples for each 'Other' node for specific species."""
   
   new_rows = []
-  species_with_nan = not_assigned_sources['Species Taxon ID'].unique()
-  species_id_to_name = {id: name for id, name in zip(not_assigned_sources['Species Taxon ID'], not_assigned_sources['Species Name'])}
+  species_with_nan = not_assigned['Species Taxon ID'].unique()
+  species_id_to_name = {id: name for id, name in zip(not_assigned['Species Taxon ID'], not_assigned['Species Name'])}
   
   # create "Other" node for each certain species
   for species_id in species_with_nan:
@@ -246,12 +244,12 @@ def create_other_nodes(not_assigned_sources):
     )
 
   # add proteins without a parent to the "Other" node
-  for _, row in not_assigned_sources.iterrows():
+  for source_accession, group in not_assigned.groupby('Source Accession'):
     new_rows.extend(
       owl_class(
-        f"UP:{row['Accession']}" if row['Database'] == 'UniProt' else f"NCBI:{row['Accession']}",
-        f"{row['Name']} [{row['Accession']}]",
-        f"iedb-protein:{row['Species Taxon ID']}-other"
+        f"UP:{source_accession}" if group['Source Database'].iloc[0] == 'UniProt' else f"NCBI:{source_accession}",
+        f"{group['Source Name'].iloc[0]} [{source_accession}]",
+        f"iedb-protein:{group['Species Taxon ID'].iloc[0]}-other"
       )
     )
   
@@ -300,15 +298,15 @@ def main():
   build_path = Path(args.build_path)
 
   # drop duplicates in source_assignments but keep NaNs
-  source_assignments = pd.read_csv(build_path / 'arborist' / 'all-source-assignments.tsv', sep='\t')
-  isna = source_assignments['Assigned Protein ID'].isna()
-  source_assignments = pd.concat([
-    source_assignments[isna],
-    source_assignments[~isna].drop_duplicates(subset=['Assigned Protein ID'])
-  ]).reset_index(drop=True)
+  # source_assignments = pd.read_csv(build_path / 'arborist' / 'all-source-assignments.tsv', sep='\t')
+  # isna = source_assignments['Assigned Protein ID'].isna()
+  # source_assignments = pd.concat([
+  #   source_assignments[isna],
+  #   source_assignments[~isna].drop_duplicates(subset=['Assigned Protein ID'])
+  # ]).reset_index(drop=True)
 
   peptide_assignments = pd.read_csv(build_path / 'arborist' / 'all-peptide-assignments.tsv', sep='\t')
-  peptide_assignments.drop_duplicates(subset=['Parent Antigen ID'], inplace=True)
+  # peptide_assignments.drop_duplicates(subset=['Parent Antigen ID'], inplace=True)
 
   with sqlite3.connect(build_path / 'arborist' / 'nanobot.db') as connection:
     # Copy the organism_tree, but replace each taxon with 'taxon protein'.
@@ -351,7 +349,7 @@ def main():
     tree_df.loc[tree_df['object'] == 'iedb-protein:28384', 'object'] = 'PR:000000001'
     tree_df.loc[tree_df['object'] == 'OBI:0100026', 'object'] = 'PR:000000001'
 
-    old_df = build_old_tree(tree_df, source_assignments)
+    old_df = build_old_tree(tree_df, peptide_assignments)
     new_df = build_new_tree(tree_df, peptide_assignments)
   
     old_df.to_sql('protein_tree_old', connection, if_exists='replace', index=False)
