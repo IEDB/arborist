@@ -3,13 +3,21 @@
 import argparse
 import pandas as pd
 
+import warnings
+warnings.filterwarnings('ignore')
+
 
 def map_structure_ids(structure_path, peptide_path):
     structure = pd.read_csv(structure_path, sep='\t')
     peptide = pd.read_csv(peptide_path, sep='\t')
 
-    structure_map = structure.set_index('description')['structure_id'].to_dict()
+    # get the full regions for certain structures that have it
+    structure['description'] = structure['mc_region'].combine_first(structure['disc_region']).combine_first(structure['description'])
 
+    # separate PTM from description
+    structure['description'] = structure['description'].str.split(r'\s*\+\s*').str[0]
+
+    structure_map = structure.set_index('description')['structure_id'].to_dict()
     peptide['Epitope ID'] = peptide['Sequence'].map(structure_map)
     return peptide
 
