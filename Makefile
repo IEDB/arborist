@@ -258,7 +258,7 @@ build/iedb/peptide_source.tsv: src/iedb/peptide_source.sql build/iedb/source.bui
 	src/util/sqlite2tsv $| $< $@
 
 build/iedb/structure.tsv: build/iedb/peptide.tsv
-	zcat current/iedb/structure.tsv.gz | cut -f1,2 > $@
+	zcat current/iedb/structure.tsv.gz | cut -f1,2,13,15 > $@
 	src/util/map_structure_ids.py $@ $<
 
 .PHONY: iedb
@@ -432,10 +432,11 @@ build/arborist/allergens.tsv: src/util/csv2tsv.py build/arborist/allergens.csv
 	python3 $^ $@
 
 build/arborist/manual-parents.tsv: build/arborist/allergens.tsv
-	wget --no-check-certificate 'https://docs.google.com/spreadsheets/d/1VUDYmmnQURRnuqyVxZGyF8JCgAIiooaKCmi3_mf03o8/export?format=tsv&gid=2087231134' -O $@
+	# wget --no-check-certificate 'https://docs.google.com/spreadsheets/d/1VUDYmmnQURRnuqyVxZGyF8JCgAIiooaKCmi3_mf03o8/export?format=tsv&gid=2087231134' -O $@
+	cp src/protein_tree/data/manual-parents.tsv $@
 
 build/arborist/protein-tree.assigned: build/arborist/allergens.tsv build/arborist/manual-parents.tsv
-	python src/protein_tree/protein_tree/assign.py -b build/ -a
+	python src/protein_tree/protein_tree/assign.py -b build/ -a -n 14
 	touch $@
 
 
