@@ -29,7 +29,7 @@ organism_tree_tsv	curie			taxon_CURIE	primary	the CURIE for this taxon
 organism_tree_tsv	label			label	unique	the label for this taxon
 organism_tree_tsv	label_source			label		the source for this label
 organism_tree_tsv	rank		empty	label		the taxonomic rank for this taxon
-organism_tree_tsv	level		empty	taxon_level		the level of the taxon: upper, species, lower
+organism_tree_tsv	level			taxon_level		the level of the taxon: upper, species, lower
 organism_tree_tsv	epitope_count		empty	natural_number		the number of epitopes in IEDB for this taxon
 organism_tree_tsv	parent			CURIE		the parent for this taxon
 organism_tree_tsv	parent_label			label		the label of the parent

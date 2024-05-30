@@ -45,7 +45,7 @@ lower_ranks = [
     'subspecies',
     'subtribe',
     'tribe',
-    "varietas",
+    'varietas',
 ]
 
 
@@ -385,17 +385,29 @@ def main():
     # Assign species to lower taxa
     species_to_add = set()
     for curie, row in tree.items():
-        if 'level' in row and row['level'] != 'lower':
+        if 'level' in row and row['level'] == 'upper':
             continue
 
         if 'rank' in row:
             rank = row['rank']
         else:
             rank = get_rank(con, curie)
+            if rank:
+                row['rank'] = rank
+
+        species = get_species(con, tree, curie)
 
         if rank in upper_ranks:
+            if species:
+                print(f'WARN: Found species for upper taxon: {species}')
             continue
         elif rank == 'species':
+            if species and species != curie:
+                print(f'WARN: Found alternate species {species} for curie {curie}')
+            species = curie
+        elif 'level' in row and row['level'] == 'species':
+            if species and species != curie:
+                print(f'WARN: Found alternate species {species} for curie {curie}')
             species = curie
         else:
             species = get_species(con, tree, curie)
@@ -403,6 +415,8 @@ def main():
         if species:
             row['species'] = species
             row['species_label'] = get_label(con, tree, species)
+            if species != curie:
+                row['level'] = 'lower'
             if species not in tree:
                 species_to_add.add(species)
 
@@ -415,7 +429,7 @@ def main():
             'label': label,
             'label_source': label_source,
             'rank': rank,
-            'level': get_level(rank),
+            'level': 'species',
             'species': species,
             'species_label': label,
             'source_table': 'species not otherwise in use',
@@ -437,32 +451,32 @@ def main():
 
     bad_species = [
         # 2023-10-17 JAO: weird species added by NCBI, not in UniProt
-        'NCBITaxon:3046277', # Orthoflavivirus flavi
-        'NCBITaxon:3048148', # Metapneumovirus hominis
-        'NCBITaxon:3048158', # Orthoflavivirus japonicum
-        'NCBITaxon:3048278', # Circovirus porcine1
-        'NCBITaxon:3048279', # Circovirus porcine2
-        'NCBITaxon:3048287', # Orthoflavivirus powassanense
-        'NCBITaxon:3048448', # Orthoflavivirus nilense
-        'NCBITaxon:3048459', # Orthoflavivirus zikaense
-        'NCBITaxon:3049953', # Respirovirus pneumoniae
-        'NCBITaxon:3050243', # Varicellovirus bovinealpha1
-        'NCBITaxon:3050276', # Varicellovirus equidalpha1
-        'NCBITaxon:3050278', # Varicellovirus equidalpha4
-        'NCBITaxon:3050281', # Percavirus equidgamma2
-        'NCBITaxon:3050287', # Mardivirus gallidalpha2
-        'NCBITaxon:3050297', # Roseolovirus humanbeta6b
-        'NCBITaxon:3050323', # Muromegalovirus muridbeta1
-        'NCBITaxon:3050327', # Rhadinovirus muridgamma4
-        'NCBITaxon:3050355', # Varicellovirus suidalpha1
-        'NCBITaxon:3051375', # Orthoavulavirus javaense
-        'NCBITaxon:3052345', # Morbillivirus hominis
-        'NCBITaxon:3052346', # Morbillivirus pecoris
-        'NCBITaxon:3052347', # Morbillivirus phocae
-        'NCBITaxon:3052458', # Orthoebolavirus bundibugyoense
-        'NCBITaxon:3052464', # Orthoflavivirus denguei
-        'NCBITaxon:3052465', # Orthoflavivirus encephalitidis
-        'NCBITaxon:3052560', # Orthorubulavirus parotitidis
+        'NCBITaxon:3046277',  # Orthoflavivirus flavi
+        'NCBITaxon:3048148',  # Metapneumovirus hominis
+        'NCBITaxon:3048158',  # Orthoflavivirus japonicum
+        'NCBITaxon:3048278',  # Circovirus porcine1
+        'NCBITaxon:3048279',  # Circovirus porcine2
+        'NCBITaxon:3048287',  # Orthoflavivirus powassanense
+        'NCBITaxon:3048448',  # Orthoflavivirus nilense
+        'NCBITaxon:3048459',  # Orthoflavivirus zikaense
+        'NCBITaxon:3049953',  # Respirovirus pneumoniae
+        'NCBITaxon:3050243',  # Varicellovirus bovinealpha1
+        'NCBITaxon:3050276',  # Varicellovirus equidalpha1
+        'NCBITaxon:3050278',  # Varicellovirus equidalpha4
+        'NCBITaxon:3050281',  # Percavirus equidgamma2
+        'NCBITaxon:3050287',  # Mardivirus gallidalpha2
+        'NCBITaxon:3050297',  # Roseolovirus humanbeta6b
+        'NCBITaxon:3050323',  # Muromegalovirus muridbeta1
+        'NCBITaxon:3050327',  # Rhadinovirus muridgamma4
+        'NCBITaxon:3050355',  # Varicellovirus suidalpha1
+        'NCBITaxon:3051375',  # Orthoavulavirus javaense
+        'NCBITaxon:3052345',  # Morbillivirus hominis
+        'NCBITaxon:3052346',  # Morbillivirus pecoris
+        'NCBITaxon:3052347',  # Morbillivirus phocae
+        'NCBITaxon:3052458',  # Orthoebolavirus bundibugyoense
+        'NCBITaxon:3052464',  # Orthoflavivirus denguei
+        'NCBITaxon:3052465',  # Orthoflavivirus encephalitidis
+        'NCBITaxon:3052560',  # Orthorubulavirus parotitidis
     ]
     for curie in tree.keys():
         if curie in bad_species:

@@ -285,7 +285,7 @@ build/arborist/nanobot.db: build/arborist/nanobot.toml src/arborist/*.tsv
 cache/ncbitaxon/:
 	mkdir $@
 
-TAXDMP_VERSION:= $(shell date +"%Y-%m-01")
+TAXDMP_VERSION := $(shell date +"%Y-%m-01")
 
 # Fetch the taxdmp.zip for this month.
 cache/ncbitaxon/taxdmp_$(TAXDMP_VERSION).zip: | cache/ncbitaxon/ current/
@@ -405,6 +405,14 @@ build/species/%/sources.tsv: build/iedb/peptide_source.tsv build/species/%/taxa.
 
 build/arborist/proteomes.built: build/arborist/proteome.tsv
 	python3 src/protein_tree/protein_tree/select_proteome.py -b build/ -a
+
+# Remove epitope counts from proteome table.
+build/arborist/proteome_after.tsv: build/arborist/proteome.tsv
+	qsv select 1-5,7- $< --output $@
+
+# Compare new proteomes to src/proteome.
+build/arborist/proteome.html: src/proteome/proteome.tsv build/arborist/proteome_after.tsv
+	daff --output $@ $^
 
 .PHONY: proteome
 proteome: build/arborist/proteomes.built
