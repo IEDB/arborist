@@ -64,6 +64,7 @@ mysql \
   --user="${IEDB_MYSQL_USER}" \
   --password="${IEDB_MYSQL_PASSWORD}" \
   "${IEDB_MYSQL_DATABASE}" \
+  --skip-ssl \
   --execute "${MYSQL_QUERY}" \
   --quick \
 > "${TEMP_FILE}"
