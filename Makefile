@@ -187,6 +187,18 @@ bin/hmmscan: build/hmmer-$(HMMER_VERSION) | bin/
 deps: bin/hmmscan
 endif
 
+# Install MMseqs2 if not already present
+ifeq ($(shell command -v mmseqs),)
+MMSEQS_VERSION := 15-6f452
+build/mmseqs-linux-sse41.tar.gz: | build/
+	curl -L -o $@ 'https://github.com/soedinglab/MMseqs2/releases/download/15-6f452/mmseqs-linux-sse41.tar.gz'
+build/mmseqs-linux-sse41: build/mmseqs-linux-sse41.tar.gz
+	cd build/ && tar xvf $(notdir $<)
+bin/mmseqs: build/mmseqs | bin/
+	cp $</bin/mmseqs $@
+	rm -rf $<
+deps: bin/mmseqs
+endif
 
 ### 1. Fetch IEDB Data
 #
