@@ -1,6 +1,5 @@
 SELECT DISTINCT
-  source_id AS 'Source ID',
-  accession AS 'Accession',
+  accession AS 'Source Accession',
   database AS 'Database',
   name AS 'Name',
   aliases AS 'Aliases',

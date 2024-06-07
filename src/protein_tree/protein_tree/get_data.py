@@ -21,7 +21,7 @@ class DataFetcher:
 
     # keep only peptides whose source is in sources_df
     peptides_df = peptides_df[
-      peptides_df['Source Accession'].isin(sources_df['Accession'])
+      peptides_df['Source Accession'].isin(sources_df['Source Accession'])
     ]
 
     # get allergen data
@@ -131,7 +131,7 @@ class DataFetcher:
       all_sources: list of all peptide sources from the backend.
       all_taxa: list of all active children taxa for a species.
     """
-    return all_sources[all_sources['Accession'].isin(accessions)]
+    return all_sources[all_sources['Source Accession'].isin(accessions)]
 
   @staticmethod
   def update_species():

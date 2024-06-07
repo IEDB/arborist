@@ -18,6 +18,7 @@ from pepmatch import Preprocessor, Matcher
 from protein_tree.get_data import DataFetcher
 from protein_tree.select_proteome import ProteomeSelector
 
+
 class GeneAndProteinAssigner:
   def __init__(
     self,
@@ -563,7 +564,15 @@ def run(taxon_id, species_name, group, all_taxa, build_path, all_peptides, all_s
   species_path = build_path / 'species' / f'{taxon_id}' # directory to write species data
 
   peptides_df = DataFetcher(build_path).get_peptides_for_species(all_peptides, all_taxa)
+  
   sources_df = DataFetcher(build_path).get_sources_for_species(all_sources, peptides_df['Source Accession'].tolist())
+  sources_df['Length'] = sources_df['Sequence'].str.len()
+  source_cols = [
+    'Source Accession', 'Name', 'Database', 'Aliases', 'Synonyms', 'Sequence', 'Length', 'IRI'
+  ]
+  sources_df[source_cols].to_csv(species_path / 'source-data.tsv', sep='\t', index=False)
+
+  exit(1)
 
   if sources_df.empty or peptides_df.empty:
     return
