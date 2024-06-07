@@ -32,12 +32,12 @@ command -v qsv > /dev/null || fail 'Please install qsv'
 HEADERS=$(qsv headers --just-names "$TSV" | tr '\n' ',')
 qsv enum --new-column row_number "$TSV" \
 | qsv select "row_number,$HEADERS" \
-  --output "$NEW_TSV"
+| qsv behead --output "$NEW_TSV"
 
 # Load table into SQLite
 sqlite3 "$DB" "$PRAGMAS" \
   ".mode tabs" \
-  ".import --skip 1 '$NEW_TSV' '$TABLE'" \
+  ".import '$NEW_TSV' '$TABLE'" \
   || fail "Failed to load $TSV into $DB"
 rm "$NEW_TSV"
 

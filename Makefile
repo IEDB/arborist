@@ -206,7 +206,7 @@ current/iedb/%:
 	src/iedb/update-cache "$$IEDB_MYSQL_DATABASE"
 
 # Unzip an IEDB table from the cache into the build directory,
-build/iedb/%.tsv: current/iedb/%.tsv.gz
+build/iedb/%.tsv: current/iedb/%.tsv.gz | build/iedb/
 	zcat $< > $@
 
 # Load IEDB tables into SQLite using Nanobot.
