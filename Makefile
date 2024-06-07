@@ -191,10 +191,10 @@ endif
 ifeq ($(shell command -v mmseqs),)
 MMSEQS_VERSION := 15-6f452
 build/mmseqs-linux-sse41.tar.gz: | build/
-	curl -L -o $@ 'https://github.com/soedinglab/MMseqs2/releases/download/15-6f452/mmseqs-linux-sse41.tar.gz'
+	curl -L -o $@ 'https://github.com/soedinglab/MMseqs2/releases/download/$(MMSEQS_VERSION)/mmseqs-linux-sse41.tar.gz'
 build/mmseqs-linux-sse41: build/mmseqs-linux-sse41.tar.gz
 	cd build/ && tar xvf $(notdir $<)
-bin/mmseqs: build/mmseqs | bin/
+bin/mmseqs: build/mmseqs-linux-sse41 | bin/
 	cp $</bin/mmseqs $@
 	rm -rf $<
 deps: bin/mmseqs
