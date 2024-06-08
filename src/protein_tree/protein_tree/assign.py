@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -85,18 +83,16 @@ class GeneAndProteinAssigner:
     """
     # assign None to all peptide sources and peptides to start
     for i, row in sources_df.iterrows():
-      self.source_gene_assignment[row['Accession']] = None
-      self.source_protein_assignment[row['Accession']] = None
-      self.source_assignment_score[row['Accession']] = None
+      self.source_gene_assignment[row['Source Accession']] = None
+      self.source_protein_assignment[row['Source Accession']] = None
+      self.source_assignment_score[row['Source Accession']] = None
     for i, row in peptides_df.iterrows():
       self.peptide_protein_assignment[(row['Source Accession'], row['Sequence'])] = None
 
     self.source_to_peptides_map = self._create_source_to_peptides_map(peptides_df)
-
-    sources_df['Length'] = sources_df['Sequence'].str.len() # add length column to sources
     self.source_length_map = dict( # create map of peptide sources to their length
       zip(
-        sources_df['Accession'],
+        sources_df['Source Accession'],
         sources_df['Length']
       )
     )
@@ -112,21 +108,21 @@ class GeneAndProteinAssigner:
     print('Done.\n')
 
     # map peptide sources to their BLAST matches
-    sources_df.loc[:, 'Assigned Gene'] = sources_df['Accession'].map(self.source_gene_assignment)    
+    sources_df.loc[:, 'Assigned Gene'] = sources_df['Source Accession'].map(self.source_gene_assignment)    
     sources_df.loc[:, 'Assigned Gene'] = sources_df['Assigned Gene'].fillna(
-      sources_df['Accession'].map(self.source_arc_assignment).apply(lambda x: x[0] if pd.notna(x) else x)
+      sources_df['Source Accession'].map(self.source_arc_assignment).apply(lambda x: x[0] if pd.notna(x) else x)
     )
-    sources_df.loc[:, 'Assigned Protein ID'] = sources_df['Accession'].map(self.source_protein_assignment)
+    sources_df.loc[:, 'Assigned Protein ID'] = sources_df['Source Accession'].map(self.source_protein_assignment)
     sources_df.loc[:, 'Assigned Protein Name'] = sources_df['Assigned Protein ID'].map(self.uniprot_id_to_name_map)
     sources_df.loc[:, 'Assigned Protein Reviewed'] = sources_df['Assigned Protein ID'].map(self.uniprot_id_to_database_map)
-    sources_df.loc[:, 'Assignment Score'] = sources_df['Accession'].map(self.source_assignment_score)
+    sources_df.loc[:, 'Assignment Score'] = sources_df['Source Accession'].map(self.source_assignment_score)
     
     # map peptide sources to their ARC assignments
-    sources_df.loc[:, 'ARC Assignment'] = sources_df['Accession'].map(
+    sources_df.loc[:, 'ARC Assignment'] = sources_df['Source Accession'].map(
       self.source_arc_assignment).apply(lambda x: x[0] if pd.notna(x) else x)
-    sources_df.loc[:, 'ARC Chain Type'] = sources_df['Accession'].map(
+    sources_df.loc[:, 'ARC Chain Type'] = sources_df['Source Accession'].map(
       self.source_arc_assignment).apply(lambda x: x[1] if pd.notna(x) else x)
-    sources_df.loc[:, 'ARC MHC Allele'] = sources_df['Accession'].map(
+    sources_df.loc[:, 'ARC MHC Allele'] = sources_df['Source Accession'].map(
       self.source_arc_assignment).apply(lambda x: x[2] if pd.notna(x) else x)
     
     # add synonyms and fragment data for sources
@@ -170,7 +166,7 @@ class GeneAndProteinAssigner:
 
     self._remove_files()
     
-    num_sources = len(sources_df['Accession'].drop_duplicates())
+    num_sources = len(sources_df['Source Accession'].drop_duplicates())
     num_peptides = len(peptides_df[['Source Accession', 'Sequence']].drop_duplicates())
     num_matched_sources = len(sources_df[sources_df['Assigned Protein ID'].notnull()])
     num_matched_peptides = len(peptides_df[peptides_df['Parent Antigen Gene Isoform ID'].notnull()])
@@ -239,7 +235,7 @@ class GeneAndProteinAssigner:
       seq_records.append(
         SeqRecord(
           Seq(row['Sequence']),
-          id=row['Accession'],
+          id=row['Source Accession'],
           description='')
       )
     with open(f'{self.species_path}/{filename}.fasta', 'w') as f:
@@ -275,11 +271,11 @@ class GeneAndProteinAssigner:
       return
     
     os.system( # make BLAST database from proteome
-      f'makeblastdb -in {species_path}/proteome.fasta '\
+      f'bin/makeblastdb -in {species_path}/proteome.fasta '\
       f'-dbtype prot > /dev/null'
     )
     os.system( # run blastp
-      f'blastp -query {species_path}/sources.fasta '\
+      f'bin/blastp -query {species_path}/sources.fasta '\
       f'-db {species_path}/proteome.fasta '\
       f'-evalue 1  -num_threads {self.num_threads} -outfmt 10 '\
       f'-out {species_path}/blast_results.csv'
@@ -456,7 +452,7 @@ class GeneAndProteinAssigner:
     try:
       past_arc_results_df = pd.read_csv(f'{self.species_path}/ARC_results.tsv', sep='\t')
       past_arc_ids = set(past_arc_results_df['id'])
-      arc_sources_df = sources_df[(~sources_df['Accession'].isin(past_arc_ids)) & (sources_df['Sequence'].notnull())]
+      arc_sources_df = sources_df[(~sources_df['Source Accession'].isin(past_arc_ids)) & (sources_df['Sequence'].notnull())]
       past_results = True
     except FileNotFoundError:
       arc_sources_df = sources_df
@@ -515,8 +511,6 @@ class GeneAndProteinAssigner:
     allergen_map = allergen_df.set_index('AllergenID')['AccProtein'].to_dict()
     manual_df['Parent Accession'] = manual_df.apply(replace_allergen_parent, axis=1)
 
-    # print(manual_df['Parent Accession'].to_list())
-
     manual_gene_map = manual_df.set_index('Accession')['Accession Gene'].to_dict()
     manual_protein_id_map = manual_df.set_index('Accession')['Parent Accession'].to_dict()
     manual_protein_name_map = manual_df.set_index('Accession')['Parent Name'].to_dict()
@@ -571,8 +565,6 @@ def run(taxon_id, species_name, group, all_taxa, build_path, all_peptides, all_s
     'Source Accession', 'Name', 'Database', 'Aliases', 'Synonyms', 'Sequence', 'Length', 'IRI'
   ]
   sources_df[source_cols].to_csv(species_path / 'source-data.tsv', sep='\t', index=False)
-
-  exit(1)
 
   if sources_df.empty or peptides_df.empty:
     return
@@ -667,7 +659,7 @@ if __name__ == '__main__':
     species_df['Species Label']))
 
   if all_species: # run all species at once
-    for taxon_id in valid_taxon_ids:
+    for taxon_id in valid_taxon_ids[0:500]:
       species_name = taxon_to_species_map[taxon_id]
       group = species_df[species_df['Species ID'] == taxon_id]['Group'].iloc[0]
       all_taxa = [int(taxon) for taxon in all_taxa_map[taxon_id].split(', ')]

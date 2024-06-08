@@ -1,4 +1,5 @@
 SELECT DISTINCT
+  source_id AS 'Source ID',
   accession AS 'Source Accession',
   database AS 'Database',
   name AS 'Name',
