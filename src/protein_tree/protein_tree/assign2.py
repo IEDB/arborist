@@ -120,11 +120,7 @@ class SourceProcessor:
     alignments = alignments.with_columns(
       pl.col('Alignment Length').mul(pl.col('% Identity')).truediv(pl.col('Query Length')).alias('Score')
     )
-
-    # TODO: leave from here - Polars conversion
-    top_proteins = alignments.groupby('Query', group_keys=False).apply(lambda x: x.nlargest(1, 'Score')).reset_index(drop=True)
-
-    return top_proteins
+    return alignments.groupby('Query').agg(pl.all().sort_by('Score').last())
 
   def get_protein_data(self, top_proteins):
     proteome = pl.read_csv(self.species_path / 'proteome.tsv', separator='\t')
