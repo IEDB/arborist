@@ -1,7 +1,6 @@
-import os
 import argparse
 import subprocess
-import pandas as pd
+import polars as pl
 from pathlib import Path
 
 from protein_tree.data_fetch import DataFetcher
@@ -46,7 +45,7 @@ class SourceProcessor:
 
     if self.group == 'vertebrate':
       self.run_arc()
-      arc_results = pd.read_csv(self.species_path / 'arc-results.tsv', sep='\t')
+      # arc_results = pd.read_csv(self.species_path / 'arc-results.tsv', sep='\t')
 
     if self.run_mmseqs2:
       self.mmseqs2_isoforms()
@@ -57,14 +56,11 @@ class SourceProcessor:
     top_protein_data = self.get_protein_data(top_proteins)
 
   def write_source_data(self):
-    source_cols = [
-      'Source ID', 'Source Accession', 'Name', 'Database', 'Aliases', 'Synonyms', 
-      'Sequence', 'Length', 'Organism ID', 'Organism Name', 'IRI']
-    self.sources.to_csv(self.species_path / 'source-data.tsv', sep='\t', index=False, columns=source_cols)
+    self.sources.write_csv(self.species_path / 'source-data.tsv', separator='\t')
 
   def write_isoforms_to_fasta(self):
     with open(self.fasta_path, 'w') as fasta_file:
-      for _, row in self.sources.iterrows():
+      for row in self.sources.iter_rows(named=True):
         fasta_file.write(f">{row['Source Accession']}\n{row['Sequence']}\n")
 
   def run_arc(self):
@@ -111,23 +107,28 @@ class SourceProcessor:
       'Query Start', 'Query End', 'Subject Start', 'Subject End', 'E-value', 'Bit Score'
     ]
     if self.run_mmseqs2:
-      alignments = pd.read_csv(self.species_path / 'alignments.tsv', sep='\t', header=None, names=alignment_cols)
+      alignments = pl.read_csv(self.species_path / 'alignments.tsv', separator='\t', has_header=False, new_columns=alignment_cols)
       alignments['% Identity'] = alignments['% Identity'] * 100
     else:
-      alignments = pd.read_csv(self.species_path / 'alignments.csv', header=None, names=alignment_cols)
-      alignments['Subject'] = alignments['Subject'].str.split('|').str[1] # Uniprot ID
+      alignments = pl.read_csv(self.species_path / 'alignments.csv', separator=',', has_header=False, new_columns=alignment_cols)
+      alignments = alignments.with_columns(pl.col('Subject').str.split('|').list.get(1))
 
-    query_length_map = self.sources.set_index('Source Accession')['Length'].to_dict()
-    alignments['Query Length'] = alignments['Query'].map(query_length_map)
-    alignments['Score'] = (alignments['Alignment Length'] * alignments['% Identity']) / alignments['Query Length']
+    query_length_map = dict(self.sources.select('Source Accession', 'Length').iter_rows())
+    alignments = alignments.with_columns(
+      pl.col('Query').map_dict(query_length_map).alias('Query Length')
+    )
+    alignments = alignments.with_columns(
+      pl.col('Alignment Length').mul(pl.col('% Identity')).truediv(pl.col('Query Length')).alias('Score')
+    )
 
-    top_proteins = alignments.groupby('Query').apply(lambda x: x.nlargest(1, 'Score')).reset_index(drop=True)
+    # TODO: leave from here - Polars conversion
+    top_proteins = alignments.groupby('Query', group_keys=False).apply(lambda x: x.nlargest(1, 'Score')).reset_index(drop=True)
 
     return top_proteins
 
   def get_protein_data(self, top_proteins):
-    proteome = pd.read_csv(self.species_path / 'proteome.tsv', sep='\t')
-    protein_data = pd.merge(top_proteins, proteome, how='left', left_on='Subject', right_on='Protein ID')
+    proteome = pl.read_csv(self.species_path / 'proteome.tsv', separator='\t')
+    protein_data = top_proteins.join(proteome, how='left', left_on='Subject', right_on='Protein ID')
     print(protein_data)
 
 
@@ -141,12 +142,12 @@ class PeptideProcessor:
 
 
 def do_assignments(taxon_id):
-  species_row = active_species.loc[active_species['Species ID'] == taxon_id].iloc[0]
-  group = species_row['Group']
-  active_taxa = [int(taxon_id) for taxon_id in species_row['Active Taxa'].split(', ')]
+  species_row = active_species.row(by_predicate=pl.col('Species ID') == taxon_id)
+  group = species_row[4]
+  active_taxa = [int(taxon_id) for taxon_id in species_row[3].split(', ')]
   peptides = data_fetcher.get_peptides_for_species(all_peptides, active_taxa)
-  sources = data_fetcher.get_sources_for_species(all_sources, peptides['Source Accession'].unique())
-  sources['Length'] = sources['Sequence'].str.len()
+  sources = data_fetcher.get_sources_for_species(all_sources, peptides['Source Accession'].to_list())
+  sources = sources.with_columns(pl.col('Sequence').str.len_chars().alias('Length'))
   config = {
     'taxon_id': taxon_id,
     'group': group,
@@ -167,7 +168,7 @@ if __name__ == "__main__":
   all_species = not bool(taxon_id)
 
   build_path = Path(__file__).parents[3] / 'build'
-  active_species = pd.read_csv(build_path / 'arborist' / 'active-species.tsv', sep='\t')
+  active_species = pl.read_csv(build_path / 'arborist' / 'active-species.tsv', separator='\t')
   data_fetcher = DataFetcher(build_path)
   all_peptides = data_fetcher.get_all_peptides()
   all_sources = data_fetcher.get_all_sources()

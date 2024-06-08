@@ -13,7 +13,7 @@ from Bio.SeqRecord import SeqRecord
 from pathlib import Path
 from pepmatch import Preprocessor, Matcher
 
-from protein_tree.get_data import DataFetcher
+from protein_tree.data_fetch import DataFetcher
 from protein_tree.select_proteome import ProteomeSelector
 
 
