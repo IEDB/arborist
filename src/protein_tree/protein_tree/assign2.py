@@ -1,26 +1,34 @@
+import json
 import argparse
 import subprocess
 import polars as pl
 from pathlib import Path
+from pepmatch import Preprocessor, Matcher
 from ARC.classifier import SeqClassifier
 from protein_tree.data_fetch import DataFetcher
 
 
 class AssignmentHandler:
-  def __init__(self, taxon_id, group, peptides, sources, num_threads):
+  def __init__(self, taxon_id, species_name, group, peptides, sources, num_threads):
     self.taxon_id = taxon_id
+    self.species_name = species_name
     self.group = group
     self.peptides = peptides
     self.sources = sources
     self.num_threads = num_threads
-    self.build_path = Path(__file__).parents[3] / 'build' 
+    self.build_path = Path(__file__).parents[3] / 'build'
     self.species_path = self.build_path / 'species' / str(self.taxon_id)
 
   def process_species(self):
-    source_processor = SourceProcessor(self.taxon_id, self.group, self.sources, self.num_threads, self.species_path)
+    source_processor = SourceProcessor(
+      self.taxon_id, self.group, self.sources, self.num_threads, self.species_path
+    )
     source_assignments = source_processor.process()
+    self.peptides = self.peptides.join(source_assignments, how='left', on='Source Accession', coalesce=True)
 
-    peptide_processor = PeptideProcessor(source_assignments)
+    peptide_processor = PeptideProcessor(
+      self.taxon_id, self.species_name, self.peptides, source_assignments, self.species_path
+    )
     peptide_processor.process()
 
   def cleanup_files(self):
@@ -87,8 +95,8 @@ class SourceProcessor:
       '-num_threads', str(self.num_threads), 
       '-out', str(self.species_path / 'alignments.csv')
     ]
-    subprocess.run(makeblastdb_cmd, check=True)
-    subprocess.run(blastp_cmd, check=True)
+    subprocess.run(makeblastdb_cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.run(blastp_cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
   def mmseqs2_sources(self):
     mmseqs2_path = self.bin_path / 'mmseqs'
@@ -108,7 +116,8 @@ class SourceProcessor:
     if arc_results_exist:
       old_arc_df = pl.read_csv(self.species_path / 'arc-results.tsv', separator='\t')
       new_arc_sources = self.sources.filter(
-        ~pl.col('Source Accession').is_in(old_arc_df['id'])
+        ~pl.col('Source Accession').str.contains('SRC'),
+        ~pl.col('Source Accession').is_in(old_arc_df['id'].to_list())
       )
       if new_arc_sources.shape[0] == 0:
         return old_arc_df
@@ -178,17 +187,150 @@ class SourceProcessor:
     return protein_data
 
 
-
 class PeptideProcessor:
-  def __init__(self, source_assignments):
+  def __init__(self, taxon_id, species_name, peptides, source_assignments, species_path):
+    self.taxon_id = taxon_id
+    self.species_name = species_name
+    self.peptides = peptides
     self.source_assignments = source_assignments
+    self.species_path = species_path
 
   def process(self):
+    self.preprocess_proteome()
+    self.search_peptides()
+    assignments = self.assign_parents()
+    assignments = self.get_protein_data(assignments)
+    assignments = self.handle_allergens(assignments)
+    assignments = self.handle_manuals(assignments)
+    self.write_assignments(assignments)
+
+  def preprocess_proteome(self):
+    if (self.species_path / 'proteome.db').exists():
+      return
+    gp_proteome = self.species_path / 'gp_proteome.fasta' if (self.species_path / 'gp_proteome.fasta').exists() else ''
+    Preprocessor(
+      proteome = self.species_path / 'proteome.fasta',
+      preprocessed_files_path = self.species_path,
+      gene_priority_proteome=gp_proteome
+    ).sql_proteome(k = 5)
+
+  def search_peptides(self):
+    peptides = self.peptides['Sequence'].to_list()
+    Matcher(
+      query=peptides,
+      proteome_file=self.species_path / 'proteome.fasta',
+      max_mismatches=0,
+      k=5,
+      preprocessed_files_path=self.species_path,
+      best_match=False, 
+      output_format='dataframe',
+      output_name=self.species_path / 'peptide-matches.tsv',
+      sequence_version=False
+    ).match()
+  
+  def assign_parents(self):
+    matches = pl.read_csv(self.species_path / 'peptide-matches.tsv', separator='\t')
+    peptides_with_genes = self.peptides.filter(pl.col('Source Assigned Gene').is_not_null())
+    peptides_without_genes = self.peptides.filter(pl.col('Source Assigned Gene').is_null())
+
+    matches_with_genes = peptides_with_genes.join(
+      matches, how="left", coalesce=False,
+      left_on=["Sequence", "Source Assigned Gene"], 
+      right_on=["Query Sequence", "Gene"]
+    )
+    matches_without_genes = peptides_without_genes.join(
+      matches, how="left", coalesce=False,
+      left_on=["Sequence", "Source Assigned Protein ID"], 
+      right_on=["Query Sequence", "Protein ID"]
+    )
+
+    top_matches_with_genes = matches_with_genes.sort(
+      ["Sequence", "SwissProt Reviewed", "Gene Priority", "Protein Existence Level"],
+      descending=[False, True, True, False]
+    ).group_by("Sequence").first()
+
+    top_matches_without_genes = matches_without_genes.sort(
+      ["Sequence", "SwissProt Reviewed", "Gene Priority", "Protein Existence Level"],
+      descending=[False, True, True, False]
+    ).group_by("Sequence").first()
+
+    match_cols = ['Sequence', 'Gene', 'Protein ID', 'Protein Name', 'Index start', 'Index end', 'SwissProt Reviewed']
+    top_matches_with_genes = top_matches_with_genes.select(match_cols)
+    top_matches_without_genes = top_matches_without_genes.select(match_cols)
+
+    assignments_with_genes = peptides_with_genes.join(
+      top_matches_with_genes, how="left", coalesce=False,
+      left_on=["Sequence", "Source Assigned Gene"],
+      right_on=["Sequence", "Gene"],
+    )
+
+    assignments_without_genes = peptides_without_genes.join(
+      top_matches_without_genes, how="left", coalesce=False,
+      left_on=["Sequence", "Source Assigned Protein ID"], 
+      right_on=["Sequence", "Protein ID"]
+    )
+  
+    assignments = pl.concat([assignments_with_genes, assignments_without_genes])
+    assignments = assignments.drop('Sequence_right', 'Gene')
+    assignments = assignments.unique(subset=['Sequence', 'Source Accession'])
+    assignments.write_csv(self.species_path / 'peptide-assignments.tsv', separator='\t')
+    return assignments
+
+  def get_protein_data(self, assignments):
+    proteome = pl.read_csv(self.species_path / 'proteome.tsv', separator='\t')
+    proteome = proteome.select(pl.col('Protein ID', 'Sequence'))
+    proteome = proteome.rename({'Sequence': 'Assigned Protein Sequence'})
+    fragments = self.get_fragment_data()
+    assignments = assignments.join(
+      proteome, how='left', on='Protein ID', coalesce=True
+    )
+    assignments = assignments.with_columns(
+      pl.col('Assigned Protein Sequence').str.len_chars().alias('Assigned Protein Length'),
+      pl.col('Protein ID').replace(fragments, default="").alias('Assigned Protein Fragments'),
+      pl.lit(str(self.taxon_id)).alias('Species Taxon ID'),
+      pl.lit(self.species_name).alias('Species Name')
+    )
+
+    return assignments
+  
+  def get_fragment_data(self):
+    if (self.species_path / 'fragment-data.json').exists():
+      with open(self.species_path / 'fragment-data.json', 'r') as f:
+        return json.load(f)
+      
+  def handle_allergens(self, assignments):
     pass
+
+  def handle_manuals(self, assignments):
+    pass
+
+  def write_assignments(self, assignments):
+    assignments = assignments.rename({
+      'Sequence': 'Epitope Sequence',
+      'Starting Position': 'Source Starting Position',
+      'Ending Position': 'Source Ending Position',
+      'Protein ID': 'Assigned Protein ID',
+      'Protein Name': 'Assigned Protein Name',
+      'Index start': 'Assigned Protein Starting Position',
+      'Index end': 'Assigned Protein Ending Position',
+      'SwissProt Reviewed': 'Assigned Protein Review Status'
+    })
+    col_order = [
+      'Species Taxon ID', 'Species Name', 'Organism ID', 'Source Accession', 
+      'Source Alignment Score', 'Source Assigned Gene', 'Source Assigned Protein ID', 
+      'Source Assigned Protein Name', 'ARC Assignment', 'Epitope ID', 'Epitope Sequence', 
+      'Source Starting Position', 'Source Ending Position', 'Assigned Protein ID', 
+      'Assigned Protein Name', 'Assigned Protein Review Status', 
+      'Assigned Protein Starting Position', 'Assigned Protein Ending Position', 
+      'Assigned Protein Sequence', 'Assigned Protein Length', 'Assigned Protein Fragments'
+    ]
+    assignments = assignments.select(col_order)
+    assignments.write_csv(self.species_path / 'peptide-assignments.tsv', separator='\t')
 
 
 def do_assignments(taxon_id):
   species_row = active_species.row(by_predicate=pl.col('Species ID') == taxon_id)
+  species_name = species_row[2]
   group = species_row[4]
   active_taxa = [int(taxon_id) for taxon_id in species_row[3].split(', ')]
   peptides = data_fetcher.get_peptides_for_species(all_peptides, active_taxa)
@@ -196,6 +338,7 @@ def do_assignments(taxon_id):
   sources = sources.with_columns(pl.col('Sequence').str.len_chars().alias('Length'))
   config = {
     'taxon_id': taxon_id,
+    'species_name': species_name,
     'group': group,
     'peptides': peptides,
     'sources': sources,
@@ -220,7 +363,7 @@ if __name__ == "__main__":
   all_sources = data_fetcher.get_all_sources()
 
   if all_species:
-    for _, species_row in active_species.iterrows():
-      do_assignments(species_row['Species ID'])
+    for row in active_species.iter_rows(named=True):
+      do_assignments(row['Species ID'])
   else:
     do_assignments(taxon_id)
