@@ -200,8 +200,8 @@ class PeptideProcessor:
     self.search_peptides()
     assignments = self.assign_parents()
     assignments = self.get_protein_data(assignments)
-    assignments = self.handle_allergens(assignments)
-    assignments = self.handle_manuals(assignments)
+    # assignments = self.handle_allergens(assignments)
+    # assignments = self.handle_manuals(assignments)
     self.write_assignments(assignments)
 
   def preprocess_proteome(self):
@@ -271,26 +271,29 @@ class PeptideProcessor:
     )
   
     assignments = pl.concat([assignments_with_genes, assignments_without_genes])
-    assignments = assignments.drop('Sequence_right', 'Gene')
+    assignments = assignments.drop('Sequence_right', 'Gene', 'SwissProt Reviewed')
     assignments = assignments.unique(subset=['Sequence', 'Source Accession'])
-    assignments.write_csv(self.species_path / 'peptide-assignments.tsv', separator='\t')
+    assignments = assignments.with_columns(
+      pl.col('Protein ID').fill_null('Source Assigned Protein ID'),
+      pl.col('Protein Name').fill_null('Source Assigned Protein Name')
+    )
     return assignments
 
   def get_protein_data(self, assignments):
     proteome = pl.read_csv(self.species_path / 'proteome.tsv', separator='\t')
-    proteome = proteome.select(pl.col('Protein ID', 'Sequence'))
+    proteome = proteome.select(pl.col('Database', 'Protein ID', 'Sequence'))
     proteome = proteome.rename({'Sequence': 'Assigned Protein Sequence'})
     fragments = self.get_fragment_data()
     assignments = assignments.join(
       proteome, how='left', on='Protein ID', coalesce=True
     )
     assignments = assignments.with_columns(
+      (pl.col('Database') == 'sp').alias('Assigned Protein Review Status'),
       pl.col('Assigned Protein Sequence').str.len_chars().alias('Assigned Protein Length'),
-      pl.col('Protein ID').replace(fragments, default="").alias('Assigned Protein Fragments'),
+      pl.col('Protein ID').replace(fragments, default='').alias('Assigned Protein Fragments'),
       pl.lit(str(self.taxon_id)).alias('Species Taxon ID'),
       pl.lit(self.species_name).alias('Species Name')
     )
-
     return assignments
   
   def get_fragment_data(self):
@@ -313,10 +316,9 @@ class PeptideProcessor:
       'Protein Name': 'Assigned Protein Name',
       'Index start': 'Assigned Protein Starting Position',
       'Index end': 'Assigned Protein Ending Position',
-      'SwissProt Reviewed': 'Assigned Protein Review Status'
     })
     col_order = [
-      'Species Taxon ID', 'Species Name', 'Organism ID', 'Source Accession', 
+      'Species Taxon ID', 'Species Name', 'Organism ID', 'Organism Name','Source Accession', 
       'Source Alignment Score', 'Source Assigned Gene', 'Source Assigned Protein ID', 
       'Source Assigned Protein Name', 'ARC Assignment', 'Epitope ID', 'Epitope Sequence', 
       'Source Starting Position', 'Source Ending Position', 'Assigned Protein ID', 

@@ -128,5 +128,5 @@ peptide	Sequence			label
 peptide	Starting Position			natural_number		
 peptide	Ending Position			natural_number		
 peptide	Source Accession			label	from(peptide_source.Accession)	
-peptide	Source Name			label		
 peptide	Organism ID			natural_number		
+peptide	Organism Name			label		

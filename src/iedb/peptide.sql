@@ -4,8 +4,8 @@ SELECT DISTINCT
   object.starting_position AS 'Starting Position',
   object.ending_position AS 'Ending Position',
   object.mol2_accession AS 'Source Accession',
-  object.mol2_name AS 'Source Name',
-  object.organism2_id AS 'Organism ID'
+  object.organism2_id AS 'Organism ID',
+  object.organism2_name AS 'Organism Name'
 FROM
   object
 JOIN
@@ -15,14 +15,14 @@ WHERE
 
 UNION
 
-SELECT DISTINCT
+SELECT DISTINCT 
   epitope.epitope_id AS 'Epitope ID',
   COALESCE(object.mol1_seq, object.region) AS 'Sequence',
   object.starting_position AS 'Starting Position',
   object.ending_position AS 'Ending Position',
   object.mol2_accession AS 'Source Accession',
-  object.mol2_name AS 'Source Name',
-  object.organism2_id AS 'Organism ID'
+  object.organism2_id AS 'Organism ID',
+  object.organism2_name AS 'Organism Name'
 FROM
   object
 JOIN
