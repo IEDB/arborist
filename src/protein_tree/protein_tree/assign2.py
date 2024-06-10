@@ -16,8 +16,7 @@ class AssignmentHandler:
     self.peptides = peptides
     self.sources = sources
     self.num_threads = num_threads
-    self.build_path = Path(__file__).parents[3] / 'build'
-    self.species_path = self.build_path / 'species' / str(self.taxon_id)
+    self.species_path = build_path / 'species' / str(self.taxon_id)
 
   def process_species(self):
     source_processor = SourceProcessor(
@@ -200,7 +199,7 @@ class PeptideProcessor:
     self.search_peptides()
     assignments = self.assign_parents()
     assignments = self.get_protein_data(assignments)
-    # assignments = self.handle_allergens(assignments)
+    assignments = self.handle_allergens(assignments)
     # assignments = self.handle_manuals(assignments)
     self.write_assignments(assignments)
 
@@ -223,7 +222,7 @@ class PeptideProcessor:
       k=5,
       preprocessed_files_path=self.species_path,
       best_match=False, 
-      output_format='dataframe',
+      output_format='tsv',
       output_name=self.species_path / 'peptide-matches.tsv',
       sequence_version=False
     ).match()
@@ -274,8 +273,8 @@ class PeptideProcessor:
     assignments = assignments.drop('Sequence_right', 'Gene', 'SwissProt Reviewed')
     assignments = assignments.unique(subset=['Sequence', 'Source Accession'])
     assignments = assignments.with_columns(
-      pl.col('Protein ID').fill_null('Source Assigned Protein ID'),
-      pl.col('Protein Name').fill_null('Source Assigned Protein Name')
+      pl.col('Protein ID').fill_null(pl.col('Source Assigned Protein ID')),
+      pl.col('Protein Name').fill_null(pl.col('Source Assigned Protein Name'))
     )
     return assignments
 
@@ -302,7 +301,19 @@ class PeptideProcessor:
         return json.load(f)
       
   def handle_allergens(self, assignments):
-    pass
+    allergy_data = pl.read_csv(build_path / 'arborist' / 'allergens.csv').select('AccProtein', 'Name')
+    allergy_data = allergy_data.with_columns([
+      pl.col('AccProtein').str.split(' ').list.get(0).str.split('-').list.get(0).str.split(',').list.get(0)
+    ])
+    assignments = assignments.join(
+      allergy_data, left_on='Protein ID', right_on='AccProtein', how='left', coalesce=True
+    )
+    assignments = assignments.with_columns(
+      pl.when(pl.col('Name').is_not_null())
+      .then(pl.col('Name')).otherwise('Protein Name').alias('Protein Name')
+    )
+    assignments = assignments.drop('Name')
+    return assignments
 
   def handle_manuals(self, assignments):
     pass
