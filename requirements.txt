@@ -1,2 +1,5 @@
 bottle
 jinja2
+
+# protein tree package
+-e ./src/protein
