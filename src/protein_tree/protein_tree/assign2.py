@@ -31,7 +31,15 @@ class AssignmentHandler:
     peptide_processor.process()
 
   def cleanup_files(self):
-    pass
+    files_to_remove = [
+        'alignments.csv', 'arc-temp-results.tsv', 'proteome.fasta.pdb', 'proteome.fasta.phr',
+        'proteome.fasta.pin', 'proteome.fasta.pjs', 'proteome.fasta.pot', 'proteome.fasta.psq',
+        'proteome.fasta.ptf', 'proteome.fasta.pto', 'sources.fasta'
+    ]
+    for file in files_to_remove:
+      file_path = self.species_path / file
+      if file_path.exists():
+        file_path.unlink()
 
 
 class SourceProcessor:
@@ -200,7 +208,7 @@ class PeptideProcessor:
     assignments = self.assign_parents()
     assignments = self.get_protein_data(assignments)
     assignments = self.handle_allergens(assignments)
-    # assignments = self.handle_manuals(assignments)
+    assignments = self.add_synonyms(assignments)
     self.write_assignments(assignments)
 
   def preprocess_proteome(self):
@@ -280,7 +288,7 @@ class PeptideProcessor:
 
   def get_protein_data(self, assignments):
     proteome = pl.read_csv(self.species_path / 'proteome.tsv', separator='\t')
-    proteome = proteome.select(pl.col('Database', 'Protein ID', 'Sequence'))
+    proteome = proteome.select(pl.col('Database', 'Entry Name', 'Protein ID', 'Sequence'))
     proteome = proteome.rename({'Sequence': 'Assigned Protein Sequence'})
     fragments = self.get_fragment_data()
     assignments = assignments.join(
@@ -314,9 +322,24 @@ class PeptideProcessor:
     )
     assignments = assignments.drop('Name')
     return assignments
-
-  def handle_manuals(self, assignments):
-    pass
+  
+  def add_synonyms(self, assignments):
+    if (self.species_path / 'synonym-data.json').exists():
+      with open(self.species_path / 'synonym-data.json', 'r') as f:
+        synonym_data = json.load(f)
+      synonym_data = {k: ', '.join(v) for k, v in synonym_data.items()}
+      assignments = assignments.with_columns(
+        pl.col('Protein ID').replace(synonym_data, default='').alias('Assigned Protein Synonyms'),
+      )
+      assignments = assignments.with_columns(
+        pl.when(pl.col('Assigned Protein Synonyms') != "")
+        .then(pl.concat_str(
+          [pl.col('Assigned Protein Synonyms'), pl.col('Entry Name')], separator=', ')
+        )
+        .otherwise(pl.col('Entry Name'))
+        .alias('Assigned Protein Synonyms')
+      )
+    return assignments
 
   def write_assignments(self, assignments):
     assignments = assignments.rename({
@@ -333,9 +356,9 @@ class PeptideProcessor:
       'Source Alignment Score', 'Source Assigned Gene', 'Source Assigned Protein ID', 
       'Source Assigned Protein Name', 'ARC Assignment', 'Epitope ID', 'Epitope Sequence', 
       'Source Starting Position', 'Source Ending Position', 'Assigned Protein ID', 
-      'Assigned Protein Name', 'Assigned Protein Review Status', 
-      'Assigned Protein Starting Position', 'Assigned Protein Ending Position', 
-      'Assigned Protein Sequence', 'Assigned Protein Length', 'Assigned Protein Fragments'
+      'Assigned Protein Name', 'Assigned Protein Review Status', 'Assigned Protein Starting Position', 
+      'Assigned Protein Ending Position', 'Assigned Protein Sequence', 'Assigned Protein Length', 
+      'Assigned Protein Fragments', 'Assigned Protein Synonyms'
     ]
     assignments = assignments.select(col_order)
     assignments.write_csv(self.species_path / 'peptide-assignments.tsv', separator='\t')
@@ -359,6 +382,7 @@ def do_assignments(taxon_id):
   }
   assignment_handler = AssignmentHandler(**config)
   assignment_handler.process_species()
+  assignment_handler.cleanup_files()
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
