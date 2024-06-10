@@ -64,6 +64,7 @@ class SourceProcessor:
       self.blast_sources()
 
     top_proteins = self.select_top_proteins()
+    top_proteins = self.assign_manuals(top_proteins)
     top_protein_data = self.get_protein_data(top_proteins)
 
     if self.group == 'vertebrate':
@@ -178,7 +179,23 @@ class SourceProcessor:
     alignments = alignments.with_columns(
       pl.col('Alignment Length').mul(pl.col('% Identity')).truediv(pl.col('Query Length')).alias('Score')
     )
-    return alignments.group_by('Query').agg(pl.all().sort_by('Score').last())
+
+    top_proteins = alignments.group_by('Query').agg(pl.all().sort_by('Score').last())
+    
+    missing_sources = self.sources.filter(~pl.col('Source Accession').is_in(top_proteins['Query'].to_list()))
+    if missing_sources.shape[0] != 0:
+      missing_sources = pl.DataFrame({'Query': missing_sources['Source Accession'].to_list()})
+      top_proteins = top_proteins.join(missing_sources, how='full', on='Query', coalesce=True)
+    
+    return top_proteins
+
+  def assign_manuals(self, top_proteins):
+    manual_parents = pl.read_csv(build_path / 'arborist' / 'manual-parents.tsv', separator='\t')
+    manual_parents_map = dict(manual_parents.select('Accession', 'Parent Accession').iter_rows())
+    top_proteins = top_proteins.with_columns(
+      pl.col('Query').replace(manual_parents_map, default=pl.col('Subject')).alias('Subject')
+    )
+    return top_proteins
 
   def get_protein_data(self, top_proteins):
     proteome = pl.read_csv(self.species_path / 'proteome.tsv', separator='\t')
@@ -307,6 +324,8 @@ class PeptideProcessor:
     if (self.species_path / 'fragment-data.json').exists():
       with open(self.species_path / 'fragment-data.json', 'r') as f:
         return json.load(f)
+    else:
+      return {}
       
   def handle_allergens(self, assignments):
     allergy_data = pl.read_csv(build_path / 'arborist' / 'allergens.csv').select('AccProtein', 'Name')
@@ -328,17 +347,19 @@ class PeptideProcessor:
       with open(self.species_path / 'synonym-data.json', 'r') as f:
         synonym_data = json.load(f)
       synonym_data = {k: ', '.join(v) for k, v in synonym_data.items()}
-      assignments = assignments.with_columns(
-        pl.col('Protein ID').replace(synonym_data, default='').alias('Assigned Protein Synonyms'),
+    else:
+      synonym_data = {}
+    assignments = assignments.with_columns(
+      pl.col('Protein ID').replace(synonym_data, default='').alias('Assigned Protein Synonyms'),
+    )
+    assignments = assignments.with_columns(
+      pl.when(pl.col('Assigned Protein Synonyms') != "")
+      .then(pl.concat_str(
+        [pl.col('Assigned Protein Synonyms'), pl.col('Entry Name')], separator=', ')
       )
-      assignments = assignments.with_columns(
-        pl.when(pl.col('Assigned Protein Synonyms') != "")
-        .then(pl.concat_str(
-          [pl.col('Assigned Protein Synonyms'), pl.col('Entry Name')], separator=', ')
-        )
-        .otherwise(pl.col('Entry Name'))
-        .alias('Assigned Protein Synonyms')
-      )
+      .otherwise(pl.col('Entry Name'))
+      .alias('Assigned Protein Synonyms')
+    )
     return assignments
 
   def write_assignments(self, assignments):
@@ -380,6 +401,7 @@ def do_assignments(taxon_id):
     'sources': sources,
     'num_threads': args.num_threads
   }
+  print(f'Assigning peptides for {species_name} (ID: {taxon_id})')
   assignment_handler = AssignmentHandler(**config)
   assignment_handler.process_species()
   assignment_handler.cleanup_files()
@@ -400,7 +422,7 @@ if __name__ == "__main__":
   all_sources = data_fetcher.get_all_sources()
 
   if all_species:
-    for row in active_species.iter_rows(named=True):
+    for row in active_species.rows(named=True):
       do_assignments(row['Species ID'])
   else:
     do_assignments(taxon_id)
