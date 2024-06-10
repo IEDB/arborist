@@ -5,163 +5,163 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 10116	Rattus norvegicus	SRC255186	MHC Class II RT1.Du	ARC	mhc	Major Histocompatibility Complex chain	
 10116	Rattus norvegicus	SRC268315	Ig gamma-1 chain C region	ARC	ab	Immunoglobulin chain	
 10116	Rattus norvegicus	SRC279940	RT1 class I histocompatibility antigen, AA alpha chain	ARC	ab	Immunoglobulin chain	
-3369	Cryptomeria japonica	SRC268309	Sugi basic protein	IUIS	245	Cry j 1	
-3369	Cryptomeria japonica	SRC268310	Polygalacturonase	IUIS	246	Cry j 2	
-3728	Sinapis alba	SRC269022	Allergen Sin a 1	IUIS	592	Sin a 1	
-3750	Malus domestica	SRC268313	Major allergen Mal d 1	IUIS	425	Mal d 1	
-3818	Arachis hypogaea	SRC280642	Major Peanut Allergen Ara H 1	IUIS	75	Ara h 1	
-3818	Arachis hypogaea	SRC292177	Major Peanut Allergen Ara H 2	IUIS	78	Ara h 2	
-3818	Arachis hypogaea	SRC379595	Major Peanut Allergen Ara H 6	IUIS	82	Ara h 6	
-3847	Glycine max	SRC265915	Hydrophobic seed protein	IUIS	342	Gly m 1	
-3847	Glycine max	SRC457181	beta-conglycinin alpha subunit	IUIS	346	Gly m 5	
-3981	Hevea brasiliensis	Q39967.3	Major latex allergen Hev b 5	IUIS	363	Hev b 5	
-4081	Solanum lycopersicum	SRC245008	Lyc e 2.0101	IUIS	423	Sola l 2	
-4182	Sesamum indicum	SRC269023	2S seed storage protein 1	IUIS	585	Ses i 1	
-4212	Ambrosia artemisiifolia	CAM97351.1	ragweed homologue of Art v 1 (isoform 1), partial	IUIS	686	Amb a 4	
-4212	Ambrosia artemisiifolia	CAM97352.1	ragweed homologue of Art v 1 (isoform 1), partial	IUIS	686	Amb a 4	
-4220	Artemisia vulgaris	AAO24900.1	major pollen allergen Art v 1 precursor	IUIS	89	Art v 1	
-4220	Artemisia vulgaris	Q84ZX5.1	Major pollen allergen Art v 1 precursor	IUIS	89	Art v 1	
+3369	Cryptomeria japonica	SRC268309	Sugi basic protein	IUIS	P18632	Cry j 1	
+3369	Cryptomeria japonica	SRC268310	Polygalacturonase	IUIS	P43212	Cry j 2	
+3728	Sinapis alba	SRC269022	Allergen Sin a 1	IUIS	P15322	Sin a 1	
+3750	Malus domestica	SRC268313	Major allergen Mal d 1	IUIS	P43211	Mal d 1	
+3818	Arachis hypogaea	SRC280642	Major Peanut Allergen Ara H 1	IUIS	P43238	Ara h 1	
+3818	Arachis hypogaea	SRC292177	Major Peanut Allergen Ara H 2	IUIS	Q6PSU2	Ara h 2	
+3818	Arachis hypogaea	SRC379595	Major Peanut Allergen Ara H 6	IUIS	Q647G9	Ara h 6	
+3847	Glycine max	SRC265915	Hydrophobic seed protein	IUIS	Q9S8F3	Gly m 1	
+3847	Glycine max	SRC457181	beta-conglycinin alpha subunit	IUIS	O22120	Gly m 5	
+3981	Hevea brasiliensis	Q39967.3	Major latex allergen Hev b 5	IUIS	Q39967	Hev b 5	
+4081	Solanum lycopersicum	SRC245008	Lyc e 2.0101	IUIS	Q547Q0	Sola l 2	
+4182	Sesamum indicum	SRC269023	2S seed storage protein 1	IUIS	Q9AUD1	Ses i 1	
+4212	Ambrosia artemisiifolia	CAM97351.1	ragweed homologue of Art v 1 (isoform 1), partial	IUIS	D4IHC0	Amb a 4	
+4212	Ambrosia artemisiifolia	CAM97352.1	ragweed homologue of Art v 1 (isoform 1), partial	IUIS	D4IHC0	Amb a 4	
+4220	Artemisia vulgaris	AAO24900.1	major pollen allergen Art v 1 precursor	IUIS	Q84ZX5	Art v 1	
+4220	Artemisia vulgaris	Q84ZX5.1	Major pollen allergen Art v 1 precursor	IUIS	Q84ZX5	Art v 1	
 4509	Dactylis glomerata	AAK62278.1	group 5 allergen precursor	IUIS	270	Dac g 5	
-4509	Dactylis glomerata	AAP96759.1	group 1 allergen Dac g 1.01 precursor	IUIS	266	Dac g 1	
-4509	Dactylis glomerata	CAD20406.1	unnamed protein product	IUIS	266	Dac g 1	
-4509	Dactylis glomerata	Q7XAX7	Group 1 allergen Dac g 1.02 precursor	IUIS	266	Dac g 1	
-4522	Lolium perenne	SRC269024	Pollen allergen Lol p 1	IUIS	415	Lol p 1	
-4550	Secale cereale	AAB58403.1	omega secalin	IUIS	583	Sec c 38	
-4550	Secale cereale	ABO32294.1	75k gamma secalin	IUIS	584	Sec c 20	
-4550	Secale cereale	CAA42836.1	Sec1 precursor	IUIS	583	Sec c 38	
-4550	Secale cereale	Q05573	Sec1 precursor	IUIS	583	Sec c 38	
-4550	Secale cereale	SRC335637	75k gamma secalin	IUIS	584	Sec c 20	
-4550	Secale cereale	SRC454240	Sec c 1	IUIS	583	Sec c 38	
-4565	Triticum aestivum	4GG6_I	Chain I, Protein Complex	IUIS	715	Tri a 21	
-4565	Triticum aestivum	A0A0K2QJY6	Gliadin alpha-B25	IUIS	715	Tri a 21	
-4565	Triticum aestivum	AAA96522.1	alpha-gliadin storage protein	IUIS	715	Tri a 21	
-4565	Triticum aestivum	AAB48479.1	low-molecular-weight glutenin storage protein	IUIS	728	Tri a 36	
-4565	Triticum aestivum	AAG17702.1	omega gliadin storage protein	IUIS	620	Tri a 19	
-4565	Triticum aestivum	AAK84772.1	gamma-gliadin	IUIS	796	Tri a 20	
-4565	Triticum aestivum	AAR98780.2	high-molecular-weight glutenin subunit 1Dx2.1	IUIS	622	Tri a 26	
-4565	Triticum aestivum	AAT01617.1	omega gliadin	IUIS	620	Tri a 19	
-4565	Triticum aestivum	ABB17935.1	gamma-gliadin/LMW-glutenin chimera Ch1 precursor	IUIS	796	Tri a 20	
-4565	Triticum aestivum	ABG54322.1	low molecular weight glutenin subunit	IUIS	728	Tri a 36	
-4565	Triticum aestivum	ABG68042.1	X-type HMW glutenin	IUIS	622	Tri a 26	
-4565	Triticum aestivum	ABQ52118.1	alpha-gliadin	IUIS	715	Tri a 21	
-4565	Triticum aestivum	ABQ52123.1	alpha-gliadin	IUIS	715	Tri a 21	
-4565	Triticum aestivum	ABS72145.1	alpha gliadin	IUIS	715	Tri a 21	
-4565	Triticum aestivum	ABX89298.1	high molecular weight glutenin subunit	IUIS	622	Tri a 26	
-4565	Triticum aestivum	ABY58133.1	LMW-s glutenin subunit 0359D24-S	IUIS	728	Tri a 36	
-4565	Triticum aestivum	ABY58134.1	LMW-m glutenin subunit 0703A9-M	IUIS	728	Tri a 36	
-4565	Triticum aestivum	ACA63851.1	low molecular weight glutenin subunit	IUIS	728	Tri a 36	
-4565	Triticum aestivum	ACA63863.1	low molecular weight glutenin subunit	IUIS	728	Tri a 36	
-4565	Triticum aestivum	ACD62597.1	alpha-gliadin	IUIS	715	Tri a 21	
-4565	Triticum aestivum	ACI04087.1	gamma-gliadin	IUIS	796	Tri a 20	
-4565	Triticum aestivum	ACN62213.1	omega-gliadin	IUIS	620	Tri a 19	
-4565	Triticum aestivum	ACQ83636.1	omega secalin	IUIS	620	Tri a 19	
-4565	Triticum aestivum	ADP95517.1	75k gamma secalin	IUIS	796	Tri a 20	
-4565	Triticum aestivum	AFC98436.1	gamma-gliadin	IUIS	796	Tri a 20	
-4565	Triticum aestivum	AFQ13468.1	alpha-gliadin	IUIS	715	Tri a 21	
-4565	Triticum aestivum	AGK83251.1	low-molecular-weight glutenin subunit	IUIS	728	Tri a 36	
-4565	Triticum aestivum	AGK83306.1	low-molecular-weight glutenin subunit	IUIS	728	Tri a 36	
-4565	Triticum aestivum	BAA12318.1	alpha-gliadin	IUIS	715	Tri a 21	
-4565	Triticum aestivum	BAA22613.2	LMM glutenin 1	IUIS	728	Tri a 36	
-4565	Triticum aestivum	BAB78750.1	low-molecular-weight glutenin subunit group 4 type II	IUIS	728	Tri a 36	
-4565	Triticum aestivum	BAE20328.1	omega-5 gliadin	IUIS	620	Tri a 19	
-4565	Triticum aestivum	BAE45625.1	low-molecular-weight glutenin subunit	IUIS	728	Tri a 36	
-4565	Triticum aestivum	BAN29066.1	gamma-gliadin	IUIS	796	Tri a 20	
-4565	Triticum aestivum	BAN29068.1	high molecular weight glutenin subunit	IUIS	622	Tri a 26	
-4565	Triticum aestivum	CAB76959.1	alpha-gliadin	IUIS	715	Tri a 21	
-4565	Triticum aestivum	CAB76960.1	alpha-gliadin	IUIS	715	Tri a 21	
-4565	Triticum aestivum	CAB76961.1	alpha-gliadin	IUIS	715	Tri a 21	
-4565	Triticum aestivum	CAB76962.1	alpha-gliadin	IUIS	715	Tri a 21	
-4565	Triticum aestivum	CAB76963.1	alpha-gliadin	IUIS	715	Tri a 21	
-4565	Triticum aestivum	CAB76964.1	alpha-gliadin	IUIS	715	Tri a 21	
-4565	Triticum aestivum	CAC84119.1	glutenin high molecular weight subunit	IUIS	622	Tri a 26	
-4565	Triticum aestivum	CAD58622.1	low molecular weight glutenin subunit	IUIS	728	Tri a 36	
-4565	Triticum aestivum	CAI78903.2	putative omega-gliadin	IUIS	620	Tri a 19	
-4565	Triticum aestivum	CAR82265.1	D-type LMW glutenin subunit	IUIS	796	Tri a 20	
-4565	Triticum aestivum	CAR82266.1	D-type LMW glutenin subunit	IUIS	796	Tri a 20	
-4565	Triticum aestivum	CAR82267.1	D-type LMW glutenin subunit	IUIS	796	Tri a 20	
-4565	Triticum aestivum	P02863.2	Alpha/beta-gliadin precursor	IUIS	715	Tri a 21	
-4565	Triticum aestivum	P04721.1	Alpha/beta-gliadin A-I precursor	IUIS	715	Tri a 21	
-4565	Triticum aestivum	P04722.1	Alpha/beta-gliadin A-II precursor	IUIS	715	Tri a 21	
-4565	Triticum aestivum	P04723.1	Alpha/beta-gliadin A-III precursor	IUIS	715	Tri a 21	
-4565	Triticum aestivum	P04724.1	Alpha/beta-gliadin A-IV precursor	IUIS	715	Tri a 21	
-4565	Triticum aestivum	P04725.1	Alpha/beta-gliadin A-V	IUIS	715	Tri a 21	
-4565	Triticum aestivum	P04726	Alpha/beta-gliadin clone PW1215	IUIS	715	Tri a 21	
-4565	Triticum aestivum	P04727.1	Alpha/beta-gliadin clone PW8142 precursor	IUIS	715	Tri a 21	
-4565	Triticum aestivum	P10385.1	Glutenin, low molecular weight subunit precursor	IUIS	728	Tri a 36	
-4565	Triticum aestivum	P10388.4	Glutenin, high molecular weight subunit DX5 precursor	IUIS	622	Tri a 26	
-4565	Triticum aestivum	P18573.1	Alpha/beta-gliadin MM1 precursor	IUIS	715	Tri a 21	
-4565	Triticum aestivum	Q402I5	Omega-5 gliadin	IUIS	620	Tri a 19	
-4565	Triticum aestivum	Q41545	(T. aestivum) alpha-type gliadin precursor	IUIS	715	Tri a 21	
-4565	Triticum aestivum	Q8L6B2	Gamma gliadin	IUIS	796	Tri a 20	
-4565	Triticum aestivum	Q9FUW7	Omega gliadin storage protein	IUIS	620	Tri a 19	
-4565	Triticum aestivum	Q9M4L6	Alpha-gliadin	IUIS	715	Tri a 21	
-4565	Triticum aestivum	Q9M4M5	Alpha-gliadin	IUIS	715	Tri a 21	
-4565	Triticum aestivum	Q9ZNY0	Low molecular weight glutenin subunit precursor	IUIS	728	Tri a 36	
-4565	Triticum aestivum	SRC262387	omega-5 gliadin	IUIS	620	Tri a 19	
-4565	Triticum aestivum	SRC264156	alpha/beta gliadin precursor	IUIS	715	Tri a 21	
-4565	Triticum aestivum	SRC268307	Gamma-gliadin	IUIS	796	Tri a 20	
-4565	Triticum aestivum	SRC276224	Glutenin, high molecular weight subunit DX5	IUIS	622	Tri a 26	
-5077	Penicillium citrinum	AAD25926.1	Pen c 1	IUIS	477	Pen c 13	
-5599	Alternaria alternata	AAB48043.1	hsp70	IUIS	25	Alt a 3	
-5599	Alternaria alternata	AAR98813.1	glutathione-S-transferase	IUIS	24	Alt a 13	
-5599	Alternaria alternata	P49148.1	60S acidic ribosomal protein P1	IUIS	23	Alt a 12	
-5599	Alternaria alternata	Q6R4B4.1	Glutathione-S-transferase	IUIS	24	Alt a 13	
-5599	Alternaria alternata	SRC269001	Major allergen Alt a 1	IUIS	21	Alt a 1	
-6689	Penaeus vannamei	ACB38288.1	Lit v 1 tropomyosin	IUIS	411	Lit v 1	
-6954	Dermatophagoides farinae	AAP35081.1	Der f Alt a 10 allergen	IUIS	275	Der f 10	
-6954	Dermatophagoides farinae	BAA04557.1	Mag44, partial	IUIS	275	Der f 10	
-6954	Dermatophagoides farinae	P39673.1	Allergen Mag	IUIS	275	Der f 10	
-6954	Dermatophagoides farinae	SRC338478	Mag44	IUIS	275	Der f 10	
-6954	Dermatophagoides farinae	SRC343989	Der f 3 allergen	IUIS	285	Der f 3	
-6954	Dermatophagoides farinae	SRC343990	Der f Alt a 10 allergen	IUIS	275	Der f 10	
-6954	Dermatophagoides farinae	SRC343991	Der f 16 allergen	IUIS	280	Der f 16	
-6954	Dermatophagoides farinae	SRC343992	ferritin	IUIS	814	Der f 30	
-6956	Dermatophagoides pteronyssinus	3H4Z_A	Chain A, Crystal Structure Of An Mbp-Der P 7 Fusion Protein	IUIS	301	Der p 7	
-6956	Dermatophagoides pteronyssinus	SRC261403	Mite group 6 allergen Der p 6	IUIS	300	Der p 6	
-6956	Dermatophagoides pteronyssinus	SRC269004	Der P 1	IUIS	289	Der p 1	
-6956	Dermatophagoides pteronyssinus	SRC269005	Mite group 2 allergen Der p 2	IUIS	293	Der p 2	
-6956	Dermatophagoides pteronyssinus	SRC343987	group 14 allergen protein	IUIS	292	Der p 14	
-6956	Dermatophagoides pteronyssinus	SRC343988	glutathione transferase mu	IUIS	302	Der p 8	
-6956	Dermatophagoides pteronyssinus	SRC343993	Der p 13 allergen	IUIS	868	Der p 13	
-6956	Dermatophagoides pteronyssinus	SRC343997	Der p 5	IUIS	299	Der p 5	
-6956	Dermatophagoides pteronyssinus	SRC522220	Der p23 allergen	IUIS	296	Der p 23	
-6973	Blattella germanica	SRC323160	Bla g 11	IUIS	779	Bla g 11	
-6978	Periplaneta americana	CAB38086.1	tropomyosin	IUIS	497	Per a 7	
-8049	Gadus morhua	CAM56786.1	parvalbumin beta	IUIS	708	Gad m 1	
-8049	Gadus morhua	Q90YK9.3	Parvalbumin beta	IUIS	708	Gad m 1	
-8053	Gadus morhua callarias	P02622.1	Parvalbumin beta	IUIS	708	Gad m 1	
-9031	Gallus gallus	SRC279992	Ovalbumin	IUIS	336	Gal d 2	
-9031	Gallus gallus	SRC280240	Lysozyme C	IUIS	338	Gal d 4	
-9685	Felis catus	1PUO_A	Chain A, Crystal Structure Of Fel D 1- The Major Cat Allergen	IUIS	319	Fel d 1	
-9685	Felis catus	2EJN_A	Chain A, Structural Characterization Of The Tetrameric Form Of The Major Cat Allergen Fel D 1	IUIS	319	Fel d 1	
-9685	Felis catus	SRC269010	Major allergen I polypeptide chain 1	IUIS	319	Fel d 1	
-9685	Felis catus	SRC282810	Major allergen I polypeptide chain 2	IUIS	319	Fel d 1	
-9685	Felis catus	CAD32275.1		IUIS	320	Fel d 2	
-9913	Bos taurus	CAC37028.1	beta casein B	IUIS	758	Bos d 11	
-9913	Bos taurus	SRC280081	Alpha-S1-casein	IUIS	756	Bos d 9	
-9913	Bos taurus	SRC293738	beta-casein	IUIS	758	Bos d 11	
-9913	Bos taurus	SRC293739	kappa-casein	IUIS	759	Bos d 12	
-9913	Bos taurus	SRC309991	beta-lactoglobulin	IUIS	163	Bos d 5	
+4509	Dactylis glomerata	AAP96759.1	group 1 allergen Dac g 1.01 precursor	IUIS	Q7M1X8	Dac g 1	
+4509	Dactylis glomerata	CAD20406.1	unnamed protein product	IUIS	Q7M1X8	Dac g 1	
+4509	Dactylis glomerata	Q7XAX7	Group 1 allergen Dac g 1.02 precursor	IUIS	Q7M1X8	Dac g 1	
+4522	Lolium perenne	SRC269024	Pollen allergen Lol p 1	IUIS	P14946	Lol p 1	
+4550	Secale cereale	AAB58403.1	omega secalin	IUIS	Q9S8H2	Sec c 38	
+4550	Secale cereale	ABO32294.1	75k gamma secalin	IUIS	Q9S8B0	Sec c 20	
+4550	Secale cereale	CAA42836.1	Sec1 precursor	IUIS	Q9S8H2	Sec c 38	
+4550	Secale cereale	Q05573	Sec1 precursor	IUIS	Q9S8H2	Sec c 38	
+4550	Secale cereale	SRC335637	75k gamma secalin	IUIS	Q9S8B0	Sec c 20	
+4550	Secale cereale	SRC454240	Sec c 1	IUIS	Q9S8H2	Sec c 38	
+4565	Triticum aestivum	4GG6_I	Chain I, Protein Complex	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	A0A0K2QJY6	Gliadin alpha-B25	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	AAA96522.1	alpha-gliadin storage protein	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	AAB48479.1	low-molecular-weight glutenin storage protein	IUIS	B2Y2Q7	Tri a 36	
+4565	Triticum aestivum	AAG17702.1	omega gliadin storage protein	IUIS	Q402I5	Tri a 19	
+4565	Triticum aestivum	AAK84772.1	gamma-gliadin	IUIS	A0A060N479	Tri a 20	
+4565	Triticum aestivum	AAR98780.2	high-molecular-weight glutenin subunit 1Dx2.1	IUIS	P10388	Tri a 26	
+4565	Triticum aestivum	AAT01617.1	omega gliadin	IUIS	Q402I5	Tri a 19	
+4565	Triticum aestivum	ABB17935.1	gamma-gliadin/LMW-glutenin chimera Ch1 precursor	IUIS	A0A060N479	Tri a 20	
+4565	Triticum aestivum	ABG54322.1	low molecular weight glutenin subunit	IUIS	B2Y2Q7	Tri a 36	
+4565	Triticum aestivum	ABG68042.1	X-type HMW glutenin	IUIS	P10388	Tri a 26	
+4565	Triticum aestivum	ABQ52118.1	alpha-gliadin	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	ABQ52123.1	alpha-gliadin	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	ABS72145.1	alpha gliadin	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	ABX89298.1	high molecular weight glutenin subunit	IUIS	P10388	Tri a 26	
+4565	Triticum aestivum	ABY58133.1	LMW-s glutenin subunit 0359D24-S	IUIS	B2Y2Q7	Tri a 36	
+4565	Triticum aestivum	ABY58134.1	LMW-m glutenin subunit 0703A9-M	IUIS	B2Y2Q7	Tri a 36	
+4565	Triticum aestivum	ACA63851.1	low molecular weight glutenin subunit	IUIS	B2Y2Q7	Tri a 36	
+4565	Triticum aestivum	ACA63863.1	low molecular weight glutenin subunit	IUIS	B2Y2Q7	Tri a 36	
+4565	Triticum aestivum	ACD62597.1	alpha-gliadin	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	ACI04087.1	gamma-gliadin	IUIS	A0A060N479	Tri a 20	
+4565	Triticum aestivum	ACN62213.1	omega-gliadin	IUIS	Q402I5	Tri a 19	
+4565	Triticum aestivum	ACQ83636.1	omega secalin	IUIS	Q402I5	Tri a 19	
+4565	Triticum aestivum	ADP95517.1	75k gamma secalin	IUIS	A0A060N479	Tri a 20	
+4565	Triticum aestivum	AFC98436.1	gamma-gliadin	IUIS	A0A060N479	Tri a 20	
+4565	Triticum aestivum	AFQ13468.1	alpha-gliadin	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	AGK83251.1	low-molecular-weight glutenin subunit	IUIS	B2Y2Q7	Tri a 36	
+4565	Triticum aestivum	AGK83306.1	low-molecular-weight glutenin subunit	IUIS	B2Y2Q7	Tri a 36	
+4565	Triticum aestivum	BAA12318.1	alpha-gliadin	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	BAA22613.2	LMM glutenin 1	IUIS	B2Y2Q7	Tri a 36	
+4565	Triticum aestivum	BAB78750.1	low-molecular-weight glutenin subunit group 4 type II	IUIS	B2Y2Q7	Tri a 36	
+4565	Triticum aestivum	BAE20328.1	omega-5 gliadin	IUIS	Q402I5	Tri a 19	
+4565	Triticum aestivum	BAE45625.1	low-molecular-weight glutenin subunit	IUIS	B2Y2Q7	Tri a 36	
+4565	Triticum aestivum	BAN29066.1	gamma-gliadin	IUIS	A0A060N479	Tri a 20	
+4565	Triticum aestivum	BAN29068.1	high molecular weight glutenin subunit	IUIS	P10388	Tri a 26	
+4565	Triticum aestivum	CAB76959.1	alpha-gliadin	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	CAB76960.1	alpha-gliadin	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	CAB76961.1	alpha-gliadin	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	CAB76962.1	alpha-gliadin	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	CAB76963.1	alpha-gliadin	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	CAB76964.1	alpha-gliadin	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	CAC84119.1	glutenin high molecular weight subunit	IUIS	P10388	Tri a 26	
+4565	Triticum aestivum	CAD58622.1	low molecular weight glutenin subunit	IUIS	B2Y2Q7	Tri a 36	
+4565	Triticum aestivum	CAI78903.2	putative omega-gliadin	IUIS	Q402I5	Tri a 19	
+4565	Triticum aestivum	CAR82265.1	D-type LMW glutenin subunit	IUIS	A0A060N479	Tri a 20	
+4565	Triticum aestivum	CAR82266.1	D-type LMW glutenin subunit	IUIS	A0A060N479	Tri a 20	
+4565	Triticum aestivum	CAR82267.1	D-type LMW glutenin subunit	IUIS	A0A060N479	Tri a 20	
+4565	Triticum aestivum	P02863.2	Alpha/beta-gliadin precursor	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	P04721.1	Alpha/beta-gliadin A-I precursor	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	P04722.1	Alpha/beta-gliadin A-II precursor	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	P04723.1	Alpha/beta-gliadin A-III precursor	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	P04724.1	Alpha/beta-gliadin A-IV precursor	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	P04725.1	Alpha/beta-gliadin A-V	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	P04726	Alpha/beta-gliadin clone PW1215	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	P04727.1	Alpha/beta-gliadin clone PW8142 precursor	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	P10385.1	Glutenin, low molecular weight subunit precursor	IUIS	B2Y2Q7	Tri a 36	
+4565	Triticum aestivum	P10388.4	Glutenin, high molecular weight subunit DX5 precursor	IUIS	P10388	Tri a 26	
+4565	Triticum aestivum	P18573.1	Alpha/beta-gliadin MM1 precursor	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	Q402I5	Omega-5 gliadin	IUIS	Q402I5	Tri a 19	
+4565	Triticum aestivum	Q41545	(T. aestivum) alpha-type gliadin precursor	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	Q8L6B2	Gamma gliadin	IUIS	A0A060N479	Tri a 20	
+4565	Triticum aestivum	Q9FUW7	Omega gliadin storage protein	IUIS	Q402I5	Tri a 19	
+4565	Triticum aestivum	Q9M4L6	Alpha-gliadin	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	Q9M4M5	Alpha-gliadin	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	Q9ZNY0	Low molecular weight glutenin subunit precursor	IUIS	B2Y2Q7	Tri a 36	
+4565	Triticum aestivum	SRC262387	omega-5 gliadin	IUIS	Q402I5	Tri a 19	
+4565	Triticum aestivum	SRC264156	alpha/beta gliadin precursor	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	SRC268307	Gamma-gliadin	IUIS	A0A060N479	Tri a 20	
+4565	Triticum aestivum	SRC276224	Glutenin, high molecular weight subunit DX5	IUIS	P10388	Tri a 26	
+5077	Penicillium citrinum	AAD25926.1	Pen c 1	IUIS	Q9URH1	Pen c 13	
+5599	Alternaria alternata	AAB48043.1	hsp70	IUIS	P78983	Alt a 3	
+5599	Alternaria alternata	AAR98813.1	glutathione-S-transferase	IUIS	Q6R4B4	Alt a 13	
+5599	Alternaria alternata	P49148.1	60S acidic ribosomal protein P1	IUIS	P49148	Alt a 12	
+5599	Alternaria alternata	Q6R4B4.1	Glutathione-S-transferase	IUIS	Q6R4B4	Alt a 13	
+5599	Alternaria alternata	SRC269001	Major allergen Alt a 1	IUIS	P79085	Alt a 1	
+6689	Penaeus vannamei	ACB38288.1	Lit v 1 tropomyosin	IUIS	B4YAH6	Lit v 1	
+6954	Dermatophagoides farinae	AAP35081.1	Der f Alt a 10 allergen	IUIS	Q23939	Der f 10	
+6954	Dermatophagoides farinae	BAA04557.1	Mag44, partial	IUIS	Q23939	Der f 10	
+6954	Dermatophagoides farinae	P39673.1	Allergen Mag	IUIS	Q23939	Der f 10	
+6954	Dermatophagoides farinae	SRC338478	Mag44	IUIS	Q23939	Der f 10	
+6954	Dermatophagoides farinae	SRC343989	Der f 3 allergen	IUIS	P49275	Der f 3	
+6954	Dermatophagoides farinae	SRC343990	Der f Alt a 10 allergen	IUIS	Q23939	Der f 10	
+6954	Dermatophagoides farinae	SRC343991	Der f 16 allergen	IUIS	Q8MVU3	Der f 16	
+6954	Dermatophagoides farinae	SRC343992	ferritin	IUIS	L7UZ91	Der f 30	
+6956	Dermatophagoides pteronyssinus	3H4Z_A	Chain A, Crystal Structure Of An Mbp-Der P 7 Fusion Protein	IUIS	P49273	Der p 7	
+6956	Dermatophagoides pteronyssinus	SRC261403	Mite group 6 allergen Der p 6	IUIS	P49277	Der p 6	
+6956	Dermatophagoides pteronyssinus	SRC269004	Der P 1	IUIS	P08176	Der p 1	
+6956	Dermatophagoides pteronyssinus	SRC269005	Mite group 2 allergen Der p 2	IUIS	P49278	Der p 2	
+6956	Dermatophagoides pteronyssinus	SRC343987	group 14 allergen protein	IUIS	Q8N0N0	Der p 14	
+6956	Dermatophagoides pteronyssinus	SRC343988	glutathione transferase mu	IUIS	P46419	Der p 8	
+6956	Dermatophagoides pteronyssinus	SRC343993	Der p 13 allergen	IUIS	E0A8N8	Der p 13	
+6956	Dermatophagoides pteronyssinus	SRC343997	Der p 5	IUIS	P14004	Der p 5	
+6956	Dermatophagoides pteronyssinus	SRC522220	Der p23 allergen	IUIS	L7N6F8	Der p 23	
+6973	Blattella germanica	SRC323160	Bla g 11	IUIS	Q2L7A6	Bla g 11	
+6978	Periplaneta americana	CAB38086.1	tropomyosin	IUIS	Q9UB83	Per a 7	
+8049	Gadus morhua	CAM56786.1	parvalbumin beta	IUIS	Q90YL0	Gad m 1	
+8049	Gadus morhua	Q90YK9.3	Parvalbumin beta	IUIS	Q90YL0	Gad m 1	
+8053	Gadus morhua callarias	P02622.1	Parvalbumin beta	IUIS	Q90YL0	Gad m 1	
+9031	Gallus gallus	SRC279992	Ovalbumin	IUIS	P01012	Gal d 2	
+9031	Gallus gallus	SRC280240	Lysozyme C	IUIS	P00698	Gal d 4	
+9685	Felis catus	1PUO_A	Chain A, Crystal Structure Of Fel D 1- The Major Cat Allergen	IUIS	P30438	Fel d 1	
+9685	Felis catus	2EJN_A	Chain A, Structural Characterization Of The Tetrameric Form Of The Major Cat Allergen Fel D 1	IUIS	P30438	Fel d 1	
+9685	Felis catus	SRC269010	Major allergen I polypeptide chain 1	IUIS	P30438	Fel d 1	
+9685	Felis catus	SRC282810	Major allergen I polypeptide chain 2	IUIS	P30438	Fel d 1	
+9685	Felis catus	CAD32275.1		IUIS	P49064	Fel d 2	
+9913	Bos taurus	CAC37028.1	beta casein B	IUIS	P02666	Bos d 11	
+9913	Bos taurus	SRC280081	Alpha-S1-casein	IUIS	P02662	Bos d 9	
+9913	Bos taurus	SRC293738	beta-casein	IUIS	P02666	Bos d 11	
+9913	Bos taurus	SRC293739	kappa-casein	IUIS	P02668	Bos d 12	
+9913	Bos taurus	SRC309991	beta-lactoglobulin	IUIS	P02754	Bos d 5	
 13187	Parietaria officinalis	SRC243675	Par j	IUIS	472	Par o 1	
-13415	Chamaecyparis obtusa	SRC265920	Major pollen allergen Cha o 1	IUIS	193	Cha o 1	
-13415	Chamaecyparis obtusa	SRC337169	major pollen allergen Cha o 2	IUIS	194	Cha o 2	
-13451	Corylus avellana	SRC265918	Major pollen allergen Cor a 1 isoforms 5, 6, 11 and 16	IUIS	228	Cor a 1	
-15957	Phleum pratense	Q7M1L8	Pollen allergen Phl p V	IUIS	509	Phl p 5	
-28909	Cynodon dactylon	SRC268305	Major pollen allergen Cyn d 1	IUIS	259	Cyn d 1	
+13415	Chamaecyparis obtusa	SRC265920	Major pollen allergen Cha o 1	IUIS	Q96385	Cha o 1	
+13415	Chamaecyparis obtusa	SRC337169	major pollen allergen Cha o 2	IUIS	Q7M1E7	Cha o 2	
+13451	Corylus avellana	SRC265918	Major pollen allergen Cor a 1 isoforms 5, 6, 11 and 16	IUIS	Q08407	Cor a 1	
+15957	Phleum pratense	Q7M1L8	Pollen allergen Phl p V	IUIS	Q40960	Phl p 5	
+28909	Cynodon dactylon	SRC268305	Major pollen allergen Cyn d 1	IUIS	O04701	Cyn d 1	
 29159	Crassostrea gigas	SRC471007	tropomyosin	IUIS	902	Cra g 1	
-29661	Anthoxanthum odoratum	SRC269025	Group I allergen Ant o I	IUIS	57	Ant o 1	
-29715	Ambrosia psilostachya	SRC310169	Amb p 5	IUIS	41	Amb p 5	
+29661	Anthoxanthum odoratum	SRC269025	Group I allergen Ant o I	IUIS	Q7M1X6	Ant o 1	
+29715	Ambrosia psilostachya	SRC310169	Amb p 5	IUIS	P43174	Amb p 5	
 29960	Penaeus indicus	SRC283302	tropomyosin	IUIS	489	Pen i 1	
-33127	Parietaria judaica	SRC268314	Probable non-specific lipid-transfer protein	IUIS	468	Par j 1	
-49011	Hesperocyparis arizonica	SRC247024	putative allergen Cup a 1 glycoprotein	IUIS	253	Cup a 1	
-51240	Juglans regia	AAF18269.1	vicilin-like protein precursor	IUIS	389	Jug r 2	
-55513	Pistacia vera	SRC337446	Pis v 5	IUIS	519	Pis v 5	
-62330	Fagopyrum tataricum	AAK97787.1	allergenic protein	IUIS	724	Fag t 2	
-62330	Fagopyrum tataricum	ABI32184.1	allergenic protein	IUIS	724	Fag t 2	
-155091	Secale cereale subsp. afghanicum	AEW46799.1	gamma prolamin	IUIS	584	Sec c 20	
-171929	Anacardium occidentale	SRC268311	Vicilin-like protein	IUIS	45	Ana o 1	
+33127	Parietaria judaica	SRC268314	Probable non-specific lipid-transfer protein	IUIS	P43217	Par j 1	
+49011	Hesperocyparis arizonica	SRC247024	putative allergen Cup a 1 glycoprotein	IUIS	Q9SCG9	Cup a 1	
+51240	Juglans regia	AAF18269.1	vicilin-like protein precursor	IUIS	Q9SEW4	Jug r 2	
+55513	Pistacia vera	SRC337446	Pis v 5	IUIS	B7SLJ1	Pis v 5	
+62330	Fagopyrum tataricum	AAK97787.1	allergenic protein	IUIS	E9NX73	Fag t 2	
+62330	Fagopyrum tataricum	ABI32184.1	allergenic protein	IUIS	E9NX73	Fag t 2	
+155091	Secale cereale subsp. afghanicum	AEW46799.1	gamma prolamin	IUIS	Q9S8B0	Sec c 20	
+171929	Anacardium occidentale	SRC268311	Vicilin-like protein	IUIS	Q8L5L5	Ana o 1	
 746128	Aspergillus fumigatus	AAC61261.1	allergen	UniProt	Q8J0P4	Asp f 16	crf1
-746128	Aspergillus fumigatus	SRC280124	Ribonuclease mitogillin	IUIS	97	Asp f 1	
+746128	Aspergillus fumigatus	SRC280124	Ribonuclease mitogillin	IUIS	P67875	Asp f 1	
 139	Borreliella burgdorferi	ABK60035.1	VlsE	UniProt	G5IXI6	Variable large protein	BB_F0041
 139	Borreliella burgdorferi	SRC265945	Outer surface protein A	UniProt	P0CL66	Outer surface protein A	ospA
 139	Borreliella burgdorferi	SRC265946	Outer surface protein C	UniProt	Q07337	Outer surface protein C	ospC
@@ -1312,9 +1312,9 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 6973	Blattella germanica (German cockroach)	SRC323173	NCRA4	UniProt	A0A2P8YR56	Apolipophorin	
 329091	Cupressus torulosa	SRC245028	allergen			Cup s 1 pollen allergen	
 7955	Danio rerio (leopard danio)	SRC279657	non-POU domain containing, octamer-binding	UniProt	Q802Z5	Non-POU domain-containing, octamer-binding	wu:fb40d10
-15957	Phleum pratense (timothy grass)	SRC251510	Phl p 3 allergen	IUIS	1013	Phl p 3 allergen	
+15957	Phleum pratense (timothy grass)	SRC251510	Phl p 3 allergen	IUIS	Q69B42	Phl p 3 allergen	
 6182	Schistosoma japonicum	SRC536328	SJCHGC06871 protein	UniProt	A0A4Z2D6V9	Annexin A10	EWB00_003895
-3645	Bertholletia excelsa (Brazil nut)	SRC268312	2S sulfur-rich seed storage protein 1	IUIS	127	2S sulfur-rich seed storage protein 1	
+3645	Bertholletia excelsa (Brazil nut)	SRC268312	2S sulfur-rich seed storage protein 1	IUIS	P04403	2S sulfur-rich seed storage protein 1	
 6182	Schistosoma japonicum	SRC536333	micro exon gene 15	UniProt	A0A4Z2D0E9	Uncharacterized Protein	EWB00_005888
 6182	Schistosoma japonicum	SRC536347	micro exon gene 8.3 C	UniProt	A0A4Z2CTZ7	Uncharacterized Protein	EWB00_007523
 6182	Schistosoma japonicum	SRC536355	25 kDa integral membrane protein isoform 2	UniProt	A0A4Z2CQU9	25 kDa integral membrane protein isoform 2	EWB00_008283
@@ -1323,8 +1323,8 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 10245	Vaccinia virus (vaccinia virus VV)	SRC293727	DNA helicase	UniProt	P16712	Transcript termination protein OPG145	OPG145
 1281454	Rodent hepacivirus	SRC537113	Envelope glycoprotein E1	UniProt	A0A247ZNN0	Envelope glycoprotein E1	
 9606	Homo sapiens (human)	SRC248015	myosin 7	UniProt	P12883	Myosin-7	MYH7
-6956	Dermatophagoides pteronyssinus (European house dust mite)	SRC343994	serine protease	IUIS	303	Der p 9	
-6956	Dermatophagoides pteronyssinus (European house dust mite)	SRC343995	LytFM	IUIS	949	Der p 38	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	SRC343994	serine protease	IUIS	Q7Z163	Der p 9	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	SRC343995	LytFM	IUIS	Q8MWR6	Der p 38	
 9031	Gallus gallus (chicken)	SRC245864	gamma globulin	ARC	ab	Immunoglobulin chain	
 10090	Mus musculus (mouse)	SRC378890	band 3 anion transport protein	UniProt	P04919	Band 3 anion transport protein	Slc4a1
 9606	Homo sapiens (human)	SRC454731	tissue transglutaminase	UniProt	P21980	Protein-glutamine gamma-glutamyltransferase 2	TGM2
@@ -2313,10 +2313,10 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 9606	Homo sapiens (human)	SRC245696	seven transmembrane helix receptor	UniProt	Q01718	Adrenocorticotropic hormone receptor	MC2R
 9606	Homo sapiens (human)	SRC248884	CD5 antigen	UniProt	P10643	Complement component C7	C7
 9606	Homo sapiens (human)	SRC250796	interferon, gamma-inducible protein	UniProt	P13284	Gamma-interferon-inducible lysosomal thiol reductase	IFI30
-6954	Dermatophagoides farinae (American house dust mite)	SRC589593	Der f 1 allergen	IUIS	274	Der f 1	
+6954	Dermatophagoides farinae (American house dust mite)	SRC589593	Der f 1 allergen	IUIS	Q58A71	Der f 1	
 6954	Dermatophagoides farinae (American house dust mite)	SRC589604	Der f Mag 29 allergen	UniProt	A0A922HN71	Heat shock cognate 71 kDa protein	MAG29
-6956	Dermatophagoides pteronyssinus (European house dust mite)	SRC589043	dipeptidyl peptidase 1-like	IUIS	289	Der p 1	
-6956	Dermatophagoides pteronyssinus (European house dust mite)	SRC589543	alpha-amylase-like	IUIS	289	Der p 1	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	SRC589043	dipeptidyl peptidase 1-like	IUIS	P08176	Der p 1	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	SRC589543	alpha-amylase-like	IUIS	P08176	Der p 1	
 1773	Mycobacterium tuberculosis	SRC648519	ABC transporter ATP-binding protein	UniProt	P9WQK1	Uncharacterized ABC transporter ATP-binding protein Rv0986	Rv0986
 10090	Mus musculus (mouse)	SRC648591	centrosomal protein of 295 kDa isoform X1	UniProt	Q8BQ48	Centrosomal protein of 295 kDa	Cep295
 10090	Mus musculus (mouse)	SRC648592	succinate dehydrogenase cytochrome b560 subunit	UniProt	Q9CZB0	Succinate dehydrogenase cytochrome b560 subunit, mitochondrial	Sdhc
