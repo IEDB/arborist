@@ -165,23 +165,32 @@ class SourceProcessor:
       'Query', 'Subject', '% Identity', 'Alignment Length', 'Mismatches', 'Gap Openings', 
       'Query Start', 'Query End', 'Subject Start', 'Subject End', 'E-value', 'Bit Score'
     ]
-    if self.run_mmseqs2:
-      alignments = pl.read_csv(self.species_path / 'alignments.tsv', separator='\t', has_header=False, new_columns=alignment_cols)
-      alignments = alignments.with_columns(pl.col('% Identity').mul(100).alias('% Identity'))
-    else:
-      alignments = pl.read_csv(self.species_path / 'alignments.csv', separator=',', has_header=False, new_columns=alignment_cols)
-      alignments = alignments.with_columns(pl.col('Subject').str.split('|').list.get(1))
+    try:
+      if self.run_mmseqs2:
+        alignments = pl.read_csv(self.species_path / 'alignments.tsv', separator='\t', has_header=False, new_columns=alignment_cols, infer_schema_length=10000)
+        alignments = alignments.with_columns(pl.col('% Identity').mul(100).alias('% Identity'))
+      else:
+        alignments = pl.read_csv(self.species_path / 'alignments.csv', separator=',', has_header=False, new_columns=alignment_cols, infer_schema_length=10000)
+        alignments = alignments.with_columns(pl.col('Subject').str.split('|').list.get(1))
 
-    query_length_map = dict(self.sources.select('Source Accession', 'Length').iter_rows())
-    alignments = alignments.with_columns(
-      pl.col('Query').replace(query_length_map).cast(pl.Int32).alias('Query Length')
-    )
-    alignments = alignments.with_columns(
-      pl.col('Alignment Length').mul(pl.col('% Identity')).truediv(pl.col('Query Length')).alias('Score')
-    )
+      query_length_map = dict(self.sources.select('Source Accession', 'Length').iter_rows())
+      alignments = alignments.with_columns(
+        pl.col('Query').replace(query_length_map).cast(pl.Int32).alias('Query Length')
+      )
+      alignments = alignments.with_columns(
+        pl.col('Alignment Length').mul(pl.col('% Identity')).truediv(pl.col('Query Length')).alias('Score')
+      )
 
+    except pl.NoDataError: # no alignments were found
+      alignments = pl.DataFrame({col: [] for col in alignment_cols})
+      alignments = alignments.with_columns(
+        pl.lit(0).alias('Query Length'),
+        pl.lit(0).alias('Score')
+      )
+    alignments = alignments.with_columns(
+      pl.col('Query').cast(pl.String).alias('Query'),
+    )
     top_proteins = alignments.group_by('Query').agg(pl.all().sort_by('Score').last())
-    
     missing_sources = self.sources.filter(~pl.col('Source Accession').is_in(top_proteins['Query'].to_list()))
     if missing_sources.shape[0] != 0:
       missing_sources = pl.DataFrame({'Query': missing_sources['Source Accession'].to_list()})
@@ -253,7 +262,9 @@ class PeptideProcessor:
     ).match()
   
   def assign_parents(self):
-    matches = pl.read_csv(self.species_path / 'peptide-matches.tsv', separator='\t')
+    matches = pl.read_csv(self.species_path / 'peptide-matches.tsv', separator='\t').with_columns(
+      pl.col('Gene').cast(pl.String).alias('Gene'),
+    )
     peptides_with_genes = self.peptides.filter(pl.col('Source Assigned Gene').is_not_null())
     peptides_without_genes = self.peptides.filter(pl.col('Source Assigned Gene').is_null())
 
@@ -385,7 +396,15 @@ class PeptideProcessor:
     assignments.write_csv(self.species_path / 'peptide-assignments.tsv', separator='\t')
 
 
+def check_for_skips(taxon_id):
+  if (build_path / 'species' / str(taxon_id) / 'proteome.fasta').stat().st_size == 0:
+    print(f'Proteome is empty, skipping.')
+    return True
+
 def do_assignments(taxon_id):
+  skip = check_for_skips(taxon_id)
+  if skip:
+    return
   species_row = active_species.row(by_predicate=pl.col('Species ID') == taxon_id)
   species_name = species_row[2]
   group = species_row[4]
