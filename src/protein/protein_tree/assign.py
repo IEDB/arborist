@@ -32,15 +32,15 @@ class AssignmentHandler:
 
   def cleanup_files(self):
     files_to_remove = [
-        'alignments.csv', 'arc-temp-results.tsv', 'proteome.fasta.pdb', 'proteome.fasta.phr',
-        'proteome.fasta.pin', 'proteome.fasta.pjs', 'proteome.fasta.pot', 'proteome.fasta.psq',
-        'proteome.fasta.ptf', 'proteome.fasta.pto', 'sources.fasta'
+      'alignments.csv', 'alignments.tsv', 'arc-temp-results.tsv', 'proteome.fasta.pdb', 
+      'proteome.fasta.phr', 'proteome.fasta.pin', 'proteome.fasta.pjs', 'proteome.fasta.pot',
+      'proteome.fasta.psq', 'proteome.fasta.ptf', 'proteome.fasta.pto', 'sources.fasta'
     ]
     for file in files_to_remove:
       file_path = self.species_path / file
       if file_path.exists():
         file_path.unlink()
-
+    subprocess.run(['rm', '-rf', str(self.species_path / 'tmp')])
 
 class SourceProcessor:
   def __init__(self, taxon_id, group, sources, num_threads, species_path):
@@ -117,7 +117,7 @@ class SourceProcessor:
       '--threads', str(self.num_threads),
       '-s', '7.0'
     ]
-    subprocess.run(mmseqs2_cmd, check=True)
+    subprocess.run(mmseqs2_cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
   def run_arc(self):
     arc_results_exist = (self.species_path / 'arc-results.tsv').exists()
@@ -139,13 +139,15 @@ class SourceProcessor:
     ).classify_seqfile(f'{self.species_path}/sources.fasta')
 
     temp_results = pl.read_csv(temp_results_path, separator='\t')
+    if temp_results.shape[0] == 0:
+      return old_arc_df
+
     if arc_results_exist:
       arc_df = pl.concat([old_arc_df, temp_results])
     else:
       arc_df = temp_results
 
     arc_df.write_csv(self.species_path / 'arc-results.tsv', separator='\t')
-
     return arc_df
   
   def combine_arc_data(self, top_protein_data, arc_df):
@@ -175,7 +177,7 @@ class SourceProcessor:
 
       query_length_map = dict(self.sources.select('Source Accession', 'Length').iter_rows())
       alignments = alignments.with_columns(
-        pl.col('Query').replace(query_length_map).cast(pl.Int32).alias('Query Length')
+        pl.col('Query').cast(pl.String).replace(query_length_map).cast(pl.Int32).alias('Query Length')
       )
       alignments = alignments.with_columns(
         pl.col('Alignment Length').mul(pl.col('% Identity')).truediv(pl.col('Query Length')).alias('Score')
@@ -191,7 +193,9 @@ class SourceProcessor:
       pl.col('Query').cast(pl.String).alias('Query'),
     )
     top_proteins = alignments.group_by('Query').agg(pl.all().sort_by('Score').last())
-    missing_sources = self.sources.filter(~pl.col('Source Accession').is_in(top_proteins['Query'].to_list()))
+    missing_sources = self.sources.filter(
+      ~pl.col('Source Accession').is_in(top_proteins['Query'].to_list())
+    )
     if missing_sources.shape[0] != 0:
       missing_sources = pl.DataFrame({'Query': missing_sources['Source Accession'].to_list()})
       top_proteins = top_proteins.join(missing_sources, how='full', on='Query', coalesce=True)
@@ -216,6 +220,9 @@ class SourceProcessor:
     )).rename({
       'Query': 'Source Accession', 'Score': 'Source Alignment Score', 'Gene': 'Source Assigned Gene',
       'Protein ID': 'Source Assigned Protein ID', 'Protein Name': 'Source Assigned Protein Name'}
+    )
+    protein_data = protein_data.with_columns(
+      pl.col('Source Assigned Gene').cast(pl.String).alias('Source Assigned Gene')
     )
     return protein_data
 
@@ -248,7 +255,7 @@ class PeptideProcessor:
     ).sql_proteome(k = 5)
 
   def search_peptides(self):
-    peptides = self.peptides['Sequence'].to_list()
+    peptides = [peptide for peptide in self.peptides['Sequence'].to_list() if peptide]
     Matcher(
       query=peptides,
       proteome_file=self.species_path / 'proteome.fasta',
