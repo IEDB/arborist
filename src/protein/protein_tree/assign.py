@@ -409,9 +409,6 @@ def check_for_skips(taxon_id):
     return True
 
 def do_assignments(taxon_id):
-  skip = check_for_skips(taxon_id)
-  if skip:
-    return
   species_row = active_species.row(by_predicate=pl.col('Species ID') == taxon_id)
   species_name = species_row[2]
   group = species_row[4]
@@ -428,9 +425,22 @@ def do_assignments(taxon_id):
     'num_threads': args.num_threads
   }
   print(f'Assigning peptides for {species_name} (ID: {taxon_id})')
+  skip = check_for_skips(taxon_id)
+  if skip:
+    return
   assignment_handler = AssignmentHandler(**config)
   assignment_handler.process_species()
   assignment_handler.cleanup_files()
+
+def combine_assignments():
+  all_assignments = pl.DataFrame()
+  for species_path in sorted((build_path / 'species').iterdir(), key=lambda x: int(x.name)):
+    if not (species_path / 'peptide-assignments.tsv').exists():
+      continue
+    assignments = pl.read_csv(species_path / 'peptide-assignments.tsv', separator='\t', infer_schema_length=0)
+    all_assignments = pl.concat([all_assignments, assignments])
+
+  all_assignments.write_csv(build_path / 'arborist' / 'all-peptide-assignments.tsv', separator='\t')
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
@@ -450,5 +460,6 @@ if __name__ == "__main__":
   if all_species:
     for row in active_species.rows(named=True):
       do_assignments(row['Species ID'])
+    combine_assignments()
   else:
     do_assignments(taxon_id)
