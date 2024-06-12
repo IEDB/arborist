@@ -2,31 +2,54 @@ import polars as pl
 from pathlib import Path
 
 
-def get_parents(assignments):
+def get_all_parent_data(assignments, source_data, species_data):
   top_parents = assignments.group_by('Source Accession').agg(
     pl.col('Assigned Protein ID').mode().first()
   ).rename({'Assigned Protein ID': 'Parent Protein ID'})
 
   assignments = assignments.join(
     top_parents, how='left', on='Source Accession', coalesce=True
-  )
-
-  parents = assignments.filter(
+  ).filter(
     (pl.col('Assigned Protein ID') == pl.col('Parent Protein ID')) | 
     (pl.col('Assigned Protein ID').is_null())
   ).unique(subset=['Source Accession', 'Parent Protein ID'])
 
-  return parents
-
-def make_source_parents(parents):
-  all_data = parents.join(
+  all_parent_data = assignments.join(
     source_data, how='left', on='Source Accession', coalesce=True
-  )
-  all_data = all_data.join(
+  ).join(
     species_data, how='left', left_on='Species Taxon ID', right_on='Species ID', coalesce=True
   )
+  return all_parent_data
 
-def make_parent_proteins():
+def make_source_parents(all_parent_data):
+  all_parent_data = all_parent_data.with_columns(
+    # TODO: change strategy to some kind of apply func
+    pl.lit('strong-blast-match').alias('Protein Strategy'),
+    pl.when(
+      pl.col('Parent Protein ID').is_not_null())
+      .then(pl.lit('UniProt'))
+      .otherwise(pl.lit('IEDB'))
+      .alias('Parent Protein Database')
+  )
+  source_parents = all_parent_data.select(
+    'Source ID', 'Source Accession', 'Database', 'Name', 'Aliases',
+    'Assigned Protein Synonyms', 'Organism ID', 'Organism Name',
+    'Species Taxon ID', 'Species Name', 'Proteome ID', 'Proteome Label',
+    'Protein Strategy', 'Parent Protein Database', 'Parent Protein ID',
+    'Assigned Protein Length', 'Assigned Protein Sequence'
+  ).rename({
+    'Source Accession': 'Accession', 'Assigned Protein Synonyms': 'Synonyms',
+    'Organism ID': 'Taxon ID', 'Organism Name': 'Taxon Name',
+    'Species Taxon ID': 'Species ID', 'Species Name': 'Species Label',
+    'Parent Protein ID': 'Parent Protein Accession', 
+    'Assigned Protein Length': 'Parent Sequence Length',
+    'Assigned Protein Sequence': 'Sequence'
+  })
+
+  # TODO: parent IRI??
+  print(source_parents)
+
+def make_parent_proteins(all_parent_data):
   pass
 
 
@@ -58,7 +81,7 @@ if __name__ == '__main__':
   source_data = pl.read_csv(build_path / 'arborist' / 'all-source-data.tsv', separator='\t')
   species_data = pl.read_csv(build_path / 'arborist' / 'all-species-data.tsv', separator='\t')
 
-  parents = get_parents(assignments)
-  make_source_parents(parents)
-  make_parent_proteins()
+  all_parent_data = get_all_parent_data(assignments, source_data, species_data)
+  make_source_parents(all_parent_data)
+  make_parent_proteins(all_parent_data)
   epitope_mapping = EpitopeMapping(assignments)
