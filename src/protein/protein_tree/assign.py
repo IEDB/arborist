@@ -432,15 +432,26 @@ def do_assignments(taxon_id):
   assignment_handler.process_species()
   assignment_handler.cleanup_files()
 
-def combine_assignments():
+def combine_data():
+  print('Combining assignment, source, and species data.')
   all_assignments = pl.DataFrame()
+  all_source_data = pl.DataFrame()
+  all_species_data = pl.DataFrame()
+
   for species_path in sorted((build_path / 'species').iterdir(), key=lambda x: int(x.name)):
-    if not (species_path / 'peptide-assignments.tsv').exists():
-      continue
-    assignments = pl.read_csv(species_path / 'peptide-assignments.tsv', separator='\t', infer_schema_length=0)
-    all_assignments = pl.concat([all_assignments, assignments])
+    if (species_path / 'peptide-assignments.tsv').exists():
+      assignments = pl.read_csv(species_path / 'peptide-assignments.tsv', separator='\t', infer_schema_length=0)
+      all_assignments = pl.concat([all_assignments, assignments])
+    if (species_path / 'source-data.tsv').exists():
+      source_data = pl.read_csv(species_path / 'source-data.tsv', separator='\t', infer_schema_length=0)
+      all_source_data = pl.concat([all_source_data, source_data])
+    if (species_path / 'species-data.tsv').exists():
+      species_data = pl.read_csv(species_path / 'species-data.tsv', separator='\t', infer_schema_length=0)
+      all_species_data = pl.concat([all_species_data, species_data])
 
   all_assignments.write_csv(build_path / 'arborist' / 'all-peptide-assignments.tsv', separator='\t')
+  all_source_data.write_csv(build_path / 'arborist' / 'all-source-data.tsv', separator='\t')
+  all_species_data.write_csv(build_path / 'arborist' / 'all-species-data.tsv', separator='\t')
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
@@ -453,6 +464,7 @@ if __name__ == "__main__":
 
   build_path = Path(__file__).parents[3] / 'build'
   active_species = pl.read_csv(build_path / 'arborist' / 'active-species.tsv', separator='\t')
+  
   data_fetcher = DataFetcher(build_path)
   all_peptides = data_fetcher.get_all_peptides()
   all_sources = data_fetcher.get_all_sources()
@@ -460,6 +472,6 @@ if __name__ == "__main__":
   if all_species:
     for row in active_species.rows(named=True):
       do_assignments(row['Species ID'])
-    combine_assignments()
+    combine_data()
   else:
     do_assignments(taxon_id)
