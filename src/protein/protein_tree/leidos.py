@@ -23,31 +23,35 @@ def get_all_parent_data(assignments, source_data, species_data):
 
 def make_source_parents(all_parent_data):
   all_parent_data = all_parent_data.with_columns(
-    # TODO: change strategy to some kind of apply func
-    pl.lit('strong-blast-match').alias('Protein Strategy'),
-    pl.when(
-      pl.col('Parent Protein ID').is_not_null())
+    pl.when(pl.col('Source Alignment Score') >= 90)
+      .then(pl.lit('strong-blast-match'))
+      .when(pl.col('Source Alignment Score') < 90)
+      .then(pl.lit('weak-blast-match'))
+      .otherwise(pl.lit('manual')).alias('Protein Strategy'),
+    pl.when(pl.col('Parent Protein ID').is_not_null())
+      .then(pl.lit('https://www.uniprot.org/uniprotkb/') + pl.col('Parent Protein ID'))
+      .otherwise(
+        pl.lit('https://ontology.iedb.org/taxon-protein/') + 
+        pl.col('Species Taxon ID').cast(pl.String) + pl.lit('-other')
+      )
+      .alias('Parent IRI'),
+    pl.when(pl.col('Parent Protein ID').is_not_null())
       .then(pl.lit('UniProt'))
       .otherwise(pl.lit('IEDB'))
       .alias('Parent Protein Database')
   )
   source_parents = all_parent_data.select(
-    'Source ID', 'Source Accession', 'Database', 'Name', 'Aliases',
-    'Assigned Protein Synonyms', 'Organism ID', 'Organism Name',
-    'Species Taxon ID', 'Species Name', 'Proteome ID', 'Proteome Label',
-    'Protein Strategy', 'Parent Protein Database', 'Parent Protein ID',
-    'Assigned Protein Length', 'Assigned Protein Sequence'
+    'Source ID', 'Source Accession', 'Database', 'Name', 'Aliases', 'Assigned Protein Synonyms',
+    'Organism ID', 'Organism Name', 'Species Taxon ID', 'Species Name', 'Proteome ID',
+    'Proteome Label', 'Protein Strategy', 'Parent IRI', 'Parent Protein Database',
+    'Parent Protein ID', 'Assigned Protein Length', 'Assigned Protein Sequence'
   ).rename({
     'Source Accession': 'Accession', 'Assigned Protein Synonyms': 'Synonyms',
-    'Organism ID': 'Taxon ID', 'Organism Name': 'Taxon Name',
-    'Species Taxon ID': 'Species ID', 'Species Name': 'Species Label',
-    'Parent Protein ID': 'Parent Protein Accession', 
-    'Assigned Protein Length': 'Parent Sequence Length',
-    'Assigned Protein Sequence': 'Sequence'
+    'Organism ID': 'Taxon ID', 'Organism Name': 'Taxon Name', 'Species Taxon ID': 'Species ID',
+    'Species Name': 'Species Label', 'Parent Protein ID': 'Parent Protein Accession', 
+    'Assigned Protein Length': 'Parent Sequence Length', 'Assigned Protein Sequence': 'Sequence'
   })
-
-  # TODO: parent IRI??
-  print(source_parents)
+  source_parents.write_csv(build_path / 'arborist' / 'source-parents.tsv', separator='\t')
 
 def make_parent_proteins(all_parent_data):
   pass
