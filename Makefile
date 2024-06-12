@@ -336,7 +336,7 @@ build/arborist/organism_core.html: src/organism/render_organism_core.py src/orga
 	python3 $^ $@
 
 # Build a new organism tree.
-build/arborist/organism-tree.tsv: src/organism/assign_species.py build/arborist/ncbitaxon.built src/organism/organism_core.tsv build/iedb/iedb_taxa.tsv build/arborist/peptide-count.tsv | build/arborist/nanobot.db
+build/arborist/organism-tree.tsv: src/organism/assign_species.py build/arborist/ncbitaxon.built src/organism/organism_core.tsv build/iedb/ncbi_include.tsv build/iedb/iedb_taxa.tsv build/arborist/peptide-count.tsv | build/arborist/nanobot.db
 	python3 $< $| $(filter %.tsv, $^) $@
 	qsv sort $@ --output $@
 

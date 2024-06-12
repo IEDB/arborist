@@ -233,6 +233,11 @@ def main():
         type=FileType('r'),
     )
     parser.add_argument(
+        'ncbi',
+        help='Path to NCBI include file',
+        type=FileType('r'),
+    )
+    parser.add_argument(
         'iedb',
         help='Path to IEDB taxon file',
         type=FileType('r'),
@@ -358,6 +363,21 @@ def main():
                 'source_table': 'iedb_taxa.parent2',
             }
         row['parent2_label'] = tree[parent2]['label']
+
+    # Add all ncbi_includes
+    for row in csv.DictReader(args.ncbi, delimiter='\t'):
+        curie = get_curie(row['taxon_id'])
+        if curie not in tree:
+            label, label_source = get_label_and_source(con, tree, curie)
+            rank = get_rank(con, curie)
+            tree[curie] = {
+                'curie': curie,
+                'label': label,
+                'label_source': label_source,
+                'rank': rank,
+                'level': get_level(rank),
+                'source_table': 'ncbi_include',
+            }
 
     # Add all active taxa, and assign epitope counts
     for row in csv.DictReader(args.count, delimiter='\t'):
