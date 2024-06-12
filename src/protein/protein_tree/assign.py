@@ -387,6 +387,7 @@ class PeptideProcessor:
       'Ending Position': 'Source Ending Position',
       'Protein ID': 'Assigned Protein ID',
       'Protein Name': 'Assigned Protein Name',
+      'Entry Name': 'Assigned Protein Entry Name',
       'Index start': 'Assigned Protein Starting Position',
       'Index end': 'Assigned Protein Ending Position',
     })
@@ -395,9 +396,10 @@ class PeptideProcessor:
       'Source Alignment Score', 'Source Assigned Gene', 'Source Assigned Protein ID', 
       'Source Assigned Protein Name', 'ARC Assignment', 'Epitope ID', 'Epitope Sequence', 
       'Source Starting Position', 'Source Ending Position', 'Assigned Protein ID', 
-      'Assigned Protein Name', 'Assigned Protein Review Status', 'Assigned Protein Starting Position', 
-      'Assigned Protein Ending Position', 'Assigned Protein Sequence', 'Assigned Protein Length', 
-      'Assigned Protein Fragments', 'Assigned Protein Synonyms'
+      'Assigned Protein Name', 'Assigned Protein Entry Name', 'Assigned Protein Review Status',
+      'Assigned Protein Starting Position', 'Assigned Protein Ending Position', 
+      'Assigned Protein Sequence', 'Assigned Protein Length', 'Assigned Protein Fragments',
+      'Assigned Protein Synonyms'
     ]
     assignments = assignments.select(col_order)
     assignments.write_csv(self.species_path / 'peptide-assignments.tsv', separator='\t')
