@@ -54,7 +54,27 @@ def make_source_parents(all_parent_data):
   source_parents.write_csv(build_path / 'arborist' / 'source-parents.tsv', separator='\t')
 
 def make_parent_proteins(all_parent_data):
-  pass
+  parent_protein_name_tail = (
+    pl.lit('|') + pl.col('Parent Protein ID') + pl.lit('|') + pl.col('Assigned Protein Entry Name')
+  )
+  unique_parents = all_parent_data.unique(subset=['Parent Protein ID']).with_columns(
+    pl.lit('UniProt').alias('Parent Protein Database'),
+    pl.when(pl.col('Assigned Protein Review Status'))
+    .then(pl.lit('sp') + parent_protein_name_tail)
+    .otherwise(pl.lit('tr') + parent_protein_name_tail)
+    .alias('Parent Protein Name')
+    ).filter(
+      pl.col('Parent Protein ID').is_not_null()
+    )
+
+  parent_proteins = unique_parents.select(
+    'Parent Protein ID', 'Parent Protein Database', 'Parent Protein Name', 'Assigned Protein Name',
+    'Proteome ID', 'Proteome Label', 'Assigned Protein Sequence'
+  ).rename({
+    'Parent Protein ID': 'Accession', 'Parent Protein Database': 'Database',
+    'Assigned Protein Name': 'Title', 'Assigned Protein Sequence': 'Sequence'
+  })
+  parent_proteins.write_csv(build_path / 'arborist' / 'parent-proteins.tsv', separator='\t')
 
 
 class EpitopeMapping:
