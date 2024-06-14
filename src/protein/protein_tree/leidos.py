@@ -85,14 +85,15 @@ class EpitopeMapper:
     self.assignments = assignments
     self.num_threads = num_threads
     self.bin_path = Path(__file__).parents[3] / 'bin'
+    self.blast_temp = build_path / 'blast_temp'
 
   def make_epitope_mapping(self):
     exact_matches, non_exact_linear, non_exact_discontinuous = self.split_assignments()
-    exact_mappings = self.calculate_exact_mappings(exact_matches)
-    linear_mappings = self.blast_linear_peptides(non_exact_linear)
+    exact_mappings = self.make_exact_mappings(exact_matches)
+    linear_mappings = self.make_linear_mappings(non_exact_linear)
     discontinous_mappings = self.map_discontinuous_peptides(non_exact_discontinuous)
+    combined_mappings = self.combine_mappings(exact_mappings, linear_mappings, discontinous_mappings)
 
-    
   def split_assignments(self):
     exact_matches = self.assignments.filter(
       (pl.col('Assigned Protein Starting Position').is_not_null()) & 
@@ -112,55 +113,98 @@ class EpitopeMapper:
     )
     return exact_matches, non_exact_linear, non_exact_discontinuous
   
-  def calculate_exact_mappings(self, exact_matches):
+  def combine_mappings(self, exact_mappings, linear_mappings, discontinous_mappings):
     pass
 
+  def make_exact_mappings(self, exact_matches):
+    pass
+
+  def make_linear_mappings(self, non_exact_linear):
+    self.blast_linear_peptides(non_exact_linear)
+    blast_cols = [
+      'Query', 'Subject', 'Query Sequence', 'Subject Sequence', '% Identity', 'Alignment Length',
+      'Gaps', 'Query Start', 'Query End', 'Subject Start', 'Subject End', 'E-value'
+    ]
+    blast_results = pl.read_csv(
+      self.blast_temp / 'blast_results.csv', separator=',', has_header=False, new_columns=blast_cols
+    )
+    top_alignments = non_exact_linear.with_columns(
+      pl.col('Epitope ID').cast(pl.Int64).alias('Query')
+    ).join(blast_results, how='left', on='Query', coalesce=True).filter(
+      pl.col('Subject') == pl.col('Assigned Protein ID')
+    ).group_by('Query').agg(pl.all().sort_by('% Identity').last())
+
+    def modify_parent_alignment(qseq, sseq):
+      seq = ''
+      for i in range(len(qseq)):
+        if qseq[i] != sseq[i]:
+          seq += sseq[i].lower()
+        else:
+          seq += sseq[i]
+      return seq
+    
+    linear_mappings = top_alignments.with_columns(
+      (pl.col('% Identity')).alias('identity_alignment'),
+      (pl.col('% Identity')).alias('similarity_alignment'),
+      (pl.col('Query Sequence').str.count_matches('-') / pl.col('Alignment Length')).alias('gaps_source_alignment'),
+      (pl.col('Subject Sequence').str.count_matches('-') / pl.col('Alignment Length')).alias('gaps_parent_alignment'),
+      (pl.col('Gaps') / pl.col('Alignment Length')).alias('all_gaps'),
+      (pl.col('Query Sequence')).alias('source_alignment'),
+      (pl.col('Subject Sequence')).alias('parent_alignment'),
+      (pl.struct(['Query Sequence', 'Subject Sequence']).map_elements(
+        lambda x: modify_parent_alignment(x['Query Sequence'], x['Subject Sequence']), 
+        return_dtype=pl.String
+      )).alias('parent_alignment_modified')
+    ).select(
+      'Epitope ID', 'Epitope Sequence', 'Source Starting Position', 'Source Ending Position',
+      'Source Accession', 'Assigned Protein ID', 'Subject Sequence', 'Subject Start', 'Subject End',
+      'identity_alignment', 'similarity_alignment', 'gaps_source_alignment', 'gaps_parent_alignment',
+      'all_gaps', 'source_alignment', 'parent_alignment', 'parent_alignment_modified'
+    ).rename({
+      'Epitope ID': 'epitope_id', 'Epitope Sequence': 'epitope_seq', 
+      'Source Starting Position': 'epitope_start', 'Source Ending Position': 'epitope_end',
+      'Source Accession': 'source_accession', 'Assigned Protein ID': 'parent_accession',
+      'Subject Sequence': 'parent_seq', 'Subject Start': 'parent_start', 'Subject End': 'parent_end',
+     }).cast({
+      'epitope_id': pl.Int64, 'epitope_start': pl.Int64, 'epitope_end': pl.Int64, 
+      'parent_start': pl.Int64, 'parent_end': pl.Int64,
+    })
+    return linear_mappings
+  
   def blast_linear_peptides(self, non_exact_linear):
-    blast_temp = build_path / 'blast_temp'
-    blast_temp.mkdir(exist_ok=True)
-    self.make_blast_db(non_exact_linear, blast_temp)
-    self.make_epitope_file(non_exact_linear, blast_temp)
+    self.blast_temp.mkdir(exist_ok=True)
+    self.make_blast_db(non_exact_linear)
+    self.make_epitope_file(non_exact_linear)
     cmd = [
       str(self.bin_path / 'blastp'),
-      '-query', str(blast_temp / 'epitopes.fasta'),
-      '-db', str(blast_temp / 'proteins.fasta'),
+      '-query', str(self.blast_temp / 'epitopes.fasta'),
+      '-db', str(self.blast_temp / 'proteins.fasta'),
       '-outfmt', '10 qseqid sseqid qseq sseq pident length gaps qstart qend sstart send evalue',
       '-num_threads', str(self.num_threads),
-      '-out', str(blast_temp / 'blast_results.csv')
+      '-out', str(self.blast_temp / 'blast_results.csv')
     ]
     subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    return self.calculate_blast_mappings(blast_temp)
 
-  def make_blast_db(self, non_exact_linear, blast_temp):
+  def make_blast_db(self, non_exact_linear):
     proteins = non_exact_linear.unique(subset=['Assigned Protein ID'])
-    with open(str(blast_temp / 'proteins.fasta'), 'w') as f:
+    with open(str(self.blast_temp / 'proteins.fasta'), 'w') as f:
       for row in proteins.iter_rows(named=True):
         f.write(f'>{row["Assigned Protein ID"]}\n{row["Assigned Protein Sequence"]}\n')
     cmd = [
       str(self.bin_path / 'makeblastdb'),
-      '-in', str(blast_temp / 'proteins.fasta'),
+      '-in', str(self.blast_temp / 'proteins.fasta'),
       '-dbtype', 'prot',
-      '-out', str(blast_temp / 'proteins.fasta')
+      '-out', str(self.blast_temp / 'proteins.fasta')
     ]
     subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
-  def make_epitope_file(self, non_exact_linear, blast_temp):
-    with open(str(blast_temp / 'epitopes.fasta'), 'w') as f:
+  def make_epitope_file(self, non_exact_linear):
+    with open(str(self.blast_temp / 'epitopes.fasta'), 'w') as f:
       for row in non_exact_linear.iter_rows(named=True):
         f.write(f'>{int(row["Epitope ID"])}\n{row["Epitope Sequence"]}\n')
 
-  def calculate_blast_mappings(self, blast_temp):
-    blast_cols = [
-      'Query', 'Subject', 'Query Sequence', 'Subject Sequence', '% Identity', ' Alignment Length',
-      'Gaps', 'Query Start', 'Query End', 'Subject Start', 'Subject End', 'E-value'
-    ]
-    blast_results = pl.read_csv(
-      blast_temp / 'blast_results.csv', separator=',', has_header=False, new_columns=blast_cols
-    )
-
   def map_discontinuous_peptides(self, non_exact_discontinuous):
     pass
-
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
@@ -172,9 +216,9 @@ if __name__ == '__main__':
   source_data = pl.read_csv(build_path / 'arborist' / 'all-source-data.tsv', separator='\t')
   species_data = pl.read_csv(build_path / 'arborist' / 'all-species-data.tsv', separator='\t')
 
-  all_parent_data = get_all_parent_data(assignments, source_data, species_data)
-  make_source_parents(all_parent_data)
-  make_parent_proteins(all_parent_data)
+  # all_parent_data = get_all_parent_data(assignments, source_data, species_data)
+  # make_source_parents(all_parent_data)
+  # make_parent_proteins(all_parent_data)
 
   epitope_mapping = EpitopeMapper(assignments, args.num_threads)
   epitope_mapping.make_epitope_mapping()
