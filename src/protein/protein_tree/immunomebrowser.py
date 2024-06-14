@@ -93,6 +93,7 @@ class EpitopeMapper:
     linear_mappings = self.make_linear_mappings(non_exact_linear)
     discontinous_mappings = self.make_discontinuous_mappings(non_exact_discontinuous)
     combined_mappings = self.combine_mappings(exact_mappings, linear_mappings, discontinous_mappings)
+    self.write_mappings(combined_mappings)
 
   def split_assignments(self):
     exact_matches = self.assignments.filter(
@@ -146,7 +147,7 @@ class EpitopeMapper:
     return exact_mappings
 
   def make_linear_mappings(self, non_exact_linear):
-    self.blast_linear_peptides(non_exact_linear)
+    # self.blast_linear_peptides(non_exact_linear)
     blast_cols = [
       'Query', 'Subject', 'Query Sequence', 'Subject Sequence', '% Identity', 'Alignment Length',
       'Gaps', 'Query Start', 'Query End', 'Subject Start', 'Subject End', 'E-value'
@@ -302,6 +303,9 @@ class EpitopeMapper:
         seq += sseq[i]
     return seq
 
+  def write_mappings(self, combined_mappings):
+    combined_mappings.write_csv(build_path / 'arborist' / 'epitope-mappings.tsv', separator='\t')
+
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
   parser.add_argument('-n', '--num_threads', type=int, default=1, help='Number of threads to use.')
@@ -312,9 +316,9 @@ if __name__ == '__main__':
   source_data = pl.read_csv(build_path / 'arborist' / 'all-source-data.tsv', separator='\t')
   species_data = pl.read_csv(build_path / 'arborist' / 'all-species-data.tsv', separator='\t')
 
-  # all_parent_data = get_all_parent_data(assignments, source_data, species_data)
-  # make_source_parents(all_parent_data)
-  # make_parent_proteins(all_parent_data)
+  all_parent_data = get_all_parent_data(assignments, source_data, species_data)
+  make_source_parents(all_parent_data)
+  make_parent_proteins(all_parent_data)
 
   epitope_mapping = EpitopeMapper(assignments, args.num_threads)
   epitope_mapping.make_epitope_mappings()
