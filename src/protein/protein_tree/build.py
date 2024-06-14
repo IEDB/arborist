@@ -1,12 +1,7 @@
 import json
 import sqlite3
-import argparse
-import pandas as pd
-
+import polars as pl
 from pathlib import Path
-
-import warnings
-warnings.filterwarnings('ignore')
 
 
 def triple(subject, predicate, object, datatype='_IRI'):
@@ -23,7 +18,6 @@ def triple(subject, predicate, object, datatype='_IRI'):
     'annotation': None
   }
 
-
 def owl_class(subject, label, parent):
   """Given a subject, label, and parent,
   return triples defining an owl:Class in the protein tree."""
@@ -33,8 +27,7 @@ def owl_class(subject, label, parent):
     triple(subject, 'rdfs:subClassOf', parent)
   ]
 
-
-def build_old_tree(tree_df, peptide_assignments):
+def build_tree(tree_df, peptide_assignments):
   """Given dataframes for the tree and peptide_assignments,
   insert LDTab rows for each protein under its 'species protein' parent."""
 
@@ -68,7 +61,6 @@ def build_old_tree(tree_df, peptide_assignments):
   tree_df = pd.concat([tree_df, pd.DataFrame(new_rows)], ignore_index=True)
 
   return tree_df
-
 
 def create_antigen_receptor_node(group, new_rows, species_seen):
   """Given a row from the source_assignments dataframe that is an antigen receptor
@@ -105,7 +97,6 @@ def create_antigen_receptor_node(group, new_rows, species_seen):
   )
 
   return assignment_node
-
 
 def add_fragments(parent_id, group):
   """Given a row from the source_assignments dataframe, return a list of triples
@@ -176,7 +167,6 @@ def add_reviewed_status(parent_id, group):
     datatype="xsd:boolean"
   )]
 
-
 def add_synonyms(parent_id, group):
   """Given a row from the source_assignments dataframe, return a list of triples
   for the synonyms of the protein."""
@@ -191,7 +181,6 @@ def add_synonyms(parent_id, group):
       datatype="xsd:string"
     ))
   return synonyms
-
 
 def add_accession(parent_id):
   """Given a row from the source_assignments dataframe, return a list of triples
@@ -209,7 +198,6 @@ def add_accession(parent_id):
     datatype="xsd:string"
   )]
 
-
 def add_source_database(parent_id):
   """Given a row from the source_assignments dataframe, return a triple
   for the source database of the protein (always UniProt)."""
@@ -219,7 +207,6 @@ def add_source_database(parent_id):
     "UniProt",
     datatype="xsd:string"
   )]
-
 
 def create_other_nodes(not_assigned):
   """Given a dataframe of sources without an assigned protein,
@@ -252,62 +239,14 @@ def create_other_nodes(not_assigned):
   
   return new_rows
 
+if __name__ == "__main__":
+  build_path = Path(__file__).parents[3] / 'build'
 
-def build_new_tree(tree_df, peptide_assignments):
-  """Given dataframes for the tree and peptide_assignments,
-  insert LDTab rows for each gene under its 'species protein' parent,
-  and each protein under its gene."""
- 
-  new_rows = []
-  
-  for _, row in peptide_assignments.iterrows():
-    # WARN: This produces many duplicates?
-    new_rows.extend(
-      owl_class(
-        f"{row['Species Taxon ID']}:{row['Parent Antigen Gene']}",
-        f"{row['Parent Antigen Gene']}",
-        f"iedb-protein:{row['Species Taxon ID']}"
-      ))
-    
-    new_rows.extend(
-      owl_class(
-        f"UP:{row['Parent Antigen Gene Isoform ID']}",
-        f"{row['Parent Antigen Gene Isoform Name']} (UniProt:{row['Parent Antigen Gene Isoform ID']})",
-        f"{row['Species Taxon ID']}:{row['Parent Antigen Gene']}"
-      ))
-
-  tree_df = pd.concat([tree_df, pd.DataFrame(new_rows)], ignore_index=True)
-
-  return tree_df
-
-
-def main():
-  parser = argparse.ArgumentParser()
-
-  parser.add_argument(
-    'build_path',
-    type=str,
-    default='build/',
-    help='Path to species directory.'
-  )
-
-  args = parser.parse_args()
-  build_path = Path(args.build_path)
-
-  # drop duplicates in source_assignments but keep NaNs
-  # source_assignments = pd.read_csv(build_path / 'arborist' / 'all-source-assignments.tsv', sep='\t')
-  # isna = source_assignments['Assigned Protein ID'].isna()
-  # source_assignments = pd.concat([
-  #   source_assignments[isna],
-  #   source_assignments[~isna].drop_duplicates(subset=['Assigned Protein ID'])
-  # ]).reset_index(drop=True)
-
-  peptide_assignments = pd.read_csv(build_path / 'arborist' / 'all-peptide-assignments.tsv', sep='\t')
-  # peptide_assignments.drop_duplicates(subset=['Parent Antigen ID'], inplace=True)
+  # peptide_assignments = pl.read_csv(build_path / 'arborist' / 'all-peptide-assignments.tsv', separator='\t')
 
   with sqlite3.connect(build_path / 'arborist' / 'nanobot.db') as connection:
     # Copy the organism_tree, but replace each taxon with 'taxon protein'.
-    tree_df = pd.read_sql_query('''
+    tree_df = pl.read_database('''
       SELECT
         assertion,
         retraction,
@@ -327,12 +266,17 @@ def main():
         annotation
       FROM organism_tree
       WHERE subject NOT IN ('NCBITaxon:1', 'NCBITaxon:28384', 'OBI:0100026')''',
-      connection
+      connection=connection, infer_schema_length=None
     )
 
     # Filter out subjects with iedb-taxon:level "lower" or blank.
-    lower_subjects = tree_df[tree_df['object'].isin(['lower', ''])]['subject']
-    tree_df = tree_df[-tree_df['subject'].isin(lower_subjects)]
+    lower_subjects = tree_df.filter( pl.col('object').is_in(['lower', '']))['subject'].to_list()
+    tree_df = tree_df.filter(~pl.col('subject').is_in(lower_subjects))
+
+
+    exit(1)
+
+
 
     # Relabel 'taxon' to 'taxon protein'.
     tree_df.loc[(tree_df['subject'].str.startswith('iedb-protein:')) & (tree_df['predicate'] == 'rdfs:label'), 'object'] = tree_df['object'] + ' protein'
@@ -351,6 +295,3 @@ def main():
   
     old_df.to_sql('protein_tree_old', connection, if_exists='replace', index=False)
     new_df.to_sql('protein_tree_new', connection, if_exists='replace', index=False)
-
-if __name__ == "__main__":
-  main()
