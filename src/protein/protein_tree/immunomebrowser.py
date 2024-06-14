@@ -87,11 +87,11 @@ class EpitopeMapper:
     self.bin_path = Path(__file__).parents[3] / 'bin'
     self.blast_temp = build_path / 'blast_temp'
 
-  def make_epitope_mapping(self):
+  def make_epitope_mappings(self):
     exact_matches, non_exact_linear, non_exact_discontinuous = self.split_assignments()
     exact_mappings = self.make_exact_mappings(exact_matches)
     linear_mappings = self.make_linear_mappings(non_exact_linear)
-    discontinous_mappings = self.map_discontinuous_peptides(non_exact_discontinuous)
+    discontinous_mappings = self.make_discontinuous_mappings(non_exact_discontinuous)
     combined_mappings = self.combine_mappings(exact_mappings, linear_mappings, discontinous_mappings)
 
   def split_assignments(self):
@@ -114,7 +114,7 @@ class EpitopeMapper:
     return exact_matches, non_exact_linear, non_exact_discontinuous
   
   def combine_mappings(self, exact_mappings, linear_mappings, discontinous_mappings):
-    pass
+    return pl.concat([exact_mappings, linear_mappings, discontinous_mappings])
 
   def make_exact_mappings(self, exact_matches):
     exact_mappings = exact_matches.with_columns(
@@ -146,7 +146,7 @@ class EpitopeMapper:
     return exact_mappings
 
   def make_linear_mappings(self, non_exact_linear):
-    # self.blast_linear_peptides(non_exact_linear)
+    self.blast_linear_peptides(non_exact_linear)
     blast_cols = [
       'Query', 'Subject', 'Query Sequence', 'Subject Sequence', '% Identity', 'Alignment Length',
       'Gaps', 'Query Start', 'Query End', 'Subject Start', 'Subject End', 'E-value'
@@ -159,15 +159,6 @@ class EpitopeMapper:
     ).join(blast_results, how='left', on='Query', coalesce=True).filter(
       pl.col('Subject') == pl.col('Assigned Protein ID')
     ).group_by(['Source Accession', 'Epitope ID']).agg(pl.all().sort_by('% Identity').last())
-
-    def modify_parent_alignment(qseq, sseq):
-      seq = ''
-      for i in range(len(qseq)):
-        if qseq[i] != sseq[i]:
-          seq += sseq[i].lower()
-        else:
-          seq += sseq[i]
-      return seq
     
     linear_mappings = top_alignments.with_columns(
       (pl.col('% Identity')).alias('identity_alignment'),
@@ -178,7 +169,7 @@ class EpitopeMapper:
       (pl.col('Query Sequence')).alias('source_alignment'),
       (pl.col('Subject Sequence')).alias('parent_alignment'),
       (pl.struct(['Query Sequence', 'Subject Sequence']).map_elements(
-        lambda x: modify_parent_alignment(x['Query Sequence'], x['Subject Sequence']), 
+        lambda x: self.modify_parent_alignment(x['Query Sequence'], x['Subject Sequence']), 
         return_dtype=pl.String
       )).alias('parent_alignment_modified')
     ).select(
@@ -229,8 +220,87 @@ class EpitopeMapper:
       for row in non_exact_linear.iter_rows(named=True):
         f.write(f'>{int(row["Epitope ID"])}\n{row["Epitope Sequence"]}\n')
 
-  def map_discontinuous_peptides(self, non_exact_discontinuous):
-    pass
+  def make_discontinuous_mappings(self, non_exact_discontinuous):
+    parent_seqs, perc_identities, source_alignments, parent_alignments, parent_alignments_modified = [], [], [], [], []
+    for row in non_exact_discontinuous.iter_rows(named=True):
+      seq, parent_seq, perc_identity, parent_alignment = self.map_discontinuous_epitopes(
+        row['Epitope Sequence'], row['Assigned Protein Sequence']
+      )
+      parent_seqs.append(parent_seq)
+      perc_identities.append(perc_identity)
+      parent_alignments.append(parent_alignment)
+
+      collapsed_seq = ''.join([x[0] for x in seq.split(',')])
+      source_alignments.append(collapsed_seq)
+      parent_alignments_modified.append(self.modify_parent_alignment(collapsed_seq, parent_alignment))
+
+    discontinous_mappings = non_exact_discontinuous.with_columns(
+      pl.Series(name='parent_seq', values=parent_seqs),
+      pl.Series(name='identity_alignment', values=perc_identities),
+      pl.Series(name='similarity_alignment', values=perc_identities),
+      (pl.lit(0.0)).alias('gaps_source_alignment'),
+      (pl.lit(0.0)).alias('gaps_parent_alignment'),
+      (pl.lit(0.0)).alias('all_gaps'),
+      pl.Series(name='source_alignment', values=source_alignments),
+      pl.Series(name='parent_alignment', values=parent_alignments),
+      pl.Series(name='parent_alignment_modified', values=parent_alignments_modified)
+    ).with_columns(
+      pl.col('parent_seq').str.split(', ').list.get(0).str.slice(1, 5).alias('parent_start'),
+      pl.col('parent_seq').str.split(', ').list.get(-1).str.slice(1, 5).alias('parent_end')
+    ).select(
+      'Epitope ID', 'Epitope Sequence', 'Source Starting Position', 'Source Ending Position',
+      'Source Accession', 'Assigned Protein ID', 'parent_seq', 'parent_start', 'parent_end',
+      'identity_alignment', 'similarity_alignment', 'gaps_source_alignment', 'gaps_parent_alignment',
+      'all_gaps', 'source_alignment', 'parent_alignment', 'parent_alignment_modified'
+    ).rename({
+      'Epitope ID': 'epitope_id', 'Epitope Sequence': 'epitope_seq',
+      'Source Starting Position': 'epitope_start', 'Source Ending Position': 'epitope_end',
+      'Source Accession': 'source_accession', 'Assigned Protein ID': 'parent_accession'
+    }).filter(
+      pl.col('parent_alignment') != ''
+    ).cast({
+      'epitope_id': pl.Int64, 'epitope_start': pl.Int64, 'epitope_end': pl.Int64,
+      'parent_start': pl.Int64, 'parent_end': pl.Int64
+    })
+    return discontinous_mappings
+  
+  def map_discontinuous_epitopes(self, seq, protein_seq):
+    seq = seq.replace(',  ', ', ').replace(' ,', ', ').replace(', ', ',').replace(' ', ',').replace(',,', ',')
+    seq = seq[0:-1] if seq[-1] == ',' else seq
+    split_seq = seq.split(',')
+    seq_len = len(split_seq)
+    residue_matches = 0
+    parent_seq = ''
+    for residue in split_seq:
+      try:
+        pos = int(residue[1:])-1
+        if residue[0] == protein_seq[pos]:
+          parent_seq += f'{residue[0]}{pos+1}, '
+          residue_matches += 1
+        else:
+          parent_seq += f'{protein_seq[pos]}{pos+1}, '
+      except IndexError:
+        parent_seq += f'{'X'}{pos+1}, '
+      except ValueError:
+        continue
+    parent_seq = parent_seq[:-2]
+    if parent_seq == '':
+      return seq, parent_seq, 0.0, ''
+
+    perc_identity = residue_matches / seq_len
+    parent_alignment = ''.join([x[0] for x in parent_seq.split(', ')])
+    return seq, parent_seq, perc_identity, parent_alignment
+
+  def modify_parent_alignment(self, qseq, sseq):
+    if len(qseq) != len(sseq):
+      return ''
+    seq = ''
+    for i in range(len(qseq)):
+      if qseq[i] != sseq[i]:
+        seq += sseq[i].lower()
+      else:
+        seq += sseq[i]
+    return seq
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
@@ -247,4 +317,4 @@ if __name__ == '__main__':
   # make_parent_proteins(all_parent_data)
 
   epitope_mapping = EpitopeMapper(assignments, args.num_threads)
-  epitope_mapping.make_epitope_mapping()
+  epitope_mapping.make_epitope_mappings()
