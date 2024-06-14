@@ -117,10 +117,36 @@ class EpitopeMapper:
     pass
 
   def make_exact_mappings(self, exact_matches):
-    pass
+    exact_mappings = exact_matches.with_columns(
+      (pl.col('Epitope Sequence')).alias('parent_seq'),
+      (pl.lit(0.0)).alias('identity_alignment'),
+      (pl.lit(0.0)).alias('similarity_alignment'),
+      (pl.lit(0.0)).alias('gaps_source_alignment'),
+      (pl.lit(0.0)).alias('gaps_parent_alignment'),
+      (pl.lit(0.0)).alias('all_gaps'),
+      (pl.col('Epitope Sequence')).alias('source_alignment'),
+      (pl.col('Epitope Sequence')).alias('parent_alignment'),
+      (pl.col('Epitope Sequence')).alias('parent_alignment_modified')
+    ).select(
+      'Epitope ID', 'Epitope Sequence', 'Source Starting Position', 'Source Ending Position',
+      'Source Accession', 'Assigned Protein ID', 'parent_seq', 'Assigned Protein Starting Position', 
+      'Assigned Protein Ending Position', 'identity_alignment', 'similarity_alignment',
+      'gaps_source_alignment', 'gaps_parent_alignment', 'all_gaps', 'source_alignment',
+      'parent_alignment', 'parent_alignment_modified'
+    ).rename({
+      'Epitope ID': 'epitope_id', 'Epitope Sequence': 'epitope_seq',
+      'Source Starting Position': 'epitope_start', 'Source Ending Position': 'epitope_end',
+      'Source Accession': 'source_accession', 'Assigned Protein ID': 'parent_accession',
+      'Assigned Protein Starting Position': 'parent_start', 
+      'Assigned Protein Ending Position': 'parent_end'
+    }).cast({
+      'epitope_id': pl.Int64, 'epitope_start': pl.Int64, 'epitope_end': pl.Int64,
+      'parent_start': pl.Int64, 'parent_end': pl.Int64
+    })
+    return exact_mappings
 
   def make_linear_mappings(self, non_exact_linear):
-    self.blast_linear_peptides(non_exact_linear)
+    # self.blast_linear_peptides(non_exact_linear)
     blast_cols = [
       'Query', 'Subject', 'Query Sequence', 'Subject Sequence', '% Identity', 'Alignment Length',
       'Gaps', 'Query Start', 'Query End', 'Subject Start', 'Subject End', 'E-value'
@@ -132,7 +158,7 @@ class EpitopeMapper:
       pl.col('Epitope ID').cast(pl.Int64).alias('Query')
     ).join(blast_results, how='left', on='Query', coalesce=True).filter(
       pl.col('Subject') == pl.col('Assigned Protein ID')
-    ).group_by('Query').agg(pl.all().sort_by('% Identity').last())
+    ).group_by(['Source Accession', 'Epitope ID']).agg(pl.all().sort_by('% Identity').last())
 
     def modify_parent_alignment(qseq, sseq):
       seq = ''
@@ -167,7 +193,7 @@ class EpitopeMapper:
       'Subject Sequence': 'parent_seq', 'Subject Start': 'parent_start', 'Subject End': 'parent_end',
      }).cast({
       'epitope_id': pl.Int64, 'epitope_start': pl.Int64, 'epitope_end': pl.Int64, 
-      'parent_start': pl.Int64, 'parent_end': pl.Int64,
+      'parent_start': pl.Int64, 'parent_end': pl.Int64
     })
     return linear_mappings
   
