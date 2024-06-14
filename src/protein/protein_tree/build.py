@@ -241,8 +241,7 @@ def create_other_nodes(not_assigned):
 
 if __name__ == "__main__":
   build_path = Path(__file__).parents[3] / 'build'
-
-  # peptide_assignments = pl.read_csv(build_path / 'arborist' / 'all-peptide-assignments.tsv', separator='\t')
+  peptide_assignments = pl.read_csv(build_path / 'arborist' / 'all-peptide-assignments.tsv', separator='\t')
 
   with sqlite3.connect(build_path / 'arborist' / 'nanobot.db') as connection:
     # Copy the organism_tree, but replace each taxon with 'taxon protein'.
@@ -273,25 +272,34 @@ if __name__ == "__main__":
     lower_subjects = tree_df.filter( pl.col('object').is_in(['lower', '']))['subject'].to_list()
     tree_df = tree_df.filter(~pl.col('subject').is_in(lower_subjects))
 
-
-    exit(1)
-
-
-
     # Relabel 'taxon' to 'taxon protein'.
-    tree_df.loc[(tree_df['subject'].str.startswith('iedb-protein:')) & (tree_df['predicate'] == 'rdfs:label'), 'object'] = tree_df['object'] + ' protein'
+    tree_df = tree_df.with_columns(
+      pl.when(
+        pl.col('subject').str.starts_with('iedb-protein:'),
+        pl.col('predicate') == 'rdfs:label'
+      )
+      .then(pl.col('object') + pl.lit(' protein'))
+      .otherwise(pl.col('object'))
+      .alias('object')
+    )
 
     # Add top-level 'protein'
     new_rows = owl_class('PR:000000001', 'protein', 'BFO:0000040')
-    tree_df = pd.concat([tree_df, pd.DataFrame(new_rows)], ignore_index=True)
+    tree_df = pl.concat([tree_df, pl.DataFrame(new_rows)])
 
     # Re-parent children of 'Root' and 'organism' to 'protein'
-    tree_df.loc[tree_df['object'] == 'iedb-protein:1', 'object'] = 'PR:000000001'
-    tree_df.loc[tree_df['object'] == 'iedb-protein:28384', 'object'] = 'PR:000000001'
-    tree_df.loc[tree_df['object'] == 'OBI:0100026', 'object'] = 'PR:000000001'
+    tree_df = tree_df.with_columns(
+      pl.when(
+        (pl.col('object') == 'iedb-protein:1') | 
+        (pl.col('object') == 'iedb-protein:28384') | 
+        (pl.col('object') == 'OBI:0100026')
+      )
+      .then(pl.lit('PR:000000001'))
+      .otherwise(pl.col('object'))
+      .alias('object')
+    )
 
-    old_df = build_old_tree(tree_df, peptide_assignments)
-    new_df = build_new_tree(tree_df, peptide_assignments)
+    protein_tree = build_tree(tree_df, peptide_assignments)
   
-    old_df.to_sql('protein_tree_old', connection, if_exists='replace', index=False)
-    new_df.to_sql('protein_tree_new', connection, if_exists='replace', index=False)
+    protein_tree.write_database('protein_tree_old', connection, if_table_exists='replace')
+    protein_tree.write_database('protein_tree_new', connection, if_table_exists='replace')
