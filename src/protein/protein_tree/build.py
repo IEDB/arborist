@@ -11,6 +11,10 @@ def build_tree(tree_base, assignments):
 
   new_rows = []
 
+  arc_parents = assignments.filter(
+    (pl.col('ARC Assignment').str.contains('TCR')) | (pl.col('ARC Assignment').str.contains('BCR')) | (pl.col('ARC Assignment').str.contains('MHC')),
+  ).unique(subset=['Source Accession'])
+
   normal_parents = assignments.join(
     assignments.group_by('Source Accession').agg(
       pl.col('Assigned Protein ID').mode().first()
@@ -18,13 +22,8 @@ def build_tree(tree_base, assignments):
     how='left', on='Source Accession', coalesce=True
   ).filter(
     (pl.col('Assigned Protein ID') == pl.col('Parent Protein ID')),
-    (pl.col('ARC Assignment').is_null()) | (pl.col('ARC Assignment') == '')
+    ~(pl.col('Source Accession').is_in(arc_parents['Source Accession']))
   ).unique(subset=['Parent Protein ID'])
-
-  arc_parents = assignments.filter(
-    (pl.col('ARC Assignment').is_not_null()),
-    (pl.col('ARC Assignment') != '')
-  ).unique(subset=['Source Accession'])
 
   others = assignments.filter(
     (pl.col('Assigned Protein ID').is_null()),
@@ -95,7 +94,25 @@ def antigen_receptor_name(antigen_receptor_class):
 def add_others(others):
   """Proteins that have not been assigned a parent nor as an antigen receptor."""
   rows = []
+  species_seen = set()
+  for other in others.iter_rows(named=True):
+    if other['Species Taxon ID'] not in species_seen:
+      rows.extend(
+        owl_class(
+          f"iedb-protein:{other['Species Taxon ID']}-other",
+          f"Other {other['Species Name']} protein",
+          f"iedb-protein:{other['Species Taxon ID']}"
+        )
+      )
+      species_seen.add(other['Species Taxon ID'])
 
+    rows.extend(
+      owl_class(
+        f"UP:{other['Source Accession']}" if other['Database'] == 'UniProt' else f"NCBI:{other['Source Accession']}",
+        f"{other['Name']} [{other['Source Accession']}]",
+        f"iedb-protein:{other['Species Taxon ID']}-other"
+      )
+    )
   return rows
 
 def add_metadata(parent):
@@ -206,7 +223,7 @@ def add_accession(parent):
   triple(
     f"UP:{parent['Parent Protein ID']}",
     "ONTIE:0003624",
-    f"http://www.uniprot.org/uniprot/{parent['Parent Protein ID']}",
+    f"https://www.uniprot.org/uniprotkb/{parent['Parent Protein ID']}",
     datatype="xsd:string"
   )]
 
