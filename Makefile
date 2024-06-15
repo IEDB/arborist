@@ -431,12 +431,7 @@ proteome: build/arborist/proteomes.built
 
 
 ### 5. Build Protein Tree
-### TODO: Create actual tree - right now it just does the assignments
 
-# build/species/%/source_assignments.tsv: build/species/%/epitopes.tsv build/species/%/sources.tsv build/species/%/proteome.tsv
-# 	src/protein_tree/src/assign_gene_protein.py -b build/ -a
-
-# TODO: QSV is not happy with their CSV input.
 build/arborist/allergens.csv: | build/
 	curl -L -o $@ 'http://www.allergen.org/csv.php?table=joint'
 
@@ -445,14 +440,11 @@ build/arborist/allergens.tsv: src/util/csv2tsv.py build/arborist/allergens.csv
 
 build/arborist/manual-parents.tsv: build/arborist/allergens.tsv
 	# wget --no-check-certificate 'https://docs.google.com/spreadsheets/d/1VUDYmmnQURRnuqyVxZGyF8JCgAIiooaKCmi3_mf03o8/export?format=tsv&gid=2087231134' -O $@
-	cp src/protein_tree/data/manual-parents.tsv $@
+	cp src/protein/data/manual-parents.tsv $@
 
-build/arborist/protein-tree.assigned: build/arborist/allergens.tsv build/arborist/manual-parents.tsv
-	python src/protein_tree/protein_tree/assign.py -n 14
-	touch $@
-
-
-### 6. Build Protein Tree
+# build/arborist/protein-tree.assigned: build/arborist/allergens.tsv build/arborist/manual-parents.tsv
+# 	python src/protein/protein_tree/assign.py -n 14
+# 	touch $@
 
 build/arborist/mro.owl: | build/arborist/
 	curl -L -o $@ 'http://purl.obolibrary.org/obo/mro/2023-12-21/mro.owl'
@@ -472,14 +464,11 @@ build/arborist/mro.built: build/arborist/mro.owl | build/arborist/nanobot.db
 .PHONY: mro
 mro: build/arborist/mro.built
 
-build/arborist/all-peptide-assignments.tsv build/arborist/all-source-assignments.tsv build/arborist/parent-proteins.tsv build/parents/source-parents.tsv: build/arborist/protein-tree.assigned
-	python src/protein_tree/protein_tree/combine_assignments.py build/
-
-build/arborist/protein-tree.built: src/protein_tree/protein_tree/build.py build/arborist/all-peptide-assignments.tsv build/arborist/organism-tree.built
+build/arborist/protein-tree.built: src/protein/protein_tree/build.py build/arborist/all-peptide-assignments.tsv build/arborist/organism-tree.built
 	$(eval DB := build/arborist/nanobot.db)
 	sqlite3 $(DB) 'DROP TABLE IF EXISTS protein_tree_old'
 	sqlite3 $(DB) 'DROP TABLE IF EXISTS protein_tree_new'
-	python $< build/
+	python $<
 	sqlite3 $(DB) 'CREATE INDEX idx_protein_tree_old_subject ON protein_tree_old(subject)'
 	sqlite3 $(DB) 'CREATE INDEX idx_protein_tree_old_predicate ON protein_tree_old(predicate)'
 	sqlite3 $(DB) 'CREATE INDEX idx_protein_tree_old_object ON protein_tree_old(object)'
@@ -504,7 +493,7 @@ build/arborist/epitope-mappings_new.tsv: build/arborist/epitope-mappings.tsv
 protein: build/arborist/protein-tree.owl
 
 
-### 7. TODO Build Molecule Tree
+### 6. TODO Build Molecule Tree
 
 build/arborist/molecule-tree.owl: nonpeptide-tree-20240305.owl build/arborist/protein-tree.owl
 	robot remove \
@@ -540,10 +529,10 @@ build/proteins/latest/: build/disease-tree.owl build/arborist/molecule-tree.owl 
 	chmod 644 $@*
 
 
-### 8. TODO Build Assay Tree
+### 7. TODO Build Assay Tree
 
 
-### 9. Build Disease Tree
+### 8. Build Disease Tree
 
 # Copy disease-tree.owl from production.
 # TODO: Build proper disease tree
