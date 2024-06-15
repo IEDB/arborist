@@ -147,7 +147,7 @@ class EpitopeMapper:
     return exact_mappings
 
   def make_linear_mappings(self, non_exact_linear):
-    # self.blast_linear_peptides(non_exact_linear)
+    self.blast_linear_peptides(non_exact_linear)
     blast_cols = [
       'Query', 'Subject', 'Query Sequence', 'Subject Sequence', '% Identity', 'Alignment Length',
       'Gaps', 'Query Start', 'Query End', 'Subject Start', 'Subject End', 'E-value'
