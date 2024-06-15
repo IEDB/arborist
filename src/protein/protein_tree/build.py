@@ -4,14 +4,15 @@ import polars as pl
 from pathlib import Path
 
 
-def build_tree(tree_base, peptide_assignments):
-  """Given dataframes for the tree and peptide_assignments,
-  insert LDTab rows for each protein under its 'species protein' parent."""
+def build_tree(tree_base, assignments):
+  """Given the tree_base from the organism tree dataframes for the tree and 
+  the assignments, insert LDTab rows for each protein under its 
+  'species protein' parent."""
 
   new_rows = []
 
-  normal_parents = peptide_assignments.join(
-    peptide_assignments.group_by('Source Accession').agg(
+  normal_parents = assignments.join(
+    assignments.group_by('Source Accession').agg(
       pl.col('Assigned Protein ID').mode().first()
     ).rename({'Assigned Protein ID': 'Parent Protein ID'}), 
     how='left', on='Source Accession', coalesce=True
@@ -20,26 +21,25 @@ def build_tree(tree_base, peptide_assignments):
     (pl.col('ARC Assignment').is_null()) | (pl.col('ARC Assignment') == '')
   ).unique(subset=['Parent Protein ID'])
 
-  arc_parents = peptide_assignments.filter(
+  arc_parents = assignments.filter(
     (pl.col('ARC Assignment').is_not_null()),
     (pl.col('ARC Assignment') != '')
   ).unique(subset=['Source Accession'])
 
-  others = peptide_assignments.filter(
+  others = assignments.filter(
     (pl.col('Assigned Protein ID').is_null()),
   ).unique(subset=['Source Accession'])
   
   new_rows.extend(add_normal_parents(normal_parents))
-  # new_rows.extend(add_arc_parents(arc_parents))
-  # new_rows.extend(add_others(others))
+  new_rows.extend(add_arc_parents(arc_parents))
+  new_rows.extend(add_others(others))
 
   protein_tree = pl.concat([tree_base, pl.DataFrame(new_rows)])
 
   return protein_tree
 
 def add_normal_parents(normal_parents):
-  """Given a dataframe of proteins with a parent protein,
-  return a list of triples for each protein under its parent."""
+  """Proteins that have been assigned a parent."""
   rows = []
   for parent in normal_parents.iter_rows(named=True):
     rows.extend(
@@ -53,10 +53,50 @@ def add_normal_parents(normal_parents):
   return rows
 
 def add_arc_parents(arc_parents):
-  pass
+  """Proteins that have been assigned an antigen receptor via ARC."""
+  rows = []
+  nodes_seen = set()
+  arc_parents = arc_parents.rename({'Assigned Protein ID': 'Parent Protein ID'})
+  for parent in arc_parents.iter_rows(named=True):
+    arc_assignment = parent['ARC Assignment']
+    antigen_receptor_class = arc_assignment.split('_')[0]
+    node_id = f"{str(parent['Species Taxon ID'])}-{antigen_receptor_class.lower()}"
+    node_name = antigen_receptor_name(antigen_receptor_class)
+    if node_id not in nodes_seen:
+      rows.extend(
+        owl_class(
+          f"iedb-protein:{node_id}",
+          f"{node_name} chain",
+          f"iedb-protein:{parent['Species Taxon ID']}"
+        )
+      )
+      nodes_seen.add(node_id)
+
+    rows.extend(
+      owl_class(
+        f"UP:{parent['Parent Protein ID']}",
+        f"{parent['Assigned Protein Name']} (UniProt:{parent['Parent Protein ID']})",
+        f"iedb-protein:{node_id}"
+      )
+    )
+    rows.extend(add_metadata(parent))
+  return rows
+
+def antigen_receptor_name(antigen_receptor_class):
+  if antigen_receptor_class == 'TCR':
+    return 'T Cell Receptor'
+  elif antigen_receptor_class == 'BCR':
+    return 'B Cell Receptor / Immunoglobulin'
+  elif antigen_receptor_class == 'MHC-I':
+    return 'Major Histocompatibility Complex I'
+  elif antigen_receptor_class == 'MHC-II':
+    return 'Major Histocompatibility Complex II'
 
 def add_others(others):
-  pass
+  """Proteins that have not been assigned a parent nor as an antigen receptor."""
+  rows = []
+
+  return rows
 
 def add_metadata(parent):
   """Given a row from the source_assignments dataframe, return a list of triples
@@ -205,7 +245,10 @@ def triple(subject, predicate, object, datatype='_IRI'):
 
 if __name__ == "__main__":
   build_path = Path(__file__).parents[3] / 'build'
-  peptide_assignments = pl.read_csv(build_path / 'arborist' / 'all-peptide-assignments.tsv', separator='\t')
+  
+  assignments = pl.read_csv(build_path / 'arborist' / 'all-peptide-assignments.tsv', separator='\t')
+  source_data = pl.read_csv(build_path / 'arborist' / 'all-source-data.tsv', separator='\t')
+  assignments = assignments.join(source_data, how='left', on='Source Accession', coalesce=True)
 
   with sqlite3.connect(build_path / 'arborist' / 'nanobot.db') as connection:
     # Copy the organism_tree, but replace each taxon with 'taxon protein'.
@@ -263,7 +306,7 @@ if __name__ == "__main__":
     .alias('object')
   )
 
-  protein_tree = build_tree(tree_base, peptide_assignments)
+  protein_tree = build_tree(tree_base, assignments)
 
   db = 'sqlite:///' + str(build_path / 'arborist' / 'nanobot.db')
   protein_tree.write_database('protein_tree_old', connection=db, if_table_exists='replace')
