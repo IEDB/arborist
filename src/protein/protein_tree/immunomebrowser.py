@@ -92,8 +92,7 @@ class EpitopeMapper:
     exact_mappings = self.make_exact_mappings(exact_matches)
     linear_mappings = self.make_linear_mappings(non_exact_linear)
     discontinous_mappings = self.make_discontinuous_mappings(non_exact_discontinuous)
-    combined_mappings = self.combine_mappings(exact_mappings, linear_mappings, discontinous_mappings)
-    self.write_mappings(combined_mappings)
+    combined_mappings = self.combine_and_write_mappings(exact_mappings, linear_mappings, discontinous_mappings)
 
   def split_assignments(self):
     exact_matches = self.assignments.filter(
@@ -303,7 +302,9 @@ class EpitopeMapper:
         seq += sseq[i]
     return seq
 
-  def write_mappings(self, combined_mappings):
+  def combine_and_write_mappings(self, exact_mappings, linear_mappings, discontinous_mappings):
+    combined_mappings = pl.concat([exact_mappings, linear_mappings, discontinous_mappings])
+    combined_mappings = combined_mappings.filter(pl.col('epitope_id').is_not_null())
     combined_mappings.write_csv(build_path / 'arborist' / 'epitope-mappings.tsv', separator='\t')
 
 if __name__ == '__main__':
