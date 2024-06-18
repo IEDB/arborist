@@ -46,12 +46,14 @@ def make_source_parents(all_parent_data):
     'Source ID', 'Source Accession', 'Database', 'Name', 'Aliases', 'Assigned Protein Synonyms',
     'Organism ID', 'Organism Name', 'Species Taxon ID', 'Species Name', 'Proteome ID',
     'Proteome Label', 'Protein Strategy', 'Parent IRI', 'Parent Protein Database',
-    'Parent Protein ID', 'Assigned Protein Length', 'Assigned Protein Sequence'
+    'Parent Protein ID', 'Assigned Protein Length', 'Assigned Protein Sequence',
+    'Source Assigned Gene'
   ).rename({
     'Source Accession': 'Accession', 'Assigned Protein Synonyms': 'Synonyms',
     'Organism ID': 'Taxon ID', 'Organism Name': 'Taxon Name', 'Species Taxon ID': 'Species ID',
     'Species Name': 'Species Label', 'Parent Protein ID': 'Parent Protein Accession', 
-    'Assigned Protein Length': 'Parent Sequence Length', 'Assigned Protein Sequence': 'Sequence'
+    'Assigned Protein Length': 'Parent Sequence Length', 'Assigned Protein Sequence': 'Sequence',
+    'Source Assigned Gene': 'Parent Protein Gene'
   })
   source_parents.write_csv(build_path / 'arborist' / 'source-parents.tsv', separator='\t')
 
@@ -92,7 +94,7 @@ class EpitopeMapper:
     exact_mappings = self.make_exact_mappings(exact_matches)
     linear_mappings = self.make_linear_mappings(non_exact_linear)
     discontinous_mappings = self.make_discontinuous_mappings(non_exact_discontinuous)
-    combined_mappings = self.combine_and_write_mappings(exact_mappings, linear_mappings, discontinous_mappings)
+    self.combine_and_write_mappings(exact_mappings, linear_mappings, discontinous_mappings)
 
   def split_assignments(self):
     exact_matches = self.assignments.filter(

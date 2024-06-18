@@ -12,7 +12,7 @@ from Bio import SeqIO
 from pathlib import Path
 from pepmatch import Preprocessor, Matcher
 
-from protein_tree.get_data import DataFetcher
+from protein_tree.data_fetch import DataFetcher
 
 class ProteomeSelector:
   def __init__(self, taxon_id, species_name, group, build_path = Path(__file__).parent.parent / 'build'):
