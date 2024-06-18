@@ -69,6 +69,7 @@ all: deps iedb ncbitaxon organism protein molecule disease leidos
 
 .PHONY: leidos
 leidos: build/organisms/latest/ build/proteins/latest/
+	pytest test/test_leidos.py
 
 .PHONY: serve
 serve: src/util/serve.py

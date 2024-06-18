@@ -41,7 +41,7 @@ def make_source_parents(all_parent_data):
       .then(pl.lit('UniProt'))
       .otherwise(pl.lit('IEDB'))
       .alias('Parent Protein Database')
-  )
+  ).unique(subset=['Source Accession'])
   source_parents = all_parent_data.select(
     'Source ID', 'Source Accession', 'Database', 'Name', 'Aliases', 'Assigned Protein Synonyms',
     'Organism ID', 'Organism Name', 'Species Taxon ID', 'Species Name', 'Proteome ID',
