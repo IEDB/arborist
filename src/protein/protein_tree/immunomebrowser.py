@@ -31,7 +31,7 @@ def make_source_parents(all_parent_data):
       .then(pl.lit('weak-blast-match'))
       .otherwise(pl.lit('manual')).alias('Protein Strategy'),
     pl.when(pl.col('Parent Protein ID').is_not_null())
-      .then(pl.lit('https://www.uniprot.org/uniprotkb/') + pl.col('Parent Protein ID'))
+      .then(pl.lit('http://www.uniprot.org/uniprot/') + pl.col('Parent Protein ID'))
       .otherwise(
         pl.lit('https://ontology.iedb.org/taxon-protein/') + 
         pl.col('Species Taxon ID').cast(pl.String) + pl.lit('-other')
