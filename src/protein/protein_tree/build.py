@@ -223,7 +223,7 @@ def add_accession(parent):
   triple(
     f"UP:{parent['Parent Protein ID']}",
     "ONTIE:0003624",
-    f"https://www.uniprot.org/uniprotkb/{parent['Parent Protein ID']}",
+    f"http://www.uniprot.org/uniprot/{parent['Parent Protein ID']}",
     datatype="xsd:string"
   )]
 
