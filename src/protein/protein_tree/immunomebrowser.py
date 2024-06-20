@@ -121,8 +121,8 @@ class EpitopeMapper:
   def make_exact_mappings(self, exact_matches):
     exact_mappings = exact_matches.with_columns(
       (pl.col('Epitope Sequence')).alias('parent_seq'),
-      (pl.lit(0.0)).alias('identity_alignment'),
-      (pl.lit(0.0)).alias('similarity_alignment'),
+      (pl.lit(1.0)).alias('identity_alignment'),
+      (pl.lit(1.0)).alias('similarity_alignment'),
       (pl.lit(0.0)).alias('gaps_source_alignment'),
       (pl.lit(0.0)).alias('gaps_parent_alignment'),
       (pl.lit(0.0)).alias('all_gaps'),
