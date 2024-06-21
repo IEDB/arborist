@@ -163,8 +163,8 @@ class EpitopeMapper:
     ).group_by(['Source Accession', 'Epitope ID']).agg(pl.all().sort_by('% Identity').last())
     
     linear_mappings = top_alignments.with_columns(
-      (pl.col('% Identity')).alias('identity_alignment'),
-      (pl.col('% Identity')).alias('similarity_alignment'),
+      (pl.col('% Identity') / 100).alias('identity_alignment'),
+      (pl.col('% Identity') / 100).alias('similarity_alignment'),
       (pl.col('Query Sequence').str.count_matches('-') / pl.col('Alignment Length')).alias('gaps_source_alignment'),
       (pl.col('Subject Sequence').str.count_matches('-') / pl.col('Alignment Length')).alias('gaps_parent_alignment'),
       (pl.col('Gaps') / pl.col('Alignment Length')).alias('all_gaps'),
