@@ -475,6 +475,16 @@
         "allergen_name": "Ara h 1"
     },
     {
+        "uniprot_id": "P43237",
+        "mapped_id": "P43238",
+        "allergen_name": "Ara h 1"
+    },
+    {
+        "uniprot_id": "E5G076",
+        "mapped_id": "P43238",
+        "allergen_name": "Ara h 1"
+    },
+    {
         "uniprot_id": "Q647G5",
         "mapped_id": "Q647G5",
         "allergen_name": "Ara h 10"
@@ -495,18 +505,38 @@
         "allergen_name": "Ara h 11"
     },
     {
-        "uniprot_id": "Q6PSU2-1",
-        "mapped_id": "Q6PSU2-1",
+        "uniprot_id": "Q6PSU2",
+        "mapped_id": "Q6PSU2",
         "allergen_name": "Ara h 2"
     },
     {
+        "uniprot_id": "Q647H2",
+        "mapped_id": "Q647H2",
+        "allergen_name": "Ara h 3"
+    },
+    {
         "uniprot_id": "O82580",
-        "mapped_id": "O82580",
+        "mapped_id": "Q647H2",
         "allergen_name": "Ara h 3"
     },
     {
         "uniprot_id": "Q9SQH7",
-        "mapped_id": "O82580",
+        "mapped_id": "Q647H2",
+        "allergen_name": "Ara h 3"
+    },
+    {
+        "uniprot_id": "Q8LKN1",
+        "mapped_id": "Q647H2",
+        "allergen_name": "Ara h 3"
+    },
+    {
+        "uniprot_id": "E5G077",
+        "mapped_id": "Q647H2",
+        "allergen_name": "Ara h 3"
+    },
+    {
+        "uniprot_id": "B5TYU1",
+        "mapped_id": "Q647H2",
         "allergen_name": "Ara h 3"
     },
     {
@@ -546,6 +576,11 @@
     },
     {
         "uniprot_id": "B0YIU5",
+        "mapped_id": "Q6VT83",
+        "allergen_name": "Ara h 8"
+    },
+    {
+        "uniprot_id": "B1PYZ4",
         "mapped_id": "Q6VT83",
         "allergen_name": "Ara h 8"
     },
@@ -920,7 +955,22 @@
         "allergen_name": "Bet v 1"
     },
     {
+        "uniprot_id": "O23754",
+        "mapped_id": "P15494",
+        "allergen_name": "Bet v 1"
+    },
+    {
+        "uniprot_id": "Q546V0",
+        "mapped_id": "P15494",
+        "allergen_name": "Bet v 1"
+    },
+    {
         "uniprot_id": "P25816",
+        "mapped_id": "P25816",
+        "allergen_name": "Bet v 2"
+    },
+    {
+        "uniprot_id": "A4K9Z8",
         "mapped_id": "P25816",
         "allergen_name": "Bet v 2"
     },
@@ -970,12 +1020,32 @@
         "allergen_name": "Bla g 1"
     },
     {
+        "uniprot_id": "A9XFX0",
+        "mapped_id": "Q9UAM5",
+        "allergen_name": "Bla g 1"
+    },
+    {
         "uniprot_id": "P54958",
         "mapped_id": "P54958",
         "allergen_name": "Bla g 2"
     },
     {
+        "uniprot_id": "D0VNY6",
+        "mapped_id": "D0VNY6",
+        "allergen_name": "Bla g 3"
+    },
+    {
         "uniprot_id": "P54962",
+        "mapped_id": "P54962",
+        "allergen_name": "Bla g 4"
+    },
+    {
+        "uniprot_id": "B7TYB1",
+        "mapped_id": "P54962",
+        "allergen_name": "Bla g 4"
+    },
+    {
+        "uniprot_id": "A9XFW8",
         "mapped_id": "P54962",
         "allergen_name": "Bla g 4"
     },
@@ -1006,6 +1076,11 @@
     },
     {
         "uniprot_id": "A0ERA8",
+        "mapped_id": "A0ERA8",
+        "allergen_name": "Bla g 8"
+    },
+    {
+        "uniprot_id": "G9JWG6",
         "mapped_id": "A0ERA8",
         "allergen_name": "Bla g 8"
     },
@@ -2450,6 +2525,21 @@
         "allergen_name": "Fel d 1"
     },
     {
+        "uniprot_id": "P30438-2",
+        "mapped_id": "P30438",
+        "allergen_name": "Fel d 1"
+    },
+    {
+        "uniprot_id": "P30440",
+        "mapped_id": "P30438",
+        "allergen_name": "Fel d 1"
+    },
+    {
+        "uniprot_id": "P30440-3",
+        "mapped_id": "P30438",
+        "allergen_name": "Fel d 1"
+    },
+    {
         "uniprot_id": "P49064",
         "mapped_id": "P49064",
         "allergen_name": "Fel d 2"
@@ -3805,13 +3895,28 @@
         "allergen_name": "Phl p 2"
     },
     {
+        "uniprot_id": "Q2I6V7",
+        "mapped_id": "Q2I6V7",
+        "allergen_name": "Phl p 4"
+    },
+    {
         "uniprot_id": "Q5ZQK5",
-        "mapped_id": "Q5ZQK5",
+        "mapped_id": "Q2I6V7",
         "allergen_name": "Phl p 4"
     },
     {
         "uniprot_id": "Q5ZQK4",
-        "mapped_id": "Q5ZQK5",
+        "mapped_id": "Q2I6V7",
+        "allergen_name": "Phl p 4"
+    },
+    {
+        "uniprot_id": "B2ZWE8",
+        "mapped_id": "Q2I6V7",
+        "allergen_name": "Phl p 4"
+    },
+    {
+        "uniprot_id": "B2ZWE9",
+        "mapped_id": "Q2I6V7",
         "allergen_name": "Phl p 4"
     },
     {
@@ -3885,12 +3990,27 @@
         "allergen_name": "Phl p 5"
     },
     {
+        "uniprot_id": "Q9AT26",
+        "mapped_id": "Q40960",
+        "allergen_name": "Phl p 5"
+    },
+    {
         "uniprot_id": "P43215",
         "mapped_id": "P43215",
         "allergen_name": "Phl p 6"
     },
     {
         "uniprot_id": "O65868",
+        "mapped_id": "P43215",
+        "allergen_name": "Phl p 6"
+    },
+    {
+        "uniprot_id": "Q6LAG9",
+        "mapped_id": "P43215",
+        "allergen_name": "Phl p 6"
+    },
+    {
+        "uniprot_id": "O65869",
         "mapped_id": "P43215",
         "allergen_name": "Phl p 6"
     },
@@ -4791,6 +4911,11 @@
     },
     {
         "uniprot_id": "E5D2Z5",
+        "mapped_id": "E5D2Z5",
+        "allergen_name": "Fel d 7"
+    },
+    {
+        "uniprot_id": "M3W4L1",
         "mapped_id": "E5D2Z5",
         "allergen_name": "Fel d 7"
     },
@@ -6328,5 +6453,10 @@
         "uniprot_id": "A0A9Q0M772",
         "mapped_id": "A0A9Q0M772",
         "allergen_name": "Blo t 37"
+    },
+    {
+        "uniprot_id": "A0A445BYI5",
+        "mapped_id": "Q6PSU2",
+        "allergen_name": "Ara h 2"
     }
 ]

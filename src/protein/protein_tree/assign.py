@@ -215,6 +215,18 @@ class SourceProcessor:
     protein_data = top_proteins.join(
       proteome, how='left', left_on='Subject', right_on='Protein ID', coalesce=False
     )
+    allergy_data = pl.read_json(build_path / 'arborist' / 'allergens.json')
+    protein_data = protein_data.join(
+      allergy_data, left_on='Protein ID', right_on='uniprot_id', how='left', coalesce=True
+    )
+    protein_data = protein_data.with_columns(
+      pl.when(pl.col('allergen_name').is_not_null())
+      .then(pl.col('allergen_name')).otherwise(pl.col('Protein Name')).alias('Protein Name')
+    )
+    protein_data = protein_data.with_columns(
+      pl.when(pl.col('mapped_id').is_not_null())
+      .then(pl.col('mapped_id')).otherwise(pl.col('Protein ID')).alias('Protein ID')
+    )
     protein_data = protein_data.select(pl.col(
       'Query', 'Score', 'Gene', 'Protein ID', 'Protein Name'
     )).rename({
@@ -239,8 +251,8 @@ class PeptideProcessor:
     self.preprocess_proteome()
     self.search_peptides()
     assignments = self.assign_parents()
-    assignments = self.get_protein_data(assignments)
     assignments = self.handle_allergens(assignments)
+    assignments = self.get_protein_data(assignments)
     assignments = self.add_synonyms(assignments)
     self.write_assignments(assignments)
 
@@ -346,18 +358,18 @@ class PeptideProcessor:
       return {}
       
   def handle_allergens(self, assignments):
-    allergy_data = pl.read_csv(build_path / 'arborist' / 'allergens.csv').select('AccProtein', 'Name')
-    allergy_data = allergy_data.with_columns([
-      pl.col('AccProtein').str.split(' ').list.get(0).str.split('-').list.get(0).str.split(',').list.get(0)
-    ])
+    allergy_data = pl.read_json(build_path / 'arborist' / 'allergens.json')
     assignments = assignments.join(
-      allergy_data, left_on='Protein ID', right_on='AccProtein', how='left', coalesce=True
+      allergy_data, left_on='Protein ID', right_on='uniprot_id', how='left', coalesce=True
     )
     assignments = assignments.with_columns(
-      pl.when(pl.col('Name').is_not_null())
-      .then(pl.col('Name')).otherwise('Protein Name').alias('Protein Name')
+      pl.when(pl.col('allergen_name').is_not_null())
+      .then(pl.col('allergen_name')).otherwise(pl.col('Protein Name')).alias('Protein Name')
     )
-    assignments = assignments.drop('Name')
+    assignments = assignments.with_columns(
+      pl.when(pl.col('mapped_id').is_not_null())
+      .then(pl.col('mapped_id')).otherwise(pl.col('Protein ID')).alias('Protein ID')
+    )
     return assignments
   
   def add_synonyms(self, assignments):
