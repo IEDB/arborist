@@ -200,7 +200,9 @@ class EpitopeMapper:
       '-db', str(self.blast_temp / 'proteins.fasta'),
       '-outfmt', '10 qseqid sseqid qseq sseq pident length gaps qstart qend sstart send evalue',
       '-num_threads', str(self.num_threads),
-      '-out', str(self.blast_temp / 'blast_results.csv')
+      '-out', str(self.blast_temp / 'blast_results.csv'),
+      '-word_size', '2',
+      '-evalue', '100'
     ]
     subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
@@ -267,6 +269,7 @@ class EpitopeMapper:
     return discontinous_mappings
   
   def map_discontinuous_epitopes(self, seq, protein_seq):
+    if not protein_seq: return seq, '', 0.0, ''
     seq = seq.replace(',  ', ', ').replace(' ,', ', ').replace(', ', ',').replace(' ', ',').replace(',,', ',')
     seq = seq[0:-1] if seq[-1] == ',' else seq
     split_seq = seq.split(',')
