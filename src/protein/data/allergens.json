@@ -3165,13 +3165,13 @@
         "allergen_name": "Jun o 4"
     },
     {
-        "uniprot_id": "Q9LLT2",
-        "mapped_id": "Q9LLT2",
+        "uniprot_id": "Q9LLT1",
+        "mapped_id": "Q9LLT1",
         "allergen_name": "Jun v 1"
     },
     {
-        "uniprot_id": "Q9LLT1",
-        "mapped_id": "Q9LLT2",
+        "uniprot_id": "Q9LLT2",
+        "mapped_id": "Q9LLT1",
         "allergen_name": "Jun v 1"
     },
     {
@@ -6125,13 +6125,13 @@
         "allergen_name": "Cari p 1"
     },
     {
-        "uniprot_id": "A0A3Q0KAE3",
-        "mapped_id": "A0A3Q0KAE3",
+        "uniprot_id": "A0A482J3M1",
+        "mapped_id": "A0A482J3M1",
         "allergen_name": "Der p 37"
     },
     {
-        "uniprot_id": "A0A482J3M1",
-        "mapped_id": "A0A3Q0KAE3",
+        "uniprot_id": "A0A3Q0KAE3",
+        "mapped_id": "A0A482J3M1",
         "allergen_name": "Der p 37"
     },
     {
