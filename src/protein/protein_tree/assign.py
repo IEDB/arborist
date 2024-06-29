@@ -484,8 +484,8 @@ if __name__ == "__main__":
   all_sources = data_fetcher.get_all_sources()
 
   if all_species:
-    for row in active_species.rows(named=True):
-      do_assignments(row['Species ID'])
+    # for row in active_species.rows(named=True):
+    #   do_assignments(row['Species ID'])
     combine_data()
   else:
     do_assignments(taxon_id)

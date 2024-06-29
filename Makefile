@@ -490,6 +490,9 @@ build/arborist/protein-tree.ttl: build/arborist/protein-tree.built | build/arbor
 build/arborist/protein-tree.owl: build/arborist/protein-tree.ttl
 	robot convert -i $< -o $@
 
+build/arborist/eptiope-mappings.tsv: build/arborist/all-peptide-assignments.tsv
+	python src/protein/protein_tree/immunomebrowser.py -n 14
+
 build/arborist/epitope-mappings_new.tsv: build/arborist/epitope-mappings.tsv
 	qsv slice --start -10 $< --output $@
 
@@ -593,7 +596,7 @@ build/arborist/organism-tree-old.built: build/arborist/organism-tree-old.owl | b
 	touch $@
 
 # Load an existing subspecies-tree.owl
-build/arborist/subspecies-tree-old.built: build/arboirst/subspecies-tree-old.owl | build/arborist/nanobot.db
+build/arborist/subspecies-tree-old.built: build/aborist/subspecies-tree-old.owl | build/arborist/nanobot.db
 	sqlite3 $| 'DROP TABLE IF EXISTS subspecies_tree_old'
 	ldtab init $| --table subspecies_tree_old
 	ldtab import $| $< --table subspecies_tree_old
