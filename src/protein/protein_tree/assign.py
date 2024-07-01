@@ -204,9 +204,11 @@ class SourceProcessor:
 
   def assign_manuals(self, top_proteins):
     manual_parents = pl.read_csv(build_path / 'arborist' / 'manual-parents.tsv', separator='\t')
-    manual_parents_map = dict(manual_parents.select('Accession', 'Parent Accession').iter_rows())
-    top_proteins = top_proteins.with_columns(
-      pl.col('Query').replace(manual_parents_map, default=pl.col('Subject')).alias('Subject')
+    top_proteins = top_proteins.join(
+      manual_parents, how='left', left_on='Query', right_on='Accession', coalesce=True
+    ).with_columns(
+      pl.when(pl.col('Parent Accession').is_not_null())
+      .then(pl.col('Parent Accession')).otherwise(pl.col('Subject')).alias('Subject')
     )
     return top_proteins
 
