@@ -77,7 +77,9 @@ serve: src/util/serve.py
 
 .PHONY: clean
 clean:
+	mv species/ .
 	rm -rf build
+	mv species/ build/
 
 .PHONY: clobber
 clobber:
