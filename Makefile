@@ -449,7 +449,7 @@ build/arborist/manual-parents.tsv: build/arborist/allergens.tsv
 	cp src/protein/data/manual-parents.tsv $@
 
 build/arborist/all-peptide-assignments.tsv: build/arborist/manual-parents.tsv
-	python3 src/protein/protein_tree/assign_peptides.py -n 8
+	python3 src/protein/protein_tree/assign.py -n 8
 
 build/arborist/protein-tree.assigned: build/arborist/allergens.tsv
 	touch $@
