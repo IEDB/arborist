@@ -448,9 +448,11 @@ build/arborist/manual-parents.tsv: build/arborist/allergens.tsv
 	# wget --no-check-certificate 'https://docs.google.com/spreadsheets/d/1VUDYmmnQURRnuqyVxZGyF8JCgAIiooaKCmi3_mf03o8/export?format=tsv&gid=2087231134' -O $@
 	cp src/protein/data/manual-parents.tsv $@
 
-# build/arborist/protein-tree.assigned: build/arborist/allergens.tsv build/arborist/manual-parents.tsv
-# 	python src/protein/protein_tree/assign.py -n 14
-# 	touch $@
+build/arborist/all-peptide-assignments.tsv: build/arborist/manual-parents.tsv
+	python3 src/protein/protein_tree/assign_peptides.py -n 8
+
+build/arborist/protein-tree.assigned: build/arborist/allergens.tsv
+	touch $@
 
 build/arborist/mro.owl: | build/arborist/
 	curl -L -o $@ 'http://purl.obolibrary.org/obo/mro/2023-12-21/mro.owl'
