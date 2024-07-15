@@ -6,6 +6,7 @@ from pathlib import Path
 from pepmatch import Preprocessor, Matcher
 from ARC.classifier import SeqClassifier
 from protein_tree.data_fetch import DataFetcher
+from protein_tree.select_proteome import ProteomeSelector
 
 
 class AssignmentHandler:
@@ -418,12 +419,6 @@ class PeptideProcessor:
     assignments = assignments.select(col_order)
     assignments.write_csv(self.species_path / 'peptide-assignments.tsv', separator='\t')
 
-
-def check_for_skips(taxon_id):
-  if (build_path / 'species' / str(taxon_id) / 'proteome.fasta').stat().st_size == 0:
-    print(f'Proteome is empty, skipping.')
-    return True
-
 def do_assignments(taxon_id):
   species_row = active_species.row(by_predicate=pl.col('Species ID') == taxon_id)
   species_name = species_row[2]
@@ -440,6 +435,7 @@ def do_assignments(taxon_id):
     'sources': sources,
     'num_threads': args.num_threads
   }
+  check_for_proteome(taxon_id, active_taxa, species_name, group)
   print(f'Assigning peptides for {species_name} (ID: {taxon_id})')
   skip = check_for_skips(taxon_id)
   if skip:
@@ -447,6 +443,22 @@ def do_assignments(taxon_id):
   assignment_handler = AssignmentHandler(**config)
   assignment_handler.process_species()
   assignment_handler.cleanup_files()
+
+def check_for_proteome(taxon_id, active_taxa, species_name, group):
+  species_path = build_path / 'species' / str(taxon_id)
+  if not species_path.exists():
+    Fetcher = DataFetcher(build_path)
+    peptides_df = Fetcher.get_peptides_for_species(all_peptides, active_taxa)
+    Selector = ProteomeSelector(
+      taxon_id, species_name, group, build_path
+    )
+    Selector.select_best_proteome(peptides_df)
+    Selector.proteome_to_tsv()
+
+def check_for_skips(taxon_id):
+  if (build_path / 'species' / str(taxon_id) / 'proteome.fasta').stat().st_size == 0:
+    print(f'Proteome is empty, skipping.')
+    return True
 
 def combine_data():
   print('Combining assignment, source, and species data.')
