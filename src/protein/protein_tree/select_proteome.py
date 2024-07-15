@@ -310,7 +310,7 @@ class ProteomeSelector:
       ProteomeSelector.get_proteome_to_fasta(proteome_id, self.species_path)
       return proteome_id, proteome_taxon
 
-    peptides_df = peptides_df[peptides_df['Sequence'].notna()] 
+    peptides_df = peptides_df[peptides_df['Sequence'].notna()]
     peptides = peptides_df['Sequence'].tolist()
 
     if not peptides: # get proteome with highest protein count

@@ -449,7 +449,7 @@ def check_for_proteome(taxon_id, active_taxa, species_name, group):
   species_path = build_path / 'species' / str(taxon_id)
   if not species_path.exists():
     Fetcher = DataFetcher(build_path)
-    peptides_df = Fetcher.get_peptides_for_species(all_peptides, active_taxa)
+    peptides_df = Fetcher.get_peptides_for_species(all_peptides, active_taxa).to_pandas()
     Selector = ProteomeSelector(
       taxon_id, species_name, group, build_path
     )
