@@ -136,6 +136,7 @@ class SourceProcessor:
     SeqClassifier(
       outfile=str(temp_results_path),
       threads=self.num_threads,
+      hmmer_path=str(self.bin_path)+'/',
       blast_path=str(self.bin_path)+'/'
     ).classify_seqfile(f'{self.species_path}/sources.fasta')
 
