@@ -476,7 +476,7 @@ build/arborist/protein-tree.built: src/protein/protein_tree/build.py build/arbor
 	$(eval DB := build/arborist/nanobot.db)
 	sqlite3 $(DB) 'DROP TABLE IF EXISTS protein_tree_old'
 	sqlite3 $(DB) 'DROP TABLE IF EXISTS protein_tree_new'
-	python $<
+	python3 $<
 	sqlite3 $(DB) 'CREATE INDEX idx_protein_tree_old_subject ON protein_tree_old(subject)'
 	sqlite3 $(DB) 'CREATE INDEX idx_protein_tree_old_predicate ON protein_tree_old(predicate)'
 	sqlite3 $(DB) 'CREATE INDEX idx_protein_tree_old_object ON protein_tree_old(object)'
@@ -495,7 +495,7 @@ build/arborist/protein-tree.owl: build/arborist/protein-tree.ttl
 	robot convert -i $< -o $@
 
 build/arborist/eptiope-mappings.tsv: build/arborist/all-peptide-assignments.tsv
-	python src/protein/protein_tree/immunomebrowser.py -n 14
+	python3 src/protein/protein_tree/immunomebrowser.py -n 14
 
 build/arborist/epitope-mappings_new.tsv: build/arborist/epitope-mappings.tsv
 	qsv slice --start -10 $< --output $@

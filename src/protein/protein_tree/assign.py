@@ -177,7 +177,7 @@ class SourceProcessor:
 
       query_length_map = dict(self.sources.select('Source Accession', 'Length').iter_rows())
       alignments = alignments.with_columns(
-        pl.col('Query').cast(pl.String).replace(query_length_map).cast(pl.Int32).alias('Query Length')
+        pl.col('Query').cast(pl.String).replace_strict(query_length_map).cast(pl.Int32).alias('Query Length')
       )
       alignments = alignments.with_columns(
         pl.col('Alignment Length').mul(pl.col('% Identity')).truediv(pl.col('Query Length')).alias('Score')
@@ -346,7 +346,7 @@ class PeptideProcessor:
     assignments = assignments.with_columns(
       (pl.col('Database') == 'sp').alias('Assigned Protein Review Status'),
       pl.col('Assigned Protein Sequence').str.len_chars().alias('Assigned Protein Length'),
-      pl.col('Protein ID').replace(fragments, default='').alias('Assigned Protein Fragments'),
+      pl.col('Protein ID').replace_strict(fragments, default='').alias('Assigned Protein Fragments'),
       pl.lit(str(self.taxon_id)).alias('Species Taxon ID'),
       pl.lit(self.species_name).alias('Species Name')
     )
@@ -382,7 +382,7 @@ class PeptideProcessor:
     else:
       synonym_data = {}
     assignments = assignments.with_columns(
-      pl.col('Protein ID').replace(synonym_data, default='').alias('Assigned Protein Synonyms'),
+      pl.col('Protein ID').replace_strict(synonym_data, default='').alias('Assigned Protein Synonyms'),
     )
     assignments = assignments.with_columns(
       pl.when(pl.col('Assigned Protein Synonyms') != "")
