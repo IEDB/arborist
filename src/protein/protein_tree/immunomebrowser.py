@@ -285,7 +285,7 @@ class EpitopeMapper:
         else:
           parent_seq += f'{protein_seq[pos]}{pos+1}, '
       except IndexError:
-        parent_seq += f'{'X'}{pos+1}, '
+        parent_seq += f'{"X"}{pos+1}, '
       except ValueError:
         continue
     parent_seq = parent_seq[:-2]
