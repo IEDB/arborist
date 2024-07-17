@@ -73,8 +73,6 @@ weekly: clean_except_dirs iedb organism protein molecule disease leidos
 .PHONY: clean_except_dirs
 clean_except_dirs:
 	find build/ -mindepth 1 ! -path "build/organisms" ! -path "build/organisms/*" ! -path "build/proteins" ! -path "build/proteins/*" ! -path "build/species" ! -path "build/species/*" -delete
-	find cache/ -mindepth 1 -delete
-	find current/ -mindepth 1 -delete
 
 .PHONY: leidos
 leidos: build/organisms/latest/ build/proteins/latest/
@@ -406,7 +404,7 @@ build/organisms/latest/: build/arborist/subspecies-tree.owl
 # fetching FASTA and XML annotations.
 
 # TODO: Use previously selected proteomes or force refresh.
-build/arborist/proteome.tsv: build/arborist/active-species.tsv src/proteome/proteome.tsv
+build/arborist/proteome.tsv: build/arborist/active-species.tsv src/protein/data/proteomes.tsv
 	qsv join --left 'Species ID' $< 'Species ID' $(word 2,$^) \
 	| qsv select 1-6,12- --output $@
 
@@ -435,7 +433,7 @@ build/arborist/proteome_after.tsv: build/arborist/proteome.tsv
 	qsv select 1-5,7- $< --output $@
 
 # Compare new proteomes to src/proteome.
-build/arborist/proteome.html: src/proteome/proteome.tsv build/arborist/proteome_after.tsv
+build/arborist/proteome.html: src/protein/data/proteomes.tsv build/arborist/proteome_after.tsv
 	daff --output $@ $^
 
 .PHONY: proteome
