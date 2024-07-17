@@ -450,10 +450,10 @@ build/arborist/allergens.csv: | build/
 build/arborist/allergens.tsv: src/util/csv2tsv.py build/arborist/allergens.csv
 	python3 $^ $@
 
-build/arborist/allergens.json: src/protein/data/allergens.json
+build/arborist/allergens.json: src/protein/data/allergens.json 
 	cp $< $@
 
-build/arborist/manual-parents.tsv: build/arborist/allergens.tsv
+build/arborist/manual-parents.tsv: build/arborist/allergens.tsv build/arborist/allergens.json
 	# wget --no-check-certificate 'https://docs.google.com/spreadsheets/d/1VUDYmmnQURRnuqyVxZGyF8JCgAIiooaKCmi3_mf03o8/export?format=tsv&gid=2087231134' -O $@
 	cp src/protein/data/manual-parents.tsv $@
 
