@@ -67,6 +67,13 @@ deps:
 .PHONY: all
 all: deps iedb ncbitaxon organism protein molecule disease leidos
 
+.PHONY: weekly
+weekly: clean_except_dirs iedb organism protein molecule disease leidos
+
+.PHONY: clean_except_dirs
+clean_except_dirs:
+	find build/ -mindepth 1 ! -path "build/organisms" ! -path "build/organisms/*" ! -path "build/proteins" ! -path "build/proteins/*" ! -path "build/species" ! -path "build/species/*" -delete
+
 .PHONY: leidos
 leidos: build/organisms/latest/ build/proteins/latest/
 	pytest test/test_leidos.py

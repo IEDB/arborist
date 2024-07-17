@@ -1,5 +1,6 @@
 bottle
 jinja2
+polars>=1.0.0
 
 # protein tree package
 -e ./src/protein

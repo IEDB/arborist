@@ -1,5 +1,7 @@
 #!/bin/sh
 
-python -m venv arborist
-source arborist/bin/activate
+python3 -m venv _venv
+. _venv/bin/activate
+sudo chown -R $USER _venv
+pip install --upgrade pip
 pip install -r requirements.txt
