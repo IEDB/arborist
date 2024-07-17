@@ -73,6 +73,8 @@ weekly: clean_except_dirs iedb organism protein molecule disease leidos
 .PHONY: clean_except_dirs
 clean_except_dirs:
 	find build/ -mindepth 1 ! -path "build/organisms" ! -path "build/organisms/*" ! -path "build/proteins" ! -path "build/proteins/*" ! -path "build/species" ! -path "build/species/*" -delete
+	find cache/ -mindepth 1 -delete
+	find current/ -mindepth 1 -delete
 
 .PHONY: leidos
 leidos: build/organisms/latest/ build/proteins/latest/
