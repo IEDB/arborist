@@ -2,6 +2,7 @@ import json
 import argparse
 import subprocess
 import polars as pl
+from polars.exceptions import NoDataError
 from pathlib import Path
 from pepmatch import Preprocessor, Matcher
 from ARC.classifier import SeqClassifier
@@ -185,7 +186,7 @@ class SourceProcessor:
         pl.col('Alignment Length').mul(pl.col('% Identity')).truediv(pl.col('Query Length')).alias('Score')
       )
 
-    except pl.NoDataError: # no alignments were found
+    except NoDataError: # no alignments were found
       alignments = pl.DataFrame({col: [] for col in alignment_cols})
       alignments = alignments.with_columns(
         pl.lit(0).alias('Query Length'),
