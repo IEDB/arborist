@@ -504,13 +504,13 @@ build/arborist/protein-tree.owl: build/arborist/protein-tree.ttl
 	robot convert -i $< -o $@
 
 build/arborist/epitope-mappings.tsv: build/arborist/all-peptide-assignments.tsv
-	$(VENV_PYTHON) src/protein/protein_tree/immunomebrowser.py -n 14
+	$(VENV_PYTHON) src/protein/protein_tree/immunomebrowser.py -n 10
 
 build/arborist/epitope-mappings_new.tsv: build/arborist/epitope-mappings.tsv
 	qsv slice --start -10 $< --output $@
 
 .PHONY: protein
-protein: build/arborist/protein-tree.owl
+protein: build/arborist/epitope-mappings_new.tsv
 
 
 ### 6. TODO Build Molecule Tree
