@@ -68,7 +68,7 @@ deps:
 all: deps iedb ncbitaxon organism protein molecule disease leidos
 
 .PHONY: weekly
-weekly: protein molecule disease leidos
+weekly: clean_except_dirs iedb ncbitaxon organism protein molecule disease leidos
 
 .PHONY: clean_except_dirs
 clean_except_dirs:
