@@ -3,19 +3,24 @@ echo "--------------------------------------"
 
 echo "Activating environment..."
 . _venv/bin/activate || (echo "Missing _venv, please setup_env.sh"; exit 1)
+export VENV_PYTHON=$(pwd)/_venv/bin/python
 
-read -p "Enter MySQL Username: " IEDB_MYSQL_USER
-read -s -p "Enter MySQL Password: " IEDB_MYSQL_PASSWORD
-echo ""
+DATESTAMP=$1
+export MYSQL_HOST=$2
 
-VENV_PYTHON=$(pwd)/_venv/bin/python
+export IEDB_MYSQL_HOST="$MYSQL_HOST"
+export IEDB_MYSQL_PORT="3306"
+export IEDB_MYSQL_USER="iedb_query"
+export IEDB_MYSQL_PASSWORD=$(cat .iedb_query)
+export IEDB_MYSQL_DATABASE="iedb_query_$DATESTAMP"
 
-export IEDB_MYSQL_HOST="iedb-mysql.liai.org"
-export IEDB_MYSQL_PORT="33306"
-export IEDB_MYSQL_DATABASE="iedb_query"
-export IEDB_MYSQL_USER="$IEDB_MYSQL_USER"
-export IEDB_MYSQL_PASSWORD="$IEDB_MYSQL_PASSWORD"
+export IEDB_MYSQL_QUERY="mysql --host=${IEDB_MYSQL_HOST} --port=${IEDB_MYSQL_PORT} --user=${IEDB_MYSQL_USER} --password=${IEDB_MYSQL_PASSWORD} ${IEDB_MYSQL_DATABASE}"
+
+echo "Checking database connection..."
+$IEDB_MYSQL_QUERY -e "SELECT 1" || (echo "Could not connect to database ${IEDB_MYSQL_DATABASE} on host ${IEDB_MYSQL_HOST}:${IEDB_MYSQL_PORT}"; exit 1)
 
 echo "--------------------------------------"
 echo "Running Arborist..."
-sudo -E make weekly IEDB_MYSQL_HOST="$IEDB_MYSQL_HOST" IEDB_MYSQL_PORT="$IEDB_MYSQL_PORT" IEDB_MYSQL_DATABASE="$IEDB_MYSQL_DATABASE" IEDB_MYSQL_USER="$IEDB_MYSQL_USER" IEDB_MYSQL_PASSWORD="$IEDB_MYSQL_PASSWORD" VENV_PYTHON="$VENV_PYTHON"
+
+make weekly_clean
+make weekly

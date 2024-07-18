@@ -68,7 +68,13 @@ deps:
 all: deps iedb ncbitaxon organism protein molecule disease leidos
 
 .PHONY: weekly
-weekly: clean_except_dirs iedb ncbitaxon organism protein molecule disease leidos
+weekly: iedb ncbitaxon organism protein molecule disease leidos
+
+.PHONY: weekly_clean
+weekly_clean:
+	chmod +w -R cache/
+	rm -rf build/iedb/ build/arborist/ cache/ current/
+	rm -rf build/disease*
 
 .PHONY: clean_except_dirs
 clean_except_dirs:
