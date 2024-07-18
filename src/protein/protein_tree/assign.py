@@ -477,7 +477,14 @@ def combine_data():
       all_source_data = pl.concat([all_source_data, source_data])
     if (species_path / 'species-data.tsv').exists():
       species_data = pl.read_csv(species_path / 'species-data.tsv', separator='\t', infer_schema_length=0)
-      all_species_data = pl.concat([all_species_data, species_data])
+      try:
+        all_species_data = pl.concat([all_species_data, species_data])
+      except:
+        species_data = species_data.with_columns(
+          pl.lit(species_path.name).alias('Species ID'),
+          pl.col('Species Name').cast(pl.String).alias('Proteome Label'),
+        )
+        all_species_data = pl.concat([all_species_data, species_data])
 
   all_assignments.write_csv(build_path / 'arborist' / 'all-peptide-assignments.tsv', separator='\t')
   all_source_data.write_csv(build_path / 'arborist' / 'all-source-data.tsv', separator='\t')
