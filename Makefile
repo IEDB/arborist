@@ -125,7 +125,7 @@ $(error "Please install 'mariadb' from MariaDB")
 endif
 
 # Require Python
-ifeq ($(shell command -v $(VENV_PYTHON)),)
+ifeq ($(shell command -v python3),)
 $(error 'Please install Python 3, so we can run various scripts')
 endif
 
