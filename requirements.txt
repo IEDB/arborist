@@ -1,6 +1,15 @@
 bottle
 jinja2
-polars>=1.0.0
+polars
+pandas
+pyarrow
+biopython
+lxml
+mysql-connector-python
+pepmatch
+sqlalchemy
+pytest
+requests
 
 # protein tree package
 -e ./src/protein
