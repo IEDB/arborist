@@ -503,7 +503,7 @@ build/arborist/protein-tree.ttl: build/arborist/protein-tree.built | build/arbor
 build/arborist/protein-tree.owl: build/arborist/protein-tree.ttl
 	robot convert -i $< -o $@
 
-build/arborist/eptiope-mappings.tsv: build/arborist/all-peptide-assignments.tsv
+build/arborist/epitope-mappings.tsv: build/arborist/all-peptide-assignments.tsv
 	python3 src/protein/protein_tree/immunomebrowser.py -n 14
 
 build/arborist/epitope-mappings_new.tsv: build/arborist/epitope-mappings.tsv
