@@ -68,7 +68,7 @@ deps:
 all: deps iedb ncbitaxon organism protein molecule disease leidos
 
 .PHONY: weekly
-weekly: clean_except_dirs iedb organism protein molecule disease leidos
+weekly: protein molecule disease leidos
 
 .PHONY: clean_except_dirs
 clean_except_dirs:
@@ -82,7 +82,7 @@ leidos: build/organisms/latest/ build/proteins/latest/
 
 .PHONY: serve
 serve: src/util/serve.py
-	python3 $<
+	$(VENV_PYTHON) $<
 
 .PHONY: clean
 clean:
@@ -119,7 +119,7 @@ $(error "Please install 'mariadb' from MariaDB")
 endif
 
 # Require Python
-ifeq ($(shell command -v python3),)
+ifeq ($(shell command -v $(VENV_PYTHON)),)
 $(error 'Please install Python 3, so we can run various scripts')
 endif
 
@@ -321,7 +321,7 @@ current/taxdmp.zip: cache/ncbitaxon/taxdmp_$(TAXDMP_VERSION).zip
 
 build/arborist/ncbitaxon.built: src/organism/ncbitaxon2ldtab.py current/taxdmp.zip | build/arborist/nanobot.db
 	sqlite3 $| "DROP TABLE IF EXISTS ncbitaxon"
-	python3 $^ $|
+	$(VENV_PYTHON) $^ $|
 	sqlite3 $| "CREATE INDEX idx_ncbitaxon_subject ON ncbitaxon(subject)"
 	sqlite3 $| "CREATE INDEX idx_ncbitaxon_predicate ON ncbitaxon(predicate)"
 	sqlite3 $| "CREATE INDEX idx_ncbitaxon_object ON ncbitaxon(object)"
@@ -345,22 +345,22 @@ build/arborist/peptide-count.tsv: src/organism/peptide-count.sql build/iedb/pept
 
 # Render the organism_core as HTML.
 build/arborist/organism_core.html: src/organism/render_organism_core.py src/organism/organism_core.tsv | build/arborist/
-	python3 $^ $@
+	$(VENV_PYTHON) $^ $@
 
 # Build a new organism tree.
 build/arborist/organism-tree.tsv: src/organism/assign_species.py build/arborist/ncbitaxon.built src/organism/organism_core.tsv build/iedb/ncbi_include.tsv build/iedb/iedb_taxa.tsv build/arborist/peptide-count.tsv | build/arborist/nanobot.db
-	python3 $< $| $(filter %.tsv, $^) $@
+	$(VENV_PYTHON) $< $| $(filter %.tsv, $^) $@
 	qsv sort $@ --output $@
 
 # Convert the organism tree to an LDTab table in SQLite.
 build/arborist/organism-tree.built: src/organism/build_organism_tree.py build/arborist/organism-tree.tsv | build/arborist/nanobot.db
 	sqlite3 $| "DROP TABLE IF EXISTS organism_tree"
-	python3 $< $| $(filter %.tsv, $^)
+	$(VENV_PYTHON) $< $| $(filter %.tsv, $^)
 	touch $@
 
 build/arborist/subspecies-tree.built: src/organism/build_subspecies_tree.py build/arborist/organism-tree.built | build/arborist/nanobot.db
 	sqlite3 $| "DROP TABLE IF EXISTS subspecies_tree"
-	python3 $< $|
+	$(VENV_PYTHON) $< $|
 	touch $@
 
 # Export sorted LDTab TSV files.
@@ -382,7 +382,7 @@ build/arborist/%-tree.owl: build/arborist/%-tree.ttl src/organism/predicates.ttl
 	--output $@
 
 build/arborist/active-species.tsv: src/organism/get_active_species.py build/arborist/organism-tree.built build/arborist/peptide-count.tsv | build/arborist/nanobot.db
-	python3 $< $| $(filter %.tsv, $^) $@
+	$(VENV_PYTHON) $< $| $(filter %.tsv, $^) $@
 
 .PHONY: organism
 organism: build/arborist/organism_core.html
@@ -428,7 +428,7 @@ build/species/%/sources.tsv: build/iedb/peptide_source.tsv build/species/%/taxa.
 .PRECIOUS: build/species/%/epitopes.tsv build/species/%/sources.tsv
 
 build/arborist/proteomes.built: build/arborist/proteome.tsv
-	python3 src/protein_tree/protein_tree/select_proteome.py -b build/ -a
+	$(VENV_PYTHON) src/protein_tree/protein_tree/select_proteome.py -b build/ -a
 
 # Remove epitope counts from proteome table.
 build/arborist/proteome_after.tsv: build/arborist/proteome.tsv
@@ -448,7 +448,7 @@ build/arborist/allergens.csv: | build/
 	curl -L -o $@ 'http://www.allergen.org/csv.php?table=joint'
 
 build/arborist/allergens.tsv: src/util/csv2tsv.py build/arborist/allergens.csv
-	python3 $^ $@
+	$(VENV_PYTHON) $^ $@
 
 build/arborist/allergens.json: src/protein/data/allergens.json 
 	cp $< $@
@@ -458,7 +458,7 @@ build/arborist/manual-parents.tsv: build/arborist/allergens.tsv build/arborist/a
 	cp src/protein/data/manual-parents.tsv $@
 
 build/arborist/all-peptide-assignments.tsv: build/arborist/manual-parents.tsv
-	python3 src/protein/protein_tree/assign.py -n 8
+	$(VENV_PYTHON) src/protein/protein_tree/assign.py -n 8
 
 build/arborist/protein-tree.assigned: build/arborist/allergens.tsv
 	touch $@
@@ -485,7 +485,7 @@ build/arborist/protein-tree.built: src/protein/protein_tree/build.py build/arbor
 	$(eval DB := build/arborist/nanobot.db)
 	sqlite3 $(DB) 'DROP TABLE IF EXISTS protein_tree_old'
 	sqlite3 $(DB) 'DROP TABLE IF EXISTS protein_tree_new'
-	python3 $<
+	$(VENV_PYTHON) $<
 	sqlite3 $(DB) 'CREATE INDEX idx_protein_tree_old_subject ON protein_tree_old(subject)'
 	sqlite3 $(DB) 'CREATE INDEX idx_protein_tree_old_predicate ON protein_tree_old(predicate)'
 	sqlite3 $(DB) 'CREATE INDEX idx_protein_tree_old_object ON protein_tree_old(object)'
@@ -504,7 +504,7 @@ build/arborist/protein-tree.owl: build/arborist/protein-tree.ttl
 	robot convert -i $< -o $@
 
 build/arborist/epitope-mappings.tsv: build/arborist/all-peptide-assignments.tsv
-	python3 src/protein/protein_tree/immunomebrowser.py -n 14
+	$(VENV_PYTHON) src/protein/protein_tree/immunomebrowser.py -n 14
 
 build/arborist/epitope-mappings_new.tsv: build/arborist/epitope-mappings.tsv
 	qsv slice --start -10 $< --output $@
@@ -586,14 +586,14 @@ save: | build/arborist/nanobot.db
 	valve-export data $| src/arborist/ table column datatype
 	valve-export data $| src/organism/ organism_core
 	valve-export data $| build/arborist/ $$(grep build src/arborist/table.tsv | cut -f1 | tr '\n' ' ')
-	python3 src/organism/sort_organism_core.py src/organism/organism_core.tsv
+	$(VENV_PYTHON) src/organism/sort_organism_core.py src/organism/organism_core.tsv
 
 DROPTABLES := proteomes active_species organism_core organism_tree_tsv prefix column datatype table message history
 .PHONY: reload
 reload: src/organism/check_organism_core.py | build/arborist/nanobot.db
 	sqlite3 $| $(foreach DT,$(DROPTABLES),"DROP VIEW IF EXISTS '$(DT)_text_view'" "DROP VIEW IF EXISTS '$(DT)_view'" "DROP TABLE IF EXISTS '$(DT)_conflict'" "DROP TABLE IF EXISTS '$(DT)'")
 	cd $(dir $|) && nanobot init
-	-python3 $< $|
+	-$(VENV_PYTHON) $< $|
 
 
 ### Comparisons
