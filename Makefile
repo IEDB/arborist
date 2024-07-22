@@ -451,7 +451,7 @@ proteome: build/arborist/proteomes.built
 ### 5. Build Protein Tree
 
 build/arborist/allergens.csv: | build/
-	curl -L -o $@ 'http://www.allergen.org/csv.php?table=joint'
+	curl -L --retry 10 -o $@ 'http://www.allergen.org/csv.php?table=joint'
 
 build/arborist/allergens.tsv: src/util/csv2tsv.py build/arborist/allergens.csv
 	$(VENV_PYTHON) $^ $@
