@@ -120,6 +120,7 @@ class EpitopeMapper:
 
   def make_exact_mappings(self, exact_matches):
     exact_mappings = exact_matches.with_columns(
+      (pl.col('Epitope ID').str.replace(r"\.0$", "")).alias('Epitope ID'),
       (pl.col('Epitope Sequence')).alias('parent_seq'),
       (pl.lit(1.0)).alias('identity_alignment'),
       (pl.lit(1.0)).alias('similarity_alignment'),
@@ -240,6 +241,7 @@ class EpitopeMapper:
       parent_alignments_modified.append(self.modify_parent_alignment(collapsed_seq, parent_alignment))
 
     discontinous_mappings = non_exact_discontinuous.with_columns(
+      (pl.col('Epitope ID').str.replace(r"\.0$", "")).alias('Epitope ID'),
       pl.Series(name='parent_seq', values=parent_seqs),
       pl.Series(name='identity_alignment', values=perc_identities),
       pl.Series(name='similarity_alignment', values=perc_identities),
