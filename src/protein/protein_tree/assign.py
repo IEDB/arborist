@@ -387,12 +387,15 @@ class PeptideProcessor:
     assignments = assignments.with_columns(
       pl.col('Protein ID').replace_strict(synonym_data, default='').alias('Assigned Protein Synonyms'),
     )
+    print(assignments.columns)
     assignments = assignments.with_columns(
       pl.when(pl.col('Assigned Protein Synonyms') != "")
       .then(pl.concat_str(
-        [pl.col('Assigned Protein Synonyms'), pl.col('Entry Name')], separator=', ')
+        [pl.col('Assigned Protein Synonyms'), pl.col('Source Assigned Gene'), pl.col('Entry Name')], separator=', ')
       )
-      .otherwise(pl.col('Entry Name'))
+      .otherwise(pl.concat_str(
+        [pl.col('Source Assigned Gene'), pl.col('Entry Name')], separator=', ', ignore_nulls=True)
+      )
       .alias('Assigned Protein Synonyms')
     )
     return assignments
