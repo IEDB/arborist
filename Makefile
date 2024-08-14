@@ -460,8 +460,10 @@ build/arborist/allergens.json: src/protein/data/allergens.json
 	cp $< $@
 
 build/arborist/manual-parents.tsv: build/arborist/allergens.tsv build/arborist/allergens.json
-	# wget --no-check-certificate 'https://docs.google.com/spreadsheets/d/1VUDYmmnQURRnuqyVxZGyF8JCgAIiooaKCmi3_mf03o8/export?format=tsv&gid=2087231134' -O $@
 	cp src/protein/data/manual-parents.tsv $@
+
+build/arborist/manual-synonyms.tsv: build/arborist/manual-parents.tsv
+	cp src/protein/data/manual-synonyms.tsv $@
 
 build/arborist/all-peptide-assignments.tsv: build/arborist/manual-parents.tsv
 	$(VENV_PYTHON) src/protein/protein_tree/assign.py -n 8

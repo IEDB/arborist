@@ -380,14 +380,22 @@ class PeptideProcessor:
   def add_synonyms(self, assignments):
     if (self.species_path / 'synonym-data.json').exists():
       with open(self.species_path / 'synonym-data.json', 'r') as f:
-        synonym_data = json.load(f)
-      synonym_data = {k: ', '.join(v) for k, v in synonym_data.items()}
-    else:
-      synonym_data = {}
+        species_synonym_data = json.load(f)
+      species_synonym_data = {k: ', '.join(v) for k, v in species_synonym_data.items()}
+    
+    manual_synonyms = pl.read_csv(build_path / 'arborist' / 'manual-synonyms.tsv', separator='\t')
+    manual_synonym_data = dict(manual_synonyms.select(pl.col('Accession'), pl.col('Synonyms')).iter_rows())
+    
+    for accession, synonyms in manual_synonym_data.items():
+      if accession in species_synonym_data:
+        combined_synonyms = set(species_synonym_data[accession].split(', ') + synonyms.split(', '))
+        species_synonym_data[accession] = ', '.join(combined_synonyms)
+      else:
+        species_synonym_data[accession] = synonyms
+  
     assignments = assignments.with_columns(
-      pl.col('Protein ID').replace_strict(synonym_data, default='').alias('Assigned Protein Synonyms'),
+      pl.col('Protein ID').replace_strict(species_synonym_data, default='').alias('Assigned Protein Synonyms'),
     )
-    print(assignments.columns)
     assignments = assignments.with_columns(
       pl.when(pl.col('Assigned Protein Synonyms') != "")
       .then(pl.concat_str(
