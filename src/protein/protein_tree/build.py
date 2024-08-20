@@ -201,7 +201,9 @@ def add_synonyms(parent):
   """Given a row from the source_assignments dataframe, return a list of triples
   for the synonyms of the protein."""
   synonyms = []
-  for synonym in parent['Assigned Protein Synonyms'].split(', '):
+  protein_synonyms = parent['Assigned Protein Synonyms']
+  if not protein_synonyms: return []
+  for synonym in protein_synonyms.split(', '):
     if '@' in synonym or '{' in synonym: continue
     synonyms.append(triple(
       f"UP:{parent['Parent Protein ID']}",
