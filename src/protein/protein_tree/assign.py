@@ -382,6 +382,8 @@ class PeptideProcessor:
       with open(self.species_path / 'synonym-data.json', 'r') as f:
         species_synonym_data = json.load(f)
       species_synonym_data = {k: ', '.join(v) for k, v in species_synonym_data.items()}
+    else:
+      species_synonym_data = {}
     
     manual_synonyms = pl.read_csv(build_path / 'arborist' / 'manual-synonyms.tsv', separator='\t')
     manual_synonym_data = dict(manual_synonyms.select(pl.col('Accession'), pl.col('Synonyms')).iter_rows())
