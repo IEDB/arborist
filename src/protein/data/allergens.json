@@ -760,11 +760,6 @@
         "allergen_name": "Asp f 27"
     },
     {
-        "uniprot_id": "Q92405",
-        "mapped_id": "Q92405",
-        "allergen_name": "Asp f Catalase"
-    },
-    {
         "uniprot_id": "B3V0K8",
         "mapped_id": "B3V0K8",
         "allergen_name": "Cur l 4"
@@ -822,17 +817,17 @@
     {
         "uniprot_id": "O42800",
         "mapped_id": "Q8J0P4",
-        "allergen_name": "Asp f 9 / Asp f 16"
+        "allergen_name": "Asp f 9"
     },
     {
         "uniprot_id": "Q8J0P4",
         "mapped_id": "Q8J0P4",
-        "allergen_name": "Asp f 9 / Asp f 16"
+        "allergen_name": "Asp f 9"
     },
     {
         "uniprot_id": "O74682",
         "mapped_id": "Q8J0P4",
-        "allergen_name": "Asp f 9 / Asp f 16"
+        "allergen_name": "Asp f 9"
     },
     {
         "uniprot_id": "O93933",
