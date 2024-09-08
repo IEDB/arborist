@@ -3,7 +3,6 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 9913	Bos taurus	SRC351975	immunoglobulin gamma4 heavy chain variable region	ARC	ab	Immunoglobulin chain	
 10116	Rattus norvegicus	SRC255115	MHC class I RT1.Au	ARC	mhc	Major Histocompatibility Complex chain	
 10116	Rattus norvegicus	SRC255186	MHC Class II RT1.Du	ARC	mhc	Major Histocompatibility Complex chain	
-10116	Rattus norvegicus	SRC268315	Ig gamma-1 chain C region	ARC	ab	Immunoglobulin chain	
 10116	Rattus norvegicus	SRC279940	RT1 class I histocompatibility antigen, AA alpha chain	ARC	ab	Immunoglobulin chain	
 3369	Cryptomeria japonica	SRC268309	Sugi basic protein	IUIS	P18632	Cry j 1	
 3369	Cryptomeria japonica	SRC268310	Polygalacturonase	IUIS	P43212	Cry j 2	
@@ -29,11 +28,9 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 4550	Secale cereale	AAB58403.1	omega secalin	IUIS	Q9S8H2	Sec c 38	
 4550	Secale cereale	ABO32294.1	75k gamma secalin	IUIS	Q9S8B0	Sec c 20	
 4550	Secale cereale	CAA42836.1	Sec1 precursor	IUIS	Q9S8H2	Sec c 38	
-4550	Secale cereale	Q05573	Sec1 precursor	IUIS	Q9S8H2	Sec c 38	
+4550	Secale cereale	Q05573.1	Sec1	IUIS		Sec c 38	
 4550	Secale cereale	SRC335637	75k gamma secalin	IUIS	Q9S8B0	Sec c 20	
 4550	Secale cereale	SRC454240	Sec c 1	IUIS	Q9S8H2	Sec c 38	
-4565	Triticum aestivum	4GG6_I	Chain I, Protein Complex	IUIS	D2T2K3	Tri a 21	
-4565	Triticum aestivum	A0A0K2QJY6	Gliadin alpha-B25	IUIS	D2T2K3	Tri a 21	
 4565	Triticum aestivum	AAA96522.1	alpha-gliadin storage protein	IUIS	D2T2K3	Tri a 21	
 4565	Triticum aestivum	AAB48479.1	low-molecular-weight glutenin storage protein	IUIS	B2Y2Q7	Tri a 36	
 4565	Triticum aestivum	AAG17702.1	omega gliadin storage protein	IUIS	Q402I5	Tri a 19	
@@ -56,7 +53,7 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 4565	Triticum aestivum	ACN62213.1	omega-gliadin	IUIS	Q402I5	Tri a 19	
 4565	Triticum aestivum	ACQ83636.1	omega secalin	IUIS	Q402I5	Tri a 19	
 4565	Triticum aestivum	ADP95517.1	75k gamma secalin	IUIS	A0A060N479	Tri a 20	
-4565	Triticum aestivum	AFC98436.1	gamma-gliadin	IUIS	A0A060N479	Tri a 20	
+4565	Triticum aestivum	AFC98436.1	gamma-gliadin	IUIS	A0A060N479	Tri a 19	
 4565	Triticum aestivum	AFQ13468.1	alpha-gliadin	IUIS	D2T2K3	Tri a 21	
 4565	Triticum aestivum	AGK83251.1	low-molecular-weight glutenin subunit	IUIS	B2Y2Q7	Tri a 36	
 4565	Triticum aestivum	AGK83306.1	low-molecular-weight glutenin subunit	IUIS	B2Y2Q7	Tri a 36	
@@ -85,18 +82,10 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 4565	Triticum aestivum	P04723.1	Alpha/beta-gliadin A-III precursor	IUIS	D2T2K3	Tri a 21	
 4565	Triticum aestivum	P04724.1	Alpha/beta-gliadin A-IV precursor	IUIS	D2T2K3	Tri a 21	
 4565	Triticum aestivum	P04725.1	Alpha/beta-gliadin A-V	IUIS	D2T2K3	Tri a 21	
-4565	Triticum aestivum	P04726	Alpha/beta-gliadin clone PW1215	IUIS	D2T2K3	Tri a 21	
 4565	Triticum aestivum	P04727.1	Alpha/beta-gliadin clone PW8142 precursor	IUIS	D2T2K3	Tri a 21	
 4565	Triticum aestivum	P10385.1	Glutenin, low molecular weight subunit precursor	IUIS	B2Y2Q7	Tri a 36	
 4565	Triticum aestivum	P10388.4	Glutenin, high molecular weight subunit DX5 precursor	IUIS	P10388	Tri a 26	
 4565	Triticum aestivum	P18573.1	Alpha/beta-gliadin MM1 precursor	IUIS	D2T2K3	Tri a 21	
-4565	Triticum aestivum	Q402I5	Omega-5 gliadin	IUIS	Q402I5	Tri a 19	
-4565	Triticum aestivum	Q41545	(T. aestivum) alpha-type gliadin precursor	IUIS	D2T2K3	Tri a 21	
-4565	Triticum aestivum	Q8L6B2	Gamma gliadin	IUIS	A0A060N479	Tri a 20	
-4565	Triticum aestivum	Q9FUW7	Omega gliadin storage protein	IUIS	Q402I5	Tri a 19	
-4565	Triticum aestivum	Q9M4L6	Alpha-gliadin	IUIS	D2T2K3	Tri a 21	
-4565	Triticum aestivum	Q9M4M5	Alpha-gliadin	IUIS	D2T2K3	Tri a 21	
-4565	Triticum aestivum	Q9ZNY0	Low molecular weight glutenin subunit precursor	IUIS	B2Y2Q7	Tri a 36	
 4565	Triticum aestivum	SRC262387	omega-5 gliadin	IUIS	Q402I5	Tri a 19	
 4565	Triticum aestivum	SRC264156	alpha/beta gliadin precursor	IUIS	D2T2K3	Tri a 21	
 4565	Triticum aestivum	SRC268307	Gamma-gliadin	IUIS	A0A060N479	Tri a 20	
@@ -120,8 +109,6 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 6956	Dermatophagoides pteronyssinus	SRC261403	Mite group 6 allergen Der p 6	IUIS	P49277	Der p 6	
 6956	Dermatophagoides pteronyssinus	SRC269004	Der P 1	IUIS	P08176	Der p 1	
 6956	Dermatophagoides pteronyssinus	SRC269005	Mite group 2 allergen Der p 2	IUIS	P49278	Der p 2	
-6956	Dermatophagoides pteronyssinus	SRC343987	group 14 allergen protein	IUIS	Q8N0N0	Der p 14	
-6956	Dermatophagoides pteronyssinus	SRC343988	glutathione transferase mu	IUIS	P46419	Der p 8	
 6956	Dermatophagoides pteronyssinus	SRC343993	Der p 13 allergen	IUIS	E0A8N8	Der p 13	
 6956	Dermatophagoides pteronyssinus	SRC343997	Der p 5	IUIS	P14004	Der p 5	
 6956	Dermatophagoides pteronyssinus	SRC522220	Der p23 allergen	IUIS	L7N6F8	Der p 23	
@@ -173,7 +160,6 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 727	Haemophilus influenzae	SRC265948	Lipopolysaccharide cholinephosphotransferase LicD	UniProt	P14184	Lipopolysaccharide cholinephosphotransferase LicD	licD
 727	Haemophilus influenzae	SRC279938	Outer membrane protein P2	UniProt	P43839	Outer membrane protein P2	ompP2
 770	Anaplasma marginale	SRC280374	Major surface protein 2 (MSP2)	UniProt	B9KGZ2	Major surface protein 2 (MSP2)	msp2
-813	Chlamydia trachomatis	C30593	outer membrane protein	UniProt	Q46409	Major outer membrane porin, serovar D	ompA
 813	Chlamydia trachomatis	E30593	outer membrane protein - Chlamydia trachomatis (serotype K) (fragments)	UniProt	Q46409	Major outer membrane porin, serovar D	ompA
 813	Chlamydia trachomatis	SRC265954	RNA polymerase sigma factor SigA	UniProt	P18333	RNA polymerase sigma factor SigA	sigA
 813	Chlamydia trachomatis	SRC279968	Major outer membrane porin, serovar D	UniProt	Q46409	Major outer membrane porin, serovar D	ompA
@@ -340,7 +326,6 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 9606	Homo sapiens	SRC269179	Uridine-cytidine kinase-like 1	UniProt	Q9NWZ5	Uridine-cytidine kinase-like 1	UCKL1
 9606	Homo sapiens	SRC279637	Non-receptor tyrosine-protein kinase TYK2	UniProt	P29597	Non-receptor tyrosine-protein kinase TYK2	TYK2
 9606	Homo sapiens	SRC279638	Alpha-1-antitrypsin	UniProt	P01009	Alpha-1-antitrypsin	SERPINA1
-9606	Homo sapiens	SRC279652	lutropin-choriogonadotropic hormone receptor precursor	UniProt	P22888	Lutropin-choriogonadotropic hormone receptor	LHCGR
 9606	Homo sapiens	SRC279653	plasminogen activator inhibitor 1 isoform 1 precursor	UniProt	P05121	Plasminogen activator inhibitor 1	SERPINE1
 9606	Homo sapiens	SRC279944	Islet cell autoantigen 1	UniProt	Q05084	Islet cell autoantigen 1	ICA1
 9606	Homo sapiens	SRC279945	Myelin basic protein	UniProt	P02686	Myelin basic protein	MBP
@@ -407,7 +392,6 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 9606	Homo sapiens	SRC280233	Elongation factor 1-alpha 1	UniProt	P68104	Elongation factor 1-alpha 1	EEF1A1
 9606	Homo sapiens	SRC280239	Heat shock 70 kDa protein 6	UniProt	P17066	Heat shock 70 kDa protein 6	HSPA6
 9606	Homo sapiens	SRC280245	Desmoglein-1	UniProt	Q02413	Desmoglein-1	DSG1
-9606	Homo sapiens	SRC280249	Cadherin-13	UniProt	P55290	Cadherin-13	CDH13
 9606	Homo sapiens	SRC280255	Chondroitin sulfate proteoglycan 4	UniProt	Q6UVK1	Chondroitin sulfate proteoglycan 4	CSPG4
 9606	Homo sapiens	SRC280258	U1 small nuclear ribonucleoprotein 70 kDa	UniProt	P08621	U1 small nuclear ribonucleoprotein 70 kDa	SNRNP70
 9606	Homo sapiens	SRC280262	Cytochrome c oxidase subunit 6C	UniProt	P09669	Cytochrome c oxidase subunit 6C	COX6C
@@ -451,7 +435,6 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 9606	Homo sapiens	SRC292622	10 kDa heat shock protein	UniProt	P61604	10 kDa heat shock protein, mitochondrial	HSPE1
 9606	Homo sapiens	SRC292636	proteasome subunit alpha type-7	UniProt	O14818	Proteasome subunit alpha type-7	PSMA7
 9606	Homo sapiens	SRC293729	proteasome subunit beta type-3	UniProt	P49720	Proteasome subunit beta type-3	PSMB3
-9606	Homo sapiens	SRC293735	carboxypeptidase E preproprotein	UniProt	P16870	Carboxypeptidase E	CPE
 9606	Homo sapiens	SRC293740	granulins	UniProt	P28799	Progranulin	GRN
 9606	Homo sapiens	SRC293741	transferrin receptor protein 1	UniProt	P02786	Transferrin receptor protein 1	TFRC
 9606	Homo sapiens	SRC298312	Elongation factor 2	UniProt	P13639	Elongation factor 2	EEF2
@@ -474,7 +457,6 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 9913	Bos taurus	SRC265963	Collagen alpha-1(II) chain	UniProt	P02459	Collagen alpha-1(II) chain	COL2A1
 10090	Mus musculus	720922A	insulin 1	UniProt	P01325	Insulin-1	Ins1
 10090	Mus musculus	720922B	insulin 2	UniProt	P01326	Insulin-2	Ins2
-10090	Mus musculus	Q60824.2	Bullous pemphigoid antigen 1, isoforms 6/7	UniProt	Q91ZU6	Dystonin	Dst
 10090	Mus musculus	SRC244845	prediabetic NOD sera-reactive autoantigen	UniProt	Q9WVM3	Anaphase-promoting complex subunit 7	Anapc7
 10090	Mus musculus	SRC247138	Sjogren syndrome antigen B	UniProt	P32067	Lupus La protein homolog	Ssb
 10090	Mus musculus	SRC253157	complement factor B	UniProt	P04186	Complement factor B	Cfb
@@ -516,7 +498,6 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 10090	Mus musculus	SRC280244	Acetylcholine receptor subunit gamma	UniProt	P04760	Acetylcholine receptor subunit gamma	Chrng
 10090	Mus musculus	SRC280252	Glutamate decarboxylase 1	UniProt	P48318	Glutamate decarboxylase 1	Gad1
 10090	Mus musculus	SRC280254	Glucose-6-phosphatase 2	UniProt	Q9Z186	Glucose-6-phosphatase 2	G6pc2
-10090	Mus musculus	SRC280259	Lysosome membrane protein 2	UniProt	O35114	Lysosome membrane protein 2	Scarb2
 10090	Mus musculus	SRC280285	Islet amyloid polypeptide	UniProt	P12968	Islet amyloid polypeptide	Iapp
 10090	Mus musculus	SRC280296	Zinc finger protein 40	UniProt	Q03172	Zinc finger protein 40	Hivep1
 10090	Mus musculus	SRC280649	14-3-3 protein beta	UniProt	Q9CQV8	14-3-3 protein beta/alpha	Ywhab
@@ -557,7 +538,6 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 10376	Human gammaherpesvirus 4	SRC280248	DNA polymerase processivity factor BMRF1	UniProt	P03191	DNA polymerase processivity factor BMRF1	BMRF1
 3052230	Hepacivirus C	SRC279960	Genome polyprotein	UniProt	P27958	Genome polyprotein	
 11234	Measles morbillivirus	SRC280080	Protein C	UniProt	Q9YZN9	Protein C	P/V/C
-11320	Influenza A virus	SRC114	Polymerase acidic protein	UniProt	P03433	Polymerase acidic protein	PA
 11320	Influenza A virus	SRC124	Nucleoprotein	UniProt	P03466	Nucleoprotein	NP
 11320	Influenza A virus	SRC133	Hemagglutinin precursor	UniProt	P03452	Hemagglutinin	HA
 11320	Influenza A virus	SRC279963	Matrix protein 1	UniProt	P03485	Matrix protein 1	M
@@ -572,12 +552,11 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 37296	Human gammaherpesvirus 8	SRC280141	Envelope glycoprotein B	UniProt	F5HB81	Envelope glycoprotein B	gB
 37296	Human gammaherpesvirus 8	SRC280217	Protein ORF73	UniProt	Q9QR71	Protein LANA1	LANA1
 37296	Human gammaherpesvirus 8	SRC280250	Protein K12	UniProt	Q77Q38	Protein K12	K12
-37296	Human gammaherpesvirus 8	SRC280253	Major capsid protein	UniProt	Q2HRA7	Major capsid protein	MCP
 37296	Human gammaherpesvirus 8	SRC280267	viral cyclin homolog	UniProt	Q77Q36	viral cyclin homolog	ORF72
 38020	marmosets	AAB31866.1	ZP3	UniProt	F7I9N9	Zona pellucida sperm-binding protein 3	ZP3
 47000	Equine rhinitis A virus	SRC280006	polyprotein	UniProt	Q2XP17	Capsid protein VP0	
-108098	Human mastadenovirus B	SRC276205	fiber	UniProt	Q2KSJ2	Fiber protein	L5
-184922	Giardia lamblia ATCC 50803	Q7R114	GLP_12_49813_66465	UniProt	A8BNB4	Dynein heavy chain	GLP15_2955
+108098	Human mastadenovirus B	SRC276205	fiber	UniProt	Q9PWU3	Fiber	L5
+184922	Giardia lamblia ATCC 50803	Q7R114	GLP_12_49813_66465	UniProt	E1EYU3	Dynein heavy chain	GLP15_2955
 2169992	Brazilian mammarenavirus	SRC280019	Nucleoprotein	UniProt	Q90038	Nucleoprotein	N
 11320	Influenza A virus	AAA43115.1	nonstructural protein NS	UniProt	P03508	Nuclear export protein	NS
 11320	Influenza A virus	AAC34269.1	NS2 nonstructural protein	UniProt	P03508	Nuclear export protein	NS
@@ -596,18 +575,18 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 11320	Influenza A virus	SRC121	Polymerase basic protein 2	UniProt	P03428	Polymerase basic protein 2	PB2
 11320	Influenza A virus	Q67021	DI-3 protein	UniProt	P03428	Polymerase basic protein 2	PB2
 11320	Influenza A virus	QQIVE1	hypothetical 18K protein	UniProt	P03468	Neuraminidase	
-11520	Influenza B virus	SRC279975	Hemagglutinin	UniProt	A4D4W4	Hemagglutinin	HA
+11520	Influenza B virus	SRC279975	Hemagglutinin	UniProt	P03460	Hemagglutinin	HA
 12637	Dengue virus	Q6YFY9	Polyprotein	UniProt	P17763	Genome polyprotein	
 12637	Dengue virus	SRC265914	Genome polyprotein	UniProt	P17763	Genome polyprotein	
 12637	Dengue virus	SRC326855	Genome polyprotein	UniProt	P17763	Genome polyprotein	
 12637	Dengue virus	SRC326856	Genome polyprotein	UniProt	P17763	Genome polyprotein	
 12637	Dengue virus	SRC326857	Genome polyprotein	UniProt	P17763	Genome polyprotein	
-694005	Murine coronavirus	SRC265970	Nucleoprotein	UniProt	Q9PY96	Nucleoprotein	N
-694005	Murine coronavirus	SRC265971	Spike glycoprotein	UniProt	Q77NQ7	Spike glycoprotein	S
+694005	Murine coronavirus 	SRC265970	Nucleoprotein	UniProt	Q9PY96	Nucleoprotein	N
+694005	Murine coronavirus 	SRC265971	Spike glycoprotein	UniProt	Q77NQ7	Spike glycoprotein	S
 10002316	SARS-CoV1	SRC279956	Spike glycoprotein	UniProt	P59594	Spike glycoprotein	S
-693997	Alphacoronavirus 1 (Alphacoronavirus-1)	SRC265980	Nucleoprotein	UniProt	P25909	Nucleoprotein	N
+693997	Alphacoronavirus 1 (Alphacoronavirus-1)	SRC265980	Nucleoprotein	UniProt	P04134	Nucleoprotein	N
 694014	Avian coronavirus	SRC243706	peplomeric polyprotein precursor	UniProt	P11223	Spike glycoprotein	S
-470	Acinetobacter baumannii	CAM86038.1	Beta-lactamase precursor (Cephalosporinase)	UniProt	D0C7W4	Penicillin-binding protein, transpeptidase domain protein	bla-OXA-75
+470	Acinetobacter baumannii	CAM86038.1	Beta-lactamase precursor (Cephalosporinase)	UniProt	B0VR34	Carbapenem-hydrolyzing oxacillinase OXA-75 (Beta-lactamase OXA-75)	bla-OXA-75
 715	Actinobacillus pleuropneumoniae	SRC248905	RTX-I toxin determinant A	UniProt	A3N292	RTX-I toxin determinant A	apxIA
 272636	Adeno-associated virus	SRC279643	capsid protein VP1	UniProt	A0A1C8Z4Q6	Capsid protein	
 3505	Betula pendula (white birch)	SRC268308	Major pollen allergen Bet v 1-A	UniProt	P15494	Major pollen allergen Bet v 1-A	BETVIA
@@ -619,12 +598,12 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 10320	Bovine alphaherpesvirus 1 (Bovine herpesvirus 1)	ABR27307.1	glycoprotein C	UniProt	A0A0U2UTK1	Envelope glycoprotein C	UL44
 10320	Bovine alphaherpesvirus 1 (Bovine herpesvirus 1)	CAQ51320.1	glycoprotein C	UniProt	A0A0U2UTK1	Envelope glycoprotein C	UL44
 10320	Bovine alphaherpesvirus 1 (Bovine herpesvirus 1)	SRC298311	glycoprotein D	UniProt	Q76PF1	Envelope glycoprotein D	US6
-10320	Bovine alphaherpesvirus 1 (Bovine herpesvirus 1)	SRC8883	major DNA binding protein	UniProt	A0A0U2URL4	Major DNA-binding protein	UL29
-35244	Bovine alphaherpesvirus 5 (Bovine herpesvirus 5)	SRC279655	envelope glycoprotein C	UniProt	Q6X256	UL44 glycoprotein C	BHV5-12
-11660	Caprine arthritis encephalitis virus (Caprine arthritis-encephalitis virus)	SRC240152	gag protein	UniProt	P33458	Gag polyprotein	
-11660	Caprine arthritis encephalitis virus (Caprine arthritis-encephalitis virus)	SRC280076	envelope polyprotein	UniProt	P31626	Envelope glycoprotein	
+10320	Bovine alphaherpesvirus 1 (Bovine herpesvirus 1)	SRC8883 	major DNA binding protein  	UniProt	A0A0U2URL4	Major DNA-binding protein	
+35244	Bovine alphaherpesvirus 5 (Bovine herpesvirus 5) 	SRC279655 	envelope glycoprotein C	UniProt	Q6X256	UL44 glycoprotein C	
+11660	Caprine arthritis encephalitis virus (Caprine arthritis-encephalitis virus)	SRC240152	gag protein	UniProt	C0JIG8	Gag polyprotein	
+11660	Caprine arthritis encephalitis virus (Caprine arthritis-encephalitis virus)	SRC280076 	envelope polyprotein	UniProt	C0JIH2	Env polyprotein	
 1821749	Cardiovirus A	SRC276221	Genome polyprotein	UniProt	Q66765	Genome polyprotein	
-1821750	Cardiovirus B	SRC280084	Genome polyprotein	UniProt	Q88595	Genome polyprotein	
+1821750	Cardiovirus B	SRC280084	Genome polyprotein	UniProt	P08545	Genome polyprotein	
 10141	Cavia porcellus (guinea pig)	SRC265965	Myelin basic protein	UniProt	P25188	Myelin basic protein	MBP
 10141	Cavia porcellus (guinea pig)	SRC336920	sperad	UniProt	Q9QZK1	Sperad-7	
 37124	Chikungunya virus	SRC522219	nonstructural polyprotein	UniProt	Q8JUX6	Polyprotein P1234	
@@ -642,12 +621,11 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 85991	Chlamydia pecorum	ADB92487.1	inclusion membrane protein A, partial	UniProt	V8TKU1	Inclusion membrane protein A	CpecF_0824
 85991	Chlamydia pecorum	ADB92489.1	inclusion membrane protein A, partial	UniProt	V8TKU1	Inclusion membrane protein A	CpecF_0824
 85991	Chlamydia pecorum	WP_021756698.1	inclusion membrane protein A	UniProt	V8TKU1	Inclusion membrane protein A	CpecF_0824
-813	Chlamydia trachomatis	AAB34696.1	major outer membrane protein	UniProt	Q46409	Major outer membrane porin, serovar D	ompA
-813	Chlamydia trachomatis	Q02281.4	Histone H1-like protein Hc1	UniProt	P0CE15	Histone H1-like protein Hc1	hctA
-138948	Enterovirus A (Coxsackievirus A)	SRC292625	polyprotein	UniProt	M4QPE2	Genome polyprotein	
-138949	Enterovirus B (Enterovirus EV-B)	SRC276220	Genome polyprotein	UniProt	P08292	Genome polyprotein	
-138950	Enterovirus C (Enterovirus EV-C)	SRC265977	Genome polyprotein	UniProt	P03300	Genome polyprotein	
-10326	Equid alphaherpesvirus 1 (Equine herpesvirus 1)	SRC280221	Envelope glycoprotein B	UniProt	Q6DLH8	Envelope glycoprotein B	gB
+813	Chlamydia trachomatis 	AAB34696.1	major outer membrane protein	UniProt	Q46409	Major outer membrane porin, serovar D	ompA
+813	Chlamydia trachomatis 	Q02281.4	Histone H1-like protein Hc1	UniProt	P0CE15	Histone H1-like protein Hc1	hctA
+138948	Enterovirus A (Coxsackievirus A)	SRC292625	polyprotein	UniProt	A0A0M3PZA5	Genome polyprotein	
+138949	Enterovirus B (Enterovirus EV-B)	SRC276220	Genome polyprotein	UniProt	Q86887	Genome polyprotein	
+138950	Enterovirus C (Enterovirus EV-C) 	SRC265977	Genome polyprotein	UniProt	P03300	Genome polyprotein	
 11673	Feline immunodeficiency virus (feline immunodeficiency virus FIV)	AAQ11407.1	envelope protein	UniProt	Q66014	Env protein	env
 11673	Feline immunodeficiency virus (feline immunodeficiency virus FIV)	ABO27589.1	envelope glycoprotein	UniProt	Q66014	Env protein	env
 11673	Feline immunodeficiency virus (feline immunodeficiency virus FIV)	P16090.2	Envelope glycoprotein gp150	UniProt	Q66014	Env protein	env
@@ -655,7 +633,7 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 11673	Feline immunodeficiency virus (feline immunodeficiency virus FIV)	Q04993.1	Envelope glycoprotein gp150	UniProt	Q66014	Env protein	env
 11673	Feline immunodeficiency virus (feline immunodeficiency virus FIV)	Q05312.1	Envelope glycoprotein gp150	UniProt	Q66014	Env protein	env
 11673	Feline immunodeficiency virus (feline immunodeficiency virus FIV)	SRC26410	envelope polyprotein	UniProt	Q66014	Env protein	env
-11768	Feline leukemia virus (Feline leukemia provirus)	SRC279970	Env polyprotein	UniProt	D2CNB9	Env protein	env
+11768	Feline leukemia virus (Feline leukemia provirus)	SRC279970	Env polyprotein	UniProt	O89812	Env gene polyprotein	env
 2499678	Gammaarterivirus lacdeh	SRC241223	major structural glycoprotein GP5	UniProt	Q83019	Minor structural glycoprotein	
 3847	Glycine max (soybeans)	SRC280655	P34 probable thiol protease	UniProt	P22895	P34 probable thiol protease	
 45219	Guanarito mammarenavirus (Guanarito arenavirus)	SRC280049	Nucleoprotein	UniProt	Q8AZ66	Nucleoprotein	N
@@ -671,19 +649,18 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 2697049	SARS-CoV2	SRC558393	surface glycoprotein	UniProt	P0DTC2	Spike glycoprotein	S
 2697049	SARS-CoV2	SRC558394	Nucleoprotein	UniProt	P0DTC9	Nucleoprotein	N
 2697049	SARS-CoV2	SRC562680	Membrane glycoprotein	UniProt	P0DTC5	Membrane protein	M
-10497	African swine fever virus (African swine fever virus ASF)	SRC280213	Major capsid protein	UniProt	Q5IZK2	B646L	Ba71V-081
-10497	African swine fever virus (African swine fever virus ASF)	SRC454574	C-type lectin like protein	UniProt	A0A0A7W5A0	Lectin-like protein EP153R	
+10497	African swine fever virus (African swine fever virus ASF)	SRC280213	Major capsid protein	UniProt	P22776	Major capsid protein	Ba71V-081
+10497	African swine fever virus (African swine fever virus ASF)	SRC454574	C-type lectin like protein	UniProt	Q65150 	Lectin-like protein EP153R	
 239935	Akkermansia muciniphila	SRC543258	sugar MFS transporter	UniProt	B2UN40	L-fucose transporter	Amuc_1833
 28446	Anaerotignum propionicum	SRC543254	homocysteine S-methyltransferase	UniProt	A0A0X8VCJ8	Homocysteine S-methyltransferase	mmuM
 63363	Aquifex aeolicus	SRC549212	2-oxoacid:acceptor oxidoreductase	UniProt	O66529	6,7-dimethyl-8-ribityllumazine synthase	ribH
 2560319	Avian orthoavulavirus 1	SRC446379	non-structural V protein	UniProt	P0C765	protein V	V
-2560319	Avian orthoavulavirus 1	SRC493047	matrix protein	UniProt	Q9DLD5	Matrix protein	M
+2560319	Avian orthoavulavirus 1	SRC493047	matrix protein 	UniProt	Q9DLD5	Matrix protein	M
 5865	Babesia bovis	SRC269143	12D3 antigen	UniProt	A7ARK0	12D3 antigen	BBOV_IV008150
 5865	Babesia bovis	SRC269144	Small heat shock protein	UniProt	A7ATV2	Small heat shock protein	BBOV_II004080
-1390	Bacillus amyloliquefaciens	SRC269137	Extracellular alkaline serine protease	UniProt	A0A9P3D374	Peptidase S8	E3U39_03635
+1390	Bacillus amyloliquefaciens	SRC269137	Extracellular alkaline serine protease	UniProt	A0A0F7CA45	Subtilisin	E3U39_03635
 1423	Bacillus subtilis	SRC280651	ABC transporter (ATP-binding protein)	UniProt	O07605	Proton/sodium-glutamate symport protein	gltT
 1423	Bacillus subtilis	SRC420289	pectate lyase	UniProt	P39116	Pectate lyase	pel
-9770	Balaenoptera physalus (common rorqual)	SRC246256	myelin basic protein	UniProt	A0A643CFK3	Myelin basic protein	E2I00_017671
 29518	Borreliella afzelii	SRC370443	outer surface protein C	UniProt	Q0SL36	Lipofamily protein	ospC
 139	Borreliella burgdorferi (Lyme disease spirochete)	SRC280646	membrane protein A	UniProt	Q45010	Basic membrane protein A	bmpA
 9913	Bos taurus (bovine)	SRC250680	apolipoprotein B	UniProt	E1BNR0	Apolipoprotein B	APOB
@@ -696,7 +673,6 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 9913	Bos taurus (bovine)	SRC280063	Insulin	UniProt	P01317	Insulin	INS
 9913	Bos taurus (bovine)	SRC280103	Butyrophilin subfamily 1 member A1	UniProt	P18892	Butyrophilin subfamily 1 member A1	BTN1A1
 9913	Bos taurus (bovine)	SRC280143	Retinol-binding protein 3	UniProt	P12661	Retinol-binding protein 3	RBP3
-9913	Bos taurus (bovine)	SRC280260	Serum albumin	UniProt	P02769	Albumin	ALB
 9913	Bos taurus (bovine)	SRC280294	Recoverin	UniProt	P21457	Recoverin	RCVRN
 9913	Bos taurus (bovine)	SRC280652	thyrotropin subunit beta precursor	UniProt	P01223	Thyrotropin subunit beta	TSHB
 9913	Bos taurus (bovine)	SRC293733	Carbonic anhydrase 2	UniProt	P00921	Carbonic anhydrase 2	CA2
@@ -712,7 +688,7 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 5476	Candida albicans	SRC269002	Inositol phosphorylceramide synthase	UniProt	O13332	Inositol phosphorylceramide synthase	AUR1
 5476	Candida albicans	SRC269003	Candidapepsin-2	UniProt	P0DJ06	Candidapepsin-2	SAP2
 5476	Candida albicans	SRC536882	DNA translocase	UniProt	Q5A310	ISWI chromatin-remodeling complex ATPase ISW2	ISW2
-11232	Canine morbillivirus (canine distemper virus CDV)	SRC410288	nucleocapsid protein	UniProt	Q9QPR1	Nucleocapsid	N
+11232	Canine morbillivirus (canine distemper virus CDV)	SRC410288	nucleocapsid protein	UniProt	P04865	Nucleoprotein	N
 9615	Canis lupus familiaris (dogs)	SRC310070	lysine-specific demethylase 5D	UniProt	Q30DN6	Lysine-specific demethylase 5D	KDM5D
 9615	Canis lupus familiaris (dogs)	SRC310071	Sex-determining region Y protein	UniProt	Q9XT60	Sex-determining region Y protein	SRY
 33706	Caviid betaherpesvirus 2 (Caviid herpesvirus 2)	SRC282765	GP83	UniProt	U6H6S1	GP83	
@@ -745,7 +721,7 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 777	Coxiella burnetii	SRC280251	Outer membrane protein TolC, putative	UniProt	Q83EL2	Outer membrane protein	CBU_0307
 777	Coxiella burnetii	SRC280268	Peptide ABC transporter, permease protein, putative	UniProt	Q83AM6	Oligopeptide transport ATP-binding protein	oppD
 7227	Drosophila melanogaster (fruit fly)	SRC6421	Drosocrystallin	UniProt	Q9VKE2	Crystallin, isoform A	Crys
-12639	Duck hepatitis B virus (duck hepatitis virus, DHBV)	SRC265979	Large envelope protein	UniProt	P03145	Large envelope protein	S
+12639	Duck hepatitis B virus (duck hepatitis virus, DHBV)	SRC265979	Large envelope protein	UniProt	Q66405	Large envelope protein	S
 1570291	Ebola virus (Ebola)	SRC279990	Minor nucleoprotein VP30	UniProt	Q05323	Transcriptional activator VP30	VP30
 1570291	Ebola virus (Ebola)	SRC280014	Polymerase cofactor VP35	UniProt	Q05127	Polymerase cofactor VP35	VP35
 1570291	Ebola virus (Ebola)	SRC280031	Envelope glycoprotein	UniProt	Q05320	Envelope glycoprotein	GP
@@ -754,13 +730,9 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 5759	Entamoeba histolytica	SRC15988	170 kDa surface lectin	UniProt	P32022	Galactose-inhibitable lectin 170 kDa subunit	hgl1
 11665	Equine infectious anemia virus (equine infectious anemia virus EIAV)	SRC1219	gag protein	UniProt	P69732	Gag polyprotein	gag
 562	Escherichia coli	SRC272	Beta-galactosidase	UniProt	P00722	Beta-galactosidase	lacZ
-562	Escherichia coli	SRC279949	Dihydrofolate reductase	UniProt	P0ABQ4	Repressor protein for FtsI	folA
 562	Escherichia coli	SRC279991	Lactose permease	UniProt	P02920	Lactose permease	lacY
-562	Escherichia coli	SRC280067	Chaperone protein ClpB	UniProt	P63284	Chaperone protein ClpB	clpB
 562	Escherichia coli	SRC280176	60 kDa chaperonin	UniProt	P0A6F5	60 kDa chaperonin	groEL
 562	Escherichia coli	SRC280219	Outer membrane protein A	UniProt	P0A910	Outer membrane protein A	ompA
-562	Escherichia coli	SRC292620	thioredoxin TrxA	UniProt	P0AA25	Thioredoxin 1	trxA
-329852	Escherichia virus MS2 (Enterobacteri levivirus I)	SRC280037	Coat protein	UniProt	P03612	Capsid protein	
 97253	Eubacterium plexicaudatum	SRC543255	PrgI family protein	UniProt	N2A8Y4	Uncharacterised protein similar to PrgI family protein	C823_02693
 6192	Fasciola hepatica (liver fluke)	SRC269006	Cathepsin L-like proteinase	UniProt	A0A4E0R7V4	Cathepsin L	D915_005388
 11673	Feline immunodeficiency virus (feline immunodeficiency virus FIV)	SRC26383	hypothetical protein FIVgp4 [Feline immunodeficiency virus]	UniProt	Q66013	Probable Vpr-like protein	
@@ -776,12 +748,12 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 1980471	Hantaan orthohantavirus (Hantaan hantavirus)	SRC280027	RNA-directed RNA polymerase L	UniProt	P23456	RNA-directed RNA polymerase L	L
 123841	Helicobacter canadensis	SRC553154	Glutathionylspermidine synthase	UniProt	C5ZXJ6	Glutathionylspermidine synthase	HCAN_1153
 210	Helicobacter pylori	SRC325904	catalase	UniProt	P77872	Catalase	katA
-10407	Hepatitis B virus (hepatitis B virus (HBV))	SRC279965	Large envelope protein	UniProt	P03138	Large envelope protein	S
-10407	Hepatitis B virus (hepatitis B virus (HBV))	SRC279980	External core antigen	UniProt	P0C573	External core antigen	C
-10407	Hepatitis B virus (hepatitis B virus (HBV))	SRC279982	Protein P	UniProt	P03156	Protein P	P
-10407	Hepatitis B virus (hepatitis B virus (HBV))	SRC279984	Protein X	UniProt	P03165	Protein X	X
-10407	Hepatitis B virus (hepatitis B virus (HBV))	SRC485087	large S protein	UniProt	P03138	Large envelope protein	S
-10407	Hepatitis B virus (hepatitis B virus (HBV))	SRC506611	polymerase	UniProt	P03156	Protein P	P
+10407	Hepatitis B virus (hepatitis B virus (HBV))	SRC279965	Large envelope protein	UniProt	Q76R62	Large envelope protein	S
+10407	Hepatitis B virus (hepatitis B virus (HBV))	SRC279980	External core antigen	UniProt	P0C767	External core antigen	C
+10407	Hepatitis B virus (hepatitis B virus (HBV))	SRC279982	Protein P	UniProt	Q69028	Protein P	P
+10407	Hepatitis B virus (hepatitis B virus (HBV))	SRC279984	Protein X	UniProt	Q69027	Protein X	X
+10407	Hepatitis B virus (hepatitis B virus (HBV))	SRC485087	large S protein	UniProt	Q76R62	Large envelope protein	S
+10407	Hepatitis B virus (hepatitis B virus (HBV))	SRC506611	polymerase	UniProt	Q69028	Protein P	P
 11103	Hepatitis C virus	SRC280102	F protein	UniProt	P0C045	F protein	
 12475	Hepatitis delta virus (hepatitis delta virus HDV)	SRC437424	large hepatitis delta antigen	UniProt	P29996	Large delta antigen	
 9606	Homo sapiens	SRC557940	heterogeneous nuclear ribonucleoprotein A1	UniProt	P09651	Heterogeneous nuclear ribonucleoprotein A1	HNRNPA1
@@ -823,9 +795,7 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 9606	Homo sapiens (human)	SRC320360	keratin 8	UniProt	P05787	Keratin, type II cytoskeletal 8	KRT8
 9606	Homo sapiens (human)	SRC320362	hCG1811882	UniProt	Q15772	Striated muscle preferentially expressed protein kinase	SPEG
 9606	Homo sapiens (human)	SRC320364	bifunctional heparan sulfate N-deacetylase/N-sulfotransferase	UniProt	O95803	Bifunctional heparan sulfate N-deacetylase/N-sulfotransferase 3	NDST3
-9606	Homo sapiens (human)	SRC322950	CHMP7 neoepitope protein	UniProt	Q8WUX9	Charged multivesicular body protein 7	CHMP7
 9606	Homo sapiens (human)	SRC322951	bcl-2-like neoepitope protein 13	UniProt	Q9BXK5	Bcl-2-like protein 13	BCL2L13
-9606	Homo sapiens (human)	SRC322952	nuclear receptor subfamily 1 group D member 1 neoepitope protein	UniProt	P20393	Nuclear receptor subfamily 1 group D member 1	NR1D1
 9606	Homo sapiens (human)	SRC322954	ubiquinone-binding neoepitope protein	UniProt	P14927	Cytochrome b-c1 complex subunit 7	UQCRB
 9606	Homo sapiens (human)	SRC327787	growth determining factor 5	UniProt	P43026	Growth differentiation factor 5	GDF5
 9606	Homo sapiens (human)	SRC335604	thrombin	UniProt	P00734	Prothrombin	F2
@@ -845,16 +815,7 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 9606	Homo sapiens (human)	SRC447330	Fibrinogen gamma chain	UniProt	P02679	Fibrinogen gamma chain	FGG
 9606	Homo sapiens (human)	SRC447538	apolipoprotein E	UniProt	P02649	Apolipoprotein E	APOE
 9606	Homo sapiens (human)	SRC447539	biglycan	UniProt	P21810	Biglycan	BGN
-9606	Homo sapiens (human)	SRC473428	mitochondrial import receptor Tom22 variant	UniProt	Q15388	Mitochondrial import receptor subunit TOM20 homolog	TOMM20
-9606	Homo sapiens (human)	SRC473430	MMP24 protein	UniProt	Q9Y5R2	Matrix metalloproteinase-24	MMP24
-9606	Homo sapiens (human)	SRC473432	arf-GAP with coiled-coil, ANK repeat and PH domain-containing protein 2	UniProt	Q15057	Arf-GAP with coiled-coil, ANK repeat and PH domain-containing protein 2	ACAP2
-9606	Homo sapiens (human)	SRC473433	cadherin-19	UniProt	Q9H159	Cadherin-19	CDH19
-9606	Homo sapiens (human)	SRC473438	cell division cycle protein 20 homolog B	UniProt	Q86Y33	Cell division cycle protein 20 homolog B	CDC20B
-9606	Homo sapiens (human)	SRC473439	ephrin type-A receptor 3	UniProt	P29320	Ephrin type-A receptor 3	EPHA3
-9606	Homo sapiens (human)	SRC473440	basic helix-loop-helix domain-containing protein USF3	UniProt	Q68DE3	Basic helix-loop-helix domain-containing protein USF3	USF3
-9606	Homo sapiens (human)	SRC473441	hCG1980844	UniProt	Q92508	Piezo-type mechanosensitive ion channel component 1	PIEZO1
 9606	Homo sapiens (human)	SRC473442	selenoprotein N	UniProt	Q9NZV5	Selenoprotein N	SELENON
-9606	Homo sapiens (human)	SRC473443	reverse transcriptase homolog - human retrotransposon L1	UniProt	O00370	LINE-1 retrotransposable element ORF2 protein	
 9606	Homo sapiens (human)	SRC473444	dermal papilla derived protein 6	UniProt	Q8NGS5	Olfactory receptor 13C4	OR13C4
 9606	Homo sapiens (human)	SRC473445	2'-5'-oligoadenylate synthase 2	UniProt	P29728	2'-5'-oligoadenylate synthase 2	OAS2
 9606	Homo sapiens (human)	SRC473447	butyrophilin subfamily 2 member A2 isoform a	UniProt	Q8WVV5	Butyrophilin subfamily 2 member A2	BTN2A2
@@ -903,11 +864,11 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 9606	Homo sapiens (human)	SRC554271	ribosomal protein s6	UniProt	P62753	40S ribosomal protein S6	RPS6
 9606	Homo sapiens (human)	SRC554272	programmed cell death 6-interacting protein	UniProt	Q8WUM4	Programmed cell death 6-interacting protein	PDCD6IP
 9606	Homo sapiens (human)	SRC551887	Hepatocyte Nuclear Factor 6	UniProt	U3KQR8	Hepatocyte nuclear factor 6	ONECUT1
-10515	Human adenovirus 2 (adenovirus-2)	SRC243641	23K endopeptidase	UniProt	Q6VGU5	Protease	L3
-10515	Human adenovirus 2 (adenovirus-2)	SRC265910	Fiber protein	UniProt	Q6VGT5	Fiber protein	L5
-10515	Human adenovirus 2 (adenovirus-2)	SRC265967	Hexon protein	UniProt	Q6VGU6	Hexon protein	L3
-10515	Human adenovirus 2 (adenovirus-2)	SRC280034	Early E1A 32 kDa protein	UniProt	Q6VGW0	Early E1A protein	
-28285	Human adenovirus 5 (Adenovirus 5)	SRC280640	E1A 26 kDa protein	UniProt	Q6VGW0	Early E1A protein	
+10515	Human adenovirus 2 (adenovirus-2)	SRC243641	23K endopeptidase	UniProt	P03252	Protease	L3
+10515	Human adenovirus 2 (adenovirus-2)	SRC265910	Fiber protein	UniProt	P03275	Fiber protein	L5
+10515	Human adenovirus 2 (adenovirus-2)	SRC265967	Hexon protein	UniProt	P03277	Hexon protein	L3
+10515	Human adenovirus 2 (adenovirus-2)	SRC280034	Early E1A 32 kDa protein	UniProt	P03254	Early E1A protein	
+28285	Human adenovirus 5 (Adenovirus 5)	SRC280640	E1A 26 kDa protein	UniProt	P03254	Early E1A protein	
 32603	Human betaherpesvirus 6A (Human herpesvirus 6A)	SRC300976	DNA polymerase processivity subunit	UniProt	P52439	DNA polymerase processivity factor	U27
 32604	Human betaherpesvirus 6B (Human herpes virus 6B)	SRC300863	IE1 protein	UniProt	Q9QJ16	Immediate-early protein 2	U90/U86
 32604	Human betaherpesvirus 6B (Human herpes virus 6B)	SRC549211	envelope glycoprotein Q	UniProt	P0DOE1	Glycoprotein Q2	U100
@@ -930,7 +891,6 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 10310	Human herpesvirus 2	SRC327111	ribonucleotide reductase	UniProt	P89462	Ribonucleoside-diphosphate reductase large subunit	RIR1
 10310	Human herpesvirus 2	SRC327112	envelope glycoprotein E	UniProt	P89475	Envelope glycoprotein E	gE
 10310	Human herpesvirus 2	SRC395162	envelope glycoprotein G	UniProt	P13290	Envelope glycoprotein G	gG
-10310	Human herpesvirus 2	SRC40068	tegument protein	UniProt	P89468	Tegument protein VP22	UL49
 10335	Human herpesvirus 3 (Varicella-zoster virus)	SRC280128	Major viral transcription factor ICP4 homolog	UniProt	P09310	Major viral transcription factor ICP4 homolog	ORF71
 10335	Human herpesvirus 3 (Varicella-zoster virus)	SRC326654	DNA packaging tegument protein UL25	UniProt	P09287	Capsid vertex component 2	CVC2
 10376	Human herpesvirus 4 (Epstein Barr virus)	SRC279660	EBNA-LP	UniProt	Q8AZK7	Epstein-Barr nuclear antigen leader protein	EBNA-LP
@@ -948,22 +908,20 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 10359	Human herpesvirus 5 (Human cytomegalovirus)	SRC370980	regulatory protein IE1	UniProt	F5HCM1	55 kDa immediate-early protein 1	UL123
 10359	Human herpesvirus 5 (Human cytomegalovirus)	SRC40060	phosphorylated matrix protein pp65	UniProt	Q6SW59	65 kDa phosphoprotein	UL83
 10359	Human herpesvirus 5 (Human cytomegalovirus)	SRC432639	membrane glycoprotein UL40	UniProt	Q6SW92	Protein UL40	UL40
-10359	Human herpesvirus 5 (Human cytomegalovirus)	SRC7948	Large structural phosphoprotein	UniProt	Q6SW99	Tegument protein pp150	UL32
-11676	Human immunodeficiency virus 1 (human immunodeficiency virus 1 HIV-1)	SRC279958	Gag-Pol polyprotein	UniProt	P03367	Gag-Pol polyprotein	gag-pol
-11676	Human immunodeficiency virus 1 (human immunodeficiency virus 1 HIV-1)	SRC279964	Gag polyprotein	UniProt	P03348	Gag polyprotein	gag
-11676	Human immunodeficiency virus 1 (human immunodeficiency virus 1 HIV-1)	SRC280001	Envelope glycoprotein gp160	UniProt	P03377	Envelope glycoprotein gp160	env
-11676	Human immunodeficiency virus 1 (human immunodeficiency virus 1 HIV-1)	SRC280033	Protein Nef	UniProt	P03406	Protein Nef	nef
-162145	Human metapneumovirus	SRC265982	RNA-directed RNA polymerase L	UniProt	Q6WB93	RNA-directed RNA polymerase L	L
+10359	Human herpesvirus 5 (Human cytomegalovirus)	SRC7948	Large structural phosphoprotein 	UniProt	Q6SW99	Tegument protein pp150	UL32
+11676	Human immunodeficiency virus 1 (human immunodeficiency virus 1 HIV-1)	SRC279958	Gag-Pol polyprotein	UniProt	P03369	Gag-Pol polyprotein	gag-pol
+11676	Human immunodeficiency virus 1 (human immunodeficiency virus 1 HIV-1)	SRC279964	Gag polyprotein	UniProt	P03349	Gag Polyprotein	gag
+11676	Human immunodeficiency virus 1 (human immunodeficiency virus 1 HIV-1)	SRC280001	Envelope glycoprotein gp160	UniProt	P03378	Envelope glycoprotein gp160	env
+11676	Human immunodeficiency virus 1 (human immunodeficiency virus 1 HIV-1)	SRC280033	Protein Nef	UniProt	P03407	Protein Nef	nef
 162145	Human metapneumovirus	SRC280220	Small hydrophobic protein	UniProt	Q6WB95	Small hydrophobic protein	SH
-10566	Human papillomavirus (Human Papilloma Virus)	SRC265196	Protein E7	UniProt	H2BQ88	Protein E7	E7
-10566	Human papillomavirus (Human Papilloma Virus)	SRC276208	L1 protein	UniProt	H2BQ93	Major capsid protein L1	L1
-10566	Human papillomavirus (Human Papilloma Virus)	SRC280082	Major capsid protein L1	UniProt	H2BQ93	Major capsid protein L1	L1
+10566	Human papillomavirus (Human Papilloma Virus)	SRC265196	Protein E7	UniProt	H2BQC9	Protein E7	E7
+10566	Human papillomavirus (Human Papilloma Virus)	SRC280082	Major capsid protein L1	UniProt	H2BQD4	Major capsid protein L1	L1
 333760	Human papillomavirus type 16 (Human papillomavirus - 16)	SRC245608	E4 protein	UniProt	P06922	Protein E4	E4
 333760	Human papillomavirus type 16 (Human papillomavirus - 16)	SRC265983	Protein E6	UniProt	P03126	Protein E6	E6
 333760	Human papillomavirus type 16 (Human papillomavirus - 16)	SRC265984	Protein E7	UniProt	P03129	Protein E7	E7
 333760	Human papillomavirus type 16 (Human papillomavirus - 16)	SRC265985	Major capsid protein L1	UniProt	P03101	Major capsid protein L1	L1
 333760	Human papillomavirus type 16 (Human papillomavirus - 16)	SRC276209	L2 protein	UniProt	P03107	Minor capsid protein L2	L2
-333761	Human papillomavirus type 18 (Human papilloma virus type 18)	SRC276207	Major capsid protein L1	UniProt	P06794	Major capsid protein L1	L1
+333761	Human papillomavirus type 18 (Human papilloma virus type 18)	SRC276207	Major capsid protein L1	UniProt	A9XFU3	Major capsid protein L1	L1
 10586	Human papillomavirus type 33 (Human papillomavirus - 33)	SRC283303	L1 protein	UniProt	P03101	Major capsid protein L1	L1
 10600	Human papillomavirus type 6b (Human papillomavirus - 6b)	SRC276206	Major capsid protein L1	UniProt	P04012	Major capsid protein L1	L1
 11250	Human respiratory syncytial virus	SRC279969	Major surface glycoprotein G	UniProt	O36633	Major surface glycoprotein G	G
@@ -971,19 +929,17 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 11250	Human respiratory syncytial virus	SRC280256	RNA-directed RNA polymerase L	UniProt	O36635	RNA-directed RNA polymerase L	L
 208893	Human respiratory syncytial virus A (Respiratory syncytial virus group A)	SRC420210	Major surface glycoprotein G	UniProt	O36633	Major surface glycoprotein G	G
 12132	Human rhinovirus A89 (Human rhinovirus 89)	SRC265978	Genome polyprotein	UniProt	P07210	Genome polyprotein	
-11908	Human T-cell leukemia virus type I (Human adult T-cell leukemia virus)	SRC244586	surface glycoprotein gp46; env	UniProt	P14075	Envelope glycoprotein gp62	env
-11908	Human T-cell leukemia virus type I (Human adult T-cell leukemia virus)	SRC276211	Envelope glycoprotein gp62	UniProt	P14075	Envelope glycoprotein gp62	env
-11908	Human T-cell leukemia virus type I (Human adult T-cell leukemia virus)	SRC276212	Protein Tax-1	UniProt	P14079	Protein Tax-1	Tax
-11909	Human T-lymphotropic virus 2 (Human lymphotropic virus type 2)	SRC265975	Protein Rex	UniProt	P0C206	Protein Rex	
-11909	Human T-lymphotropic virus 2 (Human lymphotropic virus type 2)	SRC265976	Gag polyprotein	UniProt	P03346	Gag polyprotein	gag
+11908	Human T-cell leukemia virus type I (Human adult T-cell leukemia virus)	SRC244586	surface glycoprotein gp46; env	UniProt	P03381	Envelope glycoprotein gp62	env
+11908	Human T-cell leukemia virus type I (Human adult T-cell leukemia virus)	SRC276211	Envelope glycoprotein gp62	UniProt	P03381	Envelope glycoprotein gp62	env
+11908	Human T-cell leukemia virus type I (Human adult T-cell leukemia virus)	SRC276212	Protein Tax-1	UniProt	P03409	Protein Tax-1	Tax
 11909	Human T-lymphotropic virus 2 (Human lymphotropic virus type 2)	SRC276213	Envelope glycoprotein gp63	UniProt	P03383	Envelope glycoprotein gp63	env
 10995	Infectious bursal disease virus (Gumboro virus)	SRC280138	Structural polyprotein	UniProt	Q9WI42	Structural polyprotein	
 11320	Influenza A virus	SRC280024	RNA-directed RNA polymerase catalytic subunit	UniProt	P03431	RNA-directed RNA polymerase catalytic subunit	PB1
-11072	Japanese encephalitis virus (Japanese encephalitis (JE) virus)	SRC265969	Genome polyprotein	UniProt	S5Y3I5	Genome polyprotein	
+11072	Japanese encephalitis virus (Japanese encephalitis (JE) virus)	SRC265969	Genome polyprotein	UniProt	P19110	Genome polyprotein	
 10632	JC polyomavirus (human polyomavirus JCV)	SRC280032	Major capsid protein VP1	UniProt	Q91UM0	Capsid protein VP1	VP1
 10623	Kappapapillomavirus 2 (Cottontail rabbit papillomavirus)	SRC280089	Replication protein E1	UniProt	P03112	Replication protein E1	E1
 11077	Kunjin virus (West Nile virus - Kunjin)	SRC280018	Genome polyprotein	UniProt	Q9Q6P4	Genome polyprotein	GP1
-1622	Lactobacillus murinus	SRC543252	DUF1810 domain-containing protein	UniProt	A0A0R2BH19	Calpastatin	E5340_09935
+1622	Lactobacillus murinus	SRC543252	DUF1810 domain-containing protein	UniProt	A0A4S2EB28	DUF1810 domain-containing protein	E5340_09935
 11620	Lassa mammarenavirus (Lassa virus)	SRC279979	Pre-glycoprotein polyprotein GP complex	UniProt	P08669	Pre-glycoprotein polyprotein GP complex	GPC
 11622	Lassa virus Josiah (Lassa virus (strain Josiah))	SRC265972	RING finger protein Z	UniProt	O73557	RING finger protein Z	Z
 11622	Lassa virus Josiah (Lassa virus (strain Josiah))	SRC280051	Nucleoprotein	UniProt	P13699	Nucleoprotein	N
@@ -998,7 +954,6 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 11623	Lymphocytic choriomeningitis mammarenavirus (Lymphocytic choriomeningitis virus)	SRC265973	RNA-directed RNA polymerase L	UniProt	P14240	RNA-directed RNA polymerase L	L
 11623	Lymphocytic choriomeningitis mammarenavirus (Lymphocytic choriomeningitis virus)	SRC265974	RING finger protein Z	UniProt	P18541	RING finger protein Z	Z
 11623	Lymphocytic choriomeningitis mammarenavirus (Lymphocytic choriomeningitis virus)	SRC279988	Nucleoprotein	UniProt	P09992	Nucleoprotein	N
-11623	Lymphocytic choriomeningitis mammarenavirus (Lymphocytic choriomeningitis virus)	SRC292634	envelope glycoprotein	UniProt	P09991	Pre-glycoprotein polyprotein GP complex	GPC
 1891767	Macaca mulatta polyomavirus 1 (Polyomavirus maccacae 1)	SRC280165	Large T antigen	UniProt	P03070	Large T antigen	
 6594	Macrocallista nimbosa (sun-ray clam)	SRC447497	FMRFamide precursor	UniProt	P69145	FMRFamide	
 11234	Measles morbillivirus (Cell-associated subacute sclerosing panencephalitis)	SRC280117	Hemagglutinin glycoprotein	UniProt	Q786F2	Hemagglutinin glycoprotein	H
@@ -1071,11 +1026,11 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 37325	Muscovy duck parvovirus (Barbarie duck parvovirus)	SRC267420	non-structural protein	UniProt	A0A1B1CWQ5	Replication protein	Rep1
 77153	Muscovy duck reovirus	SRC516038	sigma A protein	UniProt	Q9DGX2	Sigma A	
 1764	Mycobacterium avium	SRC280379	60 kDa chaperonin	UniProt	P60545	60 kDa chaperonin 1	groEL1
-1768	Mycobacterium kansasii	SRC265052	6 kDa early secretory antigenic target	UniProt	B5TV82	ESAT-6-like protein	cfp-10
+1768	Mycobacterium kansasii	SRC265052	6 kDa early secretory antigenic target	UniProt	B5TV86	ESAT-6-like protein	cfp-10
 1769	Mycobacterium leprae	SRC250774	Antigen 85-B	UniProt	P31951	Diacylglycerol acyltransferase/mycolyltransferase Ag85B	fbpB
 1769	Mycobacterium leprae	SRC280137	10 kDa chaperonin	UniProt	P24301	10 kDa chaperonin	groES
 1769	Mycobacterium leprae	SRC280376	60 kDa chaperonin	UniProt	P09239	60 kDa chaperonin 2	groEL2
-1783	Mycobacterium scrofulaceum	SRC268997	Diacylglycerol acyltransferase/mycolyltransferase Ag85B	UniProt	A0A1X0KCN9	Acyl-CoA:diacylglycerol acyltransferase	A5679_12635
+1783	Mycobacterium scrofulaceum	SRC268997	Diacylglycerol acyltransferase/mycolyltransferase Ag85B	UniProt	A0A1A2VZT5	Acyl-CoA:diacylglycerol acyltransferase	A5679_12635
 1773	Mycobacterium tuberculosis	SRC261265	invasion-associated protein	UniProt	P9WHU5	Peptidoglycan endopeptidase RipB	ripB
 1773	Mycobacterium tuberculosis	SRC292624	PPE family protein	UniProt	Q79FK5	PPE family protein PPE27	PPE27
 1773	Mycobacterium tuberculosis	SRC326354	acetyl-CoA carboxylase biotin carboxyl carrier protein subunit	UniProt	P9WPQ1	Biotinylated protein TB7.3	Rv3221c
@@ -1086,7 +1041,6 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 1773	Mycobacterium tuberculosis	SRC390713	carbonate dehydratase	UniProt	P9WPS9	Probable cation-transporting ATPase F	ctpF
 1773	Mycobacterium tuberculosis	SRC546476	14 kDa antigen	UniProt	P9WMK1	Alpha-crystallin	hspX
 1773	Mycobacterium tuberculosis	SRC552198	cation-transporting P-type ATPase	UniProt	P9WPS9	Probable cation-transporting ATPase F	ctpF
-1765	Mycobacterium tuberculosis variant bovis	SRC370415	Diaminohydroxyphosphoribosylaminopyrimidine deaminase uracil reductase	UniProt	P9WPH1	Riboflavin biosynthesis protein RibD	ribD
 1765	Mycobacterium tuberculosis variant bovis	SRC370418	methionine tRNA ligase	UniProt	P9WFU5	Methionine--tRNA ligase	metG
 1772	Mycolicibacterium smegmatis	SRC370441	50S ribosomal protein L10	UniProt	A0QS62	50S ribosomal protein L10	rplJ
 1772	Mycolicibacterium smegmatis	SRC370442	30S ribosomal protein S1	UniProt	A0QYY6	30S ribosomal protein S1	rpsA
@@ -1095,11 +1049,9 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 6282	Onchocerca volvulus	SRC447106	Ov‐ASP‐1	UniProt	A0A044VD00	Activation-associated secreted protein-1	
 9986	Oryctolagus cuniculus (rabbit)	SRC335087	gonadotropin-releasing hormone	UniProt	G1T6P6	Gonadoliberin	GNRH1
 9986	Oryctolagus cuniculus (rabbit)	SRC414507	potassium-transporting ATPase alpha chain 1	UniProt	Q9N0Z6	Sodium/potassium-transporting ATPase subunit alpha-1	ATP1A1
-9986	Oryctolagus cuniculus (rabbit)	SRC247563	proliferating cell nuclear antigen	UniProt	G1SKZ3	Proliferating cell nuclear antigen	PCNA
 9940	Ovis aries (domestic sheep)	SRC269020	major prion protein precursor	UniProt	P23907	Major prion protein	PRNP
 9940	Ovis aries (domestic sheep)	SRC371096	toll-like receptor 2	UniProt	B2LT65	Toll-like receptor 2	TLR2
 9598	Pan troglodytes (chimpanzee)	SRC298345	myosin IG	UniProt	H2R110	Myosin IG	MYO1G
-9755	Physeter catodon (sperm whale)	SRC246255	myelin basic protein	UniProt	A0A455AKQ1	Myelin basic protein	MBP
 9755	Physeter catodon (sperm whale)	SRC248960	Myoglobin	UniProt	P02185	Myoglobin	MB
 5821	Plasmodium berghei	SRC265958	Circumsporozoite protein	UniProt	A0A509AF96	Circumsporozoite protein	CSP
 5821	Plasmodium berghei	SRC280522	DNA repair endonuclease	UniProt	A0A509AML8	DNA repair endonuclease XPF, putative	PBANKA_1144700
@@ -1109,7 +1061,6 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 5821	Plasmodium berghei	SRC410588	conserved Plasmodium protein	UniProt	A0A509AR98	ATP synthase subunit beta	PBANKA_1450300
 5833	Plasmodium falciparum (malaria parasite P. falciparum)	SRC248690	antigen Pfg27/25	UniProt	Q8IEU2	Gamete antigen 27/25	PF3D7_1302100
 5833	Plasmodium falciparum (malaria parasite P. falciparum)	SRC280508	conserved Plasmodium protein, unknown function	UniProt	A0A143ZZD7	Liver stage antigen 1	PF3D7_1036400
-5833	Plasmodium falciparum (malaria parasite P. falciparum)	SRC292623	erythrocyte membrane protein 1	UniProt	Q8IHM0	Erythrocyte membrane protein 1, PfEMP1	PF3D7_1150400
 5833	Plasmodium falciparum (malaria parasite P. falciparum)	SRC293742	serine repeat antigen 5	UniProt	Q9TY95	Serine-repeat antigen protein 5	SERA5
 5833	Plasmodium falciparum (malaria parasite P. falciparum)	SRC325909	Liver stage associated protein 2	UniProt	O96125	Liver stage associated protein 2	PF3D7_0202100
 5833	Plasmodium falciparum (malaria parasite P. falciparum)	SRC337558	asparagine-rich protein	UniProt	Q8I5A3	Asparagine-rich protein, putative	PF3D7_1231800
@@ -1123,7 +1074,6 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 5861	Plasmodium yoelii	SRC9026	hepatocyte erythrocyte protein 17 kDa	UniProt	Q7RGC6	U43539 hepatocyte erythrocyte protein 17 kDa	PY04421
 133704	Porcine circovirus 1 (Porcine circovirus-1)	SRC280211	Capsid protein	UniProt	Q80QL5	Capsid protein	Cap
 61673	Porcine endogenous retrovirus	SRC265173	transmembrane envelope protein	UniProt	F6KPU0	Env protein	
-28295	Porcine epidemic diarrhea virus (porcine epidemic diarrhoea virus)	SRC280047	Spike glycoprotein	UniProt	S0AP48	Spike glycoprotein	S
 28344	Porcine reproductive and respiratory syndrome virus	SRC293734	envelope glycoprotein	UniProt	Q8B908	GP5	ORF5
 28344	Porcine reproductive and respiratory syndrome virus	SRC522284	ORF1ab polyprotein	UniProt	Q8B912	Replicase polyprotein 1ab	rep
 470565	Prevotella histicola	SRC553155	SGNH/GDSL hydrolase family protein	UniProt	G6AI01	SGNH_hydro domain-containing protein	HMPREF9138_01728
@@ -1137,10 +1087,10 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 2261	Pyrococcus furiosus	SRC551284	thioredoxin family protein	UniProt	Q8U218	Peroxiredoxin	PF1033
 593107	Pyrophorus angustus luscus	SRC549756	luciferase	UniProt	D2KV87	Luciferase-like protein	PaLL
 114742	Pythium insidiosum	SRC313672	exo-1,3-beta glucanase	UniProt	A0A2D4C4Z9	Putative exo-1,3-beta-glucanase	
-11292	Rabies lyssavirus (Rabies virus)	SRC266014	RNA polymerase	UniProt	A0A167NKS8	Replicase	L
-11292	Rabies lyssavirus (Rabies virus)	SRC279966	Phosphoprotein	UniProt	A0A160EF13	Phosphoprotein	P
-11292	Rabies lyssavirus (Rabies virus)	SRC279987	Glycoprotein G	UniProt	A0A160EE14	Glycoprotein	G
-11292	Rabies lyssavirus (Rabies virus)	SRC280087	Nucleoprotein	UniProt	Q76UJ7	Nucleoprotein	N
+11292	Rabies lyssavirus (Rabies virus)	SRC266014	RNA polymerase	UniProt	P11213	Large structural protein	L
+11292	Rabies lyssavirus (Rabies virus)	SRC279966	Phosphoprotein	UniProt	P06747	Phosphoprotein	P
+11292	Rabies lyssavirus (Rabies virus)	SRC279987	Glycoprotein G	UniProt	P08667	Glycoprotein	G
+11292	Rabies lyssavirus (Rabies virus)	SRC280087	Nucleoprotein	UniProt	P06025	Nucleoprotein	N
 10116	Rattus norvegicus (brown rat)	SRC245712	Alpha-1-antitrypsin	UniProt	P17475	Alpha-1-antiproteinase	Serpina1
 10116	Rattus norvegicus (brown rat)	SRC247901	nicotinic acetylcholine receptor	UniProt	P09483	Neuronal acetylcholine receptor subunit alpha-4	Chrna4
 10116	Rattus norvegicus (brown rat)	SRC251712	skeletal myosin	UniProt	Q9Z2X5	Homer protein homolog 3	Homer3
@@ -1150,7 +1100,7 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 10116	Rattus norvegicus (brown rat)	SRC543542	myelin P2 protein	UniProt	D3ZFG5	Myelin P2 protein	Pmp2
 60189	Rhipicephalus decoloratus	SRC269141	Intestinal cell surface glycoprotein	UniProt	A1XQW1	Intestinal cell surface glycoprotein	
 781	Rickettsia conorii	SRC280166	Outer membrane protein B	UniProt	Q9KKA3	Outer membrane protein B	ompB
-11241	Rinderpest morbillivirus (Rinderpest virus)	SRC280178	Nucleoprotein	UniProt	Q03332	Nucleoprotein	N
+11241	Rinderpest morbillivirus (Rinderpest virus)	SRC280178	Nucleoprotein	UniProt	A0A0H5BN46	Nucleocapsid	N
 11041	Rubella virus	SRC265968	Structural polyprotein	UniProt	P07566	Structural polyprotein	
 4932	Saccharomyces cerevisiae (baker's yeast)	SRC257039	ribosomal protein L2B	UniProt	P0CX46	60S ribosomal protein L2-B	RPL2B
 11080	Saint Louis encephalitis virus (St. Louis encephalitis virus)	SRC280044	polyprotein	UniProt	D8L538	Core protein	
@@ -1173,11 +1123,11 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 6183	Schistosoma mansoni	SRC280385	Fatty acid binding protein	UniProt	P29498	14 kDa fatty acid-binding protein	
 11033	Semliki Forest virus	SRC280145	Structural polyprotein	UniProt	P03315	Structural polyprotein	
 623	Shigella flexneri (Escherichia/Shigella flexneri)	SRC276204	Outer membrane protein 1b	UniProt	A0A2S4MYF8	Outer membrane protein C	ompC
-11642	Simian foamy virus	SRC499792	envelope glycoprotein	UniProt	P14351	Envelope glycoprotein gp130	env
+11642	Simian foamy virus	SRC499792	envelope glycoprotein	UniProt	Q87041	Envelope glycoprotein gp130	env
 11723	Simian immunodeficiency virus (Chimpanzee immunodeficiency virus)	SRC279939	Envelope glycoprotein gp160	UniProt	P19503	Envelope glycoprotein gp160	env
 11723	Simian immunodeficiency virus (Chimpanzee immunodeficiency virus)	SRC528257	gag protein	UniProt	P19504	Gag polyprotein	gag
 11034	Sindbis virus	SRC276223	Structural polyprotein	UniProt	P03316	Structural polyprotein	
-31604	Small ruminant morbillivirus (Pseudorinderpest virus)	SRC280163	nucleocapsid protein	UniProt	Q08823	Nucleoprotein	N
+31604	Small ruminant morbillivirus (Pseudorinderpest virus)	SRC280163	nucleocapsid protein	UniProt	Q83138	Nucleocapsid	N
 1334	Streptococcus dysgalactiae	SRC325882	glyceraldehyde-3-phosphate dehydrogenase	UniProt	C5WJ53	Glyceraldehyde-3-phosphate dehydrogenase	
 1309	Streptococcus mutans	SRC280384	Glucosyltransferase-I	UniProt	P08987	Glucosyltransferase-I	gtfB
 1309	Streptococcus mutans	SRC280388	Cell surface antigen SpaP	UniProt	P23504	Cell surface antigen I/II	spaP
@@ -1195,92 +1145,86 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 5811	Toxoplasma gondii	SRC1675	Tg2001	UniProt	A0A125YRV5	Rhoptry neck protein RON8	TGVEG_306060
 5722	Trichomonas vaginalis	SRC337199	glyceraldehyde 3-phosphate dehydrogenase	UniProt	A2DHT2	Glyceraldehyde-3-phosphate dehydrogenase	TVAG_146910
 5722	Trichomonas vaginalis	SRC337200	fructose-1,6-bisphosphate aldolase	UniProt	A2F6T1	Fructose-1,6-bisphosphate aldolase	TVAG_043170
-2678873	Trimerodytes annularis (ringed water snake)	SRC390667	phospholipase A2 inhibitor gamma	UniProt	I6PG79	Phospholipase A2 inhibitor gamma	
 4571	Triticum turgidum (cone wheat)	SRC265192	alpha-gliadin	UniProt	A0A0E3Z559	Alpha-gliadin	TRITD_6Av1G009400
 5693	Trypanosoma cruzi	SRC269190	elongation initiation factor 2	UniProt	Q4DH88	Translation initiation factor, putative	Tc00.1047053503955.70
 5693	Trypanosoma cruzi	SRC290728	haloacid dehalogenase-like hydrolase	UniProt	Q4D2M6	Haloacid dehalogenase-like hydrolase, putative	Tc00.1047053506931.10
 5693	Trypanosoma cruzi	SRC292632	trypomastigote small surface antigen	UniProt	Q4D3H3	Mucin TcMUCII, putative	Tc00.1047053507511.81
 5693	Trypanosoma cruzi	SRC298288	surface antigen 2	UniProt	Q4DGM0	Surface antigen 2 (CA-2), putative	Tc00.1047053511671.60
 5693	Trypanosoma cruzi	SRC7914	Cruzipain	UniProt	Q4DW03	Cysteine peptidase, putative	Tc00.1047053507603.260
-10245	Vaccinia virus (vaccinia virus VV)	SRC279959	Virion membrane protein A13	UniProt	Q76ZQ4	Virion membrane protein OPG139	OPG139
-10245	Vaccinia virus (vaccinia virus VV)	SRC279971	Protein A56	UniProt	Q01218	Protein OPG185	OPG185
-10245	Vaccinia virus (vaccinia virus VV)	SRC279976	Core protein E11	UniProt	P68448	Core protein OPG073	OPG073
-10245	Vaccinia virus (vaccinia virus VV)	SRC279986	Thymidylate kinase	UniProt	Q80HT9	Thymidylate kinase	OPG178
-10245	Vaccinia virus (vaccinia virus VV)	SRC279995	Protein A52	UniProt	Q01220	Protein A52	A52R
-10245	Vaccinia virus (vaccinia virus VV)	SRC279998	DNA-directed RNA polymerase 133 kDa polypeptide	UniProt	Q76ZP7	DNA-directed RNA polymerase 133 kDa polypeptide	OPG151
-10245	Vaccinia virus (vaccinia virus VV)	SRC279999	Telomere-binding protein I6	UniProt	P68462	Telomere-binding protein OPG082	OPG082
-10245	Vaccinia virus (vaccinia virus VV)	SRC280004	Protein A26	UniProt	P24758	Envelop protein OPG153	A26L
-10245	Vaccinia virus (vaccinia virus VV)	SRC280008	mRNA-capping enzyme catalytic subunit	UniProt	P04298	mRNA-capping enzyme catalytic subunit	OPG113
-10245	Vaccinia virus (vaccinia virus VV)	SRC280021	RNA helicase NPH-II	UniProt	P12927	RNA helicase NPH-II	OPG084
-10245	Vaccinia virus (vaccinia virus VV)	SRC280029	Protein L1	UniProt	P07612	Entry-fusion complex associated protein OPG095	OPG099
-10245	Vaccinia virus (vaccinia virus VV)	SRC280035	DNA-directed RNA polymerase 147 kDa polypeptide	UniProt	P07392	DNA-directed RNA polymerase 147 kDa polypeptide	OPG105
-10245	Vaccinia virus (vaccinia virus VV)	SRC280036	Pro-vaccinia growth factor	UniProt	P01136	Pro-Viral epidermal growth factor	OPG019
-10245	Vaccinia virus (vaccinia virus VV)	SRC280040	Viral late gene transcription factor 2	UniProt	P07610	Viral late gene transcription factor 2	OPG126
-10245	Vaccinia virus (vaccinia virus VV)	SRC280041	DNA polymerase	UniProt	P06856	DNA polymerase	OPG071
-10245	Vaccinia virus (vaccinia virus VV)	SRC280050	Protein O1	UniProt	Q80HX1	Protein OPG074	OPG074
-10245	Vaccinia virus (vaccinia virus VV)	SRC280053	Truncated secreted TNF-receptor-like protein A53R	UniProt	P24756	Truncated secreted TNF-receptor-like protein A53R	A53R
-10245	Vaccinia virus (vaccinia virus VV)	SRC280057	Serine/threonine-protein kinase 1	UniProt	P16913	B1 kinase	OPG187
-10245	Vaccinia virus (vaccinia virus VV)	SRC280061	Early transcription factor 82 kDa subunit	UniProt	P20636	Early transcription factor 82 kDa subunit	OPG133
-10245	Vaccinia virus (vaccinia virus VV)	SRC280100	Soluble interferon gamma receptor B8	UniProt	P24770	Soluble interferon gamma receptor OPG193	OPG193
-10245	Vaccinia virus (vaccinia virus VV)	SRC280107	Transcript termination protein A18	UniProt	P16712	Transcript termination protein OPG145	OPG145
-10245	Vaccinia virus (vaccinia virus VV)	SRC280113	Virion membrane protein A17 precursor	UniProt	P68593	Virion membrane protein OPG144 precursor	OPG144
-10245	Vaccinia virus (vaccinia virus VV)	SRC280120	Plaque-size/host range protein	UniProt	Q01227	Protein OPG190	OPG190
-10245	Vaccinia virus (vaccinia virus VV)	SRC280127	DNA-directed RNA polymerase 35 kDa subunit	UniProt	P24757	DNA-directed RNA polymerase 35 kDa subunit	OPG156
-10245	Vaccinia virus (vaccinia virus VV)	SRC280131	Protein E8	UniProt	P23372	Protein OPG070	OPG070
-10245	Vaccinia virus (vaccinia virus VV)	SRC280135	Protein A46	UniProt	P26672	Protein OPG176	OPG176
-10245	Vaccinia virus (vaccinia virus VV)	SRC280139	DNA-directed RNA polymerase 30 kDa polypeptide	UniProt	P21603	DNA-directed RNA polymerase 30 kDa polypeptide	OPG066
-10245	Vaccinia virus (vaccinia virus VV)	SRC280140	Protein A33	UniProt	P68617	Protein OPG161	OPG161
-10245	Vaccinia virus (vaccinia virus VV)	SRC280149	Protein A34	UniProt	P24761	Protein OPG162	OPG162
-10245	Vaccinia virus (vaccinia virus VV)	SRC280151	Ribonucleoside-diphosphate reductase large subunit	UniProt	P12848	Ribonucleoside-diphosphate reductase large subunit	OPG080
-10245	Vaccinia virus (vaccinia virus VV)	SRC280153	Kelch repeat protein C2	UniProt	P17371	Kelch repeat protein C2	C2L
-10245	Vaccinia virus (vaccinia virus VV)	SRC280159	Semaphorin-like protein A39	UniProt	P24764	Semaphorin-like protein A39	A39R
-10245	Vaccinia virus (vaccinia virus VV)	SRC280161	Viral late gene transcription factor 3	UniProt	P68319	Viral late gene transcription factor 3	OPG127
-10245	Vaccinia virus (vaccinia virus VV)	SRC280179	Interleukin-1-binding protein	UniProt	P25212	Interleukin-1-binding protein	B16R
-10245	Vaccinia virus (vaccinia virus VV)	SRC280180	Protein G3	UniProt	P68458	Entry-fusion complex protein OPG086	OPG086
-10245	Vaccinia virus (vaccinia virus VV)	SRC280186	25 kDa core protein A12L	UniProt	Q80HV7	25 kDa core protein OPG138	OPG138
-10245	Vaccinia virus (vaccinia virus VV)	SRC280194	Major core protein 4a precursor	UniProt	P16715	Major core protein OPG136 precursor	OPG136
-10245	Vaccinia virus (vaccinia virus VV)	SRC280205	DNA polymerase processivity factor component A20	UniProt	P68710	DNA polymerase processivity factor component OPG148	OPG148
-10245	Vaccinia virus (vaccinia virus VV)	SRC280208	Uncharacterized protein G6	UniProt	Q80HW9	Protein OPG091	OPG091
-10245	Vaccinia virus (vaccinia virus VV)	SRC280212	Protein A41	UniProt	P24766	Protein OPG170	OPG170
-10245	Vaccinia virus (vaccinia virus VV)	SRC280214	Myristoylated protein G9	UniProt	P07611	Entry-fusion complex protein OPG094	OPG094
-10245	Vaccinia virus (vaccinia virus VV)	SRC280229	Protein A40	UniProt	P24765	Protein A40	A40R
-10245	Vaccinia virus (vaccinia virus VV)	SRC280234	Protein A35	UniProt	Q01232	Protein OPG163	OPG163
-10245	Vaccinia virus (vaccinia virus VV)	SRC280242	Profilin	UniProt	Q76ZN5	Profilin	OPG171
-10245	Vaccinia virus (vaccinia virus VV)	SRC280257	Protein B9	UniProt	P24771	Protein OPG195	OPG197
-10245	Vaccinia virus (vaccinia virus VV)	SRC280261	Serine proteinase inhibitor 1	UniProt	P15058	Serine proteinase inhibitor 1	OPG205
-10245	Vaccinia virus (vaccinia virus VV)	SRC280269	Late transcription factor 1	UniProt	P68613	Late transcription factor 1	OPG093
-10245	Vaccinia virus (vaccinia virus VV)	SRC280270	Protein A30	UniProt	P68596	Protein OPG157	OPG157
-10245	Vaccinia virus (vaccinia virus VV)	SRC280276	Protein K2	UniProt	P18384	Superinfection exclusion protein	OPG040
-10245	Vaccinia virus (vaccinia virus VV)	SRC280280	Virion membrane protein A21	UniProt	P68712	Virion membrane protein OPG147	OPG147
-10245	Vaccinia virus (vaccinia virus VV)	SRC40031	Hypothetical 13.6 kDa HINDIII-C protein	UniProt	P04305	Uncoating factor OPG117	OPG117
-10245	Vaccinia virus (vaccinia virus VV)	SRC549096	VACAC2_210	UniProt	Q01221	Protein B17	B17L
+10245	Vaccinia virus (vaccinia virus VV)	SRC279959	Virion membrane protein A13	UniProt	P20990	Protein A13	OPG139
+10245	Vaccinia virus (vaccinia virus VV)	SRC279971	Protein A56	UniProt	P20978	Protein A56	OPG185
+10245	Vaccinia virus (vaccinia virus VV)	SRC279976	Core protein E11	UniProt	P68449	Protein E11	OPG073
+10245	Vaccinia virus (vaccinia virus VV)	SRC279986	Thymidylate kinase	UniProt	P68693	Thymidylate kinase	OPG178
+10245	Vaccinia virus (vaccinia virus VV)	SRC279995	Protein A52	UniProt	P21070	Protein A52	A52R
+10245	Vaccinia virus (vaccinia virus VV)	SRC279998	DNA-directed RNA polymerase 133 kDa polypeptide	UniProt	P68694	DNA-directed RNA polymerase 133 kDa polypeptide	OPG151
+10245	Vaccinia virus (vaccinia virus VV)	SRC279999	Telomere-binding protein I6	UniProt	P68463	Telomere-binding protein I6	OPG082
+10245	Vaccinia virus (vaccinia virus VV)	SRC280004	Protein A26	UniProt	P21114	Putative A-type inclusion protein	A26L
+10245	Vaccinia virus (vaccinia virus VV)	SRC280008	mRNA-capping enzyme catalytic subunit	UniProt	P20979	mRNA-capping enzyme catalytic subunit	OPG113
+10245	Vaccinia virus (vaccinia virus VV)	SRC280021	RNA helicase NPH-II	UniProt	P20502	RNA helicase NPH-II	OPG084
+10245	Vaccinia virus (vaccinia virus VV)	SRC280029	Protein L1	UniProt	P20540	Protein L1	OPG099
+10245	Vaccinia virus (vaccinia virus VV)	SRC280035	DNA-directed RNA polymerase 147 kDa polypeptide	UniProt	P20504	DNA-directed RNA polymerase 147 kDa polypeptide	OPG105
+10245	Vaccinia virus (vaccinia virus VV)	SRC280036	Pro-vaccinia growth factor	UniProt	P20494	Pro-vaccinia growth factor	OPG019
+10245	Vaccinia virus (vaccinia virus VV)	SRC280040	Viral late gene transcription factor 2	UniProt	P20982	Viral late gene transcription factor 2	OPG126
+10245	Vaccinia virus (vaccinia virus VV)	SRC280041	DNA polymerase	UniProt	P20509	DNA polymerase	OPG071
+10245	Vaccinia virus (vaccinia virus VV)	SRC280050	Protein O1	UniProt	P21093	Protein O1	OPG074
+10245	Vaccinia virus (vaccinia virus VV)	SRC280053	Truncated secreted TNF-receptor-like protein A53R	UniProt	P21071	Truncated secreted TNF-receptor-like protein A53	A53R
+10245	Vaccinia virus (vaccinia virus VV)	SRC280057	Serine/threonine-protein kinase 1	UniProt	P20505	B1 kinase	OPG187
+10245	Vaccinia virus (vaccinia virus VV)	SRC280061	Early transcription factor 82 kDa subunit	UniProt	P20635	Early transcription factor 82 kDa subunit	OPG133
+10245	Vaccinia virus (vaccinia virus VV)	SRC280100	Soluble interferon gamma receptor B8	UniProt	P21004	Soluble interferon gamma receptor B8	OPG193
+10245	Vaccinia virus (vaccinia virus VV)	SRC280107	Transcript termination protein A18	UniProt	P20534	Transcript termination protein A18	OPG145
+10245	Vaccinia virus (vaccinia virus VV)	SRC280113	Virion membrane protein A17 precursor	UniProt	P68592	Virion membrane protein A17 precursor	OPG144
+10245	Vaccinia virus (vaccinia virus VV)	SRC280120	Plaque-size/host range protein	UniProt	P21115	Protein B5	OPG190
+10245	Vaccinia virus (vaccinia virus VV)	SRC280127	DNA-directed RNA polymerase 35 kDa subunit	UniProt	P21087	DNA-directed RNA polymerase 35 kDa subunit	OPG156
+10245	Vaccinia virus (vaccinia virus VV)	SRC280131	Protein E8	UniProt	P21049	Protein E8	OPG070
+10245	Vaccinia virus (vaccinia virus VV)	SRC280135	Protein A46	UniProt	P21066	Protein A46	OPG176
+10245	Vaccinia virus (vaccinia virus VV)	SRC280139	DNA-directed RNA polymerase 30 kDa polypeptide	UniProt	P21082	DNA-directed RNA polymerase 30 kDa polypeptide	OPG066
+10245	Vaccinia virus (vaccinia virus VV)	SRC280140	Protein A33	UniProt	P68616	Protein A33	OPG161
+10245	Vaccinia virus (vaccinia virus VV)	SRC280149	Protein A34	UniProt	P21057	Protein A34	OPG162
+10245	Vaccinia virus (vaccinia virus VV)	SRC280151	Ribonucleoside-diphosphate reductase large subunit	UniProt	P20503	Ribonucleoside-diphosphate reductase large subunit	OPG080
+10245	Vaccinia virus (vaccinia virus VV)	SRC280153	Kelch repeat protein C2	UniProt	P21037	Kelch repeat protein C2	C2L
+10245	Vaccinia virus (vaccinia virus VV)	SRC280159	Semaphorin-like protein A39	UniProt	P21062	Semaphorin-like protein A39	A39R
+10245	Vaccinia virus (vaccinia virus VV)	SRC280161	Viral late gene transcription factor 3	UniProt	P68318	Viral late gene transcription factor 3	OPG127
+10245	Vaccinia virus (vaccinia virus VV)	SRC280179	Interleukin-1-binding protein	UniProt	P21116	Truncated interleukin-1-binding protein	B16R
+10245	Vaccinia virus (vaccinia virus VV)	SRC280180	Protein G3	UniProt	P68459	Protein G3	OPG086
+10245	Vaccinia virus (vaccinia virus VV)	SRC280186	25 kDa core protein A12L	UniProt	P20989	25 kDa core protein A12L	OPG138
+10245	Vaccinia virus (vaccinia virus VV)	SRC280194	Major core protein 4a precursor	UniProt	P20642	Major core protein 4a precursor	OPG136
+10245	Vaccinia virus (vaccinia virus VV)	SRC280205	DNA polymerase processivity factor component A20	UniProt	P20995	DNA polymerase processivity factor component A20	OPG148
+10245	Vaccinia virus (vaccinia virus VV)	SRC280208	Uncharacterized protein G6	UniProt	P21027	Uncharacterized protein G6	OPG091
+10245	Vaccinia virus (vaccinia virus VV)	SRC280212	Protein A41	UniProt	P21064	Protein A41	OPG170
+10245	Vaccinia virus (vaccinia virus VV)	SRC280214	Myristoylated protein G9	UniProt	P21030	Myristoylated protein G9	OPG094
+10245	Vaccinia virus (vaccinia virus VV)	SRC280229	Protein A40	UniProt	P21063	Protein A40	A40R
+10245	Vaccinia virus (vaccinia virus VV)	SRC280234	Protein A35	UniProt	P21058	Protein A35	OPG163
+10245	Vaccinia virus (vaccinia virus VV)	SRC280242	Profilin	UniProt	P68695	Profilin	OPG171
+10245	Vaccinia virus (vaccinia virus VV)	SRC280257	Protein B9	UniProt	P21005	Protein B9	OPG197
+10245	Vaccinia virus (vaccinia virus VV)	SRC280261	Serine proteinase inhibitor 1	UniProt	P20531	Serine proteinase inhibitor 1	OPG205
+10245	Vaccinia virus (vaccinia virus VV)	SRC280269	Late transcription factor 1	UniProt	P68612	Late transcription factor 1	OPG093
+10245	Vaccinia virus (vaccinia virus VV)	SRC280270	Protein A30	UniProt	P68595	Protein A30	OPG157
+10245	Vaccinia virus (vaccinia virus VV)	SRC280276	Protein K2	UniProt	P20532	Protein K2	OPG040
+10245	Vaccinia virus (vaccinia virus VV)	SRC280280	Virion membrane protein A21	UniProt	P20996	Virion membrane protein A21	OPG147
+10245	Vaccinia virus (vaccinia virus VV)	SRC40031	Hypothetical 13.6 kDa HINDIII-C protein	UniProt	P21010	Primase D5	OPG117
+10245	Vaccinia virus (vaccinia virus VV)	SRC549096	VACAC2_210	UniProt	P21075	Protein B17	B17L
 10255	Variola virus (smallpox virus)	SRC282498	kelch-like protein	UniProt	P0DSS9	Ankyrin repeat protein B4	OPG189
 10255	Variola virus (smallpox virus)	SRC282499	glycoprotein	UniProt	P0DSS5	Putative nuclease G5	OPG089
-11036	Venezuelan equine encephalitis virus (Venezuelan equine encephalitis VEE)	SRC2874	Structural polyprotein	UniProt	M1KFD7	Structural polyprotein	
+11036	Venezuelan equine encephalitis virus (Venezuelan equine encephalitis VEE)	SRC2874	Structural polyprotein	UniProt	P09592	Structural polyprotein	
 666	Vibrio cholerae	SRC280028	Cholera enterotoxin subunit B	UniProt	P01556	Cholera enterotoxin subunit B	ctxB
 2169971	Visna-maedi virus (Maedi visna virus)	SRC279962	gag protein	UniProt	Q88987	Gag protein	gag
-74537	Vladivostok virus	SRC276218	Nucleocapsid protein	UniProt	A0A077D3U2	Nucleoprotein	
+74537	Vladivostok virus	SRC276218	Nucleocapsid protein	UniProt	A0A077D137	Nucleoprotein	
 9627	Vulpes vulpes (silver fox)	SRC252165	L-lactate dehydrogenase C chain	UniProt	Q29563	L-lactate dehydrogenase C chain	LDHC
-11039	Western equine encephalitis virus	SRC265363	E2 protein	UniProt	A0A068BA30	Structural polyprotein	
-10432	Woodchuck hepatitis virus 7	SRC280111	Large envelope protein	UniProt	P17400	Large envelope protein	S
+11039	Western equine encephalitis virus	SRC265363	E2 protein	UniProt	P13897	Structural polyprotein	
+10432	Woodchuck hepatitis virus 7	SRC280111	Large envelope protein	UniProt	P12909	Large envelope protein	S
 11089	Yellow fever virus (Flavivirus febricis)	SRC279989	Genome polyprotein	UniProt	P03314	Genome polyprotein	
-630	Yersinia enterocolitica	SRC280371	60 kDa chaperonin	UniProt	A0A0H3NVC7	Chaperonin GroEL	groEL
-630	Yersinia enterocolitica	SRC447503	GNAT family N-acetyltransferase	UniProt	A0A0H3NLM7	Acetyltransferase	YE3194
+630	Yersinia enterocolitica	SRC280371	60 kDa chaperonin	UniProt	A1JIP3	60 kDa chaperonin	groEL
+630	Yersinia enterocolitica	SRC447503	GNAT family N-acetyltransferase	UniProt	A1JNW0	Acetyltransferase (GNAT) family protein	YE3194
 632	Yersinia pestis	SRC280206	Hypothetical	UniProt	P0C7U7	Virulence-associated V antigen	lcrV
 64320	Zika virus	SRC432859	non-structural protein 1 (NS1)	UniProt	Q32ZE1	Genome polyprotein	
-9615	Canis lupus familiaris (dogs)	SRC246113	Immunoglobulin	ARC	ab	Immunoglobulin chain	
 9606	Homo sapiens (human)	SRC14810	HLA class II histocompatibility antigen, DRB1 beta chain	ARC	mhc	Major Histocompatibility Complex chain	
 9606	Homo sapiens (human)	SRC241645	Ig heavy chain CDR3 region	ARC	ab	Immunoglobulin chain	
 9606	Homo sapiens (human)	SRC241949	MHC HLA-DR gamma chain	ARC	mhc	Major Histocompatibility Complex chain	
 9606	Homo sapiens (human)	SRC241951	MHC class I antigen	ARC	mhc	Major Histocompatibility Complex chain	
 9606	Homo sapiens (human)	SRC241953	MHC class II antigen	ARC	mhc	Major Histocompatibility Complex chain	
 9606	Homo sapiens (human)	SRC243797	Immunoglobulin heavy chain	ARC	ab	Immunoglobulin chain	
-9606	Homo sapiens (human)	SRC245246	VkIII myeloma protein Gun	ARC	ab	Immunoglobulin chain	
-9606	Homo sapiens (human)	SRC245248	IgM lambda light chain	ARC	ab	Immunoglobulin chain	
 9606	Homo sapiens (human)	SRC245847	T-cell receptor alpha chain	ARC	tcr	T cell receptor chain	
 9606	Homo sapiens (human)	SRC245848	T-cell receptor beta chain; TCR	ARC	tcr	T cell receptor chain	
-9606	Homo sapiens (human)	SRC247548	Fab light chain	ARC	ab	Immunoglobulin chain	
-9606	Homo sapiens (human)	SRC247549	Fab heavy chain	ARC	ab	Immunoglobulin chain	
 9606	Homo sapiens (human)	SRC248980	Immunoglobulin chain	ARC	ab	Immunoglobulin chain	
 9606	Homo sapiens (human)	SRC280779	immunoglobulin lambda chain variable region	ARC	ab	Immunoglobulin chain	
 9606	Homo sapiens (human)	SRC370989	alternatively spliced Insulin	ARC	ab	Immunoglobulin chain	
@@ -1288,9 +1232,7 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 9606	Homo sapiens (human)	SRC505873	HLA class I A2	ARC	mhc	Major Histocompatibility Complex chain	
 9606	Homo sapiens (human)	SRC533442	Immunoglobulin light chain	ARC	ab	Immunoglobulin chain	
 10090	Mus musculus (mouse)	SRC245247	T cell receptor beta chain	ARC	tcr	T cell receptor chain	
-10090	Mus musculus (mouse)	SRC245249	immunoglobulin tau heavy chain	ARC	ab	Immunoglobulin chain	
 10090	Mus musculus (mouse)	SRC245363	immunoglobulin light chain variable region	ARC	ab	Immunoglobulin chain	
-10090	Mus musculus (mouse)	SRC246036	Gammaglobulin	ARC	ab	Immunoglobulin chain	
 10090	Mus musculus (mouse)	SRC246114	T cell receptor alpha chain	ARC	tcr	T cell receptor chain	
 10090	Mus musculus (mouse)	SRC247577	Ig G anti-DNA autoantibody	ARC	ab	Immunoglobulin chain	
 10090	Mus musculus (mouse)	SRC248981	Immunoglobulin chain	ARC	ab	Immunoglobulin chain	
@@ -1299,7 +1241,6 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 10090	Mus musculus (mouse)	SRC245240	Immunoglobulin domain variable region (v)	ARC	ab	Immunoglobulin chain	
 10090	Mus musculus (mouse)	SRC298338	class I major histocompatibility antigen H-2Kb	ARC	mhc	Major Histocompatibility Complex chain	
 10090	Mus musculus (mouse)	SRC313754	immunoglobulin heavy chain variable region	ARC	ab	Immunoglobulin chain	
-9986	Oryctolagus cuniculus (rabbit)	SRC250637	Immunoglobulin chain	ARC	ab	Immunoglobulin chain	
 9402	Pteropus alecto (black flying fox)	SRC516267	Ptal-N*01:01	ARC	mhc	Major Histocompatibility Complex chain	
 10116	Rattus norvegicus (brown rat)	SRC246335	T-cell receptor beta chain	ARC	tcr	T cell receptor chain	
 10116	Rattus norvegicus (brown rat)	SRC261449	TCR alpha-chain	ARC	tcr	T cell receptor chain	
@@ -1307,25 +1248,21 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 6973	Blattella germanica (German cockroach)	SRC323161	enolase	UniProt	A0A2P8XEV7	2-phospho-D-glycerate hydro-lyase	
 6973	Blattella germanica (German cockroach)	SRC323162	GroEL-like chaperonin	UniProt	A0A2P8YHT8	60 kDa heat shock protein	
 6973	Blattella germanica (German cockroach)	SRC323163	NCRA1	UniProt	A0A2P8XY84	Vitellogenin domain-containing protein	
-6973	Blattella germanica (German cockroach)	SRC323167	NCRA13	UniProt	A0A2P8Z3A9	transferrin	
-6973	Blattella germanica (German cockroach)	SRC323172	NCRA3	UniProt	A0A2P8Z2P4	15-hydroxyprostaglandin dehydrogenase [NAD(+)]	
-6973	Blattella germanica (German cockroach)	SRC323173	NCRA4	UniProt	A0A2P8YR56	Apolipophorin	
 329091	Cupressus torulosa	SRC245028	allergen			Cup s 1 pollen allergen	
 7955	Danio rerio (leopard danio)	SRC279657	non-POU domain containing, octamer-binding	UniProt	Q802Z5	Non-POU domain-containing, octamer-binding	wu:fb40d10
 15957	Phleum pratense (timothy grass)	SRC251510	Phl p 3 allergen	IUIS	Q69B42	Phl p 3 allergen	
 6182	Schistosoma japonicum	SRC536328	SJCHGC06871 protein	UniProt	A0A4Z2D6V9	Annexin A10	EWB00_003895
-3645	Bertholletia excelsa (Brazil nut)	SRC268312	2S sulfur-rich seed storage protein 1	IUIS	P04403	2S sulfur-rich seed storage protein 1	
+3645	Bertholletia excelsa (Brazil nut)	SRC268312	2S sulfur-rich seed storage protein 1	IUIS	P04403	Ber e 1	
 6182	Schistosoma japonicum	SRC536333	micro exon gene 15	UniProt	A0A4Z2D0E9	Uncharacterized Protein	EWB00_005888
 6182	Schistosoma japonicum	SRC536347	micro exon gene 8.3 C	UniProt	A0A4Z2CTZ7	Uncharacterized Protein	EWB00_007523
 6182	Schistosoma japonicum	SRC536355	25 kDa integral membrane protein isoform 2	UniProt	A0A4Z2CQU9	25 kDa integral membrane protein isoform 2	EWB00_008283
 6182	Schistosoma japonicum	SRC536356	SJCHGC01839 protein	UniProt	A0A4Z2DJK0	GLIPR1-like protein isoform 2	EWB00_000341
 5693	Trypanosoma cruzi	SRC7944	B13 antigen	UniProt	Q4DGM0	Surface antigen 2 (CA-2), putative	Tc00.1047053511671.60
-10245	Vaccinia virus (vaccinia virus VV)	SRC293727	DNA helicase	UniProt	P16712	Transcript termination protein OPG145	OPG145
+10245	Vaccinia virus (vaccinia virus VV)	SRC293727	DNA helicase	UniProt	P20534	Transcript termination protein A18	OPG145
 1281454	Rodent hepacivirus	SRC537113	Envelope glycoprotein E1	UniProt	A0A247ZNN0	Envelope glycoprotein E1	
 9606	Homo sapiens (human)	SRC248015	myosin 7	UniProt	P12883	Myosin-7	MYH7
 6956	Dermatophagoides pteronyssinus (European house dust mite)	SRC343994	serine protease	IUIS	Q7Z163	Der p 9	
 6956	Dermatophagoides pteronyssinus (European house dust mite)	SRC343995	LytFM	IUIS	Q8MWR6	Der p 38	
-9031	Gallus gallus (chicken)	SRC245864	gamma globulin	ARC	ab	Immunoglobulin chain	
 10090	Mus musculus (mouse)	SRC378890	band 3 anion transport protein	UniProt	P04919	Band 3 anion transport protein	Slc4a1
 9606	Homo sapiens (human)	SRC454731	tissue transglutaminase	UniProt	P21980	Protein-glutamine gamma-glutamyltransferase 2	TGM2
 9606	Homo sapiens (human)	SRC594506	Prostate-specific antigen	UniProt	P07288	Prostate-specific antigen	KLK3
@@ -1343,7 +1280,7 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 9606	Homo sapiens (human)	SRC594499	Lysosomal acid phosphatase	UniProt	P11117	Lysosomal acid phosphatase	ACP2
 9606	Homo sapiens (human)	SRC594736	Serine/threonine-protein kinase 36	UniProt	Q9NRP7	Serine/threonine-protein kinase 36	STK36
 9606	Homo sapiens (human)	SRC602008	Serine/threonine-protein kinase WNK2C	UniProt	Q9Y3S1	Serine/threonine-protein kinase WNK2	WNK2
-85708	Porcine circovirus 2 (Porcine circovirus Type II)	SRC280020	Capsid protein	UniProt	O56129	Capsid protein	cap
+85708	Porcine circovirus 2 (Porcine circovirus Type II)	SRC280020	Capsid protein	UniProt	Q5QHY2	27.9 kDa capsid protein	cap
 11320	Influenza A virus	ACN72646.1	hemagglutinin	UniProt	P03452	Hemagglutinin	HA
 11320	Influenza A virus	AEB66665.1	hemagglutinin	UniProt	P03452	Hemagglutinin	HA
 11320	Influenza A virus	ALA50331.1	hemagglutinin	UniProt	P03452	Hemagglutinin	HA
@@ -1352,9 +1289,9 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 11320	Influenza A virus	ADU85848.1	matrix protein 1	UniProt	P03485	Matrix protein 1	M
 11320	Influenza A virus	AEN68979.1	matrix protein 1	UniProt	P03485	Matrix protein 1	M
 11320	Influenza A virus	Q8QLX6	Matrix protein 1	UniProt	P03485	Matrix protein 1	M
-9606	Homo sapiens (human)	SRC566470	1-phosphatidylinositol 4,5-bisphosphate phosphodiesterase eta-1	UniProt	Q4KWH8	1-phosphatidylinositol 4,5-bisphosphate phosphodiesterase eta-1	PLCH1
-9606	Homo sapiens (human)	SRC566502	28S ribosomal protein S31, mitochondrial	UniProt	Q92665	28S ribosomal protein S31, mitochondrial	MRPS31
-9606	Homo sapiens (human)	SRC566511	7SK snRNA methylphosphate capping enzyme	UniProt	Q7L2J0	7SK snRNA methylphosphate capping enzyme	MEPCE
+9606	Homo sapiens (human)	SRC566470	1-phosphatidylinositol 4,5-bisphosphate phosphodiesterase eta-1 	UniProt	Q4KWH8	1-phosphatidylinositol 4,5-bisphosphate phosphodiesterase eta-1	PLCH1
+9606	Homo sapiens (human)	SRC566502	28S ribosomal protein S31, mitochondrial 	UniProt	Q92665	28S ribosomal protein S31, mitochondrial	MRPS31
+9606	Homo sapiens (human)	SRC566511	7SK snRNA methylphosphate capping enzyme 	UniProt	Q7L2J0	7SK snRNA methylphosphate capping enzyme	MEPCE
 9606	Homo sapiens (human)	SRC566368	A disintegrin and metalloproteinase with thrombospondin motifs 6	UniProt	Q9UKP5	A disintegrin and metalloproteinase with thrombospondin motifs 6	ADAMTS6
 9606	Homo sapiens (human)	SRC566493	A disintegrin and metalloproteinase with thrombospondin motifs 7	UniProt	Q9UKP4	A disintegrin and metalloproteinase with thrombospondin motifs 7	ADAMTS7
 9606	Homo sapiens (human)	SRC566298	Activin receptor type-1B	UniProt	P36896	Activin receptor type-1B	ACVR1B
@@ -1364,7 +1301,7 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 9606	Homo sapiens (human)	SRC566471	Adenosine 3'-phospho 5'-phosphosulfate transporter 2	UniProt	Q9H1N7	Adenosine 3'-phospho 5'-phosphosulfate transporter 2	SLC35B3
 9606	Homo sapiens (human)	SRC565609	Adiponectin receptor 2	UniProt	Q86V24	Adiponectin receptor protein 2	ADIPOR2
 9606	Homo sapiens (human)	SRC566290	Androgen receptor	UniProt	P10275	Androgen receptor	AR
-9606	Homo sapiens (human)	SRC566362	Angiopoietin-related protein 4	UniProt	Q9BY76	Angiopoietin-related protein 4	ANGPTL4
+9606	Homo sapiens (human)	SRC566362	Angiopoietin-related protein 4	UniProt	Q9BY76	Angiopoietin-related protein 4 	ANGPTL4
 9606	Homo sapiens (human)	SRC565608	Ankyrin repeat domain containing protein 37	UniProt	Q7Z713	Ankyrin repeat domain-containing protein 37	ANKRD37
 9606	Homo sapiens (human)	SRC566374	Anoctamin-6	UniProt	Q4KMQ2	Anoctamin-6	ANO6
 9606	Homo sapiens (human)	SRC566376	APC membrane recruitment protein 1	UniProt	Q5JTC6	APC membrane recruitment protein 1	AMER1
@@ -1376,13 +1313,13 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 9606	Homo sapiens (human)	SRC566477	Breakpoint cluster region protein	UniProt	P11274	Breakpoint cluster region protein	BCR
 9606	Homo sapiens (human)	SRC566444	breast cancer metastasis suppressor 1, isoform CRA_a	UniProt	Q9HCU9	Breast cancer metastasis-suppressor 1	BRMS1
 9606	Homo sapiens (human)	SRC566488	Calpain-15	UniProt	O75808	Calpain-15	CAPN15
-9606	Homo sapiens (human)	SRC566435	Calreticulin-3	UniProt	Q96L12	Calreticulin-3	CALR3
+9606	Homo sapiens (human)	SRC566435	Calreticulin-3	UniProt	Q96L12	Calreticulin-3 	CALR3
 9606	Homo sapiens (human)	SRC566448	Cathepsin O	UniProt	P43234	Cathepsin O	CTSO
 9606	Homo sapiens (human)	SRC566396	Cationic amino acid transporter 2	UniProt	P52569	Cationic amino acid transporter 2	SLC7A2
 9606	Homo sapiens (human)	SRC541537	CEA cell adhesion molecule 18	UniProt	A8MTB9	Carcinoembryonic antigen-related cell adhesion molecule 18	CEACAM18
 9606	Homo sapiens (human)	SRC566327	Centrosomal protein 43	UniProt	O95684	Centrosomal protein 43	CEP43
 9606	Homo sapiens (human)	SRC566484	Centrosomal protein of 76 kDa	UniProt	Q8TAP6	Centrosomal protein of 76 kDa	CEP76
-9606	Homo sapiens (human)	SRC566500	Centrosome and spindle pole-associated protein 1	UniProt	Q1MSJ5	Centrosome and spindle pole-associated protein 1	CSPP1
+9606	Homo sapiens (human)	SRC566500	Centrosome and spindle pole-associated protein 1	UniProt	Q1MSJ5	Centrosome and spindle pole-associated protein 1 	CSPP1
 9606	Homo sapiens (human)	SRC566407	Chromodomain-helicase-DNA-binding protein 7	UniProt	Q9P2D1	Chromodomain-helicase-DNA-binding protein 7	CHD7
 9606	Homo sapiens (human)	SRC566504	Chromodomain-helicase-DNA-binding protein 9	UniProt	Q3L8U1	Chromodomain-helicase-DNA-binding protein 9	CHD9
 9606	Homo sapiens (human)	SRC566417	Citron Rho-interacting kinase	UniProt	O14578	Citron Rho-interacting kinase	CIT
@@ -1425,13 +1362,13 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 9606	Homo sapiens (human)	SRC566305	Folliculin	UniProt	Q8NFG4	Folliculin	FLCN
 9606	Homo sapiens (human)	SRC566315	FRAS1-related extracellular matrix protein 2	UniProt	Q5SZK8	FRAS1-related extracellular matrix protein 2	FREM2
 9606	Homo sapiens (human)	SRC566510	FRAS1-related extracellular matrix protein 3	UniProt	P0C091	FRAS1-related extracellular matrix protein 3	FREM3
-9606	Homo sapiens (human)	SRC566463	FYVE, RhoGEF and PH domain-containing protein 1	UniProt	P98174	FYVE, RhoGEF and PH domain-containing protein 1	FGD1
+9606	Homo sapiens (human)	SRC566463	FYVE, RhoGEF and PH domain-containing protein 1	UniProt	P98174	FYVE, RhoGEF and PH domain-containing protein 1 	FGD1
 9606	Homo sapiens (human)	SRC590682	gametogenetin-binding protein 2	UniProt	Q9H3C7	Gametogenetin-binding protein 2	GGNBP2
-9606	Homo sapiens (human)	SRC566299	Glutamine--fructose-6-phosphate aminotransferase [isomerizing] 1	UniProt	Q06210	Glutamine--fructose-6-phosphate aminotransferase [isomerizing] 1	GFPT1
+9606	Homo sapiens (human)	SRC566299	Glutamine--fructose-6-phosphate aminotransferase [isomerizing] 1 	UniProt	Q06210	Glutamine--fructose-6-phosphate aminotransferase [isomerizing] 1	GFPT1
 9606	Homo sapiens (human)	SRC566455	G-protein coupled receptor 15	UniProt	P49685	G-protein coupled receptor 15	GPR15
 9606	Homo sapiens (human)	SRC566350	GRB10-interacting GYF protein 1	UniProt	O75420	GRB10-interacting GYF protein 1	GIGYF1
 9606	Homo sapiens (human)	SRC566414	Guanylate-binding protein 3	UniProt	Q9H0R5	Guanylate-binding protein 3	GBP3
-9606	Homo sapiens (human)	SRC566503	HEAT repeat-containing protein 5A	UniProt	Q86XA9	HEAT repeat-containing protein 5A	HEATR5A
+9606	Homo sapiens (human)	SRC566503	HEAT repeat-containing protein 5A	UniProt	Q86XA9	HEAT repeat-containing protein 5A 	HEATR5A
 9606	Homo sapiens (human)	SRC566292	Helicase SRCAP	UniProt	Q6ZRS2	Helicase SRCAP	SRCAP
 9606	Homo sapiens (human)	SRC566366	hepatocyte nuclear factor 1-beta	UniProt	P35680	Hepatocyte nuclear factor 1-beta	HNF1B
 9606	Homo sapiens (human)	SRC566466	Histone deacetylase 3	UniProt	O15379	Histone deacetylase 3	HDAC3
@@ -1444,7 +1381,7 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 9606	Homo sapiens (human)	SRC566288	Kelch-like protein 6	UniProt	Q8WZ60	Kelch-like protein 6	KLHL6
 9606	Homo sapiens (human)	SRC566418	Keratin, type II cytoskeletal 1	UniProt	P04264	Keratin, type II cytoskeletal 1	KRT1
 9606	Homo sapiens (human)	SRC566295	Keratin, type II cytoskeletal 6A	UniProt	P02538	Keratin, type II cytoskeletal 6A	KRT6A
-9606	Homo sapiens (human)	SRC566458	Kinesin-like protein KIFC2	UniProt	Q96AC6	Kinesin-like protein KIFC2	KIFC2
+9606	Homo sapiens (human)	SRC566458	Kinesin-like protein KIFC2 	UniProt	Q96AC6	Kinesin-like protein KIFC2	KIFC2
 9606	Homo sapiens (human)	SRC566341	Kynureninase	UniProt	Q16719	Kynureninase	KYNU
 9606	Homo sapiens (human)	SRC566404	Latexin	UniProt	Q9BS40	Latexin	LXN
 9606	Homo sapiens (human)	SRC566514	Leucine-rich repeat serine/threonine-protein kinase 2	UniProt	Q5S007	Leucine-rich repeat serine/threonine-protein kinase 2	LRRK2
@@ -1470,7 +1407,7 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 9606	Homo sapiens (human)	SRC566507	mRNA decay activator protein ZFP36L2	UniProt	P47974	mRNA decay activator protein ZFP36L2	ZFP36L2
 9606	Homo sapiens (human)	SRC566489	Mucin-16	UniProt	Q8WXI7	Mucin-16	MUC16
 9606	Homo sapiens (human)	SRC566423	Multiple epidermal growth factor-like domains protein 10	UniProt	Q96KG7	Multiple epidermal growth factor-like domains protein 10	MEGF10
-9606	Homo sapiens (human)	SRC565606	Muskelin	UniProt	Q9UL63	Muskelin	MKLN1
+9606	Homo sapiens (human)	SRC565606	Muskelin 	UniProt	Q9UL63	Muskelin	MKLN1
 9606	Homo sapiens (human)	SRC566456	Myb/SANT-like DNA-binding domain-containing protein 1	UniProt	Q6ZTZ1	Myb/SANT-like DNA-binding domain-containing protein 1	MSANTD1
 9606	Homo sapiens (human)	SRC566419	Myomesin-1	UniProt	P52179	Myomesin-1	MYOM1
 9606	Homo sapiens (human)	SRC551530	Myristoylated alanine-rich C-kinase substrate	UniProt	P29966	Myristoylated alanine-rich C-kinase substrate	MARCKS
@@ -1542,7 +1479,7 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 9606	Homo sapiens (human)	SRC566530	Spermatogenesis-associated protein 31D1	UniProt	Q6ZQQ2	Spermatogenesis-associated protein 31D1	SPATA31D1
 9606	Homo sapiens (human)	SRC566333	Splicing factor 3B subunit 2	UniProt	Q13435	Splicing factor 3B subunit 2	SF3B2
 9606	Homo sapiens (human)	SRC566431	Stomatin	UniProt	P27105	Stomatin	STOM
-9606	Homo sapiens (human)	SRC594721	Sushi, von Willebrand factor type A, EGF and pentraxin domain-containing protein 1	UniProt	Q4LDE5	Sushi, von Willebrand factor type A, EGF and pentraxin domain-containing protein 1	SVEP1
+9606	Homo sapiens (human)	SRC594721	Sushi, von Willebrand factor type A, EGF and pentraxin domain-containing protein 1	UniProt	Q4LDE5	Sushi, von Willebrand factor type A, EGF and pentraxin domain-containing protein 1 	SVEP1
 9606	Homo sapiens (human)	SRC566513	Syntaxin-5	UniProt	Q13190	Syntaxin-5	STX5
 9606	Homo sapiens (human)	SRC594732	T cell receptor delta constant	UniProt	B7Z8K6	T cell receptor delta constant	TRDC
 9606	Homo sapiens (human)	SRC566524	TBC1 domain family member 10B	UniProt	Q4KMP7	TBC1 domain family member 10B	TBC1D10B
@@ -1905,47 +1842,46 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 12637	Dengue virus	P14339.1	Genome polyprotein	UniProt	P17763	Genome polyprotein	
 12637	Dengue virus	P14337.2	Genome polyprotein	UniProt	P17763	Genome polyprotein	
 12637	Dengue virus	P18356.2	Genome polyprotein	UniProt	P17763	Genome polyprotein	
-10407	Hepatitis B virus (hepatitis B virus (HBV))	P17391.1	Core antigen	UniProt	P0C573	External core antigen	C
-10407	Hepatitis B virus (hepatitis B virus (HBV))	P29178.1	Core antigen	UniProt	P0C573	External core antigen	C
-10407	Hepatitis B virus (hepatitis B virus (HBV))	P03154.1	External core antigen	UniProt	P0C573	External core antigen	C
-10407	Hepatitis B virus (hepatitis B virus (HBV))	P0C6H2.1	External core antigen	UniProt	P0C573	External core antigen	C
-10407	Hepatitis B virus (hepatitis B virus (HBV))	P31868.2	Large envelope protein	UniProt	P03138	Large envelope protein	S
-10407	Hepatitis B virus (hepatitis B virus (HBV))	Q67926.1	Large envelope protein	UniProt	P03138	Large envelope protein	S
-10407	Hepatitis B virus (hepatitis B virus (HBV))	P31873.2	Large envelope protein	UniProt	P03138	Large envelope protein	S
-10407	Hepatitis B virus (hepatitis B virus (HBV))	Q69606.2	Large envelope protein	UniProt	P03138	Large envelope protein	S
-10407	Hepatitis B virus (hepatitis B virus (HBV))	P87745.1	Large envelope protein	UniProt	P03138	Large envelope protein	S
-10407	Hepatitis B virus (hepatitis B virus (HBV))	Q76R62.2	Large envelope protein	UniProt	P03138	Large envelope protein	S
-10407	Hepatitis B virus (hepatitis B virus (HBV))	Q80IU6.1	Large envelope protein	UniProt	P03138	Large envelope protein	S
-10407	Hepatitis B virus (hepatitis B virus (HBV))	Q91C35.1	Large envelope protein	UniProt	P03138	Large envelope protein	S
-10407	Hepatitis B virus (hepatitis B virus (HBV))	Q4R1R8.1	Large envelope protein	UniProt	P03138	Large envelope protein	S
-10407	Hepatitis B virus (hepatitis B virus (HBV))	Q9IBI3.1	Large envelope protein	UniProt	P03138	Large envelope protein	S
-10407	Hepatitis B virus (hepatitis B virus (HBV))	Q9QBF0.1	Large envelope protein	UniProt	P03138	Large envelope protein	S
-10407	Hepatitis B virus (hepatitis B virus (HBV))	Q9E6S4.1	Large envelope protein	UniProt	P03138	Large envelope protein	S
-10407	Hepatitis B virus (hepatitis B virus (HBV))	Q67925.1	Protein P	UniProt	P03156	Protein P	P
-10407	Hepatitis B virus (hepatitis B virus (HBV))	Q69605.1	Protein P	UniProt	P03156	Protein P	P
-10407	Hepatitis B virus (hepatitis B virus (HBV))	P0C690.1	Protein P	UniProt	P03156	Protein P	P
-10407	Hepatitis B virus (hepatitis B virus (HBV))	P87744.1	Protein P	UniProt	P03156	Protein P	P
-10407	Hepatitis B virus (hepatitis B virus (HBV))	Q69602.1	Protein P	UniProt	P03156	Protein P	P
-10407	Hepatitis B virus (hepatitis B virus (HBV))	Q69028.2	Protein P	UniProt	P03156	Protein P	P
-10407	Hepatitis B virus (hepatitis B virus (HBV))	Q4R1R9.1	Protein P	UniProt	P03156	Protein P	P
-10407	Hepatitis B virus (hepatitis B virus (HBV))	Q9IBI4.1	Protein P	UniProt	P03156	Protein P	P
-10407	Hepatitis B virus (hepatitis B virus (HBV))	Q9PX62.1	Protein P	UniProt	P03156	Protein P	P
-10407	Hepatitis B virus (hepatitis B virus (HBV))	P0C686.1	Protein X	UniProt	P03165	Protein X	X
-10407	Hepatitis B virus (hepatitis B virus (HBV))	Q67923.1	Protein X	UniProt	P03165	Protein X	X
-10407	Hepatitis B virus (hepatitis B virus (HBV))	Q99HR6.1	Protein X	UniProt	P03165	Protein X	X
-10407	Hepatitis B virus (hepatitis B virus (HBV))	Q69027.1	Protein X	UniProt	P03165	Protein X	X
-10407	Hepatitis B virus (hepatitis B virus (HBV))	Q80IU5.1	Protein X	UniProt	P03165	Protein X	X
-10407	Hepatitis B virus (hepatitis B virus (HBV))	Q81102.1	Capsid protein	UniProt	P0C573	External core antigen	C
-10407	Hepatitis B virus (hepatitis B virus (HBV))	Q76R61.1	Capsid protein	UniProt	P0C573	External core antigen	C
-10407	Hepatitis B virus (hepatitis B virus (HBV))	P31870.1	P protein	UniProt	P03156	Protein P	P
-10407	Hepatitis B virus (hepatitis B virus (HBV))	BAN75949.1	preS1/preS2/S envelope protein	UniProt	P03138	Large envelope protein	S
-10407	Hepatitis B virus (hepatitis B virus (HBV))	CCK33757.1	preS1/preS2/S protein	UniProt	P03138	Large envelope protein	S
-10407	Hepatitis B virus (hepatitis B virus (HBV))	P17398.3	Major surface antigen precursor	UniProt	P03138	Large envelope protein	S
-10407	Hepatitis B virus (hepatitis B virus (HBV))	Q02317.3	Major surface antigen precursor	UniProt	P03138	Large envelope protein	S
+10407	Hepatitis B virus (hepatitis B virus (HBV))	P17391.1	Core antigen	UniProt	P0C767	External core antigen	C
+10407	Hepatitis B virus (hepatitis B virus (HBV))	P29178.1	Core antigen	UniProt	P0C767	External core antigen	C
+10407	Hepatitis B virus (hepatitis B virus (HBV))	P03154.1	External core antigen	UniProt	P0C767	External core antigen	C
+10407	Hepatitis B virus (hepatitis B virus (HBV))	P0C6H2.1	External core antigen	UniProt	P0C767	External core antigen	C
+10407	Hepatitis B virus (hepatitis B virus (HBV))	P31868.2	Large envelope protein	UniProt	Q76R62	Large envelope protein	S
+10407	Hepatitis B virus (hepatitis B virus (HBV))	Q67926.1	Large envelope protein	UniProt	Q76R62	Large envelope protein	S
+10407	Hepatitis B virus (hepatitis B virus (HBV))	P31873.2	Large envelope protein	UniProt	Q76R62	Large envelope protein	S
+10407	Hepatitis B virus (hepatitis B virus (HBV))	Q69606.2	Large envelope protein	UniProt	Q76R62	Large envelope protein	S
+10407	Hepatitis B virus (hepatitis B virus (HBV))	P87745.1	Large envelope protein	UniProt	Q76R62	Large envelope protein	S
+10407	Hepatitis B virus (hepatitis B virus (HBV))	Q76R62.2	Large envelope protein	UniProt	Q76R62	Large envelope protein	S
+10407	Hepatitis B virus (hepatitis B virus (HBV))	Q80IU6.1	Large envelope protein	UniProt	Q76R62	Large envelope protein	S
+10407	Hepatitis B virus (hepatitis B virus (HBV))	Q91C35.1	Large envelope protein	UniProt	Q76R62	Large envelope protein	S
+10407	Hepatitis B virus (hepatitis B virus (HBV))	Q4R1R8.1	Large envelope protein	UniProt	Q76R62	Large envelope protein	S
+10407	Hepatitis B virus (hepatitis B virus (HBV))	Q9IBI3.1	Large envelope protein	UniProt	Q76R62	Large envelope protein	S
+10407	Hepatitis B virus (hepatitis B virus (HBV))	Q9QBF0.1	Large envelope protein	UniProt	Q76R62	Large envelope protein	S
+10407	Hepatitis B virus (hepatitis B virus (HBV))	Q9E6S4.1	Large envelope protein	UniProt	Q76R62	Large envelope protein	S
+10407	Hepatitis B virus (hepatitis B virus (HBV))	Q67925.1	Protein P	UniProt	Q69028	Protein P	P
+10407	Hepatitis B virus (hepatitis B virus (HBV))	Q69605.1	Protein P	UniProt	Q69028	Protein P	P
+10407	Hepatitis B virus (hepatitis B virus (HBV))	P0C690.1	Protein P	UniProt	Q69028	Protein P	P
+10407	Hepatitis B virus (hepatitis B virus (HBV))	P87744.1	Protein P	UniProt	Q69028	Protein P	P
+10407	Hepatitis B virus (hepatitis B virus (HBV))	Q69602.1	Protein P	UniProt	Q69028	Protein P	P
+10407	Hepatitis B virus (hepatitis B virus (HBV))	Q69028.2	Protein P	UniProt	Q69028	Protein P	P
+10407	Hepatitis B virus (hepatitis B virus (HBV))	Q4R1R9.1	Protein P	UniProt	Q69028	Protein P	P
+10407	Hepatitis B virus (hepatitis B virus (HBV))	Q9IBI4.1	Protein P	UniProt	Q69028	Protein P	P
+10407	Hepatitis B virus (hepatitis B virus (HBV))	Q9PX62.1	Protein P	UniProt	Q69028	Protein P	P
+10407	Hepatitis B virus (hepatitis B virus (HBV))	P0C686.1	Protein X	UniProt	Q69027	Protein X	X
+10407	Hepatitis B virus (hepatitis B virus (HBV))	Q67923.1	Protein X	UniProt	Q69027	Protein X	X
+10407	Hepatitis B virus (hepatitis B virus (HBV))	Q99HR6.1	Protein X	UniProt	Q69027	Protein X	X
+10407	Hepatitis B virus (hepatitis B virus (HBV))	Q69027.1	Protein X	UniProt	Q69027	Protein X	X
+10407	Hepatitis B virus (hepatitis B virus (HBV))	Q80IU5.1	Protein X	UniProt	Q69027	Protein X	X
+10407	Hepatitis B virus (hepatitis B virus (HBV))	Q81102.1	Capsid protein	UniProt	Q76R61	Capsid protein	C
+10407	Hepatitis B virus (hepatitis B virus (HBV))	Q76R61.1	Capsid protein	UniProt	Q76R61	Capsid protein	C
+10407	Hepatitis B virus (hepatitis B virus (HBV))	P31870.1	P protein	UniProt	Q69028	Protein P	P
+10407	Hepatitis B virus (hepatitis B virus (HBV))	BAN75949.1	preS1/preS2/S envelope protein	UniProt	Q76R62	Large envelope protein	S
+10407	Hepatitis B virus (hepatitis B virus (HBV))	CCK33757.1	preS1/preS2/S protein	UniProt	Q76R62	Large envelope protein	S
+10407	Hepatitis B virus (hepatitis B virus (HBV))	P17398.3	Major surface antigen precursor	UniProt	Q76R62	Large envelope protein	S
+10407	Hepatitis B virus (hepatitis B virus (HBV))	Q02317.3	Major surface antigen precursor	UniProt	Q76R62	Large envelope protein	S
 11103	Hepatitis C virus	O39927.3	Genome polyprotein	UniProt	P27958	Genome polyprotein	
 11103	Hepatitis C virus	Q00269.3	Genome polyprotein	UniProt	P27958	Genome polyprotein	
 11103	Hepatitis C virus	266820	Genome polyprotein	UniProt	P27958	Genome polyprotein	
-11103	Hepatitis C virus	Q9QAX1	Genome polyprotein	UniProt	P27958	Genome polyprotein	
 11103	Hepatitis C virus	P27959.3	Genome polyprotein	UniProt	P27958	Genome polyprotein	
 11103	Hepatitis C virus	P27960.3	Genome polyprotein	UniProt	P27958	Genome polyprotein	
 11103	Hepatitis C virus	P27961.3	Genome polyprotein	UniProt	P27958	Genome polyprotein	
@@ -1958,44 +1894,44 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 11103	Hepatitis C virus	ADV39999.1	polyprotein	UniProt	P27958	Genome polyprotein	
 11103	Hepatitis C virus	ACM69038.1	polyprotein	UniProt	P27958	Genome polyprotein	
 11103	Hepatitis C virus	AEB71616.2	polyprotein	UniProt	P27958	Genome polyprotein	
-11520	Influenza B virus	ACR15721.1	hemagglutinin	UniProt	A4D4W4	Hemagglutinin	HA
-11520	Influenza B virus	P68760.1	Hemagglutinin	UniProt	A4D4W4	Hemagglutinin	HA
-11520	Influenza B virus	1248250884	hemagglutinin [Influenza B virus (B/Hong Kong/CUHK22332/2003)]	UniProt	A4D4W4	Hemagglutinin	HA
-11520	Influenza B virus	ATG29690.1	hemagglutinin [Influenza B virus (B/Hong Kong/CUHK4259/1997)]	UniProt	A4D4W4	Hemagglutinin	HA
-11520	Influenza B virus	1248250824	hemagglutinin [Influenza B virus (B/Hong Kong/CUHK43052/2005)]	UniProt	A4D4W4	Hemagglutinin	HA
-11520	Influenza B virus	CAH03832.1	matrix protein	UniProt	A4D4W5	Matrix protein 1	M
-11520	Influenza B virus	P06816.1	Matrix protein 1	UniProt	A4D4W5	Matrix protein 1	M
-11520	Influenza B virus	1142419281	matrix protein 1 [Influenza B virus (B/Florida/104/2016)]	UniProt	A4D4W5	Matrix protein 1	M
-11520	Influenza B virus	937174063	matrix protein 1 [Influenza B virus (B/Idaho/03/2015)]	UniProt	A4D4W5	Matrix protein 1	M
-11520	Influenza B virus	937173042	matrix protein 1 [Influenza B virus (B/Minnesota/12/2015)]	UniProt	A4D4W5	Matrix protein 1	M
-11520	Influenza B virus	ANE29705.1	matrix protein 1 [Influenza B virus (B/Washington/06/2016)]	UniProt	A4D4W5	Matrix protein 1	M
-11520	Influenza B virus	1191950243	matrix protein 1 [Influenza B virus (B/Wisconsin/19/2017)]	UniProt	A4D4W5	Matrix protein 1	M
-11520	Influenza B virus	814944606	matrix protein 1, partial [Influenza B virus (B/Beijing/FL35/2013)]	UniProt	A4D4W5	Matrix protein 1	M
-11520	Influenza B virus	AFN54655.1	matrix protein 1, partial [Influenza B virus (B/Managua/5024.01/2008)]	UniProt	A4D4W5	Matrix protein 1	M
-11520	Influenza B virus	407767770	matrix protein 1, partial [Influenza B virus (B/Ningbo/429/2010)]	UniProt	A4D4W5	Matrix protein 1	M
-11520	Influenza B virus	283137957	neuraminidase [Influenza B virus (B/Gyeongnam/3775/2008)]	UniProt	Q8B9X6	Neuraminidase	
-11520	Influenza B virus	ABL76379.1	neuraminidase [Influenza B virus (B/Houston/B67/2000)]	UniProt	Q8B9X6	Neuraminidase	
-11520	Influenza B virus	327506305	neuraminidase [Influenza B virus (B/Shimane/100/2002)]	UniProt	Q8B9X6	Neuraminidase	
-11520	Influenza B virus	324033764	neuraminidase, partial [Influenza B virus (B/Denmark/11/2011)]	UniProt	Q8B9X6	Neuraminidase	
-11520	Influenza B virus	AAU00995.1	nonstructural protein [Influenza B virus (B/Beijing/76/98)]	UniProt	A4D4X1	Non-structural protein 1	NS
-11520	Influenza B virus	P12595.1	Non-structural protein 1	UniProt	A4D4X1	Non-structural protein 1	NS
-11520	Influenza B virus	ATP83375.1	nonstructural protein 1 [Influenza B virus (B/Connecticut/46/2017)]	UniProt	A4D4X1	Non-structural protein 1	NS
-11520	Influenza B virus	ATP83690.1	nonstructural protein 1 [Influenza B virus (B/Virginia/19/2017)]	UniProt	A4D4X1	Non-structural protein 1	NS
-11520	Influenza B virus	AOT97599.1	nucleoprotein [Influenza B virus (B/Colorado/34/2016)]	UniProt	A4D4W9	Nucleoprotein	NP
-11520	Influenza B virus	AOT97885.1	nucleoprotein [Influenza B virus (B/New York/42/2016)]	UniProt	A4D4W9	Nucleoprotein	NP
-11520	Influenza B virus	APC24008.1	nucleoprotein [Influenza B virus (B/New York/WC-LVD-15-021/2015)]	UniProt	A4D4W9	Nucleoprotein	NP
-11520	Influenza B virus	AOT97555.1	nucleoprotein [Influenza B virus (B/Pennsylvania/46/2016)]	UniProt	A4D4W9	Nucleoprotein	NP
-11520	Influenza B virus	225676901	nucleoprotein [Influenza B virus (B/Taiwan/45/2007)]	UniProt	A4D4W9	Nucleoprotein	NP
-11520	Influenza B virus	AOT96928.1	nucleoprotein [Influenza B virus (B/Washington/80/2016)]	UniProt	A4D4W9	Nucleoprotein	NP
-11520	Influenza B virus	AGX16455.1	polymerase PB2 [Influenza B virus (B/Brisbane/40/2008)]	UniProt	A4D4X4	Polymerase basic protein 2	PB2
-11520	Influenza B virus	AML42321.1	polymerase PB2 [Influenza B virus (B/Singapore/Tt716/2013)]	UniProt	A4D4X4	Polymerase basic protein 2	PB2
-11520	Influenza B virus	6647764	RNA-directed RNA polymerase catalytic subunit	UniProt	A4D4X3	RNA-directed RNA polymerase catalytic subunit	PB1
-11520	Influenza B virus	APC59870.1	polymerase PB1 [Influenza B virus (B/Iowa/25/2016)]	UniProt	A4D4X3	RNA-directed RNA polymerase catalytic subunit	PB1
-11520	Influenza B virus	ARQ85408.1	polymerase PB1 [Influenza B virus (B/Louisiana/06/2017)]	UniProt	A4D4X3	RNA-directed RNA polymerase catalytic subunit	PB1
-11520	Influenza B virus	224021562	polymerase PB1 [Influenza B virus (B/Mississippi/UR06-0477/2007)]	UniProt	A4D4X3	RNA-directed RNA polymerase catalytic subunit	PB1
-11520	Influenza B virus	AGZ59995.1	polymerase PA [Influenza B virus (B/Auckland/158/2008)]	UniProt	A4D4X2	Polymerase acidic protein	PA
-11520	Influenza B virus	ARS00018.1	polymerase PA [Influenza B virus (B/Ohio/10/2017)]	UniProt	A4D4X2	Polymerase acidic protein	PA
-11520	Influenza B virus	ARR99634.1	polymerase PA [Influenza B virus (B/Vermont/04/2017)]	UniProt	A4D4X2	Polymerase acidic protein	PA
+11520	Influenza B virus	ACR15721.1	hemagglutinin	UniProt	P03460	Hemagglutinin	HA
+11520	Influenza B virus	P68760.1	Hemagglutinin	UniProt	P03460	Hemagglutinin	HA
+11520	Influenza B virus	1248250884	hemagglutinin [Influenza B virus (B/Hong Kong/CUHK22332/2003)]	UniProt	P03460	Hemagglutinin	HA
+11520	Influenza B virus	ATG29690.1	hemagglutinin [Influenza B virus (B/Hong Kong/CUHK4259/1997)]	UniProt	P03460	Hemagglutinin	HA
+11520	Influenza B virus	1248250824	hemagglutinin [Influenza B virus (B/Hong Kong/CUHK43052/2005)]	UniProt	P03460	Hemagglutinin	HA
+11520	Influenza B virus	CAH03832.1	matrix protein	UniProt	P03489	Matrix protein 1	M
+11520	Influenza B virus	P06816.1	Matrix protein 1	UniProt	P03489	Matrix protein 1	M
+11520	Influenza B virus	1142419281	matrix protein 1 [Influenza B virus (B/Florida/104/2016)]	UniProt	P03489	Matrix protein 1	M
+11520	Influenza B virus	937174063	matrix protein 1 [Influenza B virus (B/Idaho/03/2015)]	UniProt	P03489	Matrix protein 1	M
+11520	Influenza B virus	937173042	matrix protein 1 [Influenza B virus (B/Minnesota/12/2015)]	UniProt	P03489	Matrix protein 1	M
+11520	Influenza B virus	ANE29705.1	matrix protein 1 [Influenza B virus (B/Washington/06/2016)]	UniProt	P03489	Matrix protein 1	M
+11520	Influenza B virus	1191950243	matrix protein 1 [Influenza B virus (B/Wisconsin/19/2017)]	UniProt	P03489	Matrix protein 1	M
+11520	Influenza B virus	814944606	matrix protein 1, partial [Influenza B virus (B/Beijing/FL35/2013)]	UniProt	P03489	Matrix protein 1	M
+11520	Influenza B virus	AFN54655.1	matrix protein 1, partial [Influenza B virus (B/Managua/5024.01/2008)]	UniProt	P03489	Matrix protein 1	M
+11520	Influenza B virus	407767770	matrix protein 1, partial [Influenza B virus (B/Ningbo/429/2010)]	UniProt	P03489	Matrix protein 1	M
+11520	Influenza B virus	283137957	neuraminidase [Influenza B virus (B/Gyeongnam/3775/2008)]	UniProt	P03474	Neuraminidase	
+11520	Influenza B virus	ABL76379.1	neuraminidase [Influenza B virus (B/Houston/B67/2000)]	UniProt	P03474	Neuraminidase	
+11520	Influenza B virus	327506305	neuraminidase [Influenza B virus (B/Shimane/100/2002)]	UniProt	P03474	Neuraminidase	
+11520	Influenza B virus	324033764	neuraminidase, partial [Influenza B virus (B/Denmark/11/2011)]	UniProt	P03474	Neuraminidase	
+11520	Influenza B virus	AAU00995.1	nonstructural protein [Influenza B virus (B/Beijing/76/98)]	UniProt	P03502	Non-structural protein 1	NS
+11520	Influenza B virus	P12595.1	Non-structural protein 1	UniProt	P03502	Non-structural protein 1	NS
+11520	Influenza B virus	ATP83375.1	nonstructural protein 1 [Influenza B virus (B/Connecticut/46/2017)]	UniProt	P03502	Non-structural protein 1	NS
+11520	Influenza B virus	ATP83690.1	nonstructural protein 1 [Influenza B virus (B/Virginia/19/2017)]	UniProt	P03502	Non-structural protein 1	NS
+11520	Influenza B virus	AOT97599.1	nucleoprotein [Influenza B virus (B/Colorado/34/2016)]	UniProt	P04665	Nucleoprotein	NP
+11520	Influenza B virus	AOT97885.1	nucleoprotein [Influenza B virus (B/New York/42/2016)]	UniProt	P04665	Nucleoprotein	NP
+11520	Influenza B virus	APC24008.1	nucleoprotein [Influenza B virus (B/New York/WC-LVD-15-021/2015)]	UniProt	P04665	Nucleoprotein	NP
+11520	Influenza B virus	AOT97555.1	nucleoprotein [Influenza B virus (B/Pennsylvania/46/2016)]	UniProt	P04665	Nucleoprotein	NP
+11520	Influenza B virus	225676901	nucleoprotein [Influenza B virus (B/Taiwan/45/2007)]	UniProt	P04665	Nucleoprotein	NP
+11520	Influenza B virus	AOT96928.1	nucleoprotein [Influenza B virus (B/Washington/80/2016)]	UniProt	P04665	Nucleoprotein	NP
+11520	Influenza B virus	AGX16455.1	polymerase PB2 [Influenza B virus (B/Brisbane/40/2008)]	UniProt	Q9QLL6	Polymerase basic protein 2	PB2
+11520	Influenza B virus	AML42321.1	polymerase PB2 [Influenza B virus (B/Singapore/Tt716/2013)]	UniProt	Q9QLL6	Polymerase basic protein 2	PB2
+11520	Influenza B virus	6647764	RNA-directed RNA polymerase catalytic subunit	UniProt	P07832	RNA-directed RNA polymerase catalytic subunit	PB1
+11520	Influenza B virus	APC59870.1	polymerase PB1 [Influenza B virus (B/Iowa/25/2016)]	UniProt	P07832	RNA-directed RNA polymerase catalytic subunit	PB1
+11520	Influenza B virus	ARQ85408.1	polymerase PB1 [Influenza B virus (B/Louisiana/06/2017)]	UniProt	P07832	RNA-directed RNA polymerase catalytic subunit	PB1
+11520	Influenza B virus	224021562	polymerase PB1 [Influenza B virus (B/Mississippi/UR06-0477/2007)]	UniProt	P07832	RNA-directed RNA polymerase catalytic subunit	PB1
+11520	Influenza B virus	AGZ59995.1	polymerase PA [Influenza B virus (B/Auckland/158/2008)]	UniProt	Q9QLI9	Polymerase acidic protein	PA
+11520	Influenza B virus	ARS00018.1	polymerase PA [Influenza B virus (B/Ohio/10/2017)]	UniProt	Q9QLI9	Polymerase acidic protein	PA
+11520	Influenza B virus	ARR99634.1	polymerase PA [Influenza B virus (B/Vermont/04/2017)]	UniProt	Q9QLI9	Polymerase acidic protein	PA
 1773	Mycobacterium tuberculosis	AGE68882.1	1-deoxy-D-xylulose 5-phosphate reductoisomerase dxr	UniProt	P9WNS1	1-deoxy-D-xylulose 5-phosphate reductoisomerase	dxr
 1773	Mycobacterium tuberculosis	AGE69015.1	3-isopropylmalate dehydrogenase	UniProt	P9WKK9	3-isopropylmalate dehydrogenase	leuB
 1773	Mycobacterium tuberculosis	EFD18826.1	3-isopropylmalate dehydrogenase leuB	UniProt	P9WKK9	3-isopropylmalate dehydrogenase	leuB
@@ -2012,11 +1948,11 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 1773	Mycobacterium tuberculosis	KAN93589.1	branched-chain-amino-acid aminotransferase IlvE	UniProt	P9WQ75	Branched-chain-amino-acid aminotransferas	ilvE
 1773	Mycobacterium tuberculosis	EFD41402.1	cation transporter P-type ATPase ctpJ	UniProt	P9WPT9	Cation-transporting P-type ATPase B	ctpB
 1773	Mycobacterium tuberculosis	EFD44075.1	chaperone dnaJ2	UniProt	P9WNV7	Chaperone protein DnaJ	dnaJ2
-1773	Mycobacterium tuberculosis	EFD44636.1	chromosome partition protein smc	UniProt	P9WGF3	Chromosome partition protein Smc	smc
+1773	Mycobacterium tuberculosis	EFD44636.1 	chromosome partition protein smc	UniProt	P9WGF3	Chromosome partition protein Smc	
 1773	Mycobacterium tuberculosis	EFD41843.1	cobyric acid synthase cobQ1	UniProt	P9WP95	Cobyric acid synthase	cobQ
 1773	Mycobacterium tuberculosis	ZP_03538104.1	D-3-phosphoglycerate dehydrogenase	UniProt	P9WNX3	D-3-phosphoglycerate dehydrogenase	serA
 1773	Mycobacterium tuberculosis	EFD48597.1	D-3-phosphoglycerate dehydrogenase serA1	UniProt	EFD48597.1	D-3-phosphoglycerate dehydrogenase serA1	
-1773	Mycobacterium tuberculosis	EFD15689.1	DNA gyrase subunit B gyrB	UniProt	P9WG45	DNA gyrase subunit	gyrB
+1773	Mycobacterium tuberculosis	EFD15689.1	DNA gyrase subunit B gyrB	UniProt	P9WG45	DNA gyrase subunit 	gyrB
 1773	Mycobacterium tuberculosis	EFD42281.1	DNA-directed RNA polymerase subunit beta rpoB	UniProt	P9WGY9	DNA-directed RNA polymerase subunit beta	rpoB
 1773	Mycobacterium tuberculosis	EFD43630.1	epoxide hydrolase ephB	UniProt	I6YC03	Epoxide hydrolase B	ephB
 1773	Mycobacterium tuberculosis	ZP_03532868.1	Esat-6 like protein esxL (Esat-6 like protein 4)	UniProt	P9WNJ5	ESAT-6-like protein EsxL	esxL
@@ -2065,15 +2001,15 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 9606	Homo sapiens	SRC250678	E3 ubiquitin-protein ligase	UniProt	H3BP71	E3 ubiquitin protein ligase	RNF40
 9606	Homo sapiens	SRC558173	Negative elongation factor A	UniProt	Q9H3P2	Negative elongation factor A	NELFA
 9606	Homo sapiens	SRC566434	Cytosolic carboxypeptidase 4	UniProt	Q96MI9	Cytosolic carboxypeptidase 4	AGBL1
-9606	Homo sapiens	SRC586094	Alpha-enolase	UniProt	P06733	Alpha-enolase	
+9606	Homo sapiens	SRC586094	Alpha-enolase	UniProt	P06733 	Alpha-enolase	
 9606	Homo sapiens	SRC594725	Histone deacetylase complex subunit SAP130	UniProt	Q9H0E3	Histone deacetylase complex subunit SAP130	SAP130
 9606	Homo sapiens	SRC558171	histone acetyltransferase KAT6A	UniProt	Q92794	Histone acetyltransferase KAT6A	KAT6A
 9606	Homo sapiens	SRC558175	casein kinase I isoform alpha	UniProt	P48729	Casein kinase I isoform alpha	CSNK1A1
 9606	Homo sapiens	SRC557964	DnaJ homolog subfamily C member 7	UniProt	Q99615	DnaJ homolog subfamily C member 7	DNAJC7
 9606	Homo sapiens	SRC558003	Rab GTPase-activating protein 1-like	UniProt	Q5R372	Rab GTPase-activating protein 1-like	RABGAP1L
-9606	Homo sapiens	SRC558184	Myelin-associated neurite-outgrowth inhibitor	UniProt	A1KXE4	Myelin-associated neurite-outgrowth inhibitor	FAM168B
+9606	Homo sapiens	SRC558184	Myelin-associated neurite-outgrowth inhibitor 	UniProt	A1KXE4	Myelin-associated neurite-outgrowth inhibitor	FAM168B
 9606	Homo sapiens	SRC566473	Heterogeneous nuclear ribonucleoprotein H	UniProt	P31943	Heterogeneous nuclear ribonucleoprotein H	HNRNPH1
-9606	Homo sapiens	SRC558187	ubiquitin conjugating enzyme E2 C	UniProt	O00762	Ubiquitin-conjugating enzyme E2 C	UBE2C
+9606	Homo sapiens	SRC558187	ubiquitin conjugating enzyme E2 C 	UniProt	O00762	Ubiquitin-conjugating enzyme E2 C	UBE2C
 9606	Homo sapiens	SRC558176	Stearoyl-CoA desaturase	UniProt	O00767	Stearoyl-CoA desaturase	SCD
 9606	Homo sapiens	SRC558186	Class E basic helix-loop-helix protein 40	UniProt	O14503	Class E basic helix-loop-helix protein 40	BHLHE40
 9606	Homo sapiens	SRC557963	probable phospholipid-transporting ATPase IIB	UniProt	O43861	Probable phospholipid-transporting ATPase IIB	ATP9B
@@ -2090,9 +2026,9 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 9606	Homo sapiens	SRC558185	40S ribosomal protein S8	UniProt	P62241	40S ribosomal protein S8	RPS8
 9606	Homo sapiens	SRC558010	AP-2 complex subunit beta	UniProt	P63010	AP-2 complex subunit beta	AP2B1
 9606	Homo sapiens	SRC557970	cleavage stimulation factor subunit 3	UniProt	Q12996	Cleavage stimulation factor subunit 3	CSTF3
-9606	Homo sapiens	SRC558179	kinesin like protein KIF22	UniProt	Q14807	Kinesin-like protein KIF22	KIF22
+9606	Homo sapiens	SRC558179	kinesin like protein KIF22 	UniProt	Q14807	Kinesin-like protein KIF22	KIF22
 9606	Homo sapiens	SRC558012	homocysteine-responsive endoplasmic reticulum-resident ubiquitin-like domain member 1 protein	UniProt	Q15011	Homocysteine-responsive endoplasmic reticulum-resident ubiquitin-like domain member 1 protein	HERPUD1
-9606	Homo sapiens	SRC558180	lanosterol 14-alpha demethylase	UniProt	Q16850	Lanosterol 14-alpha demethylase	CYP51A1
+9606	Homo sapiens	SRC558180	lanosterol 14-alpha demethylase 	UniProt	Q16850	Lanosterol 14-alpha demethylase	CYP51A1
 9606	Homo sapiens	SRC566321	Trafficking protein particle complex subunit 3-like protein	UniProt	Q5T215	Trafficking protein particle complex subunit 3-like protein	TRAPPC3L
 9606	Homo sapiens	SRC558162	KN motif and ankyrin repeat domain-containing protein 2	UniProt	Q63ZY3	KN motif and ankyrin repeat domain-containing protein 2	KANK2
 9606	Homo sapiens	SRC558188	tubulin polyglutamylase complex subunit 2	UniProt	Q68CL5	Tubulin polyglutamylase complex subunit 2	TPGS2
@@ -2169,7 +2105,7 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 334203	Mupapillomavirus 1 (Human papillomavirus - 1)	SRC626873	major capsid protein L1	UniProt	P03099	Major capsid protein L1	L1
 10090	Mus musculus (mouse)	SRC585811	Cell adhesion molecule-related/down-regulated by oncogenes	UniProt	Q32MD9	Cell adhesion molecule-related/down-regulated by oncogenes	Cdon
 10090	Mus musculus (mouse)	SRC620014	Mitochondrial carrier homolog 1	UniProt	Q791T5	Mitochondrial carrier homolog 1	Mtch1
-10090	Mus musculus (mouse)	SRC40037	Myelin basic protein (MBP)	UniProt	P04370	Myelin basic protein	Mbp
+10090	Mus musculus (mouse)	SRC40037	Myelin basic protein (MBP) 	UniProt	P04370	Myelin basic protein	Mbp
 10090	Mus musculus (mouse)	SRC410584	solute carrier family 2, facilitated glucose transporter member 7	UniProt	P0C6A1	Solute carrier family 2, facilitated glucose transporter member 7	Slc2a7
 10090	Mus musculus (mouse)	SRC543288	retrotransposon-like protein 1	UniProt	Q7M732	Retrotransposon-like protein 1	Rtl1
 10090	Mus musculus (mouse)	SRC543290	transport and Golgi organization protein 1 homolog	UniProt	Q8BI84	Transport and Golgi organization protein 1 homolog	Mia3
@@ -2217,7 +2153,7 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 85552	Scylla paramamosain (green mud crab)	SRC594439	Sarcoplasmic calcium-binding protein	UniProt	I2DDG2	Sarcoplasmic calcium-binding protein	
 1280	Staphylococcus aureus	SRC626855	6-phospho-beta-glucosidase	UniProt	Q2G2D5	6-phospho-beta-galactosidase	lacG
 10090	Mus musculus (mouse)	SRC562679	Metalloreductase STEAP1	UniProt	Q9CWR7	Metalloreductase STEAP1	Steap1
-11520	Influenza B virus (Influenza virus type B)	SRC572450	Neuraminidase	UniProt	Q8B9X6	Neuraminidase	
+11520	Influenza B virus (Influenza virus type B)	SRC572450	Neuraminidase	UniProt	P03474	Neuraminidase	
 10090	Mus musculus (mouse)	SRC582461	Myc-associated zinc finger protein	UniProt	P56671	Myc-associated zinc finger protein	Maz
 10090	Mus musculus (mouse)	SRC582462	NAC-alpha domain-containing protein 1	UniProt	Q5SWP3	NAC-alpha domain-containing protein 1	Nacad
 10090	Mus musculus (mouse)	SRC582463	telomere-associated protein RIF1	UniProt	Q6PR54	Telomere-associated protein RIF1	Rif1
@@ -2231,62 +2167,62 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 1335626	Middle East respiratory syndrome-related coronavirus	SRC642203	Spike glycoprotein	UniProt	K9N5Q8	Spike glycoprotein	S
 11983	Norwalk virus	SRC276219	Capsid protein VP1	UniProt	Q83884	Capsid protein VP1	ORF2
 338079	African green monkey simian foamy virus	SRC626766	env protein	UniProt	P27399	Envelope glycoprotein gp130	env
-10497	African swine fever virus	SRC562685	BA71V-C315R	UniProt	A0A0A1E121	C315R	Ba71V-068
-197	Campylobacter jejuni	SRC607564	Flagellar basal body L-ring protein	UniProt	Q9PPM0	Flagellar L-ring protein	flgH
-310542	Chimpanzee adenovirus	SRC265180	hexon	UniProt	G9G854	hexon protein	L3
+10497	African swine fever virus	SRC562685	BA71V-C315R	UniProt	Q65160	Initiation factor TFIIB homolog	Ba71V-068
+197	Campylobacter jejuni	SRC607564	Flagellar basal body L-ring protein 	UniProt	Q9PPM0	Flagellar L-ring protein	flgH
+310542	Chimpanzee adenovirus	SRC265180	hexon 	UniProt	G9G854	hexon protein	L3
 9606	Homo sapiens (human)	SRC558013	proteasome activator 28 subunit beta	UniProt	Q9UL46	Proteasome activator complex subunit 2	PSME2
 9606	Homo sapiens (human)	SRC627141	Macrophage stimulating 1 protein	UniProt	P26927	Hepatocyte growth factor-like protein	MST1
-9606	Homo sapiens (human)	SRC594509	Polyglutamine binding protein variant 1	UniProt	O60828	Polyglutamine-binding protein 1	PQBP1
-9606	Homo sapiens (human)	SRC595867	cytochrome C oxidase III	UniProt	P00414	Cytochrome c oxidase subunit 3	MT-CO3
-9606	Homo sapiens (human)	SRC603499	NADH dehydrogenase subunit 5	UniProt	P03915	NADH-ubiquinone oxidoreductase chain 5	MT-ND5
+9606	Homo sapiens (human)	SRC594509	Polyglutamine binding protein variant 1 	UniProt	O60828	Polyglutamine-binding protein 1	PQBP1
+9606	Homo sapiens (human)	SRC595867	cytochrome C oxidase III	UniProt	P00414	Cytochrome c oxidase subunit 3 	MT-CO3
+9606	Homo sapiens (human)	SRC603499	NADH dehydrogenase subunit 5 	UniProt	P03915	NADH-ubiquinone oxidoreductase chain 5 	MT-ND5
 9606	Homo sapiens (human)	SRC566808	Olfactory receptor 2B7	UniProt	P58173	Olfactory receptor 2B6	OR2B6
 9606	Homo sapiens (human)	SRC558009	AP-1 complex subunit beta-1, Beta-adaptin 1	UniProt	Q10567	AP-1 complex subunit beta-1	AP1B1
-9606	Homo sapiens (human)	SRC566454	Coiled-coil domain-containing protein 142 (Fragment)	UniProt	Q17RM4	Coiled-coil domain-containing protein 142	CCDC142
-9606	Homo sapiens (human)	SRC566791	zinc finger FYVE domain-containing protein 17	UniProt	Q7Z3T8	Zinc finger FYVE domain-containing protein 16	ZFYVE16
-9606	Homo sapiens (human)	SRC566412	phosphoglycerate mutase	UniProt	Q8N0Y7	Probable phosphoglycerate mutase 4	PGAM4
-9606	Homo sapiens (human)	SRC566422	Cilia- and flagella-associated protein 61 (fragment)	UniProt	Q8NHU2	Cilia- and flagella-associated protein 61	CFAP61
+9606	Homo sapiens (human)	SRC566454	Coiled-coil domain-containing protein 142 (Fragment)	UniProt	Q17RM4	Coiled-coil domain-containing protein 142 	CCDC142
+9606	Homo sapiens (human)	SRC566791	zinc finger FYVE domain-containing protein 17 	UniProt	Q7Z3T8	Zinc finger FYVE domain-containing protein 16	ZFYVE16
+9606	Homo sapiens (human)	SRC566412	phosphoglycerate mutase	UniProt	Q8N0Y7	Probable phosphoglycerate mutase 4 	PGAM4
+9606	Homo sapiens (human)	SRC566422	Cilia- and flagella-associated protein 61 (fragment)	UniProt	Q8NHU2	Cilia- and flagella-associated protein 61 	CFAP61
 9606	Homo sapiens (human)	SRC558183	Cyclin Pas1/PHO80 domain containing protein 1	UniProt	Q9BV87	Protein CNPPD1	CNPPD1
-9606	Homo sapiens (human)	SRC558014	Card containing MAGUK protein 2	UniProt	Q9BXL6	Caspase recruitment domain-containing protein 14	CARD14
-9606	Homo sapiens (human)	SRC551888	RNA exonuclease 2	UniProt	Q9Y3B8	Oligoribonuclease, mitochondrial	REXO2
-9606	Homo sapiens (human)	SRC282545	ATP synthase 6	UniProt	P00846	ATP synthase subunit a	MT-ATP6
-9606	Homo sapiens (human)	SRC282546	NADH dehydrogenase 4	UniProt	P03905	NADH-ubiquinone oxidoreductase chain 4	MT-ND4
-9606	Homo sapiens (human)	SRC522013	Histone H3	UniProt	P84243	Histone H3.3	H3-3B
-9606	Homo sapiens (human)	SRC541540	serine protease 3	UniProt	P35030	Trypsin-3	PRSS3
+9606	Homo sapiens (human)	SRC558014	Card containing MAGUK protein 2 	UniProt	Q9BXL6	Caspase recruitment domain-containing protein 14	CARD14
+9606	Homo sapiens (human)	SRC551888	RNA exonuclease 2	UniProt	Q9Y3B8	Oligoribonuclease, mitochondrial 	REXO2
+9606	Homo sapiens (human)	SRC282545	ATP synthase 6 	UniProt	P00846	ATP synthase subunit a	MT-ATP6
+9606	Homo sapiens (human)	SRC282546	NADH dehydrogenase 4 	UniProt	P03905	NADH-ubiquinone oxidoreductase chain 4	MT-ND4
+9606	Homo sapiens (human)	SRC522013	Histone H3 	UniProt	P84243	Histone H3.3	H3-3B
+9606	Homo sapiens (human)	SRC541540	serine protease 3 	UniProt	P35030	Trypsin-3	PRSS3
 9606	Homo sapiens (human)	SRC541543	N-acetyllactosaminide alpha-1,3-galactosyltransferase	UniProt	Q4G0N0	Inactive N-acetyllactosaminide alpha-1,3-galactosyltransferase	GGTA1
-9606	Homo sapiens (human)	SRC543296	protein kinase, cAMP-dependent, regulatory, type II	UniProt	P13861	cAMP-dependent protein kinase type II-alpha regulatory subunit	PRKAR2A
-9606	Homo sapiens (human)	SRC549449	Cysteine rich with EGF like domains 2	UniProt	Q6UXH1	Protein disulfide isomerase CRELD2	CRELD2
+9606	Homo sapiens (human)	SRC543296	protein kinase, cAMP-dependent, regulatory, type II 	UniProt	P13861	cAMP-dependent protein kinase type II-alpha regulatory subunit	PRKAR2A
+9606	Homo sapiens (human)	SRC549449	Cysteine rich with EGF like domains 2 	UniProt	Q6UXH1	Protein disulfide isomerase CRELD2	CRELD2
 9606	Homo sapiens (human)	SRC549762	olfactory receptor family subfamily A member 14	UniProt	Q8NGT9	Olfactory receptor 2A1/2A42	OR2A42
-9606	Homo sapiens (human)	SRC549763	zinc finger FYVE-type containing 19	UniProt	Q96K21	Abscission/NoCut checkpoint regulator	ZFYVE19
-9606	Homo sapiens (human)	SRC549765	TGFB-induced factor homeobox 1	UniProt	Q15583	Homeobox protein TGIF1	TGIF1
-9606	Homo sapiens (human)	SRC551375	Folate binding protein	UniProt	P15328	Folate receptor alpha	FOLR1
+9606	Homo sapiens (human)	SRC549763	zinc finger FYVE-type containing 19 	UniProt	Q96K21	Abscission/NoCut checkpoint regulator	ZFYVE19
+9606	Homo sapiens (human)	SRC549765	TGFB-induced factor homeobox 1 	UniProt	Q15583	Homeobox protein TGIF1	TGIF1
+9606	Homo sapiens (human)	SRC551375	Folate binding protein	UniProt	P15328	Folate receptor alpha 	FOLR1
 9606	Homo sapiens (human)	SRC551541	C1q receptor protein	UniProt	Q9NPY3	Complement component C1q receptor	CD93
-9606	Homo sapiens (human)	SRC620023	intestinal peptide-associated transporter HPT-1	UniProt	Q12864	Cadherin-17	CDH17
+9606	Homo sapiens (human)	SRC620023	intestinal peptide-associated transporter HPT-1 	UniProt	Q12864	Cadherin-17	CDH17
 9606	Homo sapiens (human)	SRC623923	inter-alpha-trypsin inhibitor family heavy chain-related protein (IHRP)	UniProt	Q14624	Inter-alpha-trypsin inhibitor heavy chain H4	ITIH4
-9606	Homo sapiens (human)	SRC7000	Skeletal muscle myosin heavy chain 1	UniProt	P12882	Myosin-1	MYH1
-9606	Homo sapiens (human)	SRC250676	synaptotagmin IX	UniProt	Q86SS6	synaptotagmin-9	SYT9
+9606	Homo sapiens (human)	SRC7000	Skeletal muscle myosin heavy chain 1 	UniProt	P12882	Myosin-1	MYH1
+9606	Homo sapiens (human)	SRC250676	synaptotagmin IX 	UniProt	Q86SS6	synaptotagmin-9	SYT9
 9606	Homo sapiens (human)	SRC250687	Zinc finger protein	UniProt	Q96GC6	zinc finger protein 274	ZNF274
-9606	Homo sapiens (human)	SRC565612	Met proto-oncogene variant 1	UniProt	P08581	Hepatocyte growth factor receptor	MET
-9606	Homo sapiens (human)	SRC566307	dystrophin isoform Dp260-1	UniProt	P11532	dystrophin	DMD
-9606	Homo sapiens (human)	SRC566353	myomegalin isoform 5	UniProt	Q5VU43	Myomegalin	PDE4DIP
+9606	Homo sapiens (human)	SRC565612	Met proto-oncogene variant 1 	UniProt	P08581	Hepatocyte growth factor receptor	MET
+9606	Homo sapiens (human)	SRC566307	dystrophin isoform Dp260-1	UniProt	P11532	dystrophin 	DMD
+9606	Homo sapiens (human)	SRC566353	myomegalin isoform 5 	UniProt	Q5VU43	Myomegalin	PDE4DIP
 9606	Homo sapiens (human)	SRC566442	Transcription factor AP-1	UniProt	P05412	Transcription factor Jun	JUN
 9606	Homo sapiens (human)	SRC566789	A disintegrin and metalloprotease 34	UniProt	Q9BZ11	A disintegrin and metalloprotease 33	ADAM33
 9606	Homo sapiens (human)	SRC566804	Transmembrane protease serine 16	UniProt	P98073	Enteropeptidase	TMPRSS15
 9606	Homo sapiens (human)	SRC586144	protein phosphatase 1 catalytic subunit beta	UniProt	P62140	Serine/threonine-protein phosphatase PP1-beta catalytic subunit	PPP1CB
-9606	Homo sapiens (human)	SRC588681	SOGA family member 2	UniProt	Q9Y4B5	Microtubule cross-linking factor 1	MTCL1
-9606	Homo sapiens (human)	SRC588690	Methyltransferase-like protein 12, mitochondrial,	UniProt	A8MUP2	Citrate synthase-lysine N-methyltransferase CSKMT, mitochondrial	CSKMT
-10376	Human herpesvirus 4 (Epstein Barr virus)	SRC626743	BORF2	UniProt	P03190	Ribonucleoside-diphosphate reductase large subunit	RIR1
-10798	Human parvovirus B19 (B19 virus)	SRC279981	VP1 capsid protein	UniProt	Q9PZT0	Minor capsid protein VP1	vp
-11908	Human T-cell leukemia virus type I (Human T cell leukemia virus type 1)	SRC626770	gag protein	UniProt	P14076	Gag polyprotein	gag
-11908	Human T-cell leukemia virus type I (Human T cell leukemia virus type 1)	SRC240587	Rev protein	UniProt	P0C206	Protein Rex	
-10090	Mus musculus (mouse)	SRC543289	suppressor of zeste 12 homolog	UniProt	Q80U70	Polycomb protein Suz12	Suz12
-10090	Mus musculus (mouse)	SRC543304	polymerase (RNA) mitochondrial (DNA directed)	UniProt	Q6P1E7	DNA-directed primase/polymerase protein	
-10090	Mus musculus (mouse)	SRC543305	Bicc1 protein	UniProt	Q99MQ1	Protein bicaudal C homolog 1	Bicc1
+9606	Homo sapiens (human)	SRC588681	SOGA family member 2 	UniProt	Q9Y4B5	Microtubule cross-linking factor 1 	MTCL1
+9606	Homo sapiens (human)	SRC588690	Methyltransferase-like protein 12, mitochondrial, 	UniProt	A8MUP2	Citrate synthase-lysine N-methyltransferase CSKMT, mitochondrial	CSKMT
+10376	Human herpesvirus 4 (Epstein Barr virus)	SRC626743	BORF2 	UniProt	P03190	Ribonucleoside-diphosphate reductase large subunit	RIR1
+10798	Human parvovirus B19 (B19 virus)	SRC279981	VP1 capsid protein 	UniProt	Q9PZT0	Minor capsid protein VP1	vp
+11908	Human T-cell leukemia virus type I (Human T cell leukemia virus type 1)	SRC626770	gag protein	UniProt	P03345	gag polyprotein	gag
+11908	Human T-cell leukemia virus type I (Human T cell leukemia virus type 1)	SRC240587	Rev protein 	UniProt	P0C205	Protein Rex	
+10090	Mus musculus (mouse)	SRC543289	suppressor of zeste 12 homolog 	UniProt	Q80U70	Polycomb protein Suz12	Suz12
+10090	Mus musculus (mouse)	SRC543304	polymerase (RNA) mitochondrial (DNA directed)	UniProt	Q6P1E7 	DNA-directed primase/polymerase protein	
+10090	Mus musculus (mouse)	SRC543305	Bicc1 protein 	UniProt	Q99MQ1	Protein bicaudal C homolog 1	Bicc1
 10090	Mus musculus (mouse)	SRC543306	mKIAA4060	UniProt	Q8C9W3	A disintegrin and metalloproteinase with thrombospondin motifs 2	Adamts2
-10090	Mus musculus (mouse)	SRC543323	noxin	UniProt	Q6NZG4	DNA damage-induced apoptosis suppressor protein	Ddias
-10090	Mus musculus (mouse)	SRC543326	E3 ubiquitin-protein ligase pellino	UniProt	Q8BST6	E3 ubiquitin-protein ligase pellino homolog 2	Peli2
+10090	Mus musculus (mouse)	SRC543323	noxin	UniProt	Q6NZG4	DNA damage-induced apoptosis suppressor protein 	Ddias
+10090	Mus musculus (mouse)	SRC543326	E3 ubiquitin-protein ligase pellino 	UniProt	Q8BST6	E3 ubiquitin-protein ligase pellino homolog 2	Peli2
 10090	Mus musculus (mouse)	SRC543329	nonconventional myosin-Va	UniProt	Q99104	Unconventional myosin-Va	Myo5a
-10090	Mus musculus (mouse)	SRC543330	PKHD1	UniProt	E9PZ36	Fibrocystin	Pkhd1
-10090	Mus musculus (mouse)	SRC543334	RIKEN cDNA 1700024G13	UniProt	Q3KNL4	UPF0728 protein C10orf53 homolog	
+10090	Mus musculus (mouse)	SRC543330	PKHD1 	UniProt	E9PZ36	Fibrocystin	Pkhd1
+10090	Mus musculus (mouse)	SRC543334	RIKEN cDNA 1700024G13 	UniProt	Q3KNL4	UPF0728 protein C10orf53 homolog	
 10090	Mus musculus (mouse)	SRC544037	prostaglandin D synthetase	UniProt	O09114	Prostaglandin-H2 D-isomerase	Ptgds
 10090	Mus musculus (mouse)	SRC544038	polyhomeotic-like 2	UniProt	Q9QWH1	Polyhomeotic-like protein 2	Phc2
 10090	Mus musculus (mouse)	SRC544039	bol, boule-like protein	UniProt	Q924M5	Protein boule-like	Boll
@@ -2294,19 +2230,19 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 10090	Mus musculus (mouse)	SRC582464	Sdccag1 protein	UniProt	Q8CCP0	Ribosome quality control complex subunit NEMF	Nemf
 10090	Mus musculus (mouse)	SRC544009	Transcription factor TBLYM	UniProt	Q9JKD8	T-box transcription factor TBX21	Tbx21
 10090	Mus musculus (mouse)	SRC544010	solute carrier family 6	UniProt	Q6PGE7	Sodium-dependent proline transporter	Slc6a7
-10090	Mus musculus (mouse)	SRC544011	Gm51581	UniProt	Q6P9L4	Ubiquitin carboxyl-terminal hydrolase 49	Usp49
+10090	Mus musculus (mouse)	SRC544011	Gm51581 	UniProt	Q6P9L4	Ubiquitin carboxyl-terminal hydrolase 49	Usp49
 10090	Mus musculus (mouse)	SRC544015	Amyloid beta A4 protein	UniProt	P12023	Amyloid-beta precursor protein	App
 10090	Mus musculus (mouse)	SRC544016	enhancer of polycomb	UniProt	Q8C0I4	Enhancer of polycomb homolog 2	Epc2
 12131	rhinovirus B14 (Human rhinovirus B14)	SRC626758	polyprotein	UniProt	P03303	Genome polyprotein	
-11886	Rous sarcoma virus (Rous sarcoma virus RSV)	SRC279664	p60 src	UniProt	P03397	Envelope glycoprotein gp95	env
-6183	Schistosoma mansoni	SRC563021	Microexon gene 4	UniProt	P13492	Antigen 10-3	
-10245	Vaccinia virus (vaccinia virus VV)	SRC280002	Core phosphoprotein F17	UniProt	P07396	Phosphoprotein OPG062	OPG062
-10497	African swine fever virus (African swine fever virus ASF)	SRC562682	ASFV_G_ACD_00320	UniProt	A0A2X0RVL7	I267L	Ba71V-137
-10497	African swine fever virus (African swine fever virus ASF)	SRC562683	pC717R 2	UniProt	A0A0A1E0Q2	C717R	Ba71V-064
+11886	Rous sarcoma virus (Rous sarcoma virus RSV)	SRC279664	p60 src 	UniProt	P03397	Envelope glycoprotein gp95	env
+6183	Schistosoma mansoni	SRC563021	Microexon gene 4 	UniProt	P13492	Antigen 10-3	
+10245	Vaccinia virus (vaccinia virus VV)	SRC280002	Core phosphoprotein F17	UniProt	P68454	Phosphoprotein F17	OPG062
+10497	African swine fever virus (African swine fever virus ASF)	SRC562682	ASFV_G_ACD_00320	UniProt	Q65205	Uncharacterized protein I267L	Ba71V-137
+10497	African swine fever virus (African swine fever virus ASF)	SRC562683	pC717R 2	UniProt	Q65156	Uncharacterized protein C717R	Ba71V-064
 83560	Chlamydia muridarum (agent of mouse pneumonitis)	SRC626765	porin	UniProt	P75024	Major outer membrane porin	ompA
-83558	Chlamydia pneumoniae	SRC627063	Chaperonin GroEL	UniProt	P31681	Chaperonin GroEL 1	groEL1
-9606	Homo sapiens (human)	SRC292627	alpha 2,8-sialyltransferase	UniProt	D6RIA3	Uncharacterized protein C4orf54	C4orf54
-9606	Homo sapiens (human)	SRC320358	DEAD/H box polypeptide 11 like 12	UniProt	Q96FC9	ATP-dependent DNA helicase DDX11	DDX11
+83558	Chlamydia pneumoniae	SRC627063	Chaperonin GroEL 	UniProt	P31681	Chaperonin GroEL 1	groEL1
+9606	Homo sapiens (human)	SRC292627	alpha 2,8-sialyltransferase 	UniProt	D6RIA3	Uncharacterized protein C4orf54	C4orf54
+9606	Homo sapiens (human)	SRC320358	DEAD/H box polypeptide 11 like 12 	UniProt	Q96FC9	ATP-dependent DNA helicase DDX11	DDX11
 9606	Homo sapiens (human)	SRC517406	Ribonuclease P protein subunit p25	UniProt	Q9BUL9	Ribonuclease P protein subunit p25	RPP25
 9606	Homo sapiens (human)	SRC623920	Glutathione S-transferase	UniProt	P28161	Glutathione S-transferase Mu 2	GSTM2
 9606	Homo sapiens (human)	SRC623924	platelet-activating factor acetylhydrolase	UniProt	Q13093	Platelet-activating factor acetylhydrolase	PLA2G7
@@ -2314,7 +2250,7 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 9606	Homo sapiens (human)	SRC248884	CD5 antigen	UniProt	P10643	Complement component C7	C7
 9606	Homo sapiens (human)	SRC250796	interferon, gamma-inducible protein	UniProt	P13284	Gamma-interferon-inducible lysosomal thiol reductase	IFI30
 6954	Dermatophagoides farinae (American house dust mite)	SRC589593	Der f 1 allergen	IUIS	Q58A71	Der f 1	
-6954	Dermatophagoides farinae (American house dust mite)	SRC589604	Der f Mag 29 allergen	UniProt	A0A922HN71	Heat shock cognate 71 kDa protein	MAG29
+6954	Dermatophagoides farinae (American house dust mite)	SRC589604	Der f Mag 29 allergen	IUIS	A0A922HN71	Der f 29	MAG29
 6956	Dermatophagoides pteronyssinus (European house dust mite)	SRC589043	dipeptidyl peptidase 1-like	IUIS	P08176	Der p 1	
 6956	Dermatophagoides pteronyssinus (European house dust mite)	SRC589543	alpha-amylase-like	IUIS	P08176	Der p 1	
 1773	Mycobacterium tuberculosis	SRC648519	ABC transporter ATP-binding protein	UniProt	P9WQK1	Uncharacterized ABC transporter ATP-binding protein Rv0986	Rv0986
@@ -2334,7 +2270,7 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 9606	Homo sapiens (human)	SRC647554	Golgi-associated RAB2 interactor protein 6	UniProt	Q8NEG0	Golgi-associated RAB2 interactor protein 6	GARIN6
 9606	Homo sapiens (human)	SRC647555	AHNAK nucleoprotein 2	UniProt	Q8IVF2	Protein AHNAK2	AHNAK2
 9606	Homo sapiens (human)	SRC647556	sarcoma antigen 1	UniProt	Q9NXZ1	Sarcoma antigen 1	SAGE1
-9606	Homo sapiens (human)	SRC643963	proprotein convertase subtilisin/kexin type 9	UniProt	Q8NBP7	Proprotein convertase subtilisin/kexin type 9	PCSK9
+9606	Homo sapiens (human)	SRC643963	proprotein convertase subtilisin/kexin type 9	UniProt	Q8NBP7	Proprotein convertase subtilisin/kexin type 9 	PCSK9
 129470	Micrurus surinamensis	SRC643906	three-finger toxin (3FTx)	UniProt	P86097	Three-finger toxin MS3	
 9606	Homo sapiens (human)	SRC643763	Wilms tumor protein	UniProt	P19544	Wilms tumor protein	WT1
 235	Brucella abortus	SRC643734	enolase	UniProt	Q2YPV0	Enolase	eno
@@ -2353,7 +2289,7 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 10090	Mus musculus (mouse)	SRC643554	Unconventional myosin-IXb	UniProt	Q9QY06	Unconventional myosin-IXb	Myo9b
 10090	Mus musculus (mouse)	SRC643547	Protein phosphatase 1 regulatory subunit 3F	UniProt	Q9JIG4	Protein phosphatase 1 regulatory subunit 3F	Ppp1r3f
 10090	Mus musculus (mouse)	SRC643548	Intersectin-1 (Fragment)	UniProt	Q9Z0R4	Intersectin-1	Itsn1
-10090	Mus musculus (mouse)	SRC643549	SEC23-interacting protein	UniProt	Q6NZC7	SEC23-interacting protein	
+10090	Mus musculus (mouse)	SRC643549	SEC23-interacting protein	UniProt	Q6NZC7 	SEC23-interacting protein	
 10090	Mus musculus (mouse)	SRC643537	Osteopontin (Fragment)	UniProt	P10923	Osteopontin	Spp1
 10090	Mus musculus (mouse)	SRC643538	Serine/threonine-protein kinase ATR	UniProt	Q9JKK8	Serine/threonine-protein kinase ATR	Atr
 10090	Mus musculus (mouse)	SRC643539	Enteropeptidase	UniProt	P97435	Enteropeptidase	Tmprss15
@@ -2420,20 +2356,20 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 10090	Mus musculus (mouse)	SRC643433	Protease, serine 3	UniProt	P07146	Anionic trypsin-2	Prss2
 10090	Mus musculus (mouse)	SRC643434	Hemoglobin subunit beta-2	UniProt	P02089	Hemoglobin subunit beta-2	Hbb-b2
 10090	Mus musculus (mouse)	SRC643435	Albumin	UniProt	P07724	Albumin	Alb
-4565	Triticum aestivum	SRC635385	high-molecular-weight glutenin subunit 2.6	UniProt	P02862	Glutenin, high molecular weight subunit PC237	
-4565	Triticum aestivum	SRC635383	alpha-gliadin	UniProt	P04725	Alpha/beta-gliadin A-V	
-4565	Triticum aestivum	SRC635382	high-molecular-weight glutenin subunit 1Ay21	UniProt	P08488	Glutenin, high molecular weight subunit 12	
+4565	Triticum aestivum	SRC635385	high-molecular-weight glutenin subunit 2.6	IUIS	P02862	Tri a 26	
+4565	Triticum aestivum	SRC635383	alpha-gliadin	IUIS	P04725	Tri a 21	
+4565	Triticum aestivum	SRC635382	high-molecular-weight glutenin subunit 1Ay21	IUIS	P08488	Tri a 26	
 333760	Human papillomavirus type 16	SRC635266	Regulatory protein E2	UniProt	P03120	Regulatory protein E2	E2
 333760	Human papillomavirus type 16	SRC635265	Replication protein E1	UniProt	P03114	Replication protein E1	E1
 9606	Homo sapiens (human)	SRC630931	Protein PRR14L	UniProt	Q5THK1	Protein PRR14L	PRR14L
 9606	Homo sapiens (human)	SRC630932	N-acetylgalactosaminyltransferase 7	UniProt	Q86SF2	N-acetylgalactosaminyltransferase 7	GALNT7
-9606	Homo sapiens (human)	SRC630933	Neuron navigator 1	UniProt	Q8NEY1	Neuron navigator 1	NAV1
+9606	Homo sapiens (human)	SRC630933	Neuron navigator 1	UniProt	Q8NEY1	Neuron navigator 1 	NAV1
 9606	Homo sapiens (human)	SRC630934	Cytokine receptor common subunit beta	UniProt	P32927	Cytokine receptor common subunit beta	CSF2RB
 9606	Homo sapiens (human)	SRC630935	CUB and sushi domain-containing protein 2	UniProt	Q7Z408	CUB and sushi domain-containing protein 2	CSMD2
 9606	Homo sapiens (human)	SRC630936	POZ-, AT hook-, and zinc finger-containing protein 1	UniProt	Q9HBE1	POZ-, AT hook-, and zinc finger-containing protein 1	PATZ1
 9606	Homo sapiens (human)	SRC630937	Polypyrimidine tract-binding protein 3	UniProt	O95758	Polypyrimidine tract-binding protein 3	PTBP3
-10497	African swine fever virus	SRC626685	Inner membrane protein p54	UniProt	B2MUM6	Inner membrane protein p54	Ba71V-126
-10497	African swine fever virus	SRC620059	CD2v	UniProt	A0A0A7W5A6	CD2 homolog	Ba71V-058
+10497	African swine fever virus	SRC626685	Inner membrane protein p54	UniProt	Q65194	Inner membrane protein p54	Ba71V-126
+10497	African swine fever virus	SRC620059	CD2v	UniProt	Q89501	CD2 homolog	Ba71V-058
 10090	Mus musculus (mouse)	SRC293737	Serotransferrin	UniProt	Q921I1	Serotransferrin	Tf
 9606	Homo sapiens (human)	SRC602012	enhancer of zeste homolog 2	UniProt	Q15910	Histone-lysine N-methyltransferase EZH2	EZH2
 9606	Homo sapiens (human)	SRC250731	B-lymphocyte antigen CD20	UniProt	P11836	B-lymphocyte antigen CD20	MS4A1
@@ -2452,8 +2388,8 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 9606	Homo sapiens (human)	SRC648770	Rho guanine nucleotide exchange factor 15	UniProt	O94989	Rho guanine nucleotide exchange factor 15	ARHGEF15
 9606	Homo sapiens (human)	SRC648771	synaptotagmin 8	UniProt	Q8NBV8	Synaptotagmin-8	SYT8
 9606	Homo sapiens (human)	SRC648772	cytochrome P450 family 2 subfamily A member 6	UniProt	P11509	Cytochrome P450 2A6	CYP2A6
-9606	Homo sapiens (human)	SRC648773	oxysterol binding protein like 2	UniProt	Q9H1P3	Oxysterol-binding protein-related protein 2	
-9606	Homo sapiens (human)	SRC648774	dedicator of cytokinesis 9	UniProt	Q9BZ29	Dedicator of cytokinesis protein 9	
+9606	Homo sapiens (human)	SRC648773	oxysterol binding protein like 2	UniProt	Q9H1P3 	Oxysterol-binding protein-related protein 2	
+9606	Homo sapiens (human)	SRC648774	dedicator of cytokinesis 9	UniProt	Q9BZ29 	Dedicator of cytokinesis protein 9	
 9606	Homo sapiens (human)	SRC648775	zinc finger protein 717	UniProt	Q9BY31	Zinc finger protein 717	ZNF717
 9606	Homo sapiens (human)	SRC280203	collagen type XI alpha 1 chain	UniProt	P12107	Collagen alpha-1(XI) chain	COL11A1
 9606	Homo sapiens (human)	SRC659146	tripartite motif containing 16 like (pseudogene)	UniProt	Q309B1	Tripartite motif-containing protein 16-like protein	TRIM16L
@@ -2475,7 +2411,7 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 9606	Homo sapiens (human)	SRC660097	E3 ubiquitin-protein ligase UBR3	UniProt	Q6ZT12	E3 ubiquitin-protein ligase UBR3	UBR3
 9606	Homo sapiens (human)	SRC660102	PTEN induced kinase 1	UniProt	Q9BXM7	Serine/threonine-protein kinase PINK1, mitochondrial	PINK1
 9606	Homo sapiens (human)	SRC660103	neurofascin	UniProt	O94856	Neurofascin	NFASC
-509628	hepatitis e virus type 3	SRC660249	polyprotein	UniProt	Q81862	Non-structural polyprotein pORF1	ORF1
+509628	hepatitis e virus type 3	SRC660249	polyprotein 	UniProt	Q81862	Non-structural polyprotein pORF1	ORF1
 9606	Homo sapiens (human)	SRC661948	Pancreatic lipase-related protein 3	UniProt	Q17RR3	Pancreatic lipase-related protein 3	PNLIPRP3
 10090	Mus musculus (mouse)	SRC663127	Aquaporin 4	UniProt	P55088	Aquaporin-4	Aqp4
 10090	Mus musculus (mouse)	SRC663147	L-dopachrome tautomerase	UniProt	P29812	L-dopachrome tautomerase	Dct
@@ -2483,20 +2419,156 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 9606	Homo sapiens (human)	SRC663400	anoctamin-7	UniProt	Q6IWH7	Anoctamin-7	ANO7
 9606	Homo sapiens (human)	SRC663635	mucin-2	UniProt	Q02817	Mucin-2	MUC2
 9606	Homo sapiens (human)	SRC541544	leukocyte immunoglobulin like receptor A6	UniProt	Q6PI73	Leukocyte immunoglobulin-like receptor subfamily A member 6	LILRA6
-9606	Homo sapiens (human)	SRC549447	G protein subunit beta 5	UniProt	O14775	Guanine nucleotide-binding protein subunit beta-5	
+9606	Homo sapiens (human)	SRC549447	G protein subunit beta 5	UniProt	O14775 	Guanine nucleotide-binding protein subunit beta-5	
 9606	Homo sapiens (human)	SRC258552	Phosphatidylinositol 4,5-bisphosphate 3-kinase catalytic subunit beta isoform	UniProt	P42338	Phosphatidylinositol 4,5-bisphosphate 3-kinase catalytic subunit beta isoform	PIK3CB
 9606	Homo sapiens (human)	SRC566371	Solute carrier organic anion transporter family member	UniProt	F5H094	SLCO1B3-SLCO1B7 readthrough transcript protein	SLCO1B3-SLCO1B7
 9606	Homo sapiens (human)	SRC566496	Serine/threonine/tyrosine-interacting-like protein 1	UniProt	Q9Y6J8	Serine/threonine/tyrosine-interacting-like protein 1	STYXL1
-9606	Homo sapiens (human)	SRC574262	cyclin B1	UniProt	P14635	G2/mitotic-specific cyclin-B1	CCNB1
+9606	Homo sapiens (human)	SRC574262	cyclin B1 	UniProt	P14635	G2/mitotic-specific cyclin-B1	CCNB1
 10359	human cytomegalovirus	SRC589633	ORFL267C	UniProt	F5HF44	Protein UL145	UL145
 10359	human cytomegalovirus	SRC590757	ORFL275W	UniProt	Q6SW87	Ribonucleoside-diphosphate reductase large subunit-like protein	RIR1
 10359	human cytomegalovirus	SRC590904	Early phosphoprotein p50	UniProt	Q6SW37	Early phosphoprotein p84	UL112/UL113
-4565	Triticum aestivum	SRC635386	low-molecular-weight glutenin subunit	UniProt	P10385	Glutenin, low molecular weight subunit	
-11096	Classical swine fever virus	SRC665191	polyprotein	UniProt	O09710	Genome polyprotein	
+4565	Triticum aestivum	SRC635386	low-molecular-weight glutenin subunit	IUIS	P10385	Tri a 36	
+11096	Classical swine fever virus	SRC665191	polyprotein	UniProt	P21530	Genome polyprotein	
 9606	Homo sapiens (human)	SRC665552	Ficolin-1	UniProt	O00602	Ficolin-1	FCN1
 9606	Homo sapiens (human)	SRC665553	C4A complement	UniProt	P0C0L4	Complement C4-A	C4A
 9606	Homo sapiens (human)	SRC665554	Chain A, Integrin alpha-M	UniProt	P11215	Integrin alpha-M	ITGAM
 9606	Homo sapiens (human)	SRC665555	Paxillin	UniProt	P49023	Paxillin	PXN
 31631	Human coronavirus OC43	SRC665558	Spike glycoprotein	UniProt	P36334	Spike glycoprotein	S
-10497	African swine fever virus	SRC665589	Ubiquitin-conjugating enzyme E2	UniProt	A0A2X0TKQ7	Ubiquitin-conjugating enzyme E2	UBC
-64320	Zika Virus	SRC665621	Genome polyprotein	UniProt	Q32ZE1	Genome polyprotein	
+10497	African swine fever virus	SRC665589	Ubiquitin-conjugating enzyme E2	UniProt	P27949	Ubiquitin-conjugating enzyme E2	UBC
+64320	Zika Virus 	SRC665621	Genome polyprotein	UniProt	Q32ZE1	Genome polyprotein	
+9606	Homo sapiens (human)	SRC670418	astrocytic phosphoprotein PEA-15	UniProt	Q15121	Astrocytic phosphoprotein PEA-15	
+9606	Homo sapiens (human)	SRC670419	Hepatoma-derived growth factor-related protein 2	UniProt	Q7Z4V5	Hepatoma-derived growth factor-related protein 2	
+9606	Homo sapiens (human)	SRC675356	T cell receptor beta variable 7-9	UniProt	P04435	T cell receptor beta variable 7-9	
+9606	Homo sapiens (human)	SRC675358	Transcription factor SOX-11	UniProt	P35716	Transcription factor SOX-11	
+9606	Homo sapiens (human)	SRC675360	Variable charge X-linked protein 2	UniProt	Q9H322	Variable charge X-linked protein 2	
+9606	Homo sapiens (human)	SRC675381	estrogen receptor	UniProt	P03372	Estrogen receptor	
+9606	Homo sapiens (human)	SRC680788	Serine/threonine-protein kinase B-raf	UniProt	P15056	Serine/threonine-protein kinase B-raf	
+390157	Senecavirus A (Seneca valley virus)	SRC681247	Genome polyprotein	UniProt	Q155Z9	Genome polyprotein	
+9606	Homo sapiens (human)	SRC681293	Rhox homeobox family member 2	UniProt	Q9BQY4	Rhox homeobox family member 2	
+9606	Homo sapiens (human)	SRC681569	CD44 molecule	UniProt	P16070	CD44 antigen	
+4565	Triticum aestivum	CAH04989.1	type 1 non-specific lipid transfer protein precursor	IUIS	D2T2K2	Tri a 14	
+4565	Triticum aestivum	CDM84252.1	unnamed protein product [Triticum aestivum]	IUIS	D2T2K2	Tri a 14	
+4565	Triticum aestivum	P24296.2	Non-specific lipid-transfer protein	IUIS	D2T2K2	Tri a 14	
+4565	Triticum aestivum	CBA13560.1	putative alpha-amylase inhibitor 0.28	IUIS	D2TGC3	Tri a 15	
+4565	Triticum aestivum	P01083.3	Alpha-amylase inhibitor 0.28 precursor (CIII) (WMAI-1)	IUIS	D2TGC3	Tri a 15	
+4565	Triticum aestivum	P10968.2	Agglutinin isolectin 1 precursor	IUIS	P10968	Tri a 18	
+4565	Triticum aestivum	ATY51569.1	omega gliadin-D1 [Triticum aestivum]	IUIS	Q402I5	Tri a 19	
+4565	Triticum aestivum	P04726.1	Alpha/beta-gliadin clone PW1215	IUIS	Q402I5	Tri a 19	
+4565	Triticum aestivum	Q402I5.1	Omega-5 gliadin	IUIS	Q402I5	Tri a 19	
+4565	Triticum aestivum	Q9FUW7.1	Omega gliadin storage protein	IUIS	Q402I5	Tri a 19	
+4565	Triticum aestivum	AAA34272.1	gamma gliadin precursor	IUIS	A0A060N479	Tri a 20	
+4565	Triticum aestivum	AAK84776.1	gamma-gliadin	IUIS	A0A060N479	Tri a 20	
+4565	Triticum aestivum	AAK84778.1	gamma-gliadin	IUIS	A0A060N480	Tri a 20	
+4565	Triticum aestivum	AAQ63856.1	gamma gliadin	IUIS	A0A060N481	Tri a 20	
+4565	Triticum aestivum	ACJ03453.1	gamma-gliadin [Triticum aestivum]	IUIS	A0A060N482	Tri a 20	
+4565	Triticum aestivum	ACJ03454.1	gamma-gliadin	IUIS	A0A060N483	Tri a 20	
+4565	Triticum aestivum	ACJ03462.1	gamma-gliadin	IUIS	A0A060N484	Tri a 20	
+4565	Triticum aestivum	ACJ03479.1	gamma-gliadin	IUIS	A0A060N485	Tri a 20	
+4565	Triticum aestivum	CAC94869.1	gamma gliadin [Triticum aestivum]	IUIS	A0A060N486	Tri a 20	
+4565	Triticum aestivum	M9TGF7.1	Gamma-gliadin 2	IUIS	A0A060N487	Tri a 20	
+4565	Triticum aestivum	M9TLK0.1	Gamma-gliadin 9	IUIS	A0A060N488	Tri a 20	
+4565	Triticum aestivum	P08079.1	Gamma-gliadin	IUIS	A0A060N489	Tri a 20	
+4565	Triticum aestivum	P08453.1	Gamma-gliadin	IUIS	A0A060N490	Tri a 20	
+4565	Triticum aestivum	P21292.1	Gamma-gliadin	IUIS	A0A060N491	Tri a 20	
+4565	Triticum aestivum	Q6EEX0	Gamma gliadin	IUIS	A0A060N492	Tri a 20	
+4565	Triticum aestivum	Q8L6B2.1	Gamma gliadin	IUIS	A0A060N493	Tri a 20	
+4565	Triticum aestivum	Q8L6B3	Gamma gliadin	IUIS	A0A060N494	Tri a 20	
+4565	Triticum aestivum	Q94G97	Gamma-gliadin	IUIS	A0A060N495	Tri a 20	
+4565	Triticum aestivum	SRC626953	75k gamma secalin	IUIS	A0A060N496	Tri a 20	
+4565	Triticum aestivum	A0A0K2QJY6.1	Gliadin alpha-B25	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	AFX69582.1	alpha-gliadin [Triticum aestivum]	IUIS	D2T2K4	Tri a 21	
+4565	Triticum aestivum	Q41545.1	(T. aestivum) alpha-type gliadin	IUIS	D2T2K5	Tri a 21	
+4565	Triticum aestivum	Q9M4L6.1	Alpha-gliadin	IUIS	D2T2K6	Tri a 21	
+4565	Triticum aestivum	Q9M4M0	Alpha-gliadin	IUIS	D2T2K7	Tri a 21	
+4565	Triticum aestivum	Q9M4M5.1	Alpha-gliadin	IUIS	D2T2K8	Tri a 21	
+4565	Triticum aestivum	Q9M4M6	Alpha-gliadin	IUIS	D2T2K9	Tri a 21	
+4565	Triticum aestivum	BAC76688.1	27K protein	IUIS	Q7Y1Z2	Tri a 27	
+4565	Triticum aestivum	P93692.1	Serpin-Z2B	IUIS	Q9ST57	Tri a 33	
+4565	Triticum aestivum	AAV92009.1	low molecular weight glutenin	IUIS	B2Y2Q7	Tri a 36	
+4565	Triticum aestivum	Q9ZNY0.1	Low molecular weight glutenin subunit	IUIS	B2Y2Q7	Tri a 36	
+4565	Triticum aestivum	AFQ60540.1	alpha purothionin	IUIS	Q9T0P1	Tri a 37	
+4212	Ambrosia artemisiifolia	CBK62693.1	ragweed homologue of Art v 1 precursor	IUIS	D4IHC0	Amb a 4	
+4212	Ambrosia artemisiifolia	CBW30992.1	putative pectate lyase precursor	IUIS	P27759	Amb a 1	
+4212	Ambrosia artemisiifolia	CBK62698.1	ragweed homologue of Art v 1 precursor	IUIS	D4IHC0	Amb a 4	
+3645	Bertholletia excelsa (Brazil nut)	BAA96554.1	2S albumin	IUIS	P04403	Ber e 1	
+9615	Canis lupus familiaris (dogs)	AHY24648.1	Can f 4 variant allergen precursor	IUIS	D7PBH4	Can f 4	
+9615	Canis lupus familiaris (dogs)	NP_001177855.1	allergen Can f 4 precursor	IUIS	D7PBH4	Can f 4	
+10141	Cavia porcellus (guinea pig)	CAX62131.1	allergen lipocalin Cav-p-6 precursor [Cavia porcellus]	IUIS	S0BDX9	Cav p 6	
+10141	Cavia porcellus (guinea pig)	519113840	allergen lipocalin Cav-p-6 precursor [Cavia porcellus]	IUIS	S0BDX9	Cav p 6	
+9606	Homo sapiens (human)	CAA76830.1	atopy related autoantigen CALC, partial	IUIS	O75785	Hom s 4	
+9606	Homo sapiens (human)	3297882	atopy related autoantigen CALC, partial [Homo sapiens]	IUIS	O75785	Hom s 4	
+9913	Bos taurus (bovine)	CAC37028.1	beta casein B	IUIS	P02666	Bos d 11	
+3818	Arachis hypogaea	A0A444YLI2	Cupin type-1 domain-containing protein	IUIS	Q647H2	Ara h 3	
+7154	Chironomus thummi (midge)        	P02230.1	Globin CTT-IV precursor	IUIS	P02229	Chi t 1	
+7154	Chironomus thummi (midge)        	AAA28257.1	hemoglobin D' precursor	IUIS	P02229	Chi t 1	
+7154	Chironomus thummi (midge)        	P02227.1	Globin CTT-VIII	IUIS	P02223	Chi t 3	
+3369	Cryptomeria japonica (Japanese cedar)	BAF45320.1	allergen Cry j 2, partial	IUIS	P43212	Cry j 2	
+3369	Cryptomeria japonica (Japanese cedar)	BAA06172.1	allergen	IUIS	P43212	Cry j 2	
+3369	Cryptomeria japonica (Japanese cedar)	BAC23084.1	allergen Cry j 2	IUIS	P43212	Cry j 2	
+3369	Cryptomeria japonica (Japanese cedar)	Q8H988	Allergen Cry j 2 (Pollen allergen)	IUIS	P43212	Cry j 2	
+3369	Cryptomeria japonica (Japanese cedar)	Q8H989	Allergen Cry j 2 (Pollen allergen)	IUIS	P43212	Cry j 2	
+3656	Cucumis melo (Oriental melon)	CAD92666.1	profilin	IUIS	Q5FX67	Cuc m 2	
+7962	Cyprinus carpio (carp)	P02618.1	Parvalbumin beta	IUIS	Q8UUS3	Cyp c 1	
+6954	Dermatophagoides farinae (American house dust mite)	AHX03180.1	Der f 4 allergen	IUIS	A0A023NMA7	Der f 4	
+6954	Dermatophagoides farinae (American house dust mite)	AIO08850.1	Der f 20 allergen, partial [Dermatophagoides farinae]	IUIS	A7XZJ2	Der f 20	
+6954	Dermatophagoides farinae (American house dust mite)	AIO08849.1	Der f 32 allergen [Dermatophagoides farinae]	IUIS	A0A088SCP3	Der f 32	
+6954	Dermatophagoides farinae (American house dust mite)	AJF93907.1	Der f 4 allergen [Dermatophagoides farinae]	IUIS	A0A023NMA7	Der f 4	
+6954	Dermatophagoides farinae (American house dust mite)	BBD75204.1	Apolipophorin [Dermatophagoides farinae]	IUIS	Q94507	Der f 14	
+6954	Dermatophagoides farinae (American house dust mite)	QBF67841.1	Der f 39 [Dermatophagoides farinae]	IUIS	A0A411P9C3	Der f 39	
+6954	Dermatophagoides farinae (American house dust mite)	QBO71451.1	Der f 38 allergen [Dermatophagoides farinae]	IUIS	A0A6B9VTT9	Der f 38	
+6954	Dermatophagoides farinae (American house dust mite)	QKU37014.1	heat shock cognate 70-like protein [Dermatophagoides farinae]	IUIS	L7V065	Der f 28	
+6954	Dermatophagoides farinae (American house dust mite)	XP_046909289.1	dipeptidyl peptidase 1-like [Dermatophagoides farinae]	IUIS	Q58A71	Der f 1	
+6954	Dermatophagoides farinae (American house dust mite)	ABU97470.1	arginine kinase [Dermatophagoides farinae]	IUIS	A7XZJ2	Der f 20	
+6954	Dermatophagoides farinae (American house dust mite)	KAH7644654.1	glutathione transferase mu class [Dermatophagoides farinae]	IUIS	A0A088SAH7	Der f 8	
+6954	Dermatophagoides farinae (American house dust mite)	AGC56215.1	glutathione S-transferase, partial [Dermatophagoides farinae]	IUIS	A0A088SAH7	Der f 8	
+6954	Dermatophagoides farinae (American house dust mite)	XP_046915420.1	thioredoxin-T-like [Dermatophagoides farinae]	IUIS	1085	Der f 40	
+6954	Dermatophagoides farinae (American house dust mite)	QED58140.1	calreticulin, partial [Dermatophagoides farinae]	IUIS	281	Der f 17	
+6954	Dermatophagoides farinae (American house dust mite)	KAH9501361.1	Inorganic pyrophosphatase [Dermatophagoides farinae]	IUIS	A0A088SCP3	Der f 32	
+6954	Dermatophagoides farinae (American house dust mite)	KAH7638326.1	der f mal f 6 allergen [Dermatophagoides farinae]	IUIS	P49276	Der f 6	
+6954	Dermatophagoides farinae (American house dust mite)	AAP35065.1	Der f Mal f 6 allergen [Dermatophagoides farinae]	IUIS	P49276	Der f 6	
+6954	Dermatophagoides farinae (American house dust mite)	QED58141.1	Der f Mal f 6 allergen, partial [Dermatophagoides farinae]	IUIS	P49276	Der f 6	
+6954	Dermatophagoides farinae (American house dust mite)	KAH7636402.1	calreticulin-like protein [Dermatophagoides farinae]	IUIS	281	Der f 17	
+6954	Dermatophagoides farinae (American house dust mite)	KAH7641628.1	mite allergen-like protein [Dermatophagoides farinae]	IUIS	A0A411P9B7	Der f 37	
+6954	Dermatophagoides farinae (American house dust mite)	KAH7639818.1	dipeptidyl peptidase 1 [Dermatophagoides farinae]	IUIS	Q58A71	Der f 1	
+6954	Dermatophagoides farinae (American house dust mite)	KAH7640192.1	apolipophorin [Dermatophagoides farinae]	IUIS	Q94507	Der f 14	
+6954	Dermatophagoides farinae (American house dust mite)	AAP35082.1	Der f Gal d 2 allergen	IUIS	A0A088SV31	Der f 27	
+6954	Dermatophagoides farinae (American house dust mite)	ABG23667.1	Der f 6, partial [Dermatophagoides farinae]	IUIS	P49276	Der f 6	
+6954	Dermatophagoides farinae (American house dust mite)	SRC343996	Der f Gal d 2 allergen	IUIS	A0A088SV31	Der f 27	
+6954	Dermatophagoides farinae (American house dust mite)	SRC602449	Der f 32 allergen [Dermatophagoides farinae]	IUIS	A0A088SCP3	Der f 32	
+6954	Dermatophagoides farinae (American house dust mite)	SRC589537	heat shock protein 70        	IUIS	L7V065	Der f 28	
+6954	Dermatophagoides farinae (American house dust mite)	SRC602002	Der f 38 allergen [Dermatophagoides farinae]	IUIS	A0A6B9VTT9	Der f 38	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	AAA28296.1	major house dust allergen	IUIS	P08176	Der p 1	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	XP_027198629.1	triosephosphate isomerase B-like [Dermatophagoides pteronyssinus]	IUIS	A0A291KYZ7	Der p 25	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	XP_027195426.1	mite group 2 allergen Der f 2-like [Dermatophagoides pteronyssinus]	IUIS	P49278	Der p 2	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	ATI08941.1	Der f 28-like allergen, partial [Dermatophagoides pteronyssinus]	IUIS	A0A481MR44	Der p 28	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	AUX14775.1	Der f 22-like protein [Dermatophagoides pteronyssinus]	IUIS	P49278	Der p 2	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	XP_027194247.1	heat shock cognate 71 kDa protein-like [Dermatophagoides pteronyssinus]	IUIS	A0A481MR44	Der p 28	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	ACD50950.1	Der p 20 allergen	IUIS	B2ZSY4	Der p 20	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	XP_027194332.1	arginine kinase-like isoform X1 [Dermatophagoides pteronyssinus]	IUIS	B2ZSY4	Der p 20	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	XP_027194158.1	chitinase-3-like protein 1 [Dermatophagoides pteronyssinus]	IUIS	Q4JK71	Der p 18	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	QAT18643.1	allergen Der p 32 [Dermatophagoides pteronyssinus]	IUIS	A0A088SCP3	Der p 32	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	XP_027199416.1	mite group 2 allergen Pso o 2-like [Dermatophagoides pteronyssinus]	IUIS	P49278	Der p 2	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	AAB69424.1	tropomyosin	IUIS	O18416	Der p 10	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	XP_027200494.1	heat shock cognate 71 kDa protein [Dermatophagoides pteronyssinus]	IUIS	A0A481MR44	Der p 28	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	XP_027202682.1	mite allergen Der f 6-like [Dermatophagoides pteronyssinus]	IUIS	P49277	Der p 6	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	XP_027203088.1	peptidase 1-like [Dermatophagoides pteronyssinus]	IUIS	P08176	Der p 1	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	XP_027203714.1	dipeptidyl peptidase 1-like [Dermatophagoides pteronyssinus]	IUIS	P08176	Der p 1	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	XP_027206364.1	alpha-amylase-like [Dermatophagoides pteronyssinus]	IUIS	Q9Y197	Der p 4	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	ABG76196.1	group 2 allergen Der p 2	IUIS	P49278	Der p 2	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	ACG58378.1	Der p 1 allergen precursor	IUIS	P08176	Der p 1	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	AFJ68069.1	Der p 2 variant 3, partial [Dermatophagoides pteronyssinus]	IUIS	P49278	Der p 2	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	1KTJ_B	Chain B, X-Ray Structure Of Der P 2, The Major House Dust Mite Allergen	IUIS	P49278	Der p 2	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	1A9V_A	Chain A, Tertiary Structure Of The Major House Dust Mite Allergen Der P 2, Nmr, 10 Structures	IUIS	P49278	Der p 2	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	P49274.2	Alpha-amylase	IUIS	Q9Y197	Der p 4	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	AAD38942.1	alpha-amylase	IUIS	Q9Y197	Der p 4	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	Q9Y197	Alpha-amylase	IUIS	Q9Y197	Der p 4	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	XP_027199252.1	glutathione S-transferase D2-like [Dermatophagoides pteronyssinus]	IUIS	P46419	Der p 8	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	AAY84565.1	group 15 allergen protein short isoform [Dermatophagoides pteronyssinus]	IUIS	Q4JK69	Der p 15	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	AGV05390.1	LytFM	IUIS	Q8MWR6	Der p 38	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	SRC589533	arginine kinase-like	IUIS	B2ZSY4	Der p 20	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	SRC602025	chymotrypsin-elastase inhibitor ixodidin-like	IUIS	P49277	Der p 6	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	SRC589603	glutathione S-transferase D2-like	IUIS	P46419	Der p 8	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	SRC594547	allergen Der p 32	IUIS	A0A088SCP3	Der p 32	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	SRC594426	chitinase-3-like protein 1	IUIS	Q4JK71	Der p 18	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	SRC589610	Der f 28-like allergen, partial [Dermatophagoides pteronyssinus]	IUIS	A0A481MR44	Der p 28	
+6956	Dermatophagoides pteronyssinus (European house dust mite)	SRC594545	der p 15	IUIS	Q4JK69	Der p 15	

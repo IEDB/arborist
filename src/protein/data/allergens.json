@@ -2245,6 +2245,11 @@
         "allergen_name": "Der f 3"
     },
     {
+        "uniprot_id": "A0A023NMA7",
+        "mapped_id": "A0A023NMA7",
+        "allergen_name": "Der f 4"
+    },
+    {
         "uniprot_id": "A8B8I1",
         "mapped_id": "A8B8I1",
         "allergen_name": "Der f 5"
@@ -2493,6 +2498,21 @@
         "uniprot_id": "L7N6F8",
         "mapped_id": "L7N6F8",
         "allergen_name": "Der p 23"
+    },
+    {
+        "uniprot_id": "A0A291KYZ7",
+        "mapped_id": "A0A291KYZ7",
+        "allergen_name": "Der p 25"
+    },
+    {
+        "uniprot_id": "A0A481MR44",
+        "mapped_id": "A0A481MR44",
+        "allergen_name": "Der p 28"
+    },
+    {
+        "uniprot_id": "A0A088SCP3",
+        "mapped_id": "A0A088SCP3",
+        "allergen_name": "Der p 32"
     },
     {
         "uniprot_id": "P39675",
@@ -5730,6 +5750,11 @@
         "allergen_name": "Der f 25"
     },
     {
+        "uniprot_id": "A0A088SV31",
+        "mapped_id": "A0A088SV31",
+        "allergen_name": "Der f 27"
+    },
+    {
         "uniprot_id": "A1KXG2",
         "mapped_id": "A1KXG2",
         "allergen_name": "Der f 29"
@@ -5748,6 +5773,11 @@
         "uniprot_id": "L7UZ91",
         "mapped_id": "L7UZ91",
         "allergen_name": "Der f 30"
+    },
+    {
+        "uniprot_id": "A0A088SCP3",
+        "mapped_id": "A0A088SCP3",
+        "allergen_name": "Der f 32"
     },
     {
         "uniprot_id": "A0A0F6N3V8",
@@ -6028,6 +6058,11 @@
         "uniprot_id": "A0A291KZC2",
         "mapped_id": "A0A291KZC2",
         "allergen_name": "Der f 36"
+    },
+    {
+        "uniprot_id": "A0A411P9B7",
+        "mapped_id": "A0A411P9B7",
+        "allergen_name": "Der f 37"
     },
     {
         "uniprot_id": "A0A291KZD3",
@@ -6313,6 +6348,11 @@
         "uniprot_id": "A0A6B9VTT9",
         "mapped_id": "A0A6B9VTT9",
         "allergen_name": "Der f 38"
+    },
+    {
+        "uniprot_id": "A0A411P9C3",
+        "mapped_id": "A0A411P9C3",
+        "allergen_name": "Der f 39"
     },
     {
         "uniprot_id": "F1PHB6",
