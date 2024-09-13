@@ -53,7 +53,7 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 4565	Triticum aestivum	ACN62213.1	omega-gliadin	IUIS	Q402I5	Tri a 19	
 4565	Triticum aestivum	ACQ83636.1	omega secalin	IUIS	Q402I5	Tri a 19	
 4565	Triticum aestivum	ADP95517.1	75k gamma secalin	IUIS	A0A060N479	Tri a 20	
-4565	Triticum aestivum	AFC98436.1	gamma-gliadin	IUIS	A0A060N479	Tri a 19	
+4565	Triticum aestivum	AFC98436.1	gamma-gliadin	IUIS	Q402I5	Tri a 19	
 4565	Triticum aestivum	AFQ13468.1	alpha-gliadin	IUIS	D2T2K3	Tri a 21	
 4565	Triticum aestivum	AGK83251.1	low-molecular-weight glutenin subunit	IUIS	B2Y2Q7	Tri a 36	
 4565	Triticum aestivum	AGK83306.1	low-molecular-weight glutenin subunit	IUIS	B2Y2Q7	Tri a 36	
@@ -2356,9 +2356,9 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 10090	Mus musculus (mouse)	SRC643433	Protease, serine 3	UniProt	P07146	Anionic trypsin-2	Prss2
 10090	Mus musculus (mouse)	SRC643434	Hemoglobin subunit beta-2	UniProt	P02089	Hemoglobin subunit beta-2	Hbb-b2
 10090	Mus musculus (mouse)	SRC643435	Albumin	UniProt	P07724	Albumin	Alb
-4565	Triticum aestivum	SRC635385	high-molecular-weight glutenin subunit 2.6	IUIS	P02862	Tri a 26	
-4565	Triticum aestivum	SRC635383	alpha-gliadin	IUIS	P04725	Tri a 21	
-4565	Triticum aestivum	SRC635382	high-molecular-weight glutenin subunit 1Ay21	IUIS	P08488	Tri a 26	
+4565	Triticum aestivum	SRC635385	high-molecular-weight glutenin subunit 2.6	IUIS	P10388	Tri a 26	
+4565	Triticum aestivum	SRC635383	alpha-gliadin	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	SRC635382	high-molecular-weight glutenin subunit 1Ay21	IUIS	P10388	Tri a 26	
 333760	Human papillomavirus type 16	SRC635266	Regulatory protein E2	UniProt	P03120	Regulatory protein E2	E2
 333760	Human papillomavirus type 16	SRC635265	Replication protein E1	UniProt	P03114	Replication protein E1	E1
 9606	Homo sapiens (human)	SRC630931	Protein PRR14L	UniProt	Q5THK1	Protein PRR14L	PRR14L
@@ -2427,7 +2427,7 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 10359	human cytomegalovirus	SRC589633	ORFL267C	UniProt	F5HF44	Protein UL145	UL145
 10359	human cytomegalovirus	SRC590757	ORFL275W	UniProt	Q6SW87	Ribonucleoside-diphosphate reductase large subunit-like protein	RIR1
 10359	human cytomegalovirus	SRC590904	Early phosphoprotein p50	UniProt	Q6SW37	Early phosphoprotein p84	UL112/UL113
-4565	Triticum aestivum	SRC635386	low-molecular-weight glutenin subunit	IUIS	P10385	Tri a 36	
+4565	Triticum aestivum	SRC635386	low-molecular-weight glutenin subunit	IUIS	B2Y2Q7	Tri a 36	
 11096	Classical swine fever virus	SRC665191	polyprotein	UniProt	P21530	Genome polyprotein	
 9606	Homo sapiens (human)	SRC665552	Ficolin-1	UniProt	O00602	Ficolin-1	FCN1
 9606	Homo sapiens (human)	SRC665553	C4A complement	UniProt	P0C0L4	Complement C4-A	C4A
@@ -2458,30 +2458,30 @@ Organism ID	Organism Name	Accession	Name	Parent Database	Parent Accession	Parent
 4565	Triticum aestivum	Q9FUW7.1	Omega gliadin storage protein	IUIS	Q402I5	Tri a 19	
 4565	Triticum aestivum	AAA34272.1	gamma gliadin precursor	IUIS	A0A060N479	Tri a 20	
 4565	Triticum aestivum	AAK84776.1	gamma-gliadin	IUIS	A0A060N479	Tri a 20	
-4565	Triticum aestivum	AAK84778.1	gamma-gliadin	IUIS	A0A060N480	Tri a 20	
-4565	Triticum aestivum	AAQ63856.1	gamma gliadin	IUIS	A0A060N481	Tri a 20	
-4565	Triticum aestivum	ACJ03453.1	gamma-gliadin [Triticum aestivum]	IUIS	A0A060N482	Tri a 20	
-4565	Triticum aestivum	ACJ03454.1	gamma-gliadin	IUIS	A0A060N483	Tri a 20	
-4565	Triticum aestivum	ACJ03462.1	gamma-gliadin	IUIS	A0A060N484	Tri a 20	
-4565	Triticum aestivum	ACJ03479.1	gamma-gliadin	IUIS	A0A060N485	Tri a 20	
-4565	Triticum aestivum	CAC94869.1	gamma gliadin [Triticum aestivum]	IUIS	A0A060N486	Tri a 20	
-4565	Triticum aestivum	M9TGF7.1	Gamma-gliadin 2	IUIS	A0A060N487	Tri a 20	
-4565	Triticum aestivum	M9TLK0.1	Gamma-gliadin 9	IUIS	A0A060N488	Tri a 20	
-4565	Triticum aestivum	P08079.1	Gamma-gliadin	IUIS	A0A060N489	Tri a 20	
-4565	Triticum aestivum	P08453.1	Gamma-gliadin	IUIS	A0A060N490	Tri a 20	
-4565	Triticum aestivum	P21292.1	Gamma-gliadin	IUIS	A0A060N491	Tri a 20	
-4565	Triticum aestivum	Q6EEX0	Gamma gliadin	IUIS	A0A060N492	Tri a 20	
-4565	Triticum aestivum	Q8L6B2.1	Gamma gliadin	IUIS	A0A060N493	Tri a 20	
-4565	Triticum aestivum	Q8L6B3	Gamma gliadin	IUIS	A0A060N494	Tri a 20	
-4565	Triticum aestivum	Q94G97	Gamma-gliadin	IUIS	A0A060N495	Tri a 20	
-4565	Triticum aestivum	SRC626953	75k gamma secalin	IUIS	A0A060N496	Tri a 20	
+4565	Triticum aestivum	AAK84778.1	gamma-gliadin	IUIS	A0A060N479	Tri a 20	
+4565	Triticum aestivum	AAQ63856.1	gamma gliadin	IUIS	A0A060N479	Tri a 20	
+4565	Triticum aestivum	ACJ03453.1	gamma-gliadin [Triticum aestivum]	IUIS	A0A060N479	Tri a 20	
+4565	Triticum aestivum	ACJ03454.1	gamma-gliadin	IUIS	A0A060N479	Tri a 20	
+4565	Triticum aestivum	ACJ03462.1	gamma-gliadin	IUIS	A0A060N479	Tri a 20	
+4565	Triticum aestivum	ACJ03479.1	gamma-gliadin	IUIS	A0A060N479	Tri a 20	
+4565	Triticum aestivum	CAC94869.1	gamma gliadin [Triticum aestivum]	IUIS	A0A060N479	Tri a 20	
+4565	Triticum aestivum	M9TGF7.1	Gamma-gliadin 2	IUIS	A0A060N479	Tri a 20	
+4565	Triticum aestivum	M9TLK0.1	Gamma-gliadin 9	IUIS	A0A060N479	Tri a 20	
+4565	Triticum aestivum	P08079.1	Gamma-gliadin	IUIS	A0A060N479	Tri a 20	
+4565	Triticum aestivum	P08453.1	Gamma-gliadin	IUIS	A0A060N479	Tri a 20	
+4565	Triticum aestivum	P21292.1	Gamma-gliadin	IUIS	A0A060N479	Tri a 20	
+4565	Triticum aestivum	Q6EEX0	Gamma gliadin	IUIS	A0A060N479	Tri a 20	
+4565	Triticum aestivum	Q8L6B2.1	Gamma gliadin	IUIS	A0A060N479	Tri a 20	
+4565	Triticum aestivum	Q8L6B3	Gamma gliadin	IUIS	A0A060N479	Tri a 20	
+4565	Triticum aestivum	Q94G97	Gamma-gliadin	IUIS	A0A060N479	Tri a 20	
+4565	Triticum aestivum	SRC626953	75k gamma secalin	IUIS	A0A060N479	Tri a 20	
 4565	Triticum aestivum	A0A0K2QJY6.1	Gliadin alpha-B25	IUIS	D2T2K3	Tri a 21	
-4565	Triticum aestivum	AFX69582.1	alpha-gliadin [Triticum aestivum]	IUIS	D2T2K4	Tri a 21	
-4565	Triticum aestivum	Q41545.1	(T. aestivum) alpha-type gliadin	IUIS	D2T2K5	Tri a 21	
-4565	Triticum aestivum	Q9M4L6.1	Alpha-gliadin	IUIS	D2T2K6	Tri a 21	
-4565	Triticum aestivum	Q9M4M0	Alpha-gliadin	IUIS	D2T2K7	Tri a 21	
-4565	Triticum aestivum	Q9M4M5.1	Alpha-gliadin	IUIS	D2T2K8	Tri a 21	
-4565	Triticum aestivum	Q9M4M6	Alpha-gliadin	IUIS	D2T2K9	Tri a 21	
+4565	Triticum aestivum	AFX69582.1	alpha-gliadin [Triticum aestivum]	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	Q41545.1	(T. aestivum) alpha-type gliadin	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	Q9M4L6.1	Alpha-gliadin	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	Q9M4M0	Alpha-gliadin	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	Q9M4M5.1	Alpha-gliadin	IUIS	D2T2K3	Tri a 21	
+4565	Triticum aestivum	Q9M4M6	Alpha-gliadin	IUIS	D2T2K3	Tri a 21	
 4565	Triticum aestivum	BAC76688.1	27K protein	IUIS	Q7Y1Z2	Tri a 27	
 4565	Triticum aestivum	P93692.1	Serpin-Z2B	IUIS	Q9ST57	Tri a 33	
 4565	Triticum aestivum	AAV92009.1	low molecular weight glutenin	IUIS	B2Y2Q7	Tri a 36	
