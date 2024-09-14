@@ -83,8 +83,20 @@ clean_except_dirs:
 	find current/ -mindepth 1 -delete
 
 .PHONY: leidos
-leidos: build/organisms/latest/ build/proteins/latest/
-	pytest test/test_leidos.py
+leidos: build/organisms/latest/ build/proteins/previous/ build/proteins/latest/ build/proteins/latest/epitope-mappings_new.tsv
+	$(VENV_PYTHON) -m pytest test/test_leidos.py
+
+build/proteins/previous/:
+	mv build/proteins/latest $@
+
+build/proteins/latest/: build/disease-tree.owl build/arborist/molecule-tree.owl build/arborist/parent-proteins.tsv build/arborist/source-parents.tsv build/arborist/epitope-mappings.tsv
+	rm -rf $@
+	mkdir -p $@
+	cp $^ $@
+	chmod 644 $@*
+
+build/proteins/latest/epitope-mappings_new.tsv: build/proteins/latest/epitope-mappings.tsv build/proteins/previous/epitope-mappings.tsv
+	$(VENV_PYTHON) src/util/generate_new_mappings.py $^ $@
 
 .PHONY: serve
 serve: src/util/serve.py
@@ -514,9 +526,6 @@ build/arborist/protein-tree.owl: build/arborist/protein-tree.ttl
 build/arborist/epitope-mappings.tsv: build/arborist/all-peptide-assignments.tsv
 	$(VENV_PYTHON) src/protein/protein_tree/immunomebrowser.py -n 10
 
-build/arborist/epitope-mappings_new.tsv: build/arborist/epitope-mappings.tsv
-	qsv slice --start -10 $< --output $@
-
 .PHONY: protein
 protein: build/arborist/epitope-mappings_new.tsv
 
@@ -549,12 +558,6 @@ build/arborist/molecule-tree.built: build/arborist/molecule-tree.owl
 
 .PHONY: molecule
 molecule: build/arborist/molecule-tree.built
-
-build/proteins/latest/: build/disease-tree.owl build/arborist/molecule-tree.owl build/arborist/parent-proteins.tsv build/arborist/source-parents.tsv build/arborist/epitope-mappings.tsv build/arborist/epitope-mappings_new.tsv
-	rm -rf $@
-	mkdir -p $@
-	cp $^ $@
-	chmod 644 $@*
 
 
 ### 7. TODO Build Assay Tree
