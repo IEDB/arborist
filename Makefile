@@ -527,7 +527,7 @@ build/arborist/epitope-mappings.tsv: build/arborist/all-peptide-assignments.tsv
 	$(VENV_PYTHON) src/protein/protein_tree/immunomebrowser.py -n 10
 
 .PHONY: protein
-protein: build/arborist/epitope-mappings_new.tsv
+protein: build/arborist/epitope-mappings.tsv
 
 
 ### 6. TODO Build Molecule Tree
