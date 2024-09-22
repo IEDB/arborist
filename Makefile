@@ -116,11 +116,6 @@ clobber:
 bin/ build/ cache/ current/:
 	mkdir -p $@
 
-.PHONY: test
-test:
-	@echo "TETST"
-
-
 ### Install Dependencies
 #
 # For each software dependency
