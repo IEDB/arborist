@@ -114,12 +114,10 @@ bin/ build/ cache/ current/:
 
 ### Install Dependencies
 #
-# For each software dependency
-# we use Make's `ifeq` conditional and `command -v <name>`
-# to check if the dependency is already on the PATH
-# (including `bin/`).
-# If not, then we define a Make task to install it to `bin/`,
-# and add that dependency to `deps`.
+# For each software dependency we use Make's `ifeq` conditional
+# command -v <name>` to check if the dependency is already in 
+# the PATH (including `bin/`). If not, then we define a Makefile
+# task to install it to `bin/`, and add that dependency to `deps`.
 
 # Require SQLite
 ifeq ($(shell command -v sqlite3),)
@@ -190,7 +188,7 @@ endif
 
 # Install BLAST if not already present
 ifeq ($(shell command -v blastp),)
-BLAST_VERSION := 2.15.0
+BLAST_VERSION := 2.16.0
 build/ncbi-blast.tar.gz: | build/
 	curl -L -o $@ 'https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/$(BLAST_VERSION)/ncbi-blast-$(BLAST_VERSION)+-x64-linux.tar.gz'
 bin/blastp bin/makeblastdb: build/ncbi-blast.tar.gz | bin/
@@ -227,8 +225,7 @@ endif
 
 ### 1. Fetch IEDB Data
 #
-# Copy some tables from the IEDB,
-# validate some of them,
+# Copy some tables from the IEDB, validate some of them,
 # and load them into a SQLite database.
 
 build/iedb/:
