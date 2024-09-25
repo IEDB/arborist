@@ -46,29 +46,31 @@ help:
 	@echo "Arborist: build trees for the IEDB"
 	@echo ""
 	@echo "TASKS"
-	@echo "  deps        install dependencies"
-	@echo "  iedb        load IEDB data"
-	@echo "  ncbitaxon   build the NCBI Taxonomy"
-	@echo "  organism    build the organism and subspecies trees"
-	@echo "  proteome    select proteomes"
-	@echo "  protein     build the protein tree"
-	@echo "  molecule    build the molecule tree"
-	@echo "  leidos      copy files for Leidos"
-	@echo "  all         build all trees"
-	@echo "  serve       run the web interface on localhost:3000"
-	@echo "  clean       remove all build files"
-	@echo "  clobber     remove all generated files"
-	@echo "  help        print this message"
+	@echo "  deps         install dependencies"
+	@echo "  iedb         load IEDB data"
+	@echo "  ncbitaxon    build the NCBI Taxonomy"
+	@echo "  organism     build the organism and subspecies trees"
+	@echo "  proteome     select proteomes"
+	@echo "  protein      build the protein tree"
+	@echo "  molecule     build the molecule tree"
+	@echo "  leidos       copy files for Leidos"
+	@echo "  all          build all trees"
+	@echo "  serve        run the web interface on localhost:3000"
+	@echo "  clean        remove all build files"
+	@echo "  clobber      remove all generated files"
+	@echo "  weekly       builds all trees without proteome step"
+	@echo "  weekly_clean removes directories and files made by weekly build"
+	@echo "  help         print this message"
 
 # Dependencies are added to this list below.
 .PHONY: deps
 deps:
 
 .PHONY: all
-all: deps iedb ncbitaxon organism protein molecule disease leidos
+all: deps iedb ncbitaxon organism proteome protein molecule disease leidos
 
 .PHONY: weekly
-weekly: iedb ncbitaxon organism protein molecule disease leidos
+weekly: deps iedb ncbitaxon organism protein molecule disease leidos
 
 .PHONY: weekly_clean
 weekly_clean:
