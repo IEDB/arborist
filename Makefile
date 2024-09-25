@@ -78,12 +78,6 @@ weekly_clean:
 	rm -rf build/iedb/ build/arborist/ cache/ current/
 	rm -rf build/disease*
 
-.PHONY: clean_except_dirs
-clean_except_dirs:
-	find build/ -mindepth 1 ! -path "build/organisms" ! -path "build/organisms/*" ! -path "build/proteins" ! -path "build/proteins/*" ! -path "build/species" ! -path "build/species/*" -delete
-	find cache/ -mindepth 1 -delete
-	find current/ -mindepth 1 -delete
-
 .PHONY: leidos
 leidos: build/organisms/latest/ build/proteins/previous/ build/proteins/latest/ build/proteins/latest/epitope-mappings_new.tsv
 	$(VENV_PYTHON) -m pytest test/test_leidos.py
