@@ -505,14 +505,24 @@ def combine_data():
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
-  parser.add_argument('-n', '--num_threads', type=int, default=1, help='Number of threads to use.')
-  parser.add_argument('-t', '--taxon_id', type=int, help='Taxon ID of the species to process.')
+  parser.add_argument(
+    '-n', '--num_threads', type=int, help='Number of threads to use.',
+    default=1
+  )
+  parser.add_argument(
+    '-t', '--taxon_id', type=int, help='Taxon ID of the species to process.',
+    default=24
+  )
+  parser.add_argument(
+    '-b', '--build_path', type=str, help='Path for all Arborist build files.',
+    default=Path(__file__).parents[3] / 'build'
+  )
   args = parser.parse_args()
 
   taxon_id = args.taxon_id
+  build_path = args.build_path
   all_species = not bool(taxon_id)
 
-  build_path = Path(__file__).parents[3] / 'build'
   active_species = pl.read_csv(build_path / 'arborist' / 'active-species.tsv', separator='\t')
   
   data_fetcher = DataFetcher(build_path)
