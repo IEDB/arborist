@@ -11,3 +11,7 @@ notebooks/
 nonpeptide-tree-20240305.owl
 push_files.sh
 .iedb_query
+
+
+# test
+!test/build/

@@ -470,7 +470,7 @@ build/arborist/manual-synonyms.tsv: build/arborist/manual-parents.tsv
 	cp src/protein/data/manual-synonyms.tsv $@
 
 build/arborist/all-peptide-assignments.tsv: build/arborist/manual-parents.tsv build/arborist/manual-synonyms.tsv
-	$(VENV_PYTHON) src/protein/protein_tree/assign.py -n 8
+	$(VENV_PYTHON) src/protein/protein_tree/assign.py -n 8 -b build/
 
 build/arborist/protein-tree.assigned: build/arborist/allergens.tsv
 	touch $@
