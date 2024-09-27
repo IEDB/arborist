@@ -1,2 +1,2 @@
-Gorilla (9593, 9595) - includes MHC node
-
+Gorilla (S: 9593, A: [9593, 9595]) - includes MHC node
+Hepacivirus B (S:3052236, A: [2847087]) - fragmenting polyprotein
