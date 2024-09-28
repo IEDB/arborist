@@ -30,6 +30,32 @@ class ProteomeSelector:
   def select(self):
     if self.proteome_list.is_empty():
       self._get_orphans()
+    else:
+      proteome_types = [
+        'Reference and representative proteome',
+        'Reference proteome'
+      ]
+
+      selected_proteomes = None
+
+      for proteome_type in proteome_types:
+        proteomes = self.proteome_list.filter(
+          pl.col('Proteome Type').str.contains(proteome_type)
+        )
+        if not proteomes.is_empty():
+          selected_proteomes = proteomes
+          break
+
+      if selected_proteomes is None:
+        non_redundant = self.proteome_list.filter(
+          ~pl.col('Proteome Type').str.contains('Redundant')
+        )
+        if not non_redundant.is_empty():
+          selected_proteomes = non_redundant
+        else:
+          selected_proteomes = self.proteome_list
+
+      proteome_ids = selected_proteomes['Proteome ID']
   
   def _get_orphans(self):
     url = f'https://rest.uniprot.org/uniprotkb/search?format=fasta&query=taxonomy_id:{taxon_id}&size=500'
