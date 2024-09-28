@@ -519,7 +519,7 @@ if __name__ == "__main__":
   args = parser.parse_args()
 
   taxon_id = args.taxon_id
-  build_path = args.build_path
+  build_path = Path(args.build_path)
   all_species = not bool(taxon_id)
 
   active_species = pl.read_csv(build_path / 'arborist' / 'active-species.tsv', separator='\t')

@@ -112,6 +112,10 @@ clobber:
 bin/ build/ cache/ current/:
 	mkdir -p $@
 
+.PHONY: test
+test:
+	$(MAKE) -C test test
+
 ### Install Dependencies
 #
 # For each software dependency we use Make's `ifeq` conditional
@@ -470,7 +474,7 @@ build/arborist/manual-synonyms.tsv: build/arborist/manual-parents.tsv
 	cp src/protein/data/manual-synonyms.tsv $@
 
 build/arborist/all-peptide-assignments.tsv: build/arborist/manual-parents.tsv build/arborist/manual-synonyms.tsv
-	$(VENV_PYTHON) src/protein/protein_tree/assign.py -n 8 -b build/
+	$(VENV_PYTHON) src/protein/protein_tree/assign.py -n 8
 
 build/arborist/protein-tree.assigned: build/arborist/allergens.tsv
 	touch $@
