@@ -44,7 +44,11 @@ class ProteomeSelector:
           break
 
       if selected_proteomes.height > 1:
-        self._proteome_tiebreak(selected_proteomes)
+        proteome_id = self._proteome_tiebreak(selected_proteomes)
+      else:
+        proteome_id = selected_proteomes.item(0, 'Proteome ID')
+
+      print(proteome_id)
 
   def _get_orphans(self):
     url = f'https://rest.uniprot.org/uniprotkb/search?format=fasta&query=taxonomy_id:{taxon_id}&size=500'
@@ -70,16 +74,43 @@ class ProteomeSelector:
         return match.group(1)
 
   def _proteome_tiebreak(self, selected_proteomes: pl.DataFrame):
+    proteome_counts = {}
     peptide_seqs = self.peptides['Sequence'].to_list()
     if selected_proteomes.height > 20:
       proteome = selected_proteomes.filter(pl.col('BUSCO Score').max())
+      return proteome.item(0, 'Proteome ID')
     else:
       for proteome in selected_proteomes.rows(named=True):
-        self._fetch_proteome_file(proteome['Proteome ID'])
-        Preprocessor(
-          proteome = self.species_path / f'{proteome["Proteome ID"]}.fasta',
-          preprocessed_files_path = self.species_path,
-        ).sql_proteome(k = 5)
+        proteome_id = proteome['Proteome ID']
+        
+        if not (self.species_path / f'{proteome_id}.fasta').exists():
+          self._fetch_proteome_file(proteome_id)
+
+        match_count = self._get_match_count(peptide_seqs, proteome_id)
+        proteome_counts[proteome_id] = match_count
+
+    return max(proteome_counts.items(), key=lambda item: item[1])[0]
+
+  def _get_match_count(self, peptide_seqs: list, proteome_id: str):
+    Preprocessor(
+      proteome = self.species_path / f'{proteome_id}.fasta',
+      preprocessed_files_path = self.species_path,
+    ).sql_proteome(k = 5)
+    
+    matches = Matcher(
+      query = peptide_seqs,
+      proteome_file = self.species_path / f'{proteome_id}.fasta', 
+      max_mismatches = 0, 
+      k = 5,
+      preprocessed_files_path = self.species_path,
+      output_format='dataframe'
+    ).match()
+    matches = pl.from_pandas(matches)
+    matches = matches.filter(
+      pl.col('Matched Sequence').is_not_null()
+    ).unique('Query Sequence')
+
+    return matches.height
 
   def _fetch_proteome_file(self, proteome_id: str):
     url = f'https://rest.uniprot.org/uniprotkb/stream?compressed=false&format=fasta&includeIsoform=true&query=(proteome:{proteome_id})'
