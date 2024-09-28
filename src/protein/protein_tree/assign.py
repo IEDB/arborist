@@ -506,16 +506,15 @@ def combine_data():
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
   parser.add_argument(
-    '-n', '--num_threads', type=int, help='Number of threads to use.',
-    default=1
-  )
-  parser.add_argument(
     '-t', '--taxon_id', type=int, help='Taxon ID of the species to process.',
-    default=24
   )
   parser.add_argument(
     '-b', '--build_path', type=str, help='Path for all Arborist build files.',
     default=Path(__file__).parents[3] / 'build'
+  )
+  parser.add_argument(
+    '-n', '--num_threads', type=int, help='Number of threads to use.',
+    default=1
   )
   args = parser.parse_args()
 
