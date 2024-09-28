@@ -1,4 +1,10 @@
-default: test
+
+
+
+
+
+
 
 test:
-	echo "TEST"
+	@echo "Testing Arborist process..."
+	python3 ../src/protein/protein_tree/new_select_proteome.py -b build/
