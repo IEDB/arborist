@@ -45,10 +45,17 @@ class ProteomeSelector:
 
       if selected_proteomes.height > 1:
         proteome_id = self._proteome_tiebreak(selected_proteomes)
+        self._remove_unselected_proteomes(proteome_id)
       else:
         proteome_id = selected_proteomes.item(0, 'Proteome ID')
+        if not (self.species_path / f'{proteome_id}.fasta').exists():
+          self._fetch_proteome_file(proteome_id)
 
-      print(proteome_id)
+      self._preprocess_proteome_if_needed(proteome_id)
+      self._rename_proteome_files(proteome_id)
+      # self._fetch_fragment_data(proteome_id)
+      # self._fetch_synonym_data(proteome_id)
+      
 
   def _get_orphans(self):
     url = f'https://rest.uniprot.org/uniprotkb/search?format=fasta&query=taxonomy_id:{taxon_id}&size=500'
@@ -77,8 +84,10 @@ class ProteomeSelector:
     proteome_counts = {}
     peptide_seqs = self.peptides['Sequence'].to_list()
     if selected_proteomes.height > 20:
-      proteome = selected_proteomes.filter(pl.col('BUSCO Score').max())
-      return proteome.item(0, 'Proteome ID')
+      proteome = selected_proteomes.sort('BUSCO Score').tail(1)
+      proteome_id = proteome.item(0, 'Proteome ID')
+      self._fetch_proteome_file(proteome_id)
+      return proteome_id
     else:
       for proteome in selected_proteomes.rows(named=True):
         proteome_id = proteome['Proteome ID']
@@ -123,6 +132,25 @@ class ProteomeSelector:
               f.write(chunk.decode())
     except (requests.exceptions.ChunkedEncodingError, requests.exceptions.ReadTimeout):
       ProteomeSelector.get_proteome_to_fasta(proteome_id, species_path)  # recursive call on error
+
+  def _remove_unselected_proteomes(self, proteome_id: str):
+    for file in self.species_path.glob('*.fasta'):
+      if file.name != f'{proteome_id}.fasta':
+        file.unlink()
+    for file in self.species_path.glob('*.db'):
+      if file.name != f'{proteome_id}.db':
+        file.unlink()
+  
+  def _preprocess_proteome_if_needed(self, proteome_id: str):
+    if not (self.species_path / f'{proteome_id}.db').exists():
+      Preprocessor(
+        proteome = self.species_path / f'{proteome_id}.fasta',
+        preprocessed_files_path = self.species_path,
+      ).sql_proteome(k = 5)
+
+  def _rename_proteome_files(self, proteome_id: str):
+    (self.species_path / f'{proteome_id}.fasta').rename(self.species_path / 'proteome.fasta')
+    (self.species_path / f'{proteome_id}.db').rename(self.species_path / 'proteome.db')
 
   def _get_candidate_proteomes(self):
     url = f'https://rest.uniprot.org/proteomes/stream?format=json&query=taxonomy_id:{self.taxon_id}'
