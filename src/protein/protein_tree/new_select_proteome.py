@@ -1,14 +1,10 @@
 import argparse
 import re
-import os
-import csv
 import requests
 import gzip
 import json
 import polars as pl
 
-from typing import Iterator
-from Bio import SeqIO
 from pathlib import Path
 from pepmatch import Preprocessor, Matcher
 
@@ -33,10 +29,11 @@ class ProteomeSelector:
     else:
       proteome_types = [
         'Reference and representative proteome',
-        'Reference proteome'
+        'Representative',
+        'Reference proteome',
+        'Other',
+        'Redundant'
       ]
-
-      selected_proteomes = None
 
       for proteome_type in proteome_types:
         proteomes = self.proteome_list.filter(
@@ -46,24 +43,16 @@ class ProteomeSelector:
           selected_proteomes = proteomes
           break
 
-      if selected_proteomes is None:
-        non_redundant = self.proteome_list.filter(
-          ~pl.col('Proteome Type').str.contains('Redundant')
-        )
-        if not non_redundant.is_empty():
-          selected_proteomes = non_redundant
-        else:
-          selected_proteomes = self.proteome_list
+      if selected_proteomes.height > 1:
+        self._proteome_tiebreak(selected_proteomes)
 
-      proteome_ids = selected_proteomes['Proteome ID']
-  
   def _get_orphans(self):
     url = f'https://rest.uniprot.org/uniprotkb/search?format=fasta&query=taxonomy_id:{taxon_id}&size=500'
     for batch in self._get_protein_batches(url):
       with open(self.species_path / 'proteome.fasta', 'a') as f:
         f.write(batch.text)
 
-  def _get_protein_batches(self, batch_url: str) -> Iterator[requests.Response]:
+  def _get_protein_batches(self, batch_url: str):
     while batch_url:
       try:
         r = requests.get(batch_url)
@@ -73,12 +62,36 @@ class ProteomeSelector:
       except (requests.exceptions.ChunkedEncodingError, requests.exceptions.ReadTimeout):
         yield from self._get_protein_batches(batch_url)
 
-  def _get_next_link(self, headers: dict) -> str:
+  def _get_next_link(self, headers: dict):
     re_next_link = re.compile(r'<(.+)>; rel="next"') # regex to extract URL
     if 'Link' in headers:
       match = re_next_link.match(headers['Link'])
       if match:
         return match.group(1)
+
+  def _proteome_tiebreak(self, selected_proteomes: pl.DataFrame):
+    peptide_seqs = self.peptides['Sequence'].to_list()
+    if selected_proteomes.height > 20:
+      proteome = selected_proteomes.filter(pl.col('BUSCO Score').max())
+    else:
+      for proteome in selected_proteomes.rows(named=True):
+        self._fetch_proteome_file(proteome['Proteome ID'])
+        Preprocessor(
+          proteome = self.species_path / f'{proteome["Proteome ID"]}.fasta',
+          preprocessed_files_path = self.species_path,
+        ).sql_proteome(k = 5)
+
+  def _fetch_proteome_file(self, proteome_id: str):
+    url = f'https://rest.uniprot.org/uniprotkb/stream?compressed=false&format=fasta&includeIsoform=true&query=(proteome:{proteome_id})'
+    try:
+      with requests.get(url, stream=True) as r:
+        r.raise_for_status()
+        with open(self.species_path / f'{proteome_id}.fasta', 'w') as f:
+          for chunk in r.iter_content(chunk_size=8192):
+            if chunk:  # filter out keep-alive new chunks
+              f.write(chunk.decode())
+    except (requests.exceptions.ChunkedEncodingError, requests.exceptions.ReadTimeout):
+      ProteomeSelector.get_proteome_to_fasta(proteome_id, species_path)  # recursive call on error
 
   def _get_candidate_proteomes(self):
     url = f'https://rest.uniprot.org/proteomes/stream?format=json&query=taxonomy_id:{self.taxon_id}'
