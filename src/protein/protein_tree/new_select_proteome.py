@@ -6,7 +6,6 @@ import requests
 import gzip
 import json
 import polars as pl
-import xml.etree.ElementTree as ET
 
 from typing import Iterator
 from Bio import SeqIO
@@ -25,10 +24,35 @@ class ProteomeSelector:
     self.species_path = build_path / 'species' / str(taxon_id)
     self.species_path.mkdir(parents=True, exist_ok=True)
 
-    self._get_candidate_proteomes()
+    self.proteome_list = self._get_candidate_proteomes()
+    self.num_proteomes = len(self.proteome_list) + 1
   
-  def select_best_proteome(self):
-    pass
+  def select(self):
+    if self.proteome_list.is_empty():
+      self._get_orphans()
+  
+  def _get_orphans(self):
+    url = f'https://rest.uniprot.org/uniprotkb/search?format=fasta&query=taxonomy_id:{taxon_id}&size=500'
+    for batch in self._get_protein_batches(url):
+      with open(self.species_path / 'proteome.fasta', 'a') as f:
+        f.write(batch.text)
+
+  def _get_protein_batches(self, batch_url: str) -> Iterator[requests.Response]:
+    while batch_url:
+      try:
+        r = requests.get(batch_url)
+        r.raise_for_status()
+        yield r
+        batch_url = self._get_next_link(r.headers)
+      except (requests.exceptions.ChunkedEncodingError, requests.exceptions.ReadTimeout):
+        yield from self._get_protein_batches(batch_url)
+
+  def _get_next_link(self, headers: dict) -> str:
+    re_next_link = re.compile(r'<(.+)>; rel="next"') # regex to extract URL
+    if 'Link' in headers:
+      match = re_next_link.match(headers['Link'])
+      if match:
+        return match.group(1)
 
   def _get_candidate_proteomes(self):
     url = f'https://rest.uniprot.org/proteomes/stream?format=json&query=taxonomy_id:{self.taxon_id}'
@@ -61,7 +85,14 @@ class ProteomeSelector:
       }
       rows.append(row)
 
-    return pl.DataFrame(rows)
+    proteome_list = pl.DataFrame(rows)
+    if proteome_list.is_empty():
+      proteome_list = pl.DataFrame([{
+        'Species Taxon ID': None, 'Proteome ID': None, 'Proteome Type': None, 'Proteome Taxon ID': None, 
+        'Gene Count': None, 'Protein Count': None, 'BUSCO Score': None, 'Annotation Score': None
+      }]).head(0)
+
+    return proteome_list
 
 def get_proteome(taxon_id:int):
   species_row = active_species.row(by_predicate=pl.col('Species ID') == taxon_id)
@@ -76,7 +107,7 @@ def get_proteome(taxon_id:int):
     'peptides': peptides,
   }
   proteome_selector = ProteomeSelector(**config)
-  proteome_selector.select_best_proteome()
+  proteome_selector.select()
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
