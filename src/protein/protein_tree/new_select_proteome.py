@@ -26,6 +26,7 @@ class ProteomeSelector:
   def select(self):
     if self.proteome_list.is_empty():
       self._get_orphans()
+      self._preprocess_proteome_if_needed()
     else:
       proteome_types = [
         'Reference and representative proteome',
@@ -53,7 +54,7 @@ class ProteomeSelector:
 
       self._preprocess_proteome_if_needed(proteome_id)
       self._rename_proteome_files(proteome_id)
-      # self._fetch_fragment_data(proteome_id)
+      self._fetch_fragment_data(proteome_id)
       # self._fetch_synonym_data(proteome_id)
       
 
@@ -141,7 +142,7 @@ class ProteomeSelector:
       if file.name != f'{proteome_id}.db':
         file.unlink()
   
-  def _preprocess_proteome_if_needed(self, proteome_id: str):
+  def _preprocess_proteome_if_needed(self, proteome_id: str = 'proteome'):
     if not (self.species_path / f'{proteome_id}.db').exists():
       Preprocessor(
         proteome = self.species_path / f'{proteome_id}.fasta',
@@ -151,6 +152,36 @@ class ProteomeSelector:
   def _rename_proteome_files(self, proteome_id: str):
     (self.species_path / f'{proteome_id}.fasta').rename(self.species_path / 'proteome.fasta')
     (self.species_path / f'{proteome_id}.db').rename(self.species_path / 'proteome.db')
+
+  def _fetch_fragment_data(self, proteome_id: str):
+    url = f'https://rest.uniprot.org/uniprotkb/stream?format=json&query=proteome:{proteome_id}&fields=ft_chain,ft_peptide,ft_propep,ft_signal,ft_transit'
+    
+    try:
+      r = requests.get(url)
+    except (requests.exceptions.ChunkedEncodingError, requests.exceptions.ReadTimeout):
+      self.get_fragment_data(proteome_id)
+
+    r.raise_for_status()
+    data = json.loads(r.text)
+
+    fragment_map = {}
+    for entry in data['results']: # protein entry loop
+      uniprot_id = entry['primaryAccession']
+      fragments = []
+      features = entry.get('features', [])
+      for feature in features: # fragment loop
+        fragment_data = {
+          'type': feature['type'],
+          'start': feature['location']['start']['value'],
+          'end': feature['location']['end']['value'],
+          'description': feature.get('description', 'N/A'),
+          'feature_id': feature.get('featureId', 'N/A')
+        }
+        fragments.append(fragment_data)
+      fragment_map[uniprot_id] = fragments
+    
+    with open(self.species_path / 'fragment-data.json', 'w') as f:
+      json.dump(fragment_map, f, indent=2)
 
   def _get_candidate_proteomes(self):
     url = f'https://rest.uniprot.org/proteomes/stream?format=json&query=taxonomy_id:{self.taxon_id}'
