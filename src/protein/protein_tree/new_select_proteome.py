@@ -5,6 +5,7 @@ import gzip
 import json
 import polars as pl
 
+from Bio import SeqIO
 from pathlib import Path
 from pepmatch import Preprocessor, Matcher
 
@@ -285,6 +286,59 @@ class ProteomeSelector:
       }]).head(0)
 
     return proteome_list
+  
+  def to_tsv(self):
+    regexes = {
+      'protein_id': re.compile(r"\|([^|]*)\|"),     # between | and |
+      'entry_name': re.compile(r"\|([^\|]*?)\s"),   # between | and space
+      'protein_name': re.compile(r"\s(.+?)\sOS"),   # between space and space before OS
+      'gene': re.compile(r"GN=([^\s]+?)(?=\s|$)"),  # between GN= and space or end of line
+      'pe_level': re.compile(r"PE=(.+?)\s"),        # between PE= and space
+    }
+
+    proteins = list(SeqIO.parse(self.species_path / 'proteome.fasta', 'fasta'))
+    gp_proteome_path = self.species_path / 'gp_proteome.fasta'
+    if gp_proteome_path.exists():
+      gp_ids = [str(protein.id.split('|')[1]) for protein in list(SeqIO.parse(gp_proteome_path, 'fasta'))]
+    else:
+      gp_ids = []
+
+    proteome_data = []
+    for protein in proteins:
+      metadata = []
+      for key in regexes:
+        match = regexes[key].search(str(protein.description))
+
+        if match:
+          metadata.append(match.group(1))
+        else:
+          if key == 'protein_id':
+            metadata.append(str(protein.id))
+          elif key == 'pe_level':
+            metadata.append(0)
+          else:
+            metadata.append('')
+      
+      gp = 1 if protein.id.split('|')[1] in gp_ids else 0
+      metadata.append(gp)
+      metadata.append(str(protein.seq))
+      metadata.append(protein.id.split('|')[0])
+      
+      proteome_data.append(metadata)
+
+    columns = [
+      'Protein ID', 'Entry Name', 'Protein Name', 'Gene', 'Protein Existence Level', 
+      'Gene Priority', 'Sequence', 'Database'
+    ]
+    proteome = pl.DataFrame(proteome_data, schema=columns).with_columns(
+      pl.when(pl.col('Protein ID').str.contains('-'))
+      .then(pl.col('Protein ID').str.split('-').list.last())
+      .otherwise(pl.lit('1')).alias('Isoform Count')
+    ).select([
+      'Database', 'Gene', 'Protein ID', 'Entry Name', 'Isoform Count', 'Protein Name', 
+      'Protein Existence Level', 'Gene Priority', 'Sequence'
+    ])
+    proteome.write_csv(self.species_path / 'proteome.tsv', separator='\t')
 
 def get_proteome(taxon_id:int):
   species_row = active_species.row(by_predicate=pl.col('Species ID') == taxon_id)
@@ -301,6 +355,7 @@ def get_proteome(taxon_id:int):
   proteome_selector = ProteomeSelector(**config)
   proteome_selector.select()
   proteome_selector.to_tsv()
+
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
