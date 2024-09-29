@@ -330,7 +330,7 @@ class ProteomeSelector:
       'Protein ID', 'Entry Name', 'Protein Name', 'Gene', 'Protein Existence Level', 
       'Gene Priority', 'Sequence', 'Database'
     ]
-    proteome = pl.DataFrame(proteome_data, schema=columns).with_columns(
+    proteome = pl.DataFrame(proteome_data, schema=columns, orient='row').with_columns(
       pl.when(pl.col('Protein ID').str.contains('-'))
       .then(pl.col('Protein ID').str.split('-').list.last())
       .otherwise(pl.lit('1')).alias('Isoform Count')
