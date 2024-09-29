@@ -49,14 +49,13 @@ class ProteomeSelector:
         self._remove_unselected_proteomes(proteome_id)
       else:
         proteome_id = selected_proteomes.item(0, 'Proteome ID')
-        if not (self.species_path / f'{proteome_id}.fasta').exists():
+        if not (self.species_path / '{proteome_id}.fasta').exists():
           self._fetch_proteome_file(proteome_id)
 
       self._preprocess_proteome_if_needed(proteome_id)
       self._rename_proteome_files(proteome_id)
       self._fetch_fragment_data(proteome_id)
-      # self._fetch_synonym_data(proteome_id)
-      
+      self._fetch_synonym_data(proteome_id)
 
   def _get_orphans(self):
     url = f'https://rest.uniprot.org/uniprotkb/search?format=fasta&query=taxonomy_id:{taxon_id}&size=500'
@@ -182,6 +181,31 @@ class ProteomeSelector:
     
     with open(self.species_path / 'fragment-data.json', 'w') as f:
       json.dump(fragment_map, f, indent=2)
+
+  def _fetch_synonym_data(self, proteome_id: str):
+    url = f'https://rest.uniprot.org/uniprotkb/stream?format=json&query=proteome:{proteome_id}&fields=protein_name'
+
+    try:
+      r = requests.get(url)
+    except (requests.exceptions.ChunkedEncodingError, requests.exceptions.ReadTimeout):
+      self.get_synonym_data(proteome_id)
+
+    r.raise_for_status()
+    data = json.loads(r.text)
+
+    synonym_map = {}
+    for entry in data['results']:
+      uniprot_id = entry['primaryAccession']
+      alternative_names = [
+        name['fullName']['value'] 
+        for name in entry.get('proteinDescription', {}).get('alternativeNames', [])
+        if 'fullName' in name and 'value' in name['fullName']
+      ]
+      if alternative_names:
+        synonym_map[uniprot_id] = alternative_names
+
+    with open(self.species_path / 'synonym-data.json', 'w') as f:
+      json.dump(synonym_map, f, indent=2)
 
   def _get_candidate_proteomes(self):
     url = f'https://rest.uniprot.org/proteomes/stream?format=json&query=taxonomy_id:{self.taxon_id}'
