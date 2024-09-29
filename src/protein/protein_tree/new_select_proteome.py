@@ -27,6 +27,7 @@ class ProteomeSelector:
     if self.proteome_list.is_empty():
       self._get_orphans()
       self._preprocess_proteome_if_needed()
+      self._write_metadata('', self.taxon_id, 'Orphans', self.species_name)
     else:
       proteome_types = [
         'Reference and representative proteome',
@@ -42,14 +43,16 @@ class ProteomeSelector:
         )
         if not proteomes.is_empty():
           selected_proteomes = proteomes
+          proteome_type = proteome_type
           break
 
       if selected_proteomes.height > 1:
-        proteome_id, proteome_taxon = self._proteome_tiebreak(selected_proteomes)
+        proteome_id, proteome_taxon, proteome_label = self._proteome_tiebreak(selected_proteomes)
         self._remove_unselected_proteomes(proteome_id)
       else:
         proteome_id = selected_proteomes.item(0, 'Proteome ID')
         proteome_taxon = selected_proteomes.item(0, 'Proteome Taxon ID')
+        proteome_label = selected_proteomes.item(0, 'Proteome Label')
         if not (self.species_path / '{proteome_id}.fasta').exists():
           self._fetch_proteome_file(proteome_id)
 
@@ -58,6 +61,7 @@ class ProteomeSelector:
       self._fetch_fragment_data(proteome_id)
       self._fetch_synonym_data(proteome_id)
       self._fetch_gp_proteome(proteome_id, proteome_taxon)
+      self._write_metadata(proteome_id, proteome_taxon, proteome_type, proteome_label)
 
   def _get_orphans(self):
     url = f'https://rest.uniprot.org/uniprotkb/search?format=fasta&query=taxonomy_id:{taxon_id}&size=500'
@@ -95,12 +99,13 @@ class ProteomeSelector:
       for proteome in selected_proteomes.rows(named=True):
         proteome_id = proteome['Proteome ID']
         proteome_taxon = proteome['Proteome Taxon ID']
+        proteome_label = proteome['Proteome Label']
         
         if not (self.species_path / f'{proteome_id}.fasta').exists():
           self._fetch_proteome_file(proteome_id)
 
         match_count = self._get_match_count(peptide_seqs, proteome_id)
-        proteome_counts[(proteome_id, proteome_taxon)] = match_count
+        proteome_counts[(proteome_id, proteome_taxon, proteome_label)] = match_count
 
     return max(proteome_counts.items(), key=lambda item: item[1])[0]
 
@@ -234,6 +239,12 @@ class ProteomeSelector:
     except requests.exceptions.HTTPError:
       return
 
+  def _write_metadata(self, proteome_id: str, proteome_taxon: int, proteome_type: str, proteome_label: str):
+    pl.DataFrame({
+      'Species Taxon ID': self.taxon_id, 'Species Name': self.species_name, 'Proteome ID': proteome_id,
+      'Proteome Taxon ID': proteome_taxon, 'Proteome Type': proteome_type, 'Proteome Label': proteome_label
+    }).write_csv(self.species_path / 'species-data.tsv', separator='\t')
+
   def _get_candidate_proteomes(self):
     url = f'https://rest.uniprot.org/proteomes/stream?format=json&query=taxonomy_id:{self.taxon_id}'
     try:
@@ -258,6 +269,7 @@ class ProteomeSelector:
         'Proteome ID': proteome.get('id'),
         'Proteome Type': proteome.get('proteomeType'),
         'Proteome Taxon ID': proteome.get('taxonomy', {}).get('taxonId'),
+        'Proteome Label': proteome.get('taxonomy', {}).get('scientificName'),
         'Gene Count': proteome.get('geneCount'),
         'Protein Count': proteome.get('proteinCount'),
         'BUSCO Score': proteome.get('proteomeCompletenessReport', {}).get('buscoReport', {}).get('score'),
@@ -288,6 +300,7 @@ def get_proteome(taxon_id:int):
   }
   proteome_selector = ProteomeSelector(**config)
   proteome_selector.select()
+  proteome_selector.to_tsv()
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
