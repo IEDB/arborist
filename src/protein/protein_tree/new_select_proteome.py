@@ -45,10 +45,11 @@ class ProteomeSelector:
           break
 
       if selected_proteomes.height > 1:
-        proteome_id = self._proteome_tiebreak(selected_proteomes)
+        proteome_id, proteome_taxon = self._proteome_tiebreak(selected_proteomes)
         self._remove_unselected_proteomes(proteome_id)
       else:
         proteome_id = selected_proteomes.item(0, 'Proteome ID')
+        proteome_taxon = selected_proteomes.item(0, 'Proteome Taxon ID')
         if not (self.species_path / '{proteome_id}.fasta').exists():
           self._fetch_proteome_file(proteome_id)
 
@@ -56,6 +57,7 @@ class ProteomeSelector:
       self._rename_proteome_files(proteome_id)
       self._fetch_fragment_data(proteome_id)
       self._fetch_synonym_data(proteome_id)
+      self._fetch_gp_proteome(proteome_id, proteome_taxon)
 
   def _get_orphans(self):
     url = f'https://rest.uniprot.org/uniprotkb/search?format=fasta&query=taxonomy_id:{taxon_id}&size=500'
@@ -86,17 +88,19 @@ class ProteomeSelector:
     if selected_proteomes.height > 20:
       proteome = selected_proteomes.sort('BUSCO Score').tail(1)
       proteome_id = proteome.item(0, 'Proteome ID')
+      proteome_taxon = proteome.item(0, 'Proteome Taxon ID')
       self._fetch_proteome_file(proteome_id)
-      return proteome_id
+      return proteome_id, proteome_taxon
     else:
       for proteome in selected_proteomes.rows(named=True):
         proteome_id = proteome['Proteome ID']
+        proteome_taxon = proteome['Proteome Taxon ID']
         
         if not (self.species_path / f'{proteome_id}.fasta').exists():
           self._fetch_proteome_file(proteome_id)
 
         match_count = self._get_match_count(peptide_seqs, proteome_id)
-        proteome_counts[proteome_id] = match_count
+        proteome_counts[(proteome_id, proteome_taxon)] = match_count
 
     return max(proteome_counts.items(), key=lambda item: item[1])[0]
 
@@ -206,6 +210,29 @@ class ProteomeSelector:
 
     with open(self.species_path / 'synonym-data.json', 'w') as f:
       json.dump(synonym_map, f, indent=2)
+
+  def _fetch_gp_proteome(self, proteome_id: str, proteome_taxon: int):
+    ftp_url = f'https://ftp.uniprot.org/pub/databases/uniprot/knowledgebase/reference_proteomes/'
+    if self.group == 'archeobacterium':
+      ftp_url += f'Archaea/{proteome_id}/{proteome_id}_{proteome_taxon}.fasta.gz'
+    elif self.group == 'bacterium':
+      ftp_url += f'Bacteria/{proteome_id}/{proteome_id}_{proteome_taxon}.fasta.gz'
+    elif self.group in ['plant', 'vertebrate', 'other-eukaryote']:
+      ftp_url += f'Eukaryota/{proteome_id}/{proteome_id}_{proteome_taxon}.fasta.gz'
+    elif self.group == 'virus':
+      ftp_url += f'Viruses/{proteome_id}/{proteome_id}_{proteome_taxon}.fasta.gz'
+    else:
+      return
+
+    try:
+      with requests.get(ftp_url, stream=True) as r:
+        r.raise_for_status()
+        with open(f'{self.species_path}/gp_proteome.fasta', 'wb') as f:
+          f.write(gzip.open(r.raw, 'rb').read())
+    except (requests.exceptions.ChunkedEncodingError, requests.exceptions.ReadTimeout):
+      self._get_gp_proteome_to_fasta(proteome_id, proteome_taxon) # recursive call on error
+    except requests.exceptions.HTTPError:
+      return
 
   def _get_candidate_proteomes(self):
     url = f'https://rest.uniprot.org/proteomes/stream?format=json&query=taxonomy_id:{self.taxon_id}'
