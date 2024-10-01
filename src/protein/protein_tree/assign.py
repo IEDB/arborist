@@ -358,7 +358,19 @@ class PeptideProcessor:
   def get_fragment_data(self):
     if (self.species_path / 'fragment-data.json').exists():
       with open(self.species_path / 'fragment-data.json', 'r') as f:
-        return json.load(f)
+        data = json.load(f)
+      fragment_map = {}
+      for uniprot_id, fragments in data.items():
+        if not fragments:
+          fragment_map[uniprot_id] = ""
+        else:
+          fragment_strings = [
+            f'{fragment["type"]}-{fragment["start"]}-{fragment["end"]} '
+            f'({fragment["description"]}, {fragment["feature_id"]})'
+            for fragment in fragments
+          ]
+          fragment_map[uniprot_id] = ', '.join(fragment_strings)
+      return fragment_map
     else:
       return {}
       
