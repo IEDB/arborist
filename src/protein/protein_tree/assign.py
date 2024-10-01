@@ -474,13 +474,14 @@ def do_assignments(taxon_id):
 def check_for_proteome(taxon_id, active_taxa, species_name, group):
   species_path = build_path / 'species' / str(taxon_id)
   if not species_path.exists():
-    Fetcher = DataFetcher(build_path)
-    peptides_df = Fetcher.get_peptides_for_species(all_peptides, active_taxa).to_pandas()
-    Selector = ProteomeSelector(
-      taxon_id, species_name, group, build_path
+    print('No proteome detected for {species_name} (ID: {taxon_id}), selecting best one...')
+    data_fetcher = DataFetcher(build_path)
+    peptides = data_fetcher.get_peptides_for_species(all_peptides, active_taxa)
+    proteome_selector = ProteomeSelector(
+      taxon_id, species_name, group, peptides, build_path
     )
-    Selector.select_best_proteome(peptides_df)
-    Selector.proteome_to_tsv()
+    proteome_selector.select()
+    proteome_selector.to_tsv()
 
 def check_for_skips(taxon_id):
   if (build_path / 'species' / str(taxon_id) / 'proteome.fasta').stat().st_size == 0:

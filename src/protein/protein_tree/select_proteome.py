@@ -13,7 +13,7 @@ from protein_tree.data_fetch import DataFetcher
 
 
 class ProteomeSelector:
-  def __init__(self, taxon_id: int, species_name: str, group: str, peptides: pl.DataFrame):
+  def __init__(self, taxon_id: int, species_name: str, group: str, peptides: pl.DataFrame, build_path: Path):
     self.taxon_id = taxon_id
     self.species_name = species_name
     self.group = group
@@ -360,7 +360,7 @@ class ProteomeSelector:
     ])
     proteome.write_csv(self.species_path / 'proteome.tsv', separator='\t')
 
-def get_proteome(taxon_id:int):
+def get_proteome(taxon_id: int, build_path: Path):
   species_row = active_species.row(by_predicate=pl.col('Species ID') == taxon_id)
   species_name = species_row[2]
   group = species_row[4]
@@ -371,6 +371,7 @@ def get_proteome(taxon_id:int):
     'species_name': species_name,
     'group': group,
     'peptides': peptides,
+    'build_path': build_path
   }
   print(f'Selecting the best proteome for {species_name} (ID: {taxon_id})')
   proteome_selector = ProteomeSelector(**config)
@@ -400,6 +401,6 @@ if __name__ == "__main__":
   
   if all_species:
     for row in active_species.rows(named=True):
-      get_proteome(row['Species ID'])
+      get_proteome(row['Species ID'], build_path)
   else:
-    get_proteome(taxon_id)
+    get_proteome(taxon_id, build_path)
