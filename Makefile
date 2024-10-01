@@ -442,7 +442,7 @@ build/species/%/sources.tsv: build/iedb/peptide_source.tsv build/species/%/taxa.
 .PRECIOUS: build/species/%/epitopes.tsv build/species/%/sources.tsv
 
 build/arborist/proteomes.built: build/arborist/proteome.tsv
-	$(VENV_PYTHON) src/protein_tree/protein_tree/select_proteome.py -b build/ -a
+	$(VENV_PYTHON) src/protein/protein_tree/select_proteome.py -b build/
 
 # Remove epitope counts from proteome table.
 build/arborist/proteome_after.tsv: build/arborist/proteome.tsv
