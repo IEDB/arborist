@@ -187,10 +187,21 @@ class ProteomeSelector:
           'feature_id': feature.get('featureId', 'N/A')
         }
         fragments.append(fragment_data)
+
+      if len(fragments) > 1:
+        fragments = self._filter_fragment_data(fragments)
+
       fragment_map[uniprot_id] = fragments
     
     with open(self.species_path / 'fragment-data.json', 'w') as f:
       json.dump(fragment_map, f, indent=2)
+
+  def _filter_fragment_data(self, fragments: list):
+    if all(f['type'] == 'Chain' for f in fragments[:2]) and \
+      fragments[0]['start'] == 1 and fragments[1]['start'] == 2 and \
+      fragments[0]['end'] == fragments[1]['end']: # remove overlapping chains that differ by 1st residue
+        fragments = [fragments[0]] + fragments[2:] if len(fragments) > 2 else [fragments[0]]
+    return fragments 
 
   def _fetch_synonym_data(self, proteome_id: str):
     url = f'https://rest.uniprot.org/uniprotkb/stream?format=json&query=proteome:{proteome_id}&fields=protein_name'
