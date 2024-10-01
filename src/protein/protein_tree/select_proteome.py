@@ -177,7 +177,7 @@ class ProteomeSelector:
       r.raise_for_status()
       data = json.loads(r.text)
     except (requests.exceptions.ChunkedEncodingError, requests.exceptions.ReadTimeout):
-      self._fetch_fragment_data(proteome_id)
+      return self._fetch_fragment_data(proteome_id)
 
     fragment_map = {}
     for entry in data['results']: # protein entry loop
@@ -202,6 +202,8 @@ class ProteomeSelector:
     with open(self.species_path / 'fragment-data.json', 'w') as f:
       json.dump(fragment_map, f, indent=2)
 
+    return fragment_map
+
   def _filter_fragment_data(self, fragments: list):
     if all(f['type'] == 'Chain' for f in fragments[:2]) and \
       fragments[0]['start'] == 1 and fragments[1]['start'] == 2 and \
@@ -217,7 +219,7 @@ class ProteomeSelector:
       r.raise_for_status()
       data = json.loads(r.text)
     except (requests.exceptions.ChunkedEncodingError, requests.exceptions.ReadTimeout):
-      self._fetch_synonym_data(proteome_id)
+      return self._fetch_synonym_data(proteome_id)
 
     synonym_map = {}
     for entry in data['results']:
@@ -232,6 +234,8 @@ class ProteomeSelector:
 
     with open(self.species_path / 'synonym-data.json', 'w') as f:
       json.dump(synonym_map, f, indent=2)
+
+    return synonym_map
 
   def _fetch_gp_proteome(self, proteome_id: str, proteome_taxon: int):
     ftp_url = f'https://ftp.uniprot.org/pub/databases/uniprot/knowledgebase/reference_proteomes/'
@@ -395,7 +399,7 @@ if __name__ == "__main__":
   all_peptides = data_fetcher.get_all_peptides()
   
   if all_species:
-    for row in active_species.rows(named=True)[115:]:
+    for row in active_species.rows(named=True):
       get_proteome(row['Species ID'])
   else:
     get_proteome(taxon_id)
