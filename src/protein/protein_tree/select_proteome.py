@@ -27,7 +27,7 @@ class ProteomeSelector:
   
   def select(self):
     if self.proteome_list.is_empty():
-      self._get_orphans()
+      self._fetch_orphans()
       self._preprocess_proteome_if_needed()
       self._write_metadata('', self.taxon_id, 'Orphans', self.species_name)
     else:
@@ -65,13 +65,13 @@ class ProteomeSelector:
       self._fetch_gp_proteome(proteome_id, proteome_taxon)
       self._write_metadata(proteome_id, proteome_taxon, proteome_type, proteome_label)
 
-  def _get_orphans(self):
+  def _fetch_orphans(self):
     url = f'https://rest.uniprot.org/uniprotkb/search?format=fasta&query=taxonomy_id:{self.taxon_id}&size=500'
-    for batch in self._get_protein_batches(url):
+    for batch in self._get_batches(url):
       with open(self.species_path / 'proteome.fasta', 'a') as f:
         f.write(batch.text)
 
-  def _get_protein_batches(self, batch_url: str):
+  def _get_batches(self, batch_url: str):
     while batch_url:
       try:
         r = self.session.get(batch_url)
@@ -79,7 +79,7 @@ class ProteomeSelector:
         yield r
         batch_url = self._get_next_link(r.headers)
       except (requests.exceptions.ChunkedEncodingError, requests.exceptions.ReadTimeout):
-        yield from self._get_protein_batches(batch_url)
+        yield from self._get_batches(batch_url)
 
   def _get_next_link(self, headers: dict):
     re_next_link = re.compile(r'<(.+)>; rel="next"') # regex to extract URL
@@ -171,8 +171,10 @@ class ProteomeSelector:
       (self.species_path / f'{proteome_id}.db').rename(self.species_path / 'proteome.db')
 
   def _fetch_fragment_data(self, proteome_id: str):
-    url = f'https://rest.uniprot.org/uniprotkb/stream?format=json&compressed=true&query=proteome:{proteome_id}&fields=ft_chain,ft_peptide,ft_propep,ft_signal,ft_transit'
-    data = self._fetch_json_data(url)
+    url = f'https://rest.uniprot.org/uniprotkb/search?format=json&query=proteome:{proteome_id}&fields=ft_chain,ft_peptide,ft_propep,ft_signal,ft_transit&size=500'
+    data = {'results': []}
+    for batch in self._get_batches(url):
+      data['results'].extend(json.loads(batch.text)['results'])
 
     fragment_map = {}
     for entry in data['results']: # protein entry loop
@@ -207,8 +209,10 @@ class ProteomeSelector:
     return fragments 
 
   def _fetch_synonym_data(self, proteome_id: str):
-    url = f'https://rest.uniprot.org/uniprotkb/stream?format=json&compressed=true&query=proteome:{proteome_id}&fields=protein_name'
-    data = self._fetch_json_data(url)
+    url = f'https://rest.uniprot.org/uniprotkb/search?format=json&query=proteome:{proteome_id}&fields=protein_name&size=500'
+    data = {'results': []}
+    for batch in self._get_batches(url):
+      data['results'].extend(json.loads(batch.text)['results'])
 
     synonym_map = {}
     for entry in data['results']:
@@ -225,15 +229,6 @@ class ProteomeSelector:
       json.dump(synonym_map, f, indent=2)
 
     return synonym_map
-
-  def _fetch_json_data(self, url: str):
-    try:
-      r = self.session.get(url)
-      r.raise_for_status()
-      data = gzip.decompress(r.content).decode('utf-8')
-      return json.loads(data)
-    except (requests.exceptions.ChunkedEncodingError, requests.exceptions.ReadTimeout):
-      return self._fetch_json_data(url)
 
   def _fetch_gp_proteome(self, proteome_id: str, proteome_taxon: int):
     ftp_url = f'https://ftp.uniprot.org/pub/databases/uniprot/knowledgebase/reference_proteomes/'
