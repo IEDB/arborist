@@ -143,7 +143,7 @@ class ProteomeSelector:
       with requests.get(url, stream=True) as r:
         r.raise_for_status()
         with open(self.species_path / f'{proteome_id}.fasta', 'w') as f:
-          for chunk in r.iter_content(chunk_size=8192):
+          for chunk in r.iter_content(chunk_size=65536):
             if chunk:  # filter out keep-alive new chunks
               f.write(chunk.decode())
     except (requests.exceptions.ChunkedEncodingError, requests.exceptions.ReadTimeout):
@@ -308,6 +308,7 @@ class ProteomeSelector:
     return proteome_list
   
   def to_tsv(self):
+    if (self.species_path / 'proteome.fasta').stat().st_size == 0: return
     regexes = {
       'protein_id': re.compile(r"\|([^|]*)\|"),     # between | and |
       'entry_name': re.compile(r"\|([^\|]*?)\s"),   # between | and space
