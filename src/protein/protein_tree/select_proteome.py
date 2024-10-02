@@ -23,6 +23,8 @@ class ProteomeSelector:
 
     self.proteome_list = self._get_candidate_proteomes()
     self.num_proteomes = len(self.proteome_list) + 1
+
+    self.session = requests.Session()
   
   def select(self):
     if self.proteome_list.is_empty():
@@ -147,7 +149,7 @@ class ProteomeSelector:
             if chunk:  # filter out keep-alive new chunks
               f.write(chunk.decode())
     except (requests.exceptions.ChunkedEncodingError, requests.exceptions.ReadTimeout):
-      ProteomeSelector._fetch_proteome_file(proteome_id, species_path)  # recursive call on error
+      ProteomeSelector._fetch_proteome_file(proteome_id)  # recursive call on error
 
   def _remove_unselected_proteomes(self, proteome_id: str):
     for file in self.species_path.glob('*.fasta'):
@@ -171,13 +173,7 @@ class ProteomeSelector:
 
   def _fetch_fragment_data(self, proteome_id: str):
     url = f'https://rest.uniprot.org/uniprotkb/stream?format=json&query=proteome:{proteome_id}&fields=ft_chain,ft_peptide,ft_propep,ft_signal,ft_transit'
-    
-    try:
-      r = requests.get(url)
-      r.raise_for_status()
-      data = json.loads(r.text)
-    except (requests.exceptions.ChunkedEncodingError, requests.exceptions.ReadTimeout):
-      return self._fetch_fragment_data(proteome_id)
+    data = self._fetch_json_data
 
     fragment_map = {}
     for entry in data['results']: # protein entry loop
@@ -213,13 +209,7 @@ class ProteomeSelector:
 
   def _fetch_synonym_data(self, proteome_id: str):
     url = f'https://rest.uniprot.org/uniprotkb/stream?format=json&query=proteome:{proteome_id}&fields=protein_name'
-
-    try:
-      r = requests.get(url)
-      r.raise_for_status()
-      data = json.loads(r.text)
-    except (requests.exceptions.ChunkedEncodingError, requests.exceptions.ReadTimeout):
-      return self._fetch_synonym_data(proteome_id)
+    data = self._fetch_json_data
 
     synonym_map = {}
     for entry in data['results']:
@@ -236,6 +226,14 @@ class ProteomeSelector:
       json.dump(synonym_map, f, indent=2)
 
     return synonym_map
+
+  def _fetch_json_data(self, url: str):
+    try:
+      r = self.session.get(url)
+      r.raise_for_status()
+      return json.loads(r.text)
+    except (requests.exceptions.ChunkedEncodingError, requests.exceptions.ReadTimeout):
+      return self._fetch_json_data(url)
 
   def _fetch_gp_proteome(self, proteome_id: str, proteome_taxon: int):
     ftp_url = f'https://ftp.uniprot.org/pub/databases/uniprot/knowledgebase/reference_proteomes/'
@@ -399,7 +397,7 @@ if __name__ == "__main__":
   
   data_fetcher = DataFetcher(build_path)
   all_peptides = data_fetcher.get_all_peptides()
-  
+
   if all_species:
     for row in active_species.rows(named=True):
       get_proteome(row['Species ID'], build_path)
