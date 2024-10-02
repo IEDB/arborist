@@ -20,11 +20,10 @@ class ProteomeSelector:
     self.peptides = peptides
     self.species_path = build_path / 'species' / str(taxon_id)
     self.species_path.mkdir(parents=True, exist_ok=True)
+    self.session = requests.Session()
 
     self.proteome_list = self._get_candidate_proteomes()
     self.num_proteomes = len(self.proteome_list) + 1
-
-    self.session = requests.Session()
   
   def select(self):
     if self.proteome_list.is_empty():
@@ -75,7 +74,7 @@ class ProteomeSelector:
   def _get_protein_batches(self, batch_url: str):
     while batch_url:
       try:
-        r = requests.get(batch_url)
+        r = self.session.get(batch_url)
         r.raise_for_status()
         yield r
         batch_url = self._get_next_link(r.headers)
@@ -140,16 +139,16 @@ class ProteomeSelector:
     return matches.height
 
   def _fetch_proteome_file(self, proteome_id: str):
-    url = f'https://rest.uniprot.org/uniprotkb/stream?compressed=false&format=fasta&includeIsoform=true&query=(proteome:{proteome_id})'
+    url = f'https://rest.uniprot.org/uniprotkb/stream?format=fasta&includeIsoform=true&query=(proteome:{proteome_id})'
     try:
-      with requests.get(url, stream=True) as r:
+      with self.session.get(url, stream=True) as r:
         r.raise_for_status()
         with open(self.species_path / f'{proteome_id}.fasta', 'w') as f:
           for chunk in r.iter_content(chunk_size=65536):
             if chunk:  # filter out keep-alive new chunks
               f.write(chunk.decode())
     except (requests.exceptions.ChunkedEncodingError, requests.exceptions.ReadTimeout):
-      ProteomeSelector._fetch_proteome_file(proteome_id)  # recursive call on error
+      self._fetch_proteome_file(proteome_id)  # recursive call on error
 
   def _remove_unselected_proteomes(self, proteome_id: str):
     for file in self.species_path.glob('*.fasta'):
@@ -172,8 +171,8 @@ class ProteomeSelector:
       (self.species_path / f'{proteome_id}.db').rename(self.species_path / 'proteome.db')
 
   def _fetch_fragment_data(self, proteome_id: str):
-    url = f'https://rest.uniprot.org/uniprotkb/stream?format=json&query=proteome:{proteome_id}&fields=ft_chain,ft_peptide,ft_propep,ft_signal,ft_transit'
-    data = self._fetch_json_data
+    url = f'https://rest.uniprot.org/uniprotkb/stream?format=json&compressed=true&query=proteome:{proteome_id}&fields=ft_chain,ft_peptide,ft_propep,ft_signal,ft_transit'
+    data = self._fetch_json_data(url)
 
     fragment_map = {}
     for entry in data['results']: # protein entry loop
@@ -208,8 +207,8 @@ class ProteomeSelector:
     return fragments 
 
   def _fetch_synonym_data(self, proteome_id: str):
-    url = f'https://rest.uniprot.org/uniprotkb/stream?format=json&query=proteome:{proteome_id}&fields=protein_name'
-    data = self._fetch_json_data
+    url = f'https://rest.uniprot.org/uniprotkb/stream?format=json&compressed=true&query=proteome:{proteome_id}&fields=protein_name'
+    data = self._fetch_json_data(url)
 
     synonym_map = {}
     for entry in data['results']:
@@ -231,7 +230,8 @@ class ProteomeSelector:
     try:
       r = self.session.get(url)
       r.raise_for_status()
-      return json.loads(r.text)
+      data = gzip.decompress(r.content).decode('utf-8')
+      return json.loads(data)
     except (requests.exceptions.ChunkedEncodingError, requests.exceptions.ReadTimeout):
       return self._fetch_json_data(url)
 
@@ -249,7 +249,7 @@ class ProteomeSelector:
       return
 
     try:
-      with requests.get(ftp_url, stream=True) as r:
+      with self.session.get(ftp_url, stream=True) as r:
         r.raise_for_status()
         with open(f'{self.species_path}/gp_proteome.fasta', 'wb') as f:
           f.write(gzip.open(r.raw, 'rb').read())
@@ -265,11 +265,12 @@ class ProteomeSelector:
     }).write_csv(self.species_path / 'species-data.tsv', separator='\t')
 
   def _get_candidate_proteomes(self):
-    url = f'https://rest.uniprot.org/proteomes/stream?format=json&query=taxonomy_id:{self.taxon_id}'
+    url = f'https://rest.uniprot.org/proteomes/stream?format=json&compressed=true&query=taxonomy_id:{self.taxon_id}'
     try:
-      r = requests.get(url)
+      r = self.session.get(url)
       r.raise_for_status()
-      proteome_list = self._parse_proteome_json(r.text)
+      data = gzip.decompress(r.content).decode('utf-8')
+      proteome_list = self._parse_proteome_json(data)
     except (requests.exceptions.ChunkedEncodingError, requests.exceptions.ReadTimeout):
       proteome_list = self._get_candidate_proteomes()
     
