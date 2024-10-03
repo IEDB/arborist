@@ -7,10 +7,13 @@ import polars as pl
 
 from Bio import SeqIO
 from pathlib import Path
-from pepmatch import Preprocessor, Matcher
+from requests.exceptions import ChunkedEncodingError, ReadTimeout, ConnectionError, HTTPError
 
+from pepmatch import Preprocessor, Matcher
 from protein_tree.data_fetch import DataFetcher
 
+
+ALLERGEN_SPECIES_IDS = [15957, 13101, 13451, 3369, 3505, 3513, 3617, 3818, 3847, 39584, 4045, 4212, 4214, 4522, 4565, 6954, 6956, 6973, 6978, 746128]
 
 class ProteomeSelector:
   def __init__(self, taxon_id: int, species_name: str, group: str, peptides: pl.DataFrame, build_path: Path):
@@ -26,7 +29,7 @@ class ProteomeSelector:
     self.num_proteomes = len(self.proteome_list) + 1
   
   def select(self):
-    if self.proteome_list.is_empty():
+    if self.proteome_list.is_empty() or self.taxon_id in ALLERGEN_SPECIES_IDS:
       self._fetch_orphans()
       self._preprocess_proteome_if_needed()
       self._write_metadata('', self.taxon_id, 'Orphans', self.species_name)
@@ -78,7 +81,7 @@ class ProteomeSelector:
         r.raise_for_status()
         yield r
         batch_url = self._get_next_link(r.headers)
-      except (requests.exceptions.ChunkedEncodingError, requests.exceptions.ReadTimeout):
+      except (ChunkedEncodingError, ReadTimeout, ConnectionError):
         yield from self._get_batches(batch_url)
 
   def _get_next_link(self, headers: dict):
@@ -147,7 +150,7 @@ class ProteomeSelector:
           for chunk in r.iter_content(chunk_size=65536):
             if chunk:  # filter out keep-alive new chunks
               f.write(chunk.decode())
-    except (requests.exceptions.ChunkedEncodingError, requests.exceptions.ReadTimeout):
+    except (ChunkedEncodingError, ReadTimeout, ConnectionError):
       self._fetch_proteome_file(proteome_id)  # recursive call on error
 
   def _remove_unselected_proteomes(self, proteome_id: str):
@@ -248,9 +251,9 @@ class ProteomeSelector:
         r.raise_for_status()
         with open(f'{self.species_path}/gp_proteome.fasta', 'wb') as f:
           f.write(gzip.open(r.raw, 'rb').read())
-    except (requests.exceptions.ChunkedEncodingError, requests.exceptions.ReadTimeout):
+    except (ChunkedEncodingError, ReadTimeout, ConnectionError):
       self._fetch_gp_proteome(proteome_id, proteome_taxon) # recursive call on error
-    except requests.exceptions.HTTPError:
+    except HTTPError:
       return
 
   def _write_metadata(self, proteome_id: str, proteome_taxon: int, proteome_type: str, proteome_label: str):
@@ -266,7 +269,7 @@ class ProteomeSelector:
       r.raise_for_status()
       data = gzip.decompress(r.content).decode('utf-8')
       proteome_list = self._parse_proteome_json(data)
-    except (requests.exceptions.ChunkedEncodingError, requests.exceptions.ReadTimeout):
+    except (ChunkedEncodingError, ReadTimeout, ConnectionError):
       proteome_list = self._get_candidate_proteomes()
     
     proteome_list = proteome_list.filter(pl.col('Proteome Type') != 'Excluded')
