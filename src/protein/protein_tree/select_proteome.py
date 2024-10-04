@@ -94,8 +94,7 @@ class ProteomeSelector:
   def _proteome_tiebreak(self, selected_proteomes: pl.DataFrame):
     proteome_counts = {}
     peptide_seqs = self.peptides['Sequence'].to_list()
-    if selected_proteomes.height > 20:
-      print('BUSCO')
+    if selected_proteomes.height > 20 and not selected_proteomes.select(pl.col('BUSCO Score').is_null().all()).item(0,0):
       proteome = selected_proteomes.sort('BUSCO Score').tail(1)
       proteome_id = proteome.item(0, 'Proteome ID')
       proteome_taxon = proteome.item(0, 'Proteome Taxon ID')
@@ -103,6 +102,8 @@ class ProteomeSelector:
       self._fetch_proteome_file(proteome_id)
       return proteome_id, proteome_taxon, proteome_label
     else:
+      if selected_proteomes.height > 200:
+        selected_proteomes = selected_proteomes.sort('Protein Count', descending=True).head(200) # get top 200 proteomes
       for proteome in selected_proteomes.rows(named=True):
         proteome_id = proteome['Proteome ID']
         proteome_taxon = proteome['Proteome Taxon ID']
