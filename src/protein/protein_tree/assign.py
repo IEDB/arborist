@@ -143,7 +143,7 @@ class SourceProcessor:
 
     temp_results = pl.read_csv(temp_results_path, separator='\t')
     if temp_results.shape[0] == 0:
-      return old_arc_df
+      return pl.DataFrame({'id': [''], 'class': [''], 'chain_type': [''], 'calc_mhc_allele': ['']})
 
     if arc_results_exist:
       arc_df = pl.concat([old_arc_df, temp_results])
