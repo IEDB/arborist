@@ -31,7 +31,6 @@ class ProteomeSelector:
   def select(self):
     if self.proteome_list.is_empty() or self.taxon_id in ALLERGEN_SPECIES_IDS:
       self._fetch_orphans()
-      self._preprocess_proteome_if_needed()
       self._write_metadata('', self.taxon_id, 'Orphans', self.species_name)
     else:
       proteome_types = [
@@ -58,11 +57,10 @@ class ProteomeSelector:
         proteome_id = selected_proteomes.item(0, 'Proteome ID')
         proteome_taxon = selected_proteomes.item(0, 'Proteome Taxon ID')
         proteome_label = selected_proteomes.item(0, 'Proteome Label')
-        if not (self.species_path / '{proteome_id}.fasta').exists():
-          self._fetch_proteome_file(proteome_id)
+        self._fetch_proteome_file(proteome_id)
 
-      self._rename_proteome_files(proteome_id)
-      self._preprocess_proteome_if_needed()
+      self._rename_proteome_file(proteome_id)
+      self._preprocess_proteome()
       self._fetch_fragment_data(proteome_id)
       self._fetch_synonym_data(proteome_id)
       self._fetch_gp_proteome(proteome_id, proteome_taxon)
@@ -159,20 +157,16 @@ class ProteomeSelector:
       if file.name != f'{proteome_id}.fasta':
         file.unlink()
     for file in self.species_path.glob('*.db'):
-      if file.name != f'{proteome_id}.db':
-        file.unlink()
+      file.unlink()
   
-  def _preprocess_proteome_if_needed(self):
-    if not (self.species_path / 'proteome.db').exists():
-      Preprocessor(
-        proteome = self.species_path / 'proteome.fasta',
-        preprocessed_files_path = self.species_path,
-      ).sql_proteome(k = 5)
+  def _preprocess_proteome(self):
+    Preprocessor(
+      proteome = self.species_path / 'proteome.fasta',
+      preprocessed_files_path = self.species_path,
+    ).sql_proteome(k = 5)
 
-  def _rename_proteome_files(self, proteome_id: str):
+  def _rename_proteome_file(self, proteome_id: str):
     (self.species_path / f'{proteome_id}.fasta').rename(self.species_path / 'proteome.fasta')
-    if (self.species_path / f'{proteome_id}.db').exists():
-      (self.species_path / f'{proteome_id}.db').rename(self.species_path / 'proteome.db')
 
   def _fetch_fragment_data(self, proteome_id: str):
     url = f'https://rest.uniprot.org/uniprotkb/search?format=json&query=proteome:{proteome_id}&fields=ft_chain,ft_peptide,ft_propep,ft_signal,ft_transit&size=500'
