@@ -19,7 +19,7 @@ def get_all_parent_data(assignments, source_data, species_data):
   all_parent_data = assignments.join(
     source_data, how='left', on='Source Accession', coalesce=True
   ).join(
-    species_data, how='left', left_on='Species Taxon ID', right_on='Species ID', coalesce=True
+    species_data, how='left', on='Species Taxon ID', coalesce=True
   )
   return all_parent_data
 
