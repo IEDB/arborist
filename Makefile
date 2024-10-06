@@ -452,6 +452,7 @@ build/arborist/proteome_after.tsv: build/arborist/proteome.tsv
 build/arborist/proteome.html: src/protein/data/proteomes.tsv build/arborist/proteome_after.tsv
 	daff --output $@ $^
 
+# TODO: delete all proteome.db files when reselecting so that they are remade
 .PHONY: proteome
 proteome: build/arborist/proteomes.built
 

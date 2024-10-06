@@ -14,10 +14,18 @@ from protein_tree.data_fetch import DataFetcher
 
 
 ALLERGEN_SPECIES_IDS = [15957, 13101, 13451, 3369, 3505, 3513, 3617, 3818, 3847, 39584, 4045, 4212, 4214, 4522, 4565, 6954, 6956, 6973, 6978, 746128]
+REPLACEMENT_TAXON_IDS = {
+  3240504: 146500, 3240514: 12232, 3240520: 29271, 3240552: 322053, 3240600: 12211, 3240642: 12216,
+  3240644: 270478, 3241303: 390157, 10002316: 694009, 10002383: 1415852, 10002948: 2015376
+}
 
 class ProteomeSelector:
   def __init__(self, taxon_id: int, species_name: str, group: str, peptides: pl.DataFrame, build_path: Path):
-    self.taxon_id = taxon_id
+    if taxon_id in REPLACEMENT_TAXON_IDS.keys():
+      self.taxon_id = REPLACEMENT_TAXON_IDS[taxon_id]
+    else:
+      self.taxon_id = taxon_id
+   
     self.species_name = species_name
     self.group = group
     self.peptides = peptides
