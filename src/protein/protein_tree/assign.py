@@ -369,7 +369,7 @@ class PeptideProcessor:
             f'({fragment["description"]}, {fragment["feature_id"]})'
             for fragment in fragments
           ]
-          fragment_map[uniprot_id] = ', '.join(fragment_strings)
+          fragment_map[uniprot_id] = '; '.join(fragment_strings)
       return fragment_map
     else:
       return {}
