@@ -137,8 +137,10 @@ def add_fragments(parent):
   fragments = ast.literal_eval(fragment_str)
   if len(fragments) < 2: return [] # don't fragment the protein if there is only one
 
-  with open(Path(__file__).parents[1] / 'data' / 'fragment-type.json', 'r') as f:
-    fragment_type_map = json.load(f)
+  fragment_type_map = {
+    "Chain": "mature protein", "Peptide": "peptide", "Propeptide": "propeptide",
+    "Signal": "signal peptide", "Transit peptide": "transit peptide"
+  }
 
   fragment_counter = 1
   fragment_rows = []
@@ -146,17 +148,27 @@ def add_fragments(parent):
   for fragment in fragments:
     
     fragment_type  = fragment['type']
+    fragment_type = fragment_type_map[fragment_type]
     fragment_start = fragment['start']
     fragment_end   = fragment['end']
     fragment_desc  = fragment['description']
     fragment_id    = fragment['feature_id']
+    
+    try:
+      int(fragment_start)
+      int(fragment_end)
+    except: # these are nulls
+      continue
+    
+    if fragment_start == 1 and fragment_end == parent['Assigned Protein Length']:
+      continue # do not fragment whole length chains
+
+    if fragment_type == 'mature protein' and fragment_desc != parent['Assigned Protein Name']:
+      fragment_type = f'{fragment_type} ({fragment_desc})'
 
     if fragment_id == 'N/A': # use counter for fragment id
       fragment_id = f'fragment-{fragment_counter}'
       fragment_counter += 1
-
-    if fragment_type == 'Chain' and fragment_desc != parent['Assigned Protein Name']:
-      fragment_type = f'{fragment_type} ({fragment_desc})'
 
     fragment_rows.extend(owl_class(
       f"UP:{parent['Parent Protein ID']}-{fragment_id}",
