@@ -1,3 +1,5 @@
+import re
+import ast
 import json
 import sqlite3
 import polars as pl
@@ -129,61 +131,59 @@ def add_metadata(parent):
 def add_fragments(parent):
   """Given a row from the source_assignments dataframe, return a list of triples
   for the fragments of the protein."""
-
-  if not parent['Assigned Protein Fragments']: return []
+  
+  fragment_str = parent['Assigned Protein Fragments']
+  if not fragment_str: return []
+  fragments = ast.literal_eval(fragment_str)
+  if len(fragments) < 2: return [] # don't fragment the protein if there is only one
 
   with open(Path(__file__).parents[1] / 'data' / 'fragment-type.json', 'r') as f:
     fragment_type_map = json.load(f)
 
-  fragments = parent['Assigned Protein Fragments'].split(', ')
-  fragment_count = len(fragments)
-
-  if fragment_count < 2: return []
-
-  fragment_count = 0
+  fragment_counter = 1
   fragment_rows = []
 
   for fragment in fragments:
+    
+    fragment_type  = fragment['type']
+    fragment_start = fragment['start']
+    fragment_end   = fragment['end']
+    fragment_desc  = fragment['description']
+    fragment_id    = fragment['feature_id']
 
-    fragment_type = fragment.split('-')[0]
-    fragment_type = fragment_type_map[fragment_type]
-    fragment_start = fragment.split('-')[1]
-    fragment_end = fragment.split('-')[2]
+    if fragment_id == 'N/A': # use counter for fragment id
+      fragment_id = f'fragment-{fragment_counter}'
+      fragment_counter += 1
 
-    try:
-      int(fragment_start)
-      int(fragment_end)
-    except ValueError:
-      continue
+    if fragment_type == 'Chain' and fragment_desc != parent['Assigned Protein Name']:
+      fragment_type = f'{fragment_type} ({fragment_desc})'
 
     fragment_rows.extend(owl_class(
-      f"UP:{parent['Parent Protein ID']}-fragment-{fragment_count+1}",
+      f"UP:{parent['Parent Protein ID']}-{fragment_id}",
       f"{fragment_type} ({fragment_start}-{fragment_end})",
       f"UP:{parent['Parent Protein ID']}"
     ))
 
     fragment_rows.extend(
       [triple(
-        f"UP:{parent['Parent Protein ID']}-fragment-{fragment_count+1}",
+        f"UP:{parent['Parent Protein ID']}-{fragment_id}",
         "ONTIE:0003627",
         fragment_start,
         datatype="xsd:integer"
       ),
       triple(
-        f"UP:{parent['Parent Protein ID']}-fragment-{fragment_count+1}",
+        f"UP:{parent['Parent Protein ID']}-{fragment_id}",
         "ONTIE:0003628",
         fragment_end,
         datatype="xsd:integer"
       ),
       triple(
-        f"UP:{parent['Parent Protein ID']}-fragment-{fragment_count+1}",
+        f"UP:{parent['Parent Protein ID']}-{fragment_id}",
         "ONTIE:0003620",
-        f"{fragment_count+1} {fragment_type} ({fragment_start}-{fragment_end})",
+        f"{fragment_id} {fragment_type} ({fragment_start}-{fragment_end})",
         datatype="xsd:string"
       )]
     )
-
-    fragment_count += 1
 
   return fragment_rows
 
