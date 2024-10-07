@@ -364,12 +364,7 @@ class PeptideProcessor:
         if not fragments:
           fragment_map[uniprot_id] = ""
         else:
-          fragment_strings = [
-            f'{fragment["type"]}-{fragment["start"]}-{fragment["end"]} '
-            f'({fragment["description"]}, {fragment["feature_id"]})'
-            for fragment in fragments
-          ]
-          fragment_map[uniprot_id] = '|| '.join(fragment_strings)
+          fragment_map[uniprot_id] = str(fragments)
       return fragment_map
     else:
       return {}
