@@ -10,15 +10,15 @@
 # 3. Build Organism Tree and determine active species
 # 4. Select Proteomes for each active species
 # 5. Build Protein Tree
-# 6. TODO Build Molecule Tree
+# 6. TODO Build Molecule Tree (right now fetches old peptidic tree)
 # 7. TODO Build Assay Tree
-# 8. TODO Build Disease Tree
+# 8. TODO Build Disease Tree (right now fetches old tree)
 # 9. Build Leidos files
 #
-# TODO: test suite
+# TODO: test suite (in progress)
 # TODO: geolocation tree, MHC tree
 # TODO: merged SoT tree
-# TODO: test data, symlink?
+# TODO: symlink?
 
 
 ### Configuration
@@ -78,7 +78,6 @@ weekly_clean:
 	rm -rf build/iedb/ build/arborist/ cache/ current/
 	rm -rf build/disease*
 
-
 .PHONY: serve
 serve: src/util/serve.py
 	$(VENV_PYTHON) $<
@@ -100,6 +99,7 @@ bin/ build/ cache/ current/:
 .PHONY: test
 test:
 	$(MAKE) -C test test
+
 
 ### Install Dependencies
 #
@@ -212,6 +212,7 @@ bin/mmseqs: build/mmseqs | bin/
 deps: bin/mmseqs
 endif
 
+
 ### 1. Fetch IEDB Data
 #
 # Copy some tables from the IEDB, validate some of them,
@@ -286,6 +287,7 @@ build/iedb/structure.tsv: build/iedb/peptide.tsv
 
 .PHONY: iedb
 iedb: build/iedb/peptide.built build/iedb/peptide_source.built build/iedb/structure.tsv
+
 
 ### 2. Build NCBI Taxonomy
 #
@@ -395,6 +397,7 @@ build/organisms/latest/: build/arborist/subspecies-tree.owl
 	mkdir -p $@
 	cp $^ $@
 	chmod 644 $@*
+
 
 ### 4. Select Proteomes for each active species
 #
@@ -572,32 +575,6 @@ disease: build/disease-tree.tsv
 
 ### 9. Build Leidos files
 
-# build/proteins/previous/:
-# 	if [ -d build/proteins/latest ]; then \
-# 		mv build/proteins/latest $@; \
-# 	else \
-# 		mkdir -p $@; \
-# 	fi
-#
-# build/proteins/latest/: build/disease-tree.owl build/arborist/molecule-tree.owl build/arborist/parent-proteins.tsv build/arborist/source-parents.tsv build/arborist/epitope-mappings.tsv
-# 	rm -rf $@
-# 	mkdir -p $@
-# 	cp $^ $@
-# 	chmod 644 $@*
-#
-# build/proteins/latest/epitope-mappings_new.tsv: build/proteins/latest/
-# 	if [ -f build/proteins/previous/epitope-mappings.tsv ]; then \
-# 		$(VENV_PYTHON) src/util/generate_new_mappings.py $^ $@; \
-# 	else \
-# 		echo "No previous build files."; \
-# 		touch $@; \
-# 	fi
-#
-# .PHONY: leidos
-# leidos: build/organisms/latest/ build/proteins/previous/ build/proteins/latest/epitope-mappings_new.tsv
-# 	$(VENV_PYTHON) -m pytest test/test_leidos.py
-
-
 build/proteins/previous/: build/arborist/epitope-mappings.tsv
 	if [ -d build/proteins/latest ]; then \
 		rm -rf build/proteins/previous/; \
@@ -627,6 +604,7 @@ build/proteins/latest/epitope-mappings_new.tsv: build/proteins/latest/
 .PHONY: leidos
 leidos: build/organisms/latest/ build/proteins/previous/ build/proteins/latest/epitope-mappings_new.tsv
 	$(VENV_PYTHON) -m pytest test/test_leidos.py
+
 
 ### Nanobot Actions
 #
