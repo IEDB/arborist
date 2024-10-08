@@ -9,11 +9,11 @@
 # 2. Build NCBI Taxonomy
 # 3. Build Organism Tree and determine active species
 # 4. Select Proteomes for each active species
-# 5. Assign Proteins
-# 6. Build Protein Tree
-# 7. TODO Build Molecule Tree
-# 8. TODO Build Assay Tree
-# 9. TODO Build Disease Tree
+# 5. Build Protein Tree
+# 6. TODO Build Molecule Tree
+# 7. TODO Build Assay Tree
+# 8. TODO Build Disease Tree
+# 9. Build Leidos files
 #
 # TODO: test suite
 # TODO: geolocation tree, MHC tree
@@ -78,21 +78,6 @@ weekly_clean:
 	rm -rf build/iedb/ build/arborist/ cache/ current/
 	rm -rf build/disease*
 
-.PHONY: leidos
-leidos: build/organisms/latest/ build/proteins/previous/ build/proteins/latest/ build/proteins/latest/epitope-mappings_new.tsv
-	$(VENV_PYTHON) -m pytest test/test_leidos.py
-
-build/proteins/previous/:
-	mv build/proteins/latest $@
-
-build/proteins/latest/: build/disease-tree.owl build/arborist/molecule-tree.owl build/arborist/parent-proteins.tsv build/arborist/source-parents.tsv build/arborist/epitope-mappings.tsv
-	rm -rf $@
-	mkdir -p $@
-	cp $^ $@
-	chmod 644 $@*
-
-build/proteins/latest/epitope-mappings_new.tsv: build/proteins/latest/epitope-mappings.tsv build/proteins/previous/epitope-mappings.tsv
-	$(VENV_PYTHON) src/util/generate_new_mappings.py $^ $@
 
 .PHONY: serve
 serve: src/util/serve.py
@@ -477,7 +462,7 @@ build/arborist/manual-synonyms.tsv: build/arborist/manual-parents.tsv
 build/arborist/all-peptide-assignments.tsv: build/arborist/manual-parents.tsv build/arborist/manual-synonyms.tsv
 	$(VENV_PYTHON) src/protein/protein_tree/assign.py -n 8
 
-build/arborist/protein-tree.assigned: build/arborist/allergens.tsv
+build/arborist/protein-tree.assigned: build/arborist/all-peptide-assignments.tsv
 	touch $@
 
 build/arborist/mro.owl: | build/arborist/
@@ -498,11 +483,11 @@ build/arborist/mro.built: build/arborist/mro.owl | build/arborist/nanobot.db
 .PHONY: mro
 mro: build/arborist/mro.built
 
-build/arborist/protein-tree.built: src/protein/protein_tree/build.py build/arborist/all-peptide-assignments.tsv build/arborist/organism-tree.built
+build/arborist/protein-tree.built: build/arborist/protein-tree.assigned build/arborist/organism-tree.built
 	$(eval DB := build/arborist/nanobot.db)
 	sqlite3 $(DB) 'DROP TABLE IF EXISTS protein_tree_old'
 	sqlite3 $(DB) 'DROP TABLE IF EXISTS protein_tree_new'
-	$(VENV_PYTHON) $<
+	$(VENV_PYTHON) src/protein/protein_tree/build.py
 	sqlite3 $(DB) 'CREATE INDEX idx_protein_tree_old_subject ON protein_tree_old(subject)'
 	sqlite3 $(DB) 'CREATE INDEX idx_protein_tree_old_predicate ON protein_tree_old(predicate)'
 	sqlite3 $(DB) 'CREATE INDEX idx_protein_tree_old_object ON protein_tree_old(object)'
@@ -520,7 +505,7 @@ build/arborist/protein-tree.ttl: build/arborist/protein-tree.built | build/arbor
 build/arborist/protein-tree.owl: build/arborist/protein-tree.ttl
 	robot convert -i $< -o $@
 
-build/arborist/epitope-mappings.tsv: build/arborist/all-peptide-assignments.tsv
+build/arborist/epitope-mappings.tsv: build/arborist/protein-tree.owl
 	$(VENV_PYTHON) src/protein/protein_tree/immunomebrowser.py -n 10
 
 .PHONY: protein
@@ -584,6 +569,64 @@ disease: build/disease-tree.tsv
 # TODO: merged SoT tree
 # TODO: test data, symlink?
 
+
+### 9. Build Leidos files
+
+# build/proteins/previous/:
+# 	if [ -d build/proteins/latest ]; then \
+# 		mv build/proteins/latest $@; \
+# 	else \
+# 		mkdir -p $@; \
+# 	fi
+#
+# build/proteins/latest/: build/disease-tree.owl build/arborist/molecule-tree.owl build/arborist/parent-proteins.tsv build/arborist/source-parents.tsv build/arborist/epitope-mappings.tsv
+# 	rm -rf $@
+# 	mkdir -p $@
+# 	cp $^ $@
+# 	chmod 644 $@*
+#
+# build/proteins/latest/epitope-mappings_new.tsv: build/proteins/latest/
+# 	if [ -f build/proteins/previous/epitope-mappings.tsv ]; then \
+# 		$(VENV_PYTHON) src/util/generate_new_mappings.py $^ $@; \
+# 	else \
+# 		echo "No previous build files."; \
+# 		touch $@; \
+# 	fi
+#
+# .PHONY: leidos
+# leidos: build/organisms/latest/ build/proteins/previous/ build/proteins/latest/epitope-mappings_new.tsv
+# 	$(VENV_PYTHON) -m pytest test/test_leidos.py
+
+
+build/proteins/previous/: build/arborist/epitope-mappings.tsv
+	if [ -d build/proteins/latest ]; then \
+		rm -rf build/proteins/previous/; \
+		mv build/proteins/latest/ build/proteins/previous/; \
+	else \
+		mkdir -p $@; \
+	fi
+
+build/proteins/latest/: build/proteins/previous/
+	rm -rf $@
+	mkdir -p $@
+	cp build/disease-tree.owl $@
+	cp build/arborist/molecule-tree.owl $@
+	cp build/arborist/parent-proteins.tsv $@
+	cp build/arborist/source-parents.tsv $@
+	cp build/arborist/epitope-mappings.tsv $@
+	chmod 644 $@*
+
+build/proteins/latest/epitope-mappings_new.tsv: build/proteins/latest/
+	if [ -f build/proteins/previous/epitope-mappings.tsv ]; then \
+		$(VENV_PYTHON) src/util/generate_new_mappings.py build/proteins/latest/epitope-mappings.tsv build/proteins/previous/epitope-mappings.tsv $@; \
+	else \
+		echo "No previous build files."; \
+		touch $@; \
+	fi
+
+.PHONY: leidos
+leidos: build/organisms/latest/ build/proteins/previous/ build/proteins/latest/epitope-mappings_new.tsv
+	$(VENV_PYTHON) -m pytest test/test_leidos.py
 
 ### Nanobot Actions
 #
