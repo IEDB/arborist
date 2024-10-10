@@ -401,19 +401,20 @@ class PeptideProcessor:
         species_synonym_data[accession] = ', '.join(combined_synonyms)
       else:
         species_synonym_data[accession] = synonyms
-  
+    
     assignments = assignments.with_columns(
       pl.col('Protein ID').replace_strict(species_synonym_data, default='').alias('Assigned Protein Synonyms'),
     )
     assignments = assignments.with_columns(
-      pl.when(pl.col('Assigned Protein Synonyms') != "")
-      .then(pl.concat_str(
-        [pl.col('Assigned Protein Synonyms'), pl.col('Source Assigned Gene'), pl.col('Entry Name')], separator=', ')
-      )
-      .otherwise(pl.concat_str(
-        [pl.col('Source Assigned Gene'), pl.col('Entry Name')], separator=', ', ignore_nulls=True)
-      )
-      .alias('Assigned Protein Synonyms')
+      pl.concat_str(
+        [
+          pl.when(pl.col('Assigned Protein Synonyms') != '').then(pl.col('Assigned Protein Synonyms')), 
+          pl.when(pl.col('Source Assigned Gene') != '').then(pl.col('Source Assigned Gene')),
+          pl.when(pl.col('Entry Name') != '').then(pl.col('Entry Name'))
+        ], 
+        separator=', ', 
+        ignore_nulls=True
+      ).alias('Assigned Protein Synonyms')
     )
     return assignments
 
