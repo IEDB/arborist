@@ -122,7 +122,7 @@ def add_metadata(parent):
   for the metadata of the protein."""
   metadata_rows = []
   metadata_rows.extend(add_fragments(parent))
-  metadata_rows.extend(add_reviewed_status(parent))
+  metadata_rows.extend(add_canonical_status(parent))
   metadata_rows.extend(add_synonyms(parent))
   metadata_rows.extend(add_accession(parent))
   metadata_rows.extend(add_source_database(parent))
@@ -199,12 +199,12 @@ def add_fragments(parent):
 
   return fragment_rows
 
-def add_reviewed_status(parent):
+def add_canonical_status(parent):
   """Given a row from the source_assignments dataframe, return a triple
-  of the reviewed status of the protein."""
+  of the canonical status protein."""
   return [triple(
     f"UP:{parent['Parent Protein ID']}",
-    "UC:reviewed",
+    "ONTIE:0003673",
     "true" if parent['Assigned Protein Review Status'] else "false",
     datatype="xsd:boolean"
   )]
