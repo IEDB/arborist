@@ -233,9 +233,9 @@ class SourceProcessor:
       .then(pl.col('mapped_id')).otherwise(pl.col('Protein ID')).alias('Protein ID')
     )
     protein_data = protein_data.select(pl.col(
-      'Query', 'Score', 'Gene', 'Protein ID', 'Protein Name'
+      'Query', 'Score', 'Gene_right', 'Protein ID', 'Protein Name'
     )).rename({
-      'Query': 'Source Accession', 'Score': 'Source Alignment Score', 'Gene': 'Source Assigned Gene',
+      'Query': 'Source Accession', 'Score': 'Source Alignment Score', 'Gene_right': 'Source Assigned Gene',
       'Protein ID': 'Source Assigned Protein ID', 'Protein Name': 'Source Assigned Protein Name'}
     )
     protein_data = protein_data.with_columns(
