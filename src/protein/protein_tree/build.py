@@ -1,26 +1,26 @@
-import re
 import ast
-import json
 import sqlite3
 import polars as pl
 from pathlib import Path
 
 
 def build_tree(tree_base, assignments):
-  """Given the tree_base from the organism tree dataframes for the tree and 
-  the assignments, insert LDTab rows for each protein under its 
+  """Given the tree_base from the organism tree dataframes for the tree and
+  the assignments, insert LDTab rows for each protein under its
   'species protein' parent."""
 
   new_rows = []
 
   arc_parents = assignments.filter(
-    (pl.col('ARC Assignment').str.contains('TCR')) | (pl.col('ARC Assignment').str.contains('BCR')) | (pl.col('ARC Assignment').str.contains('MHC')),
+    (pl.col('ARC Assignment').str.contains('TCR')) |
+    (pl.col('ARC Assignment').str.contains('BCR')) |
+    (pl.col('ARC Assignment').str.contains('MHC'))
   ).unique(subset=['Source Accession'])
 
   normal_parents = assignments.join(
     assignments.group_by('Source Accession').agg(
       pl.col('Assigned Protein ID').mode().first()
-    ).rename({'Assigned Protein ID': 'Parent Protein ID'}), 
+    ).rename({'Assigned Protein ID': 'Parent Protein ID'}),
     how='left', on='Source Accession', coalesce=True
   ).filter(
     (pl.col('Assigned Protein ID') == pl.col('Parent Protein ID')),
@@ -30,7 +30,7 @@ def build_tree(tree_base, assignments):
   others = assignments.filter(
     (pl.col('Assigned Protein ID').is_null()),
   ).unique(subset=['Source Accession'])
-  
+
   new_rows.extend(add_normal_parents(normal_parents))
   new_rows.extend(add_arc_parents(arc_parents))
   new_rows.extend(add_others(others))
@@ -38,6 +38,7 @@ def build_tree(tree_base, assignments):
   protein_tree = pl.concat([tree_base, pl.DataFrame(new_rows)])
 
   return protein_tree
+
 
 def add_normal_parents(normal_parents):
   """Proteins that have been assigned a parent."""
@@ -52,6 +53,7 @@ def add_normal_parents(normal_parents):
     )
     rows.extend(add_metadata(parent))
   return rows
+
 
 def add_arc_parents(arc_parents):
   """Proteins that have been assigned an antigen receptor via ARC."""
@@ -83,6 +85,7 @@ def add_arc_parents(arc_parents):
     rows.extend(add_metadata(parent))
   return rows
 
+
 def antigen_receptor_name(antigen_receptor_class):
   if antigen_receptor_class == 'TCR':
     return 'T Cell Receptor'
@@ -92,6 +95,7 @@ def antigen_receptor_name(antigen_receptor_class):
     return 'Major Histocompatibility Complex I'
   elif antigen_receptor_class == 'MHC-II':
     return 'Major Histocompatibility Complex II'
+
 
 def add_others(others):
   """Proteins that have not been assigned a parent nor as an antigen receptor."""
@@ -108,14 +112,16 @@ def add_others(others):
       )
       species_seen.add(other['Species Taxon ID'])
 
+    prefix = 'UP' if other['Database'] == 'UniProt' else 'NCBI'
     rows.extend(
       owl_class(
-        f"UP:{other['Source Accession']}" if other['Database'] == 'UniProt' else f"NCBI:{other['Source Accession']}",
+        f"{prefix}:{other['Source Accession']}",
         f"{other['Name']} [{other['Source Accession']}]",
         f"iedb-protein:{other['Species Taxon ID']}-other"
       )
     )
   return rows
+
 
 def add_metadata(parent):
   """Given a row from the source_assignments dataframe, return a list of triples
@@ -128,14 +134,15 @@ def add_metadata(parent):
   metadata_rows.extend(add_source_database(parent))
   return metadata_rows
 
+
 def add_fragments(parent):
   """Given a row from the source_assignments dataframe, return a list of triples
   for the fragments of the protein."""
-  
+
   fragment_str = parent['Assigned Protein Fragments']
   if not fragment_str: return []
   fragments = ast.literal_eval(fragment_str)
-  if len(fragments) < 2: return [] # don't fragment the protein if there is only one
+  if len(fragments) < 2: return []  # don't fragment the protein if there is only one
 
   fragment_type_map = {
     "Chain": "mature protein", "Peptide": "peptide", "Propeptide": "propeptide",
@@ -146,27 +153,26 @@ def add_fragments(parent):
   fragment_rows = []
 
   for fragment in fragments:
-    
     fragment_type  = fragment['type']
-    fragment_type = fragment_type_map[fragment_type]
+    fragment_type  = fragment_type_map[fragment_type]
     fragment_start = fragment['start']
     fragment_end   = fragment['end']
     fragment_desc  = fragment['description']
     fragment_id    = fragment['feature_id']
-    
+
     try:
       int(fragment_start)
       int(fragment_end)
-    except: # these are nulls
+    except TypeError:  # these are nulls
       continue
-    
+
     if fragment_start == 1 and fragment_end == parent['Assigned Protein Length']:
-      continue # do not fragment whole length chains
+      continue  # do not fragment whole length chains
 
     if fragment_type == 'mature protein' and fragment_desc != parent['Assigned Protein Name']:
       fragment_type = f'{fragment_type} ({fragment_desc})'
 
-    if fragment_id == 'N/A': # use counter for fragment id
+    if fragment_id == 'N/A':  # use counter for fragment id
       fragment_id = f'fragment-{fragment_counter}'
       fragment_counter += 1
 
@@ -199,6 +205,7 @@ def add_fragments(parent):
 
   return fragment_rows
 
+
 def add_canonical_status(parent):
   """Given a row from the source_assignments dataframe, return a triple
   of the canonical status protein."""
@@ -208,6 +215,7 @@ def add_canonical_status(parent):
     "true" if parent['Assigned Protein Review Status'] else "false",
     datatype="xsd:boolean"
   )]
+
 
 def add_synonyms(parent):
   """Given a row from the source_assignments dataframe, return a list of triples
@@ -225,6 +233,7 @@ def add_synonyms(parent):
     ))
   return synonyms
 
+
 def add_accession(parent):
   """Given a row from the source_assignments dataframe, return a list of triples
   for the accession of the protein and the URL to the UniProt entry."""
@@ -241,6 +250,7 @@ def add_accession(parent):
     datatype="xsd:string"
   )]
 
+
 def add_source_database(parent):
   """Given a row from the source_assignments dataframe, return a triple
   for the source database of the protein (always UniProt)."""
@@ -251,6 +261,7 @@ def add_source_database(parent):
     datatype="xsd:string"
   )]
 
+
 def owl_class(subject, label, parent):
   """Given a subject, label, and parent,
   return triples defining an owl:Class in the protein tree."""
@@ -259,6 +270,7 @@ def owl_class(subject, label, parent):
     triple(subject, 'rdfs:label', label, 'xsd:string'),
     triple(subject, 'rdfs:subClassOf', parent)
   ]
+
 
 def triple(subject, predicate, object, datatype='_IRI'):
   """Given subject, predicate, object, and optional datatype
@@ -274,9 +286,10 @@ def triple(subject, predicate, object, datatype='_IRI'):
     'annotation': None
   }
 
+
 if __name__ == "__main__":
   build_path = Path(__file__).parents[3] / 'build'
-  
+
   assignments = pl.read_csv(build_path / 'arborist' / 'all-peptide-assignments.tsv', separator='\t')
   source_data = pl.read_csv(build_path / 'arborist' / 'all-source-data.tsv', separator='\t')
   assignments = assignments.join(source_data, how='left', on='Source Accession', coalesce=True)
@@ -331,8 +344,8 @@ if __name__ == "__main__":
   # Re-parent children of 'Root' and 'organism' to 'protein'
   tree_base = tree_base.with_columns(
     pl.when(
-      (pl.col('object') == 'iedb-protein:1') | 
-      (pl.col('object') == 'iedb-protein:28384') | 
+      (pl.col('object') == 'iedb-protein:1') |
+      (pl.col('object') == 'iedb-protein:28384') |
       (pl.col('object') == 'OBI:0100026')
     )
     .then(pl.lit('PR:000000001'))
