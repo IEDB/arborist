@@ -224,7 +224,7 @@ def add_canonical_status(parent):
   return [triple(
     f"UP:{parent['Parent Protein ID']}",
     "ONTIE:0003673",
-    "true" if parent['Assigned Protein Review Status'] else "false",
+    "true" if parent['Assigned Protein Review Status'] and '-' not in parent['Parent Protein ID'] else "false",
     datatype="xsd:boolean"
   )]
 
