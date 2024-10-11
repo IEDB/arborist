@@ -4,7 +4,7 @@ import polars as pl
 from pathlib import Path
 
 
-def build_tree(tree_base, assignments):
+def build_tree(tree_base, assignments, gene_layer=False):
   """Given the tree_base from the organism tree dataframes for the tree and
   the assignments, insert LDTab rows for each protein under its
   'species protein' parent."""
@@ -31,7 +31,7 @@ def build_tree(tree_base, assignments):
     (pl.col('Assigned Protein ID').is_null()),
   ).unique(subset=['Source Accession'])
 
-  new_rows.extend(add_normal_parents(normal_parents))
+  new_rows.extend(add_normal_parents(normal_parents, gene_layer=gene_layer))
   new_rows.extend(add_arc_parents(arc_parents))
   new_rows.extend(add_others(others))
 
@@ -39,21 +39,42 @@ def build_tree(tree_base, assignments):
 
   return protein_tree
 
-
-def add_normal_parents(normal_parents):
+def add_normal_parents(normal_parents, gene_layer):
   """Proteins that have been assigned a parent."""
   rows = []
+  genes_seen = set()
   for parent in normal_parents.iter_rows(named=True):
-    rows.extend(
-      owl_class(
-        f"UP:{parent['Parent Protein ID']}",
-        f"{parent['Assigned Protein Name']} (UniProt:{parent['Parent Protein ID']})",
-        f"iedb-protein:{parent['Species Taxon ID']}"
+
+    if gene_layer:
+      gene = parent['Source Assigned Gene'] if parent['Source Assigned Gene'] else 'Unknown Gene'
+
+      if gene not in genes_seen:
+        rows.extend(  # add gene under species protein node if not seen before
+          owl_class(
+            f"iedb-gene:{gene}",
+            f"{gene}",
+            f"iedb-protein:{parent['Species Taxon ID']}"
+          )
+        )
+        genes_seen.add((parent['Species Taxon ID'], gene))
+      rows.extend(
+        owl_class(
+          f"UP:{parent['Parent Protein ID']}",
+          f"{parent['Assigned Protein Name']} (UniProt:{parent['Parent Protein ID']})",
+          f"iedb-gene:{gene}"
+        )
       )
-    )
+
+    else:
+      rows.extend(  # just add parent under species protein node
+        owl_class(
+          f"UP:{parent['Parent Protein ID']}",
+          f"{parent['Assigned Protein Name']} (UniProt:{parent['Parent Protein ID']})",
+          f"iedb-protein:{parent['Species Taxon ID']}"
+        )
+      )
     rows.extend(add_metadata(parent))
   return rows
-
 
 def add_arc_parents(arc_parents):
   """Proteins that have been assigned an antigen receptor via ARC."""
@@ -85,7 +106,6 @@ def add_arc_parents(arc_parents):
     rows.extend(add_metadata(parent))
   return rows
 
-
 def antigen_receptor_name(antigen_receptor_class):
   if antigen_receptor_class == 'TCR':
     return 'T Cell Receptor'
@@ -95,7 +115,6 @@ def antigen_receptor_name(antigen_receptor_class):
     return 'Major Histocompatibility Complex I'
   elif antigen_receptor_class == 'MHC-II':
     return 'Major Histocompatibility Complex II'
-
 
 def add_others(others):
   """Proteins that have not been assigned a parent nor as an antigen receptor."""
@@ -122,7 +141,6 @@ def add_others(others):
     )
   return rows
 
-
 def add_metadata(parent):
   """Given a row from the source_assignments dataframe, return a list of triples
   for the metadata of the protein."""
@@ -134,13 +152,13 @@ def add_metadata(parent):
   metadata_rows.extend(add_source_database(parent))
   return metadata_rows
 
-
 def add_fragments(parent):
   """Given a row from the source_assignments dataframe, return a list of triples
   for the fragments of the protein."""
 
   fragment_str = parent['Assigned Protein Fragments']
   if not fragment_str: return []
+
   fragments = ast.literal_eval(fragment_str)
   if len(fragments) < 2: return []  # don't fragment the protein if there is only one
 
@@ -205,7 +223,6 @@ def add_fragments(parent):
 
   return fragment_rows
 
-
 def add_canonical_status(parent):
   """Given a row from the source_assignments dataframe, return a triple
   of the canonical status protein."""
@@ -216,13 +233,13 @@ def add_canonical_status(parent):
     datatype="xsd:boolean"
   )]
 
-
 def add_synonyms(parent):
   """Given a row from the source_assignments dataframe, return a list of triples
   for the synonyms of the protein."""
   synonyms = []
   protein_synonyms = parent['Assigned Protein Synonyms']
   if not protein_synonyms: return []
+  
   for synonym in protein_synonyms.split(', '):
     if '@' in synonym or '{' in synonym: continue
     synonyms.append(triple(
@@ -232,7 +249,6 @@ def add_synonyms(parent):
       datatype="xsd:string"
     ))
   return synonyms
-
 
 def add_accession(parent):
   """Given a row from the source_assignments dataframe, return a list of triples
@@ -250,7 +266,6 @@ def add_accession(parent):
     datatype="xsd:string"
   )]
 
-
 def add_source_database(parent):
   """Given a row from the source_assignments dataframe, return a triple
   for the source database of the protein (always UniProt)."""
@@ -261,7 +276,6 @@ def add_source_database(parent):
     datatype="xsd:string"
   )]
 
-
 def owl_class(subject, label, parent):
   """Given a subject, label, and parent,
   return triples defining an owl:Class in the protein tree."""
@@ -270,7 +284,6 @@ def owl_class(subject, label, parent):
     triple(subject, 'rdfs:label', label, 'xsd:string'),
     triple(subject, 'rdfs:subClassOf', parent)
   ]
-
 
 def triple(subject, predicate, object, datatype='_IRI'):
   """Given subject, predicate, object, and optional datatype
@@ -354,7 +367,8 @@ if __name__ == "__main__":
   )
 
   protein_tree = build_tree(tree_base, assignments)
+  protein_tree_w_gene = build_tree(tree_base, assignments, gene_layer=True)
 
   db = 'sqlite:///' + str(build_path / 'arborist' / 'nanobot.db')
   protein_tree.write_database('protein_tree_old', connection=db, if_table_exists='replace')
-  protein_tree.write_database('protein_tree_new', connection=db, if_table_exists='replace')
+  protein_tree_w_gene.write_database('protein_tree_new', connection=db, if_table_exists='replace')
