@@ -46,13 +46,13 @@ def add_normal_parents(normal_parents, gene_layer):
   for parent in normal_parents.iter_rows(named=True):
 
     if gene_layer:
-      gene = parent['Source Assigned Gene'] if parent['Source Assigned Gene'] else 'Unknown Gene'
+      gene = parent['Source Assigned Gene'] if parent['Source Assigned Gene'] else 'Unknown'
 
       if gene not in genes_seen:
         rows.extend(  # add gene under species protein node if not seen before
           owl_class(
-            f"iedb-gene:{gene}",
-            f"{gene}",
+            f"iedb-gene:{parent['Species Taxon ID']}-{gene}",
+            f"Gene: {gene}",
             f"iedb-protein:{parent['Species Taxon ID']}"
           )
         )
@@ -61,7 +61,7 @@ def add_normal_parents(normal_parents, gene_layer):
         owl_class(
           f"UP:{parent['Parent Protein ID']}",
           f"{parent['Assigned Protein Name']} (UniProt:{parent['Parent Protein ID']})",
-          f"iedb-gene:{gene}"
+          f"iedb-gene:{parent['Species Taxon ID']}-{gene}"
         )
       )
 
