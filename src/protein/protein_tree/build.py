@@ -78,14 +78,18 @@ def add_normal_parents(normal_parents, gene_layer):
 
 def add_arc_parents(arc_parents):
   """Proteins that have been assigned an antigen receptor via ARC."""
+  receptor_name_dict = {
+    'TCR': 'T Cell Receptor', 'BCR': 'B Cell Receptor / Immunoglobulin',
+    'MHC-I': 'Major Histocompatibility Complex I', 'MHC-II': 'Major Histocompatibility Complex II'
+  }
   rows = []
   nodes_seen = set()
   arc_parents = arc_parents.rename({'Assigned Protein ID': 'Parent Protein ID'})
   for parent in arc_parents.iter_rows(named=True):
     arc_assignment = parent['ARC Assignment']
     antigen_receptor_class = arc_assignment.split('_')[0]
+    node_name = receptor_name_dict[antigen_receptor_class]
     node_id = f"{str(parent['Species Taxon ID'])}-{antigen_receptor_class.lower()}"
-    node_name = antigen_receptor_name(antigen_receptor_class)
     if node_id not in nodes_seen:
       rows.extend(
         owl_class(
@@ -106,15 +110,6 @@ def add_arc_parents(arc_parents):
     rows.extend(add_metadata(parent))
   return rows
 
-def antigen_receptor_name(antigen_receptor_class):
-  if antigen_receptor_class == 'TCR':
-    return 'T Cell Receptor'
-  elif antigen_receptor_class == 'BCR':
-    return 'B Cell Receptor / Immunoglobulin'
-  elif antigen_receptor_class == 'MHC-I':
-    return 'Major Histocompatibility Complex I'
-  elif antigen_receptor_class == 'MHC-II':
-    return 'Major Histocompatibility Complex II'
 
 def add_others(others):
   """Proteins that have not been assigned a parent nor as an antigen receptor."""
