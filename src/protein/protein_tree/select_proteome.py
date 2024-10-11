@@ -49,13 +49,16 @@ class ProteomeSelector:
         'Redundant'
       ]
 
+      selected_proteomes = self.proteome_list
+      selected_proteome_type = ''
+
       for proteome_type in proteome_types:
         proteomes = self.proteome_list.filter(
           pl.col('Proteome Type').str.contains(proteome_type)
         )
         if not proteomes.is_empty():
           selected_proteomes = proteomes
-          proteome_type = proteome_type
+          selected_proteome_type = proteome_type
           break
 
       if selected_proteomes.height > 1:
@@ -72,7 +75,7 @@ class ProteomeSelector:
       self._fetch_fragment_data(proteome_id)
       self._fetch_synonym_data(proteome_id)
       self._fetch_gp_proteome(proteome_id, proteome_taxon)
-      self._write_metadata(proteome_id, proteome_taxon, proteome_type, proteome_label)
+      self._write_metadata(proteome_id, proteome_taxon, selected_proteome_type, proteome_label)
 
   def _fetch_orphans(self):
     url = f'https://rest.uniprot.org/uniprotkb/search?format=fasta&query=taxonomy_id:{self.taxon_id}&size=500'
