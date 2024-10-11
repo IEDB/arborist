@@ -132,6 +132,8 @@ class SourceProcessor:
       if new_arc_sources.shape[0] == 0:
         return old_arc_df
       self.write_sources_to_fasta(new_arc_sources)
+    else:
+      old_arc_df = pl.DataFrame({'id': [''], 'class': [''], 'chain_type': [''], 'calc_mhc_allele': ['']})
 
     temp_results_path = self.species_path / 'arc-temp-results.tsv'
     SeqClassifier(
@@ -143,7 +145,7 @@ class SourceProcessor:
 
     temp_results = pl.read_csv(temp_results_path, separator='\t')
     if temp_results.shape[0] == 0:
-      return pl.DataFrame({'id': [''], 'class': [''], 'chain_type': [''], 'calc_mhc_allele': ['']})
+      return old_arc_df
 
     if arc_results_exist:
       arc_df = pl.concat([old_arc_df, temp_results])
@@ -538,8 +540,8 @@ if __name__ == "__main__":
   all_sources = data_fetcher.get_all_sources()
 
   if all_species:
-    for row in active_species.rows(named=True):
-      do_assignments(row['Species ID'])
+    # for row in active_species.rows(named=True):
+    #   do_assignments(row['Species ID'])
     combine_data()
   else:
     do_assignments(taxon_id)
