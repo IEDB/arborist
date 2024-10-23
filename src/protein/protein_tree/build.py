@@ -329,10 +329,11 @@ if __name__ == "__main__":
 
   # Filter out subjects with iedb-taxon:level "lower" or blank.
   lower_subjects = tree_base.filter(pl.col('object').is_in(['lower', '']))['subject'].to_list()
-  tree_base = pl.concat([
-    tree_base.filter(~pl.col('subject').is_in(lower_subjects)),
-    tree_base.filter(pl.col('subject') == 'iedb-protein:2890311')
-  ])
+  tree_base = tree_base.filter(~pl.col('subject').is_in(lower_subjects))
+  # tree_base = pl.concat([
+  #   tree_base.filter(~pl.col('subject').is_in(lower_subjects)),
+  #   tree_base.filter(pl.col('subject') == 'iedb-protein:2890311')
+  # ])
 
   # Relabel 'taxon' to 'taxon protein'.
   tree_base = tree_base.with_columns(
