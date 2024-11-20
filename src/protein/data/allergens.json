@@ -5685,12 +5685,32 @@
         "allergen_name": "Tri a 20"
     },
     {
+        "uniprot_id": "A0A060N0S6",
+        "mapped_id": "A0A060N479",
+        "allergen_name": "Tri a 20"
+    },
+    {
+        "uniprot_id": "F2XAR4",
+        "mapped_id": "A0A060N479",
+        "allergen_name": "Tri a 20"
+    },
+    {
+        "uniprot_id": "F2XAR5",
+        "mapped_id": "A0A060N479",
+        "allergen_name": "Tri a 20"
+    },
+    {
         "uniprot_id": "P08453",
         "mapped_id": "A0A060N479",
         "allergen_name": "Tri a 20"
     },
     {
         "uniprot_id": "M9TG60",
+        "mapped_id": "A0A060N479",
+        "allergen_name": "Tri a 20"
+    },
+    {
+        "uniprot_id": "Q571R2",
         "mapped_id": "A0A060N479",
         "allergen_name": "Tri a 20"
     },
