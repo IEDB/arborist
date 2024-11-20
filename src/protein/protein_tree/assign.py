@@ -472,7 +472,7 @@ def do_assignments(taxon_id):
 def check_for_proteome(taxon_id, active_taxa, species_name, group):
   species_path = build_path / 'species' / str(taxon_id)
   if not species_path.exists():
-    print('No proteome detected for {species_name} (ID: {taxon_id}), selecting best one...')
+    print(f'No proteome detected for {species_name} (ID: {taxon_id}), selecting best one...')
     data_fetcher = DataFetcher(build_path)
     peptides = data_fetcher.get_peptides_for_species(all_peptides, active_taxa)
     proteome_selector = ProteomeSelector(
