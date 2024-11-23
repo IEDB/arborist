@@ -355,9 +355,14 @@ class ProteomeSelector:
       'Gene Priority', 'Sequence', 'Database'
     ]
     proteome = pl.DataFrame(proteome_data, schema=columns, orient='row').with_columns(
-      pl.when(pl.col('Protein ID').str.contains('-'))
+      (pl.when(pl.col('Protein ID').str.contains('-'))
       .then(pl.col('Protein ID').str.split('-').list.last())
-      .otherwise(pl.lit('1')).alias('Isoform Count')
+      .otherwise(pl.lit('1')).alias('Isoform Count')),
+      (pl.when(pl.col('Protein ID').str.contains('-'))
+      .then(
+        pl.col('Protein Existence Level').filter(pl.col('Protein ID').str.split('-').list.first() == pl.col('Protein ID')).first()
+      )
+      .otherwise(pl.col('Protein Existence Level')).alias('Protein Existence Level'))
     ).select([
       'Database', 'Gene', 'Protein ID', 'Entry Name', 'Isoform Count', 'Protein Name', 
       'Protein Existence Level', 'Gene Priority', 'Sequence'
