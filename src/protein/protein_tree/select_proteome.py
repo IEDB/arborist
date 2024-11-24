@@ -71,10 +71,10 @@ class ProteomeSelector:
         self._fetch_proteome_file(proteome_id)
 
       self._rename_proteome_file(proteome_id)
-      self._preprocess_proteome()
       self._fetch_fragment_data(proteome_id)
       self._fetch_synonym_data(proteome_id)
       self._fetch_gp_proteome(proteome_id, proteome_taxon)
+      self._preprocess_proteome()
       self._write_metadata(proteome_id, proteome_taxon, selected_proteome_type, proteome_label)
 
   def _fetch_orphans(self):
@@ -171,9 +171,11 @@ class ProteomeSelector:
       file.unlink()
   
   def _preprocess_proteome(self):
+    gp_proteome = self.species_path / 'gp_proteome.fasta' if (self.species_path / 'gp_proteome.fasta').exists() else ''
     Preprocessor(
       proteome = self.species_path / 'proteome.fasta',
       preprocessed_files_path = self.species_path,
+      gene_priority_proteome=gp_proteome
     ).sql_proteome(k = 5)
 
   def _rename_proteome_file(self, proteome_id: str):
