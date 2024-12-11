@@ -15,4 +15,3 @@ push_files.sh
 
 # test
 !test/build/
-test/build/species/
