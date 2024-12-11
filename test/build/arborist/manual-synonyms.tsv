@@ -1,0 +1,15 @@
+Organism ID	Organism Name	Database	Accession	Name	Synonyms
+9606	Homo sapiens (human)	UniProt	P15309	Prostatic acid phosphatase	PAP
+10090	Mus musculus (mouse)	UniProt	Q8CE08	Prostatic acid phosphatase	PAP
+10116	Rattus norvegicus (Norway rat)	UniProt	A0A0G2K4B4	Acid phosphatase, prostate	PAP
+9606	Homo sapiens (human)	UniProt	P07288	Prostate-specific antigen	PSA
+9606	Homo sapiens (human)	UniProt	Q04609	Glutamate carboxypeptidase 2	PMSA
+10090	Mus musculus (mouse)	UniProt	O35409	Glutamate carboxypeptidase 2	PMSA
+9606	Homo sapiens (human)	UniProt	Q96JT2	Solute carrier family 45 member 3	PROS
+10090	Mus musculus (mouse)	UniProt	Q8K0H7	Solute carrier family 45 member 3	PROS
+10116	Rattus norvegicus (Norway rat)	UniProt	D3ZPP5	Solute carrier family 45, member 3	PROS
+9606	Homo sapiens (human)	UniProt	O43653	Prostate stem cell antigen	PSCA
+9606	Homo sapiens (human)	UniProt	Q9UHE8	Metalloreductase STEAP1	STEAP
+10090	Mus musculus (mouse)	UniProt	Q9CWR7	Metalloreductase STEAP1	STEAP
+9606	Homo sapiens (human)	UniProt	Q7Z2W7	Transient receptor potential cation channel subfamily M member 8	Trp-p8
+10090	Mus musculus (mouse)	UniProt	Q8R4D5	Transient receptor potential cation channel subfamily M member 8	Trp-p8
