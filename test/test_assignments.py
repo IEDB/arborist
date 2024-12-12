@@ -44,8 +44,8 @@ def test_assignment_output(species_path):
       expected_df = expected_df.with_columns(pl.col(col).fill_null(""))
       generated_df = generated_df.with_columns(pl.col(col).fill_null(""))
     
-    generated_df = generated_df.sort("Epitope Sequence")
-    expected_df = expected_df.sort("Epitope Sequence")
-    
+    generated_df = generated_df.sort(['Source Accession', 'Epitope Sequence'])
+    expected_df = expected_df.sort(['Source Accession', 'Epitope Sequence'])
+
     assert generated_df.columns == expected_df.columns, f"Column mismatch for species {taxon}"
     assert_frame_equal(generated_df, expected_df, check_dtypes=False)
