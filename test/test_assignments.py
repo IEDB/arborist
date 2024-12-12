@@ -15,7 +15,8 @@ def cleanup_files(species_path):
     'peptide-assignments.tsv',
     'proteome.db',
     'source-data.tsv',
-    'peptide-matches.tsv'
+    'peptide-matches.tsv',
+    'arc-results.tsv'
   ]
   
   for taxon in species:
