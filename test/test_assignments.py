@@ -1,8 +1,9 @@
 import pytest
 import polars as pl
+from polars.testing import assert_frame_equal
 from pathlib import Path
 
-species = [108, 3052236]
+species = [108, 9593, 3052236]
 
 @pytest.fixture
 def species_path() -> Path:
@@ -37,11 +38,14 @@ def test_assignment_output(species_path):
     expected_path = species_dir / 'expected-assignments.tsv'
     assert expected_path.exists(), f"Expected assignments file not found for species {taxon}"
     expected_df = pl.read_csv(expected_path, separator='\t')
+
+    str_cols = [col for col in expected_df.columns if expected_df[col].dtype == pl.String]
+    for col in str_cols: # replace nulls with empty strings so it's consistent
+      expected_df = expected_df.with_columns(pl.col(col).fill_null(""))
+      generated_df = generated_df.with_columns(pl.col(col).fill_null(""))
     
-    generated_df = generated_df.sort(generated_df.columns)
-    expected_df = expected_df.sort(expected_df.columns)
+    generated_df = generated_df.sort("Epitope Sequence")
+    expected_df = expected_df.sort("Epitope Sequence")
     
-    assert generated_df.columns == expected_df.columns, \
-        f"Column mismatch for species {taxon}"
-    
-    assert generated_df.equals(expected_df)
+    assert generated_df.columns == expected_df.columns, f"Column mismatch for species {taxon}"
+    assert_frame_equal(generated_df, expected_df, check_dtypes=False)

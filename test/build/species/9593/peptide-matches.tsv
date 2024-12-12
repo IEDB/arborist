@@ -1,9 +1,0 @@
-Query Sequence	Matched Sequence	Protein ID	Protein Name	Species	Taxon ID	Gene	Mismatches	Mutated Positions	Index start	Index end	Protein Existence Level	Gene Priority	SwissProt Reviewed
-VMAPRTLVL	VMAPRTLVL	P30375	Class I histocompatibility antigen, Gogo-A*0101 alpha chain	Gorilla gorilla gorilla	9595		0	[]	3	11	2	1	1
-VMAPRTLVL	VMAPRTLVL	P30377	Class I histocompatibility antigen, Gogo-A*0401 alpha chain	Gorilla gorilla gorilla	9595		0	[]	3	11	2	1	1
-LGYDYSYL	LGYDYSYL	Q9BDE0	Tyrosinase	Gorilla gorilla gorilla	9595	TYR	0	[]	445	452	3	1	1
-QGSANDPIFL	QGSANDPIFL	Q9BDE0	Tyrosinase	Gorilla gorilla gorilla	9595	TYR	0	[]	378	387	3	1	1
-SEIWRDIDF	SEIWRDIDF	Q9BDE0	Tyrosinase	Gorilla gorilla gorilla	9595	TYR	0	[]	192	200	3	1	1
-LAVLYCLL	LAVLYCLL	Q9BDE0	Tyrosinase	Gorilla gorilla gorilla	9595	TYR	0	[]	3	10	3	1	1
-APRTLVLLL	APRTLVLLL	P30375	Class I histocompatibility antigen, Gogo-A*0101 alpha chain	Gorilla gorilla gorilla	9595		0	[]	5	13	2	1	1
-APRTLVLLL	APRTLVLLL	P30377	Class I histocompatibility antigen, Gogo-A*0401 alpha chain	Gorilla gorilla gorilla	9595		0	[]	5	13	2	1	1
