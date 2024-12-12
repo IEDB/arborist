@@ -1,0 +1,95 @@
+{
+  "Q69422": [
+    {
+      "type": "Chain",
+      "start": 1,
+      "end": 2864,
+      "description": "Genome polyprotein",
+      "feature_id": "PRO_0000450895"
+    },
+    {
+      "type": "Chain",
+      "start": 1,
+      "end": 156,
+      "description": "Core protein",
+      "feature_id": "PRO_0000037678"
+    },
+    {
+      "type": "Chain",
+      "start": 157,
+      "end": 349,
+      "description": "Envelope glycoprotein E1",
+      "feature_id": "PRO_0000037679"
+    },
+    {
+      "type": "Chain",
+      "start": 350,
+      "end": 613,
+      "description": "Envelope glycoprotein E2",
+      "feature_id": "PRO_0000037680"
+    },
+    {
+      "type": "Chain",
+      "start": 614,
+      "end": 732,
+      "description": "p13",
+      "feature_id": "PRO_0000037681"
+    },
+    {
+      "type": "Chain",
+      "start": 614,
+      "end": 669,
+      "description": "p6",
+      "feature_id": "PRO_0000284104"
+    },
+    {
+      "type": "Chain",
+      "start": 670,
+      "end": 732,
+      "description": "Viroporin p7",
+      "feature_id": "PRO_0000284105"
+    },
+    {
+      "type": "Chain",
+      "start": 733,
+      "end": 940,
+      "description": "Protease NS2",
+      "feature_id": "PRO_0000037682"
+    },
+    {
+      "type": "Chain",
+      "start": 941,
+      "end": 1564,
+      "description": "Serine protease/helicase NS3",
+      "feature_id": "PRO_0000037683"
+    },
+    {
+      "type": "Chain",
+      "start": 1565,
+      "end": 1615,
+      "description": "Non-structural protein 4A",
+      "feature_id": "PRO_0000037684"
+    },
+    {
+      "type": "Chain",
+      "start": 1616,
+      "end": 1863,
+      "description": "Non-structural protein 4B",
+      "feature_id": "PRO_0000037685"
+    },
+    {
+      "type": "Chain",
+      "start": 1864,
+      "end": 2274,
+      "description": "Non-structural protein 5A",
+      "feature_id": "PRO_0000037686"
+    },
+    {
+      "type": "Chain",
+      "start": 2275,
+      "end": 2864,
+      "description": "RNA-directed RNA polymerase",
+      "feature_id": "PRO_0000037687"
+    }
+  ]
+}
