@@ -2,7 +2,7 @@ import pytest
 import polars as pl
 from pathlib import Path
 
-species = [108]
+species = [108, 3052236]
 
 @pytest.fixture
 def species_path() -> Path:
@@ -10,29 +10,26 @@ def species_path() -> Path:
 
 @pytest.fixture(autouse=True)
 def cleanup_files(species_path):
-    # This runs before each test
-    yield
-    # This runs after each test
-    files_to_remove = [
-        'peptide-assignments.tsv',
-        'proteome.db',
-        'source-data.tsv',
-        'peptide-matches.tsv'
-    ]
-    
-    for taxon in species:
-      species_dir = species_path / str(taxon)
-      for file in files_to_remove:
-        file_path = species_dir / file
-        if file_path.exists():
-            file_path.unlink()
+  yield
+  files_to_remove = [
+    'peptide-assignments.tsv',
+    'proteome.db',
+    'source-data.tsv',
+    'peptide-matches.tsv'
+  ]
+  
+  for taxon in species:
+    species_dir = species_path / str(taxon)
+    for file in files_to_remove:
+      file_path = species_dir / file
+      if file_path.exists():
+        file_path.unlink()
 
 def test_assignment_output(species_path):
   for taxon in species:
     species_dir = species_path / str(taxon)
     
     generated_path = species_dir / 'peptide-assignments.tsv'
-    print(generated_path)
     assert generated_path.exists(), f"Generated assignments file not found for species {taxon}"
     generated_df = pl.read_csv(generated_path, separator='\t')
     
