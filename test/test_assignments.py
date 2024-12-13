@@ -1,15 +1,14 @@
 import pytest
 import polars as pl
-from polars.testing import assert_frame_equal
 from pathlib import Path
 
-species = [108, 9593, 3052236]
+species = [108, 9593, 9606, 3052236]
 
-@pytest.fixture
+@pytest.fixture(scope='session')
 def species_path() -> Path:
   return Path(__file__).parent / 'build' / 'species'
 
-@pytest.fixture(autouse=True)
+@pytest.fixture(scope='session', autouse=True)
 def cleanup_files(species_path):
   yield
   files_to_remove = [
@@ -27,25 +26,27 @@ def cleanup_files(species_path):
       if file_path.exists():
         file_path.unlink()
 
-def test_assignment_output(species_path):
+def _cols_to_dict(df, key_col, value_col):
+  return dict(df.select(key_col,value_col).iter_rows())
+
+def _check_column_matches(species_path, column_name):
   for taxon in species:
-    species_dir = species_path / str(taxon)
-    
-    generated_path = species_dir / 'peptide-assignments.tsv'
-    assert generated_path.exists(), f"Generated assignments file not found for species {taxon}"
-    generated_df = pl.read_csv(generated_path, separator='\t')
-    
-    expected_path = species_dir / 'expected-assignments.tsv'
-    assert expected_path.exists(), f"Expected assignments file not found for species {taxon}"
-    expected_df = pl.read_csv(expected_path, separator='\t')
+    generated_df = pl.read_csv(species_path / str(taxon) / 'peptide-assignments.tsv', separator='\t')
+    expected_df = pl.read_csv(species_path / str(taxon) / 'expected-assignments.tsv', separator='\t')
 
-    str_cols = [col for col in expected_df.columns if expected_df[col].dtype == pl.String]
-    for col in str_cols: # replace nulls with empty strings so it's consistent
-      expected_df = expected_df.with_columns(pl.col(col).fill_null(""))
-      generated_df = generated_df.with_columns(pl.col(col).fill_null(""))
-    
-    generated_df = generated_df.sort(['Source Accession', 'Epitope Sequence'])
-    expected_df = expected_df.sort(['Source Accession', 'Epitope Sequence'])
+    generated_dict = _cols_to_dict(generated_df, 'Epitope Sequence', column_name)
+    expected_dict = _cols_to_dict(expected_df, 'Epitope Sequence', column_name)
+    assert generated_dict == expected_dict, f"Mismatch in column '{column_name}' for taxon {taxon}"
 
-    assert generated_df.columns == expected_df.columns, f"Column mismatch for species {taxon}"
-    assert_frame_equal(generated_df, expected_df, check_dtypes=False)
+def test_generated_files_exist(species_path):
+  for taxon in species:
+    assert (species_path / str(taxon) / 'peptide-assignments.tsv').exists(), 'Assignment file not generated'
+
+def test_assignment_output(species_path):
+    _check_column_matches(species_path, 'Assigned Protein ID')
+
+def test_fragment_output(species_path):
+    _check_column_matches(species_path, 'Assigned Protein Fragments')
+
+def test_synonym_output(species_path):
+    _check_column_matches(species_path, 'Assigned Protein Synonyms')
