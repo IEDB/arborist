@@ -310,7 +310,8 @@ build/arborist/nanobot.db: build/arborist/nanobot.toml src/arborist/*.tsv
 cache/ncbitaxon/:
 	mkdir $@
 
-TAXDMP_VERSION := $(shell date +"%Y-%m-01")
+#TAXDMP_VERSION := $(shell date +"%Y-%m-01")
+TAXDMP_VERSION := 2025-04-01
 
 # Fetch the taxdmp.zip for this month.
 cache/ncbitaxon/taxdmp_$(TAXDMP_VERSION).zip: | cache/ncbitaxon/ current/
