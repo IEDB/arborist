@@ -551,10 +551,9 @@ molecule: build/arborist/molecule-tree.built
 
 ### 8. Build Disease Tree
 
-# Copy disease-tree.owl from production.
-# TODO: Build proper disease tree
 build/disease-tree.owl: | build/
-	curl -L -k -o $@ 'https://10.0.7.92/proteins/latest/disease-tree.owl'
+	cd src/diseases && make clean all
+	mv src/diseases/build/disease-tree.owl $@
 
 build/disease-tree.tsv: build/disease-tree.owl | build/arborist/nanobot.db
 	sqlite3 $| 'DROP TABLE IF EXISTS disease_tree'

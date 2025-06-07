@@ -1,0 +1,16 @@
+PREFIX obo: <http://purl.obolibrary.org/obo/>
+PREFIX oboInOwl: <http://www.geneontology.org/formats/oboInOwl#>
+PREFIX ONTIE: <https://ontology.iedb.org/ontology/ONTIE_>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?cls WHERE {
+	?s a owl:Class .
+	FILTER NOT EXISTS { ?s rdfs:label ?label }
+	FILTER(?s != ONTIE:0003542) # additional diseases by category
+	FILTER(?s != ONTIE:0003543) # host health status
+	FILTER(!isBlank(?s))
+	BIND(STR(?s) AS ?cls)
+}
+ORDER BY ?cls
+

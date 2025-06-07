@@ -1,0 +1,10 @@
+DOID:0060056	# hypersensitivity disease
+DOID:0060118	# thoracic disease
+DOID:0080000	# muscular disease
+DOID:16			# integumentary system disease
+DOID:0060085 	# organ system benign neoplasm
+DOID:2473		# opportunistic mycosis
+DOID:0050292	# primary systemic mycosis
+DOID:0050136	# systemic mycosis
+DOID:0050339	# commensal bacterial infectious disease
+DOID:0050338	# primary bacterial infectious disease

@@ -1,0 +1,6 @@
+ONTIE:0003604	# prior pregnancy (RedCap)
+ONTIE:0003605	# family medical history (RedCap)
+ONTIE:0003606	# prenatal maternal abnormality (RedCap)
+ONTIE:0003607	# congenital disease (RedCap)
+ONTIE:0003608	# congenital urogenital anomaly (RedCap)
+

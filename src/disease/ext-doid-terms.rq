@@ -1,0 +1,9 @@
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+
+SELECT ?cls WHERE {
+	?s a owl:Class .
+	FILTER(!STRSTARTS(STR(?s), "http://purl.obolibrary.org/obo/DOID_"))
+	FILTER(!STRSTARTS(STR(?s), "https://ontology.iedb.org/ontology/ONTIE_"))
+	BIND(STR(?s) AS ?cls)
+}
+ORDER BY ?cls
