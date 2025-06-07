@@ -552,10 +552,11 @@ molecule: build/arborist/molecule-tree.built
 ### 8. Build Disease Tree
 
 build/disease-tree.owl: | build/
-	cd src/diseases && make clean all
-	mv src/diseases/build/disease-tree.owl $@
+	cd src/disease && make clean all
+	mv src/disease/build/disease-tree.owl $@
 
 build/disease-tree.tsv: build/disease-tree.owl | build/arborist/nanobot.db
+	rm -f $@
 	sqlite3 $| 'DROP TABLE IF EXISTS disease_tree'
 	ldtab init $| --table disease_tree
 	ldtab import $| $< --table disease_tree
