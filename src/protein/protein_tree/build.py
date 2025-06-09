@@ -52,14 +52,14 @@ def add_normal_parents(normal_parents, gene_layer):
       if (parent['Species Taxon ID'], gene) not in genes_seen:
         rows.extend(  # add gene under species protein node if not seen before
           owl_class(
-            f"iedb-gene:{parent['Species Taxon ID']}-{gene}",
+            f"iedb-protein:{parent['Species Taxon ID']}-{gene}",
             f"Gene: {gene}",
             f"iedb-protein:{parent['Species Taxon ID']}"
           )
         )
         rows.extend( # add ONTIE triple for each gene under species
           [triple(
-            f"iedb-protein:{parent['Species Taxon ID']}",
+            f"iedb-protein:{parent['Species Taxon ID']}-{gene}",
             f"ONTIE:0003674",
             f"{gene}",
           )]
@@ -69,7 +69,7 @@ def add_normal_parents(normal_parents, gene_layer):
         owl_class(
           f"UP:{parent['Parent Protein ID']}",
           f"{parent['Assigned Protein Name']} (UniProt:{parent['Parent Protein ID']})",
-          f"iedb-gene:{parent['Species Taxon ID']}-{gene}"
+          f"iedb-protein:{parent['Species Taxon ID']}-{gene}"
         )
       )
 
