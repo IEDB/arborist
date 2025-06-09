@@ -57,6 +57,13 @@ def add_normal_parents(normal_parents, gene_layer):
             f"iedb-protein:{parent['Species Taxon ID']}"
           )
         )
+        rows.extend( # add ONTIE triple for each gene under species
+          [triple(
+            f"iedb-protein:{parent['Species Taxon ID']}",
+            f"ONTIE:0003674",
+            f"{gene}",
+          )]
+        )
         genes_seen.add((parent['Species Taxon ID'], gene))
       rows.extend(
         owl_class(
