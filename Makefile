@@ -509,12 +509,19 @@ build/arborist/protein-tree.ttl: build/arborist/protein-tree.built | build/arbor
 build/arborist/protein-tree.owl: build/arborist/protein-tree.ttl
 	robot convert -i $< -o $@
 
+build/arborist/protein-tree-with-gene.ttl: build/arborist/protein-tree.built | build/arborist/nanobot.db
+	rm -f $@
+	ldtab export $| $@ --table protein_tree_new
+
+build/arborist/protein-tree-with-gene.owl: build/arborist/protein-tree-with-gene.ttl
+	rm -f $@
+	robot convert -i $< -o $@
+
 build/arborist/epitope-mappings.tsv: build/arborist/protein-tree.owl
 	$(VENV_PYTHON) src/protein/protein_tree/immunomebrowser.py -n 10
 
 .PHONY: protein
-protein: build/arborist/epitope-mappings.tsv
-
+protein: build/arborist/epitope-mappings.tsv build/arborist/protein-tree-with-gene.owl
 
 ### 6. TODO Build Molecule Tree
 
@@ -542,9 +549,33 @@ build/arborist/molecule-tree.built: build/arborist/molecule-tree.owl
 	sqlite3 $(DB) 'ANALYZE $(TABLE)'
 	touch $@
 
-.PHONY: molecule
-molecule: build/arborist/molecule-tree.built
+build/arborist/molecule-tree-with-gene.owl: nonpeptide-tree-20240305.owl build/arborist/protein-tree-with-gene.owl
+	rm -f $@
+	robot remove \
+	--input $< \
+	--term BFO:0000023 \
+	--select "self descendants" \
+	merge \
+	--input $(word 2,$^) \
+	annotate \
+	--ontology-iri https://ontology.iedb.org/ontology/molecule-tree-with-gene.owl \
+	--version-iri https://ontology.iedb.org/ontology/$(shell date +%Y-%m-%d)/molecule-tree-with-gene.owl \
+	--output $@
 
+build/arborist/molecule-tree-with-gene.built: build/arborist/molecule-tree-with-gene.owl | build/arborist/nanobot.db
+	$(eval DB := build/arborist/nanobot.db)
+	$(eval TABLE := molecule_tree_with_gene)
+	sqlite3 $(DB) 'DROP TABLE IF EXISTS $(TABLE)'
+	ldtab init $(DB) --table $(TABLE)
+	ldtab import $(DB) $< --table $(TABLE)
+	sqlite3 $(DB) 'CREATE INDEX idx_$(TABLE)_subject ON $(TABLE)(subject)'
+	sqlite3 $(DB) 'CREATE INDEX idx_$(TABLE)_predicate ON $(TABLE)(predicate)'
+	sqlite3 $(DB) 'CREATE INDEX idx_$(TABLE)_object ON $(TABLE)(object)'
+	sqlite3 $(DB) 'ANALYZE $(TABLE)'
+	touch $@
+
+.PHONY: molecule
+molecule: build/arborist/molecule-tree.built build/arborist/molecule-tree-with-gene.built
 
 ### 7. TODO Build Assay Tree
 
@@ -589,6 +620,7 @@ build/proteins/latest/: build/proteins/previous/
 	mkdir -p $@
 	cp build/disease-tree.owl $@
 	cp build/arborist/molecule-tree.owl $@
+	cp build/arborist/molecule-tree-with-gene.owl $@
 	cp build/arborist/parent-proteins.tsv $@
 	cp build/arborist/source-parents.tsv $@
 	cp build/arborist/epitope-mappings.tsv $@
