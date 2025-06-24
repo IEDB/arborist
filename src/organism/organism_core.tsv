@@ -364,6 +364,7 @@ NCBITaxon:186938	Respirovirus	NCBI Taxonony scientific name		upper	NCBITaxon:111
 NCBITaxon:11216	Human respirovirus 3 (Human parainfluenza 3 virus)	NCBI Taxonony scientific name		species	NCBITaxon:186938	Respirovirus	
 NCBITaxon:12058	Picornavirus	singular of NCBI Taxonomy scientific name		upper	iedb-taxon:10002040	RNA virus	
 NCBITaxon:12110	Foot-and-mouth disease virus	NCBI Taxonomy scientific name		species	NCBITaxon:12058	Picornavirus	
+NCBITaxon:12092	Hepatovirus A (Hepatitis A virus)	NCBI Taxonomy scientific name (NCBI Taxonomy equivalent name)		species	NCBITaxon:12058	Picornavirus	
 iedb-taxon:10002044	Plant virus (RNA)	IEDB		upper	iedb-taxon:10002040	RNA virus	
 NCBITaxon:2560196	Orthotospovirus	NCBI Taxonomy scientific name		upper	iedb-taxon:10002044	Plant virus (RNA)	
 NCBITaxon:3052571	Orthotospovirus citrullomaculosi	NCBI Taxonomy scientific name		species	NCBITaxon:2560196	Orthotospovirus	
