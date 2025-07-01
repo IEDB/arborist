@@ -99,6 +99,8 @@ def add_arc_parents(arc_parents):
     antigen_receptor_class = arc_assignment.split('_')[0]
     node_name = receptor_name_dict[antigen_receptor_class]
     node_id = f"{str(parent['Species Taxon ID'])}-{antigen_receptor_class.lower()}"
+    if antigen_receptor_class == 'BCR':  # add to end since there are "bcr" genes in some species
+      node_id += '-ig'
     if node_id not in nodes_seen:
       rows.extend(
         owl_class(
