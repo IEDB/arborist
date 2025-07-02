@@ -315,11 +315,11 @@ class ProteomeSelector:
   def to_tsv(self):
     if (self.species_path / 'proteome.fasta').stat().st_size == 0: return
     regexes = {
-      'protein_id': re.compile(r"\|([^|]*)\|"),     # between | and |
-      'entry_name': re.compile(r"\|([^\|]*?)\s"),   # between | and space
-      'protein_name': re.compile(r"\s(.+?)\sOS"),   # between space and space before OS
-      'gene': re.compile(r"GN=([^\s]+?)(?=\s|$)"),  # between GN= and space or end of line
-      'pe_level': re.compile(r"PE=(.+?)\s"),        # between PE= and space
+      'protein_id': re.compile(r"\|([^|]*)\|"),         # between | and |
+      'entry_name': re.compile(r"\|([^\|]*?)\s"),       # between | and space
+      'protein_name': re.compile(r"\s(.+?)\sOS"),       # between space and space before OS
+      'gene': re.compile(r"GN=(.*?)(?=\s[A-Z]{2}=|$)"), # between GN= and PE= or eol
+      'pe_level': re.compile(r"PE=(.+?)\s"),            # between PE= and space
     }
 
     proteins = list(SeqIO.parse(self.species_path / 'proteome.fasta', 'fasta'))
