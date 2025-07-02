@@ -93,6 +93,7 @@ def add_arc_parents(arc_parents):
   }
   rows = []
   nodes_seen = set()
+  genes_seen_in_receptor = set()  # group genes together 
   arc_parents = arc_parents.rename({'Assigned Protein ID': 'Parent Protein ID'})
   for parent in arc_parents.iter_rows(named=True):
     arc_assignment = parent['ARC Assignment']
@@ -110,12 +111,26 @@ def add_arc_parents(arc_parents):
         )
       )
       nodes_seen.add(node_id)
+    
+    # group genes within receptor nodes
+    gene = parent['Source Assigned Gene'] if parent['Source Assigned Gene'] else 'Unknown'
+    gene = gene.replace('\\', '-')
+    gene_node_id = f"{node_id}-{gene}"
+    if (node_id, gene) not in genes_seen_in_receptor:
+      rows.extend(
+        owl_class(
+          f"iedb-protein:{gene_node_id}",
+          f"Gene: {gene}",
+          f"iedb-protein:{node_id}"
+        )
+      )
+      genes_seen_in_receptor.add((node_id, gene))
 
     rows.extend(
       owl_class(
         f"UP:{parent['Parent Protein ID']}",
         f"{parent['Assigned Protein Name']} (UniProt:{parent['Parent Protein ID']})",
-        f"iedb-protein:{node_id}"
+        f"iedb-protein:{gene_node_id}"
       )
     )
     rows.extend(add_metadata(parent))
