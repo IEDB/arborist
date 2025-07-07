@@ -364,7 +364,8 @@ class ProteomeSelector:
       .then(
         pl.col('Protein Existence Level').filter(pl.col('Protein ID').str.split('-').list.first() == pl.col('Protein ID')).first()
       )
-      .otherwise(pl.col('Protein Existence Level')).alias('Protein Existence Level'))
+      .otherwise(pl.col('Protein Existence Level')).alias('Protein Existence Level')),
+      pl.col('Gene').str.replace_all(r'[ \.\(\)]', '_').alias('Gene')
     ).select([
       'Database', 'Gene', 'Protein ID', 'Entry Name', 'Isoform Count', 'Protein Name', 
       'Protein Existence Level', 'Gene Priority', 'Sequence'
