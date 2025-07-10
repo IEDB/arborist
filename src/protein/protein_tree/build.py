@@ -114,7 +114,7 @@ def add_arc_parents(arc_parents):
     
     # group genes within receptor nodes
     gene = parent['Source Assigned Gene'] if parent['Source Assigned Gene'] else 'Unknown'
-    gene = gene.replace('\\', '-')
+    gene = gene.replace('\\', '-').upper()
     gene_node_id = f"{node_id}-{gene}"
     if (node_id, gene) not in genes_seen_in_receptor:
       rows.extend(
