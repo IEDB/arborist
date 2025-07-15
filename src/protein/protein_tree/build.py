@@ -208,7 +208,7 @@ def add_fragments(parent):
     if fragment_start == 1 and fragment_end == parent['Assigned Protein Length']:
       continue  # do not fragment whole length chains
 
-    if fragment_type == 'mature protein' and fragment_desc != parent['Assigned Protein Name']:
+    if fragment_type == 'mature protein' and fragment_desc and fragment_desc != parent['Assigned Protein Name']:
       fragment_type = f'{fragment_type} ({fragment_desc})'
 
     if fragment_id == 'N/A':  # use counter for fragment id
