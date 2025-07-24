@@ -3,12 +3,10 @@ import sqlite3
 import polars as pl
 from pathlib import Path
 
-
 def build_tree(tree_base, assignments, gene_layer=False):
   """Given the tree_base from the organism tree dataframes for the tree and
   the assignments, insert LDTab rows for each protein under its
   'species protein' parent."""
-
   new_rows = []
 
   arc_parents = assignments.filter(
@@ -42,40 +40,71 @@ def build_tree(tree_base, assignments, gene_layer=False):
 def add_normal_parents(normal_parents, gene_layer):
   """Proteins that have been assigned a parent."""
   rows = []
-  genes_seen = set()
+  gene_counts = {}
+  unknown_gene_nodes_seen = set()
   for parent in normal_parents.iter_rows(named=True):
-
     if gene_layer:
       gene = parent['Source Assigned Gene'] if parent['Source Assigned Gene'] else 'Unknown'
       gene = gene.replace('\\', '-')
+      gene_node_id = ''
 
-      if (parent['Species Taxon ID'], gene) not in genes_seen:
-        rows.extend(  # add gene under species protein node if not seen before
+      if gene == 'Unknown':
+        species_id = parent['Species Taxon ID']
+        gene_node_id = f"iedb-protein:{species_id}-Unknown"
+
+        # If we haven't created the 'Unknown' node for this species yet, create it.
+        if species_id not in unknown_gene_nodes_seen:
+          rows.extend(
+            owl_class(
+              gene_node_id,
+              "Gene: Unknown",
+              f"iedb-protein:{species_id}"
+            )
+          )
+          rows.extend(
+            [triple(
+              gene_node_id,
+              "ONTIE:0003674",
+              "Unknown",
+              "xsd:string"
+            )]
+          )
+          unknown_gene_nodes_seen.add(species_id)
+
+      else:  # Known gene: use de-duplication logic for case variants
+        tracking_key = (parent['Species Taxon ID'], gene.lower())
+        count = gene_counts.get(tracking_key, 0)
+        gene_for_id = f"{gene}_dup{count}" if count > 0 else gene
+        gene_counts[tracking_key] = count + 1
+        gene_node_id = f"iedb-protein:{parent['Species Taxon ID']}-{gene_for_id}"
+
+        # Create the unique gene node for this specific case variant
+        rows.extend(
           owl_class(
-            f"iedb-protein:{parent['Species Taxon ID']}-{gene}",
+            gene_node_id,
             f"Gene: {gene}",
             f"iedb-protein:{parent['Species Taxon ID']}"
           )
         )
-        rows.extend( # add ONTIE triple for each gene under species
+        rows.extend(
           [triple(
-            f"iedb-protein:{parent['Species Taxon ID']}-{gene}",
+            gene_node_id,
             "ONTIE:0003674",
             f"{gene}",
             "xsd:string"
           )]
         )
-        genes_seen.add((parent['Species Taxon ID'], gene))
+
+      # Attach the protein to the determined gene node
       rows.extend(
         owl_class(
           f"UP:{parent['Parent Protein ID']}",
           f"{parent['Assigned Protein Name']} (UniProt:{parent['Parent Protein ID']})",
-          f"iedb-protein:{parent['Species Taxon ID']}-{gene}"
+          gene_node_id
         )
       )
-
     else:
-      rows.extend(  # just add parent under species protein node
+      rows.extend(
         owl_class(
           f"UP:{parent['Parent Protein ID']}",
           f"{parent['Assigned Protein Name']} (UniProt:{parent['Parent Protein ID']})",
@@ -93,7 +122,7 @@ def add_arc_parents(arc_parents):
   }
   rows = []
   nodes_seen = set()
-  genes_seen_in_receptor = set()  # group genes together 
+  genes_seen_in_receptor = set()  # group genes together
   arc_parents = arc_parents.rename({'Assigned Protein ID': 'Parent Protein ID'})
   for parent in arc_parents.iter_rows(named=True):
     arc_assignment = parent['ARC Assignment']
@@ -136,7 +165,6 @@ def add_arc_parents(arc_parents):
     rows.extend(add_metadata(parent))
   return rows
 
-
 def add_others(others):
   """Proteins that have not been assigned a parent nor as an antigen receptor."""
   rows = []
@@ -176,7 +204,6 @@ def add_metadata(parent):
 def add_fragments(parent):
   """Given a row from the source_assignments dataframe, return a list of triples
   for the fragments of the protein."""
-
   fragment_str = parent['Assigned Protein Fragments']
   if not fragment_str: return []
 
@@ -241,7 +268,6 @@ def add_fragments(parent):
         datatype="xsd:string"
       )]
     )
-
   return fragment_rows
 
 def add_canonical_status(parent):
@@ -356,10 +382,6 @@ if __name__ == "__main__":
   # Filter out subjects with iedb-taxon:level "lower" or blank.
   lower_subjects = tree_base.filter(pl.col('object').is_in(['lower', '']))['subject'].to_list()
   tree_base = tree_base.filter(~pl.col('subject').is_in(lower_subjects))
-  # tree_base = pl.concat([
-  #   tree_base.filter(~pl.col('subject').is_in(lower_subjects)),
-  #   tree_base.filter(pl.col('subject') == 'iedb-protein:2890311')
-  # ])
 
   # Relabel 'taxon' to 'taxon protein'.
   tree_base = tree_base.with_columns(
