@@ -40,19 +40,18 @@ def build_tree(tree_base, assignments, gene_layer=False):
 def add_normal_parents(normal_parents, gene_layer):
   """Proteins that have been assigned a parent."""
   rows = []
-  gene_counts = {}
   unknown_gene_nodes_seen = set()
+  gene_node_map = {}
+  case_variant_counts = {}
+
   for parent in normal_parents.iter_rows(named=True):
     if gene_layer:
       gene = parent['Source Assigned Gene'] if parent['Source Assigned Gene'] else 'Unknown'
       gene = gene.replace('\\', '-')
-      gene_node_id = ''
+      species_id = parent['Species Taxon ID']
 
       if gene == 'Unknown':
-        species_id = parent['Species Taxon ID']
         gene_node_id = f"iedb-protein:{species_id}-Unknown"
-
-        # If we haven't created the 'Unknown' node for this species yet, create it.
         if species_id not in unknown_gene_nodes_seen:
           rows.extend(
             owl_class(
@@ -70,32 +69,36 @@ def add_normal_parents(normal_parents, gene_layer):
             )]
           )
           unknown_gene_nodes_seen.add(species_id)
+      else:  # Known gene
+        if (species_id, gene) in gene_node_map:
+          gene_node_id = gene_node_map[(species_id, gene)]
+        else:
+          # Create a new node for this unique gene symbol
+          tracking_key = (species_id, gene.lower())
+          count = case_variant_counts.get(tracking_key, 0)
+          gene_for_id = f"{gene}_dup{count}" if count > 0 else gene
+          gene_node_id = f"iedb-protein:{species_id}-{gene_for_id}"
 
-      else:  # Known gene: use de-duplication logic for case variants
-        tracking_key = (parent['Species Taxon ID'], gene.lower())
-        count = gene_counts.get(tracking_key, 0)
-        gene_for_id = f"{gene}_dup{count}" if count > 0 else gene
-        gene_counts[tracking_key] = count + 1
-        gene_node_id = f"iedb-protein:{parent['Species Taxon ID']}-{gene_for_id}"
+          gene_node_map[(species_id, gene)] = gene_node_id
+          case_variant_counts[tracking_key] = count + 1
 
-        # Create the unique gene node for this specific case variant
-        rows.extend(
-          owl_class(
-            gene_node_id,
-            f"Gene: {gene}",
-            f"iedb-protein:{parent['Species Taxon ID']}"
+          rows.extend(
+            owl_class(
+              gene_node_id,
+              f"Gene: {gene}",
+              f"iedb-protein:{species_id}"
+            )
           )
-        )
-        rows.extend(
-          [triple(
-            gene_node_id,
-            "ONTIE:0003674",
-            f"{gene}",
-            "xsd:string"
-          )]
-        )
-
-      # Attach the protein to the determined gene node
+          rows.extend(
+            [triple(
+              gene_node_id,
+              "ONTIE:0003674",
+              f"{gene}",
+              "xsd:string"
+            )]
+          )
+      
+      # Attach the protein to its gene node
       rows.extend(
         owl_class(
           f"UP:{parent['Parent Protein ID']}",
