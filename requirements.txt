@@ -1,6 +1,5 @@
 bottle
 jinja2
-polars
 pandas
 pyarrow
 biopython
@@ -10,6 +9,7 @@ sqlalchemy
 pytest
 requests
 pepmatch==1.1.2
+polars==1.2.0
 
 # protein tree package
 -e ./src/protein
