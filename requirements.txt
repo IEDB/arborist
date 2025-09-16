@@ -6,10 +6,10 @@ pyarrow
 biopython
 lxml
 mysql-connector-python
-pepmatch
 sqlalchemy
 pytest
 requests
+pepmatch==1.1.2
 
 # protein tree package
 -e ./src/protein
