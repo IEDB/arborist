@@ -84,8 +84,9 @@ serve: src/util/serve.py
 
 .PHONY: clean
 clean:
-	mv species/ .
-	rm -rf build
+	mv build/species/ .
+	rm -rf build/
+	mkdir build/
 	mv species/ build/
 
 .PHONY: clobber
