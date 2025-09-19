@@ -1,58 +1,53 @@
 #!/usr/bin/env python3
 
 import argparse
-import pandas as pd
-
-import warnings
-warnings.filterwarnings('ignore')
-
+import polars as pl
 
 def map_structure_ids(structure_path, peptide_path):
-    structure_cols = ['structure_id', 'description', 'disc_region', 'mc_region', 'source_antigen_accession']
-    structure = pd.read_csv(structure_path, sep='\t', names=structure_cols)
-    peptide = pd.read_csv(peptide_path, sep='\t')
+  """Maps structure IDs to peptides using a two-step fallback logic with Polars."""
+  structure_cols = ['structure_id', 'description', 'disc_region', 'mc_region', 'source_antigen_accession']
+  structure = pl.read_csv(structure_path, separator='\t', has_header=False, new_columns=structure_cols)
+  structure = structure.with_columns(
+    pl.coalesce(['mc_region', 'disc_region', 'description']).alias('description')
+  ).with_columns(
+    pl.col('description').str.split(r'\s*\+\s*').list.get(0)
+  )
 
-    # get the full regions for certain structures that have it
-    structure['description'] = structure['mc_region'].combine_first(structure['disc_region']).combine_first(structure['description'])
+  peptide = pl.read_csv(peptide_path, separator='\t')
+  original_peptide_cols = peptide.columns
 
-    # separate PTM from description
-    structure['description'] = structure['description'].str.split(r'\s*\+\s*').str[0]
+  map_with_acc = structure.filter(pl.col('source_antigen_accession').is_not_null())
+  map_seq_only = structure.select(['description', 'structure_id']).unique(subset=['description'], keep='first')
 
-    structure_with_acc = structure.dropna(subset=['source_antigen_accession'])
-    structure_without_acc = structure[structure['source_antigen_accession'].isnull()]
+  merged_df = peptide.join(
+    map_with_acc,
+    left_on=['Sequence', 'Source Accession'],
+    right_on=['description', 'source_antigen_accession'],
+    how='left'
+  ).rename({'structure_id': 'id_from_acc'})
 
-    # Try to map the structure IDs using both sequence and source accession
-    peptide['map_key'] = peptide['Sequence'].astype(str) + '|' + peptide['Source Accession'].astype(str)
-    composite_map_series = (
-        structure_with_acc['description'].astype(str) + '|' + structure_with_acc['source_antigen_accession'].astype(str)
-    )
-    structure_map_acc = pd.Series(
-        structure_with_acc['structure_id'].values, index=composite_map_series
-    ).to_dict()
+  merged_df = merged_df.join(
+    map_seq_only,
+    left_on='Sequence',
+    right_on='description',
+    how='left'
+  ).rename({'structure_id': 'id_from_seq'})
 
-    peptide['Epitope ID'] = peptide['map_key'].map(structure_map_acc)
-
-    # Create a second map using only sequences from structures that LACK an accession
-    structure_map_seq_only = structure_without_acc.drop_duplicates(
-        subset=['description']
-    ).set_index('description')['structure_id'].to_dict()
-    fallback_matches = peptide['Sequence'].map(structure_map_seq_only)
-    peptide['Epitope ID'] = peptide['Epitope ID'].combine_first(fallback_matches)
-
-    peptide = peptide.drop(columns=['map_key'])
-    return peptide
-
+  final_df = merged_df.with_columns(
+    pl.coalesce(['id_from_acc', 'id_from_seq']).alias('Epitope ID')
+  )
+  
+  return final_df.select(original_peptide_cols)
 
 def main():
-    argparser = argparse.ArgumentParser(description='Map structure IDs to peptides in peptide.tsv.')
-    argparser.add_argument('structure', type=str, help='The input structure TSV file path.')
-    argparser.add_argument('peptide', type=str, help='The input peptide TSV file path.')
+  argparser = argparse.ArgumentParser(description='Map structure IDs to peptides in peptide.tsv using Polars.')
+  argparser.add_argument('structure', type=str, help='The input structure TSV file path.')
+  argparser.add_argument('peptide', type=str, help='The input peptide TSV file path.')
 
-    args = argparser.parse_args()
+  args = argparser.parse_args()
 
-    peptide = map_structure_ids(args.structure, args.peptide)
-    peptide.to_csv(args.peptide, sep='\t', index=False)
-
+  peptide_mapped = map_structure_ids(args.structure, args.peptide)
+  peptide_mapped.write_csv(args.peptide, separator='\t')
 
 if __name__ == '__main__':
-    main()
+  main()
