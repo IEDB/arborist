@@ -282,7 +282,7 @@ build/iedb/peptide_source.tsv: src/iedb/peptide_source.sql build/iedb/source.bui
 	src/util/sqlite2tsv $| $< $@
 
 build/iedb/structure.tsv: build/iedb/peptide.tsv
-	zcat current/iedb/structure.tsv.gz | cut -f1,2,13,15 > $@
+	zcat current/iedb/structure.tsv.gz | cut -f1,2,13,15,25 > $@
 	$(VENV_PYTHON) src/util/map_structure_ids.py $@ $<
 
 .PHONY: iedb
