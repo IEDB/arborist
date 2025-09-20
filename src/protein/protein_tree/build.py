@@ -352,8 +352,19 @@ def triple(subject, predicate, object, datatype='_IRI'):
 
 if __name__ == "__main__":
   build_path = Path(__file__).parents[3] / 'build'
+  numeric_cols = [
+    'Epitope ID',
+    'Species Taxon ID',
+    'Organism ID',
+    'Source Starting Position',
+    'Source Ending Position',
+    'Assigned Protein Starting Position',
+    'Assigned Protein Ending Position'
+  ]
+  assignments = pl.read_csv(
+    build_path / 'arborist' / 'all-peptide-assignments.tsv', separator='\t', dtypes={col: pl.Float64 for col in numeric_cols}
+  ).with_columns(pl.col(numeric_cols).cast(pl.Int64))
 
-  assignments = pl.read_csv(build_path / 'arborist' / 'all-peptide-assignments.tsv', separator='\t')
   source_data = pl.read_csv(build_path / 'arborist' / 'all-source-data.tsv', separator='\t')
   assignments = assignments.join(source_data, how='left', on='Source Accession', coalesce=True)
 

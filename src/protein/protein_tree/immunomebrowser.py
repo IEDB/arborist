@@ -321,7 +321,19 @@ if __name__ == '__main__':
   args = parser.parse_args()
 
   build_path = Path(__file__).parents[3] / 'build'
-  assignments = pl.read_csv(build_path / 'arborist' / 'all-peptide-assignments.tsv', separator='\t')
+  numeric_cols = [
+    'Epitope ID',
+    'Species Taxon ID',
+    'Organism ID',
+    'Source Starting Position',
+    'Source Ending Position',
+    'Assigned Protein Starting Position',
+    'Assigned Protein Ending Position'
+  ]
+  assignments = pl.read_csv(
+    build_path / 'arborist' / 'all-peptide-assignments.tsv', separator='\t', dtypes={col: pl.Float64 for col in numeric_cols}
+  ).with_columns(pl.col(numeric_cols).cast(pl.Int64))
+
   source_data = pl.read_csv(build_path / 'arborist' / 'all-source-data.tsv', separator='\t')
   species_data = pl.read_csv(build_path / 'arborist' / 'all-species-data.tsv', separator='\t')
 
