@@ -362,7 +362,7 @@ if __name__ == "__main__":
     'Assigned Protein Ending Position'
   ]
   assignments = pl.read_csv(
-    build_path / 'arborist' / 'all-peptide-assignments.tsv', separator='\t', dtypes={col: pl.Float64 for col in numeric_cols}
+    build_path / 'arborist' / 'all-peptide-assignments.tsv', separator='\t', schema_overrides={col: pl.Float64 for col in numeric_cols}
   ).with_columns(pl.col(numeric_cols).cast(pl.Int64))
 
   source_data = pl.read_csv(build_path / 'arborist' / 'all-source-data.tsv', separator='\t')
