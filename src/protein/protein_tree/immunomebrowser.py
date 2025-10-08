@@ -17,7 +17,7 @@ def get_all_parent_data(assignments, source_data, species_data):
   ).unique(subset=['Source Accession', 'Parent Protein ID'])
 
   all_parent_data = assignments.join(
-    source_data, how='left', on='Source Accession', coalesce=True
+    source_data, how='left', on='Source Accession'
   ).join(
     species_data, how='left', on='Species Taxon ID', coalesce=True
   )
@@ -44,13 +44,13 @@ def make_source_parents(all_parent_data):
   ).unique(subset=['Source Accession'])
   source_parents = all_parent_data.select(
     'Source ID', 'Source Accession', 'Database', 'Name', 'Aliases', 'Assigned Protein Synonyms',
-    'Organism ID', 'Organism Name', 'Species Taxon ID', 'Species Name', 'Proteome ID',
+    'Organism ID_right', 'Organism Name_right', 'Species Taxon ID', 'Species Name', 'Proteome ID',
     'Proteome Label', 'Protein Strategy', 'Parent IRI', 'Parent Protein Database',
     'Parent Protein ID', 'Assigned Protein Length', 'Assigned Protein Sequence',
     'Source Assigned Gene'
   ).rename({
     'Source Accession': 'Accession', 'Assigned Protein Synonyms': 'Synonyms',
-    'Organism ID': 'Taxon ID', 'Organism Name': 'Taxon Name', 'Species Taxon ID': 'Species ID',
+    'Organism ID_right': 'Taxon ID', 'Organism Name_right': 'Taxon Name', 'Species Taxon ID': 'Species ID',
     'Species Name': 'Species Label', 'Parent Protein ID': 'Parent Protein Accession', 
     'Assigned Protein Length': 'Parent Sequence Length', 'Assigned Protein Sequence': 'Sequence',
     'Source Assigned Gene': 'Parent Protein Gene'
