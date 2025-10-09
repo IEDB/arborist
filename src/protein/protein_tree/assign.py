@@ -197,7 +197,9 @@ class SourceProcessor:
     alignments = alignments.with_columns(
       pl.col('Query').cast(pl.String).alias('Query'),
     )
-    top_proteins = alignments.group_by('Query').agg(pl.all().sort_by('Score').last())
+    top_proteins = alignments.group_by('Query').agg(
+      pl.all().sort_by(['Score', 'Subject'], descending=[True, False]).first()
+    )
     missing_sources = self.sources.filter(
       ~pl.col('Source Accession').is_in(top_proteins['Query'].to_list())
     )
