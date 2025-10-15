@@ -301,6 +301,10 @@ class PeptideProcessor:
       left_on=["Sequence", "Source Assigned Gene"], 
       right_on=["Query Sequence", "Gene"]
     )
+    matches_with_genes = matches_with_genes.with_columns(  # try to match the source assignment from BLAST
+      (pl.col('Protein ID') == pl.col('Source Assigned Protein ID')).alias('is_source_match')
+    )
+
     matches_without_genes = peptides_without_genes.join(
       matches, how="left", coalesce=False,
       left_on=["Sequence", "Source Assigned Protein ID"], 
@@ -332,7 +336,7 @@ class PeptideProcessor:
       left_on=["Sequence", "Source Assigned Protein ID"], 
       right_on=["Sequence", "Protein ID"]
     )
-  
+
     assignments = pl.concat([assignments_with_genes, assignments_without_genes])
     assignments = assignments.drop('Sequence_right', 'Gene', 'SwissProt Reviewed')
     assignments = assignments.unique(subset=['Sequence', 'Source Accession'])
