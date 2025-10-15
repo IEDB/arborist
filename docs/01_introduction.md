@@ -21,6 +21,7 @@ Arborist addresses this by creating four core trees:
 The main components of its workflow are:
 
 * **Data Fetching**: Scripts pull data from an IEDB MySQL database, public resources (like UniProt and ontology sources), and curated internal files (which we call the Source of Truth or SoT).
-* **Ontology Building**: The system uses `make` and the `ROBOT` tool to process, filter, and merge ontology files (`.owl`).
 * **Tree Construction**: A series of Python scripts process the raw data to build parent-child relationships, assign metadata, and generate the final tree structures.
+* **Ontology Building**: The system uses `make` and the `ROBOT` tool to process, filter, and merge ontology files (`.owl`).
 * **Web Interface**: The project uses **Nanobot** to serve the resulting data through a local web interface, allowing curators and developers to browse the trees and underlying data tables.
+* **IEDB Backend**: The files produced each build are pulled by the IEDB backend and incorporated to serve to iedb.org.

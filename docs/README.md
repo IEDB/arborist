@@ -6,5 +6,8 @@ Arborist is a system designed to build and maintain the biological taxonomy tree
 
 ### Table of Contents
 
-1.  [**Introduction**](./1_introduction.md)  
+1.  [**Introduction**](./01_introduction.md)  
     A high-level overview of the Arborist project, its purpose, and the problems it solves.
+
+2.  [**Installation**](./02_installation.md)  
+    Instructions for setting up the development environment, including system dependencies, Python packages, and database configuration.

@@ -12,6 +12,7 @@ WARN: This version of Arborist is still work-in-progress.
 It makes extensive use of [Nanobot](https://github.com/ontodev/nanobot.rs),
 which is also work-in-progress.
 
+See [docs](./docs/) for more detailed information and instructions.
 
 ## Usage
 
