@@ -15,7 +15,6 @@ Arborist relies on a number of command-line tools for data processing, ontology 
 * **sqlite3**: The `sqlite3` command-line tool is used for interacting with the local SQLite databases.
 
 ### Bioinformatics and General Tools
-These tools are primarily used by the `protein` module for sequence alignment and analysis.
 * **NCBI BLAST+**: The `blastp` and `makeblastdb` executables are required. Download them from the [NCBI BLAST website](https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/).
 * **MMseqs2**: Used for fast, sensitive protein searching. Installation instructions are on the [MMseqs2 GitHub page](https://github.com/soedinglab/MMseqs2).
 * **HMMER**: The `hmmscan` tool is used for protein domain analysis. You can get it from the [HMMER website](http://eddylab.org/software/hmmer/).
