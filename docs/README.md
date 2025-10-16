@@ -14,3 +14,7 @@ Arborist is a system designed to build and maintain the biological taxonomy tree
 
 3.  [**Quick Start**](./03_quick_start.md)  
     A quick guide to running the `make` commands for building the trees and launching the web interface.
+
+### References
+
+1. [**Organism Tree**](./references/organism.md)
