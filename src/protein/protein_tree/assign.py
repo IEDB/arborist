@@ -190,13 +190,14 @@ class SourceProcessor:
       )
 
     except NoDataError: # no alignments were found
-      schema = {col: pl.String for col in ['Query', 'Subject']}
-      schema.update({col: pl.Float64 for col in ['% Identity', 'E-value', 'Bit Score', 'Score']})
-      schema.update({col: pl.Int32 for col in [
-        'Alignment Length', 'Mismatches', 'Gap Openings', 'Query Start', 
-        'Query End', 'Subject Start', 'Subject End', 'Query Length'
-      ]})
-      alignments = pl.DataFrame({col: [] for col in alignment_cols}, schema=schema)
+      schema = {
+          'Query': pl.String, 'Subject': pl.String, '% Identity': pl.Float64,
+          'Alignment Length': pl.Int32, 'Mismatches': pl.Int32, 'Gap Openings': pl.Int32,
+          'Query Start': pl.Int32, 'Query End': pl.Int32, 'Subject Start': pl.Int32,
+          'Subject End': pl.Int32, 'E-value': pl.Float64, 'Bit Score': pl.Float64,
+          'Query Length': pl.Int32, 'Score': pl.Float64
+      }
+      alignments = pl.DataFrame(schema=schema)
 
     proteome = pl.read_csv(self.species_path / 'proteome.tsv', separator='\t').select(['Protein ID', 'Database'])
     alignments = alignments.join(
