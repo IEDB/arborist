@@ -190,17 +190,20 @@ class SourceProcessor:
       )
 
     except NoDataError: # no alignments were found
-      alignments = pl.DataFrame({col: [] for col in alignment_cols})
-      alignments = alignments.with_columns(
-        pl.lit(0).alias('Query Length'),
-        pl.lit(0).alias('Score')
-      )
+      schema = {col: pl.String for col in ['Query', 'Subject']}
+      schema.update({col: pl.Float64 for col in ['% Identity', 'E-value', 'Bit Score', 'Score']})
+      schema.update({col: pl.Int32 for col in [
+        'Alignment Length', 'Mismatches', 'Gap Openings', 'Query Start', 
+        'Query End', 'Subject Start', 'Subject End', 'Query Length'
+      ]})
+      alignments = pl.DataFrame({col: [] for col in alignment_cols}, schema=schema)
 
+    proteome = pl.read_csv(self.species_path / 'proteome.tsv', separator='\t').select(['Protein ID', 'Database'])
     alignments = alignments.join(
-      self.proteome.select(['Protein ID', 'Database']), how='left', left_on='Subject', right_on='Protein ID'
+      proteome, how='left', left_on='Subject', right_on='Protein ID'
     )
     alignments = alignments.with_columns(
-      (pl.col('Database') == 'sp').alias('is_reviewed') # True if Swiss-Prot
+      (pl.col('Database') == 'sp').alias('is_reviewed')
     )
     
     alignments = alignments.with_columns(
