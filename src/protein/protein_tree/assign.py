@@ -301,7 +301,7 @@ class PeptideProcessor:
       left_on=["Sequence", "Source Assigned Gene"], 
       right_on=["Query Sequence", "Gene"]
     )
-    matches_with_genes = matches_with_genes.with_columns(  # try to match the source assignment from BLAST
+    matches_with_genes = matches_with_genes.with_columns(
       (pl.col('Protein ID') == pl.col('Source Assigned Protein ID')).alias('is_source_match')
     )
 
@@ -312,13 +312,13 @@ class PeptideProcessor:
     )
 
     top_matches_with_genes = matches_with_genes.sort(
-      ["Sequence", "SwissProt Reviewed", "Gene Priority", "Protein Existence Level"],
-      descending=[False, True, True, False]
+      ["Sequence", "is_source_match", "SwissProt Reviewed", "Gene Priority", "Protein Existence Level", "Protein ID"],
+      descending=[False, True, True, True, False, False]
     ).group_by("Sequence").first()
 
     top_matches_without_genes = matches_without_genes.sort(
-      ["Sequence", "SwissProt Reviewed", "Gene Priority", "Protein Existence Level"],
-      descending=[False, True, True, False]
+      ["Sequence", "SwissProt Reviewed", "Gene Priority", "Protein Existence Level", "Protein ID"],
+      descending=[False, True, True, False, False]
     ).group_by("Sequence").first()
 
     match_cols = ['Sequence', 'Gene', 'Protein ID', 'Protein Name', 'Index start', 'Index end', 'SwissProt Reviewed']
@@ -346,23 +346,6 @@ class PeptideProcessor:
     )
     return assignments
 
-  def get_protein_data(self, assignments):
-    proteome = pl.read_csv(self.species_path / 'proteome.tsv', separator='\t')
-    proteome = proteome.select(pl.col('Database', 'Entry Name', 'Protein ID', 'Sequence'))
-    proteome = proteome.rename({'Sequence': 'Assigned Protein Sequence'})
-    fragments = self.get_fragment_data()
-    assignments = assignments.join(
-      proteome, how='left', on='Protein ID', coalesce=True
-    )
-    assignments = assignments.with_columns(
-      (pl.col('Database') == 'sp').alias('Assigned Protein Review Status'),
-      pl.col('Assigned Protein Sequence').str.len_chars().alias('Assigned Protein Length'),
-      pl.col('Protein ID').replace_strict(fragments, default='').alias('Assigned Protein Fragments'),
-      pl.lit(str(self.taxon_id)).alias('Species Taxon ID'),
-      pl.lit(self.species_name).alias('Species Name')
-    )
-    return assignments
-  
   def get_fragment_data(self):
     if (self.species_path / 'fragment-data.json').exists():
       with open(self.species_path / 'fragment-data.json', 'r') as f:
