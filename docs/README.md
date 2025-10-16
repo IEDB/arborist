@@ -1,6 +1,6 @@
 # Arborist Documentation
 
-Welcome to the documentation for the Arborist project. This collection of documents provides a comprehensive guide to understanding, installing, and using the Arborist toolkit.
+Welcome to the documentation for the Arborist project. This collection of documents provides a comprehensive guide to understanding, installing, and using the Arborist suite of tools.
 
 Arborist is a system designed to build and maintain the biological taxonomy trees used by the Immune Epitope Database (IEDB). It integrates data from various upstream sources to generate consistent and accurate organism, disease, and protein hierarchies.
 
@@ -18,3 +18,5 @@ Arborist is a system designed to build and maintain the biological taxonomy tree
 ### References
 
 1. [**Organism Tree**](./references/organism.md)
+
+2. [**Protein Tree**](./references/protein.md)
