@@ -354,6 +354,23 @@ class PeptideProcessor:
     )
     return assignments
 
+  def get_protein_data(self, assignments):
+    proteome = pl.read_csv(self.species_path / 'proteome.tsv', separator='\t')
+    proteome = proteome.select(pl.col('Database', 'Entry Name', 'Protein ID', 'Sequence'))
+    proteome = proteome.rename({'Sequence': 'Assigned Protein Sequence'})
+    fragments = self.get_fragment_data()
+    assignments = assignments.join(
+      proteome, how='left', on='Protein ID', coalesce=True
+    )
+    assignments = assignments.with_columns(
+      (pl.col('Database') == 'sp').alias('Assigned Protein Review Status'),
+      pl.col('Assigned Protein Sequence').str.len_chars().alias('Assigned Protein Length'),
+      pl.col('Protein ID').replace_strict(fragments, default='').alias('Assigned Protein Fragments'),
+      pl.lit(str(self.taxon_id)).alias('Species Taxon ID'),
+      pl.lit(self.species_name).alias('Species Name')
+    )
+    return assignments
+
   def get_fragment_data(self):
     if (self.species_path / 'fragment-data.json').exists():
       with open(self.species_path / 'fragment-data.json', 'r') as f:
