@@ -324,12 +324,12 @@ class PeptideProcessor:
     )
 
     top_matches_with_genes = matches_with_genes.sort(
-      ["Sequence", "is_source_match", "SwissProt Reviewed", "Gene Priority", "Protein Existence Level", "Protein ID"],
+      ["Sequence", "Gene Priority", "is_source_match", "SwissProt Reviewed", "Protein Existence Level", "Protein ID"],
       descending=[False, True, True, True, False, False]
     ).group_by("Sequence").first()
 
     top_matches_without_genes = matches_without_genes.sort(
-      ["Sequence", "SwissProt Reviewed", "Gene Priority", "Protein Existence Level", "Protein ID"],
+      ["Sequence", "Gene Priority", "SwissProt Reviewed", "Protein Existence Level", "Protein ID"],
       descending=[False, True, True, False, False]
     ).group_by("Sequence").first()
 
