@@ -54,6 +54,7 @@ class SourceProcessor:
     self.bin_path = Path(__file__).parents[3] / 'bin'
     self.fasta_path = self.species_path / 'sources.fasta'
     self.proteome_path = self.species_path / 'proteome.fasta'
+    self.proteome = pl.read_csv(self.species_path / 'proteome.tsv', separator='\t')
     self.run_mmseqs2 = self.taxon_id in [9606, 10090, 10116] # human, mouse, rat
 
   def process(self):
@@ -194,11 +195,19 @@ class SourceProcessor:
         pl.lit(0).alias('Query Length'),
         pl.lit(0).alias('Score')
       )
+
+    alignments = alignments.join(
+      self.proteome.select(['Protein ID', 'Database']), how='left', left_on='Subject', right_on='Protein ID'
+    )
+    alignments = alignments.with_columns(
+      (pl.col('Database') == 'sp').alias('is_reviewed') # True if Swiss-Prot
+    )
+    
     alignments = alignments.with_columns(
       pl.col('Query').cast(pl.String).alias('Query'),
     )
     top_proteins = alignments.group_by('Query').agg(
-      pl.all().sort_by(['Score', 'Subject'], descending=[True, False]).first()
+      pl.all().sort_by(['Score', 'is_reviewed', 'Subject'], descending=[True, True, False]).first()
     )
     missing_sources = self.sources.filter(
       ~pl.col('Source Accession').is_in(top_proteins['Query'].to_list())
@@ -206,7 +215,7 @@ class SourceProcessor:
     if missing_sources.shape[0] != 0:
       missing_sources = pl.DataFrame({'Query': missing_sources['Source Accession'].to_list()})
       top_proteins = top_proteins.join(missing_sources, how='full', on='Query', coalesce=True)
-    
+   
     return top_proteins
 
   def assign_manuals(self, top_proteins):
@@ -220,9 +229,8 @@ class SourceProcessor:
     return top_proteins
 
   def get_protein_data(self, top_proteins):
-    proteome = pl.read_csv(self.species_path / 'proteome.tsv', separator='\t')
     protein_data = top_proteins.join(
-      proteome, how='left', left_on='Subject', right_on='Protein ID', coalesce=False
+      self.proteome, how='left', left_on='Subject', right_on='Protein ID', coalesce=False
     )
     allergy_data = pl.read_json(build_path / 'arborist' / 'allergens.json')
     protein_data = protein_data.join(
