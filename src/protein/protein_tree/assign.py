@@ -168,17 +168,46 @@ class SourceProcessor:
     )
     return top_protein_data
 
-  def select_top_proteins(self):
+def select_top_proteins(self):
     alignment_cols = [
       'Query', 'Subject', '% Identity', 'Alignment Length', 'Mismatches', 'Gap Openings', 
       'Query Start', 'Query End', 'Subject Start', 'Subject End', 'E-value', 'Bit Score'
     ]
+    alignment_dtypes = {
+      'Query': pl.String,
+      'Subject': pl.String,
+      '% Identity': pl.Float64,
+      'Alignment Length': pl.Int64,
+      'Mismatches': pl.Int64,
+      'Gap Openings': pl.Int64,
+      'Query Start': pl.Int64,
+      'Query End': pl.Int64,
+      'Subject Start': pl.Int64,
+      'Subject End': pl.Int64,
+      'E-value': pl.Float64,
+      'Bit Score': pl.Float64
+    }
+
     try:
       if self.run_mmseqs2:
-        alignments = pl.read_csv(self.species_path / 'alignments.tsv', separator='\t', has_header=False, new_columns=alignment_cols, infer_schema_length=10000)
+        alignments = pl.read_csv(
+          self.species_path / 'alignments.tsv', 
+          separator='\t', 
+          has_header=False, 
+          new_columns=alignment_cols, 
+          dtypes=alignment_dtypes,
+          infer_schema_length=0
+        )
         alignments = alignments.with_columns(pl.col('% Identity').mul(100).alias('% Identity'))
       else:
-        alignments = pl.read_csv(self.species_path / 'alignments.csv', separator=',', has_header=False, new_columns=alignment_cols, infer_schema_length=10000)
+        alignments = pl.read_csv(
+          self.species_path / 'alignments.csv', 
+          separator=',', 
+          has_header=False, 
+          new_columns=alignment_cols, 
+          dtypes=alignment_dtypes,
+          infer_schema_length=0
+        )
         alignments = alignments.with_columns(pl.col('Subject').str.split('|').list.get(1))
 
       query_length_map = dict(self.sources.select('Source Accession', 'Length').iter_rows())
