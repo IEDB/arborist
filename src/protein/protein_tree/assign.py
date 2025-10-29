@@ -168,7 +168,7 @@ class SourceProcessor:
     )
     return top_protein_data
 
-def select_top_proteins(self):
+  def select_top_proteins(self):
     alignment_cols = [
       'Query', 'Subject', '% Identity', 'Alignment Length', 'Mismatches', 'Gap Openings', 
       'Query Start', 'Query End', 'Subject Start', 'Subject End', 'E-value', 'Bit Score'
