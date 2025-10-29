@@ -206,11 +206,12 @@ class ProteomeSelector:
         fragments = self._filter_fragment_data(fragments)
 
       fragment_map[uniprot_id] = fragments
-    
-    with open(self.species_path / 'fragment-data.json', 'w') as f:
-      json.dump(fragment_map, f, indent=2)
 
-    return fragment_map
+    cleaned_fragment_map = {uniprot_id: frags for uniprot_id, frags in fragment_map.items() if frags}
+    with open(self.species_path / 'fragment-data.json', 'w') as f:
+      json.dump(cleaned_fragment_map, f, indent=2)
+
+    return cleaned_fragment_map
 
   def _filter_fragment_data(self, fragments: list):
     if all(f['type'] == 'Chain' for f in fragments[:2]) and \
