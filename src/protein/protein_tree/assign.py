@@ -195,7 +195,7 @@ class SourceProcessor:
           separator='\t', 
           has_header=False, 
           new_columns=alignment_cols, 
-          dtypes=alignment_dtypes,
+          schema_overrides=alignment_dtypes,
           infer_schema_length=0
         )
         alignments = alignments.with_columns(pl.col('% Identity').mul(100).alias('% Identity'))
@@ -205,7 +205,7 @@ class SourceProcessor:
           separator=',', 
           has_header=False, 
           new_columns=alignment_cols, 
-          dtypes=alignment_dtypes,
+          schema_overrides=alignment_dtypes,
           infer_schema_length=0
         )
         alignments = alignments.with_columns(pl.col('Subject').str.split('|').list.get(1))
