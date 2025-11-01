@@ -5,7 +5,6 @@ import gzip
 import json
 import polars as pl
 
-from Bio import SeqIO
 from pathlib import Path
 from requests.exceptions import ChunkedEncodingError, ReadTimeout, ConnectionError, HTTPError
 
@@ -25,7 +24,7 @@ class ProteomeSelector:
       self.taxon_id = REPLACEMENT_TAXON_IDS[taxon_id]
     else:
       self.taxon_id = taxon_id
-   
+
     self.species_name = species_name
     self.group = group
     self.peptides = peptides
@@ -35,7 +34,7 @@ class ProteomeSelector:
 
     self.proteome_list = self._get_candidate_proteomes()
     self.num_proteomes = len(self.proteome_list) + 1
-  
+
   def select(self):
     if self.proteome_list.is_empty() or self.taxon_id in ALLERGEN_SPECIES_IDS:
       self._fetch_orphans()
@@ -117,7 +116,7 @@ class ProteomeSelector:
         proteome_id = proteome['Proteome ID']
         proteome_taxon = proteome['Proteome Taxon ID']
         proteome_label = proteome['Proteome Label']
-        
+
         if not (self.species_path / f'{proteome_id}.fasta').exists():
           self._fetch_proteome_file(proteome_id)
 
@@ -131,7 +130,7 @@ class ProteomeSelector:
       proteome = self.species_path / f'{proteome_id}.fasta',
       preprocessed_files_path = self.species_path,
     ).sql_proteome(k = 5)
-    
+
     Matcher(
       query = peptide_seqs,
       proteome_file = self.species_path / f'{proteome_id}.fasta', 
@@ -169,7 +168,7 @@ class ProteomeSelector:
         file.unlink()
     for file in self.species_path.glob('*.db'):
       file.unlink()
-  
+ 
   def _preprocess_proteome(self):
     gp_proteome = self.species_path / 'gp_proteome.fasta' if (self.species_path / 'gp_proteome.fasta').exists() else ''
     Preprocessor(
@@ -280,7 +279,7 @@ class ProteomeSelector:
       proteome_list = self._parse_proteome_json(data)
     except (ChunkedEncodingError, ReadTimeout, ConnectionError):
       proteome_list = self._get_candidate_proteomes()
-    
+
     proteome_list = proteome_list.filter(pl.col('Proteome Type') != 'Excluded')
     proteome_list.write_csv(self.species_path / 'proteome-list.tsv', separator='\t')
 
@@ -288,7 +287,7 @@ class ProteomeSelector:
 
   def _parse_proteome_json(self, json_text: str):
     data = json.loads(json_text)
-    
+
     rows = []
     for proteome in data['results']:
       row = {
@@ -312,66 +311,6 @@ class ProteomeSelector:
       }]).head(0)
 
     return proteome_list
-  
-  def to_tsv(self):
-    if (self.species_path / 'proteome.fasta').stat().st_size == 0: return
-    regexes = {
-      'protein_id': re.compile(r"\|([^|]*)\|"),         # between | and |
-      'entry_name': re.compile(r"\|([^\|]*?)\s"),       # between | and space
-      'protein_name': re.compile(r"\s(.+?)\sOS"),       # between space and space before OS
-      'gene': re.compile(r"GN=(.*?)(?=\s[A-Z]{2}=|$)"), # between GN= and PE= or eol
-      'pe_level': re.compile(r"PE=(.+?)\s"),            # between PE= and space
-    }
-
-    proteins = list(SeqIO.parse(self.species_path / 'proteome.fasta', 'fasta'))
-    gp_proteome_path = self.species_path / 'gp_proteome.fasta'
-    if gp_proteome_path.exists():
-      gp_ids = [str(protein.id.split('|')[1]) for protein in list(SeqIO.parse(gp_proteome_path, 'fasta'))]
-    else:
-      gp_ids = []
-
-    proteome_data = []
-    for protein in proteins:
-      metadata = []
-      for key in regexes:
-        match = regexes[key].search(str(protein.description))
-
-        if match:
-          metadata.append(match.group(1))
-        else:
-          if key == 'protein_id':
-            metadata.append(str(protein.id))
-          elif key == 'pe_level':
-            metadata.append(0)
-          else:
-            metadata.append('')
-      
-      gp = 1 if protein.id.split('|')[1] in gp_ids else 0
-      metadata.append(gp)
-      metadata.append(str(protein.seq))
-      metadata.append(protein.id.split('|')[0])
-      
-      proteome_data.append(metadata)
-
-    columns = [
-      'Protein ID', 'Entry Name', 'Protein Name', 'Gene', 'Protein Existence Level', 
-      'Gene Priority', 'Sequence', 'Database'
-    ]
-    proteome = pl.DataFrame(proteome_data, schema=columns, orient='row').with_columns(
-      (pl.when(pl.col('Protein ID').str.contains('-'))
-      .then(pl.col('Protein ID').str.split('-').list.last())
-      .otherwise(pl.lit('1')).alias('Isoform Count')),
-      (pl.when(pl.col('Protein ID').str.contains('-'))
-      .then(
-        pl.col('Protein Existence Level').filter(pl.col('Protein ID').str.split('-').list.first() == pl.col('Protein ID')).first()
-      )
-      .otherwise(pl.col('Protein Existence Level')).alias('Protein Existence Level')),
-      pl.col('Gene').str.replace_all(r'[ \.\(\)]', '_').alias('Gene')
-    ).select([
-      'Database', 'Gene', 'Protein ID', 'Entry Name', 'Isoform Count', 'Protein Name', 
-      'Protein Existence Level', 'Gene Priority', 'Sequence'
-    ])
-    proteome.write_csv(self.species_path / 'proteome.tsv', separator='\t')
 
 def get_proteome(taxon_id: int, build_path: Path):
   species_row = active_species.row(by_predicate=pl.col('Species ID') == taxon_id)
@@ -389,7 +328,6 @@ def get_proteome(taxon_id: int, build_path: Path):
   print(f'Selecting the best proteome for {species_name} (ID: {taxon_id})')
   proteome_selector = ProteomeSelector(**config)
   proteome_selector.select()
-  proteome_selector.to_tsv()
 
 
 if __name__ == "__main__":
@@ -408,7 +346,6 @@ if __name__ == "__main__":
   all_species = not bool(taxon_id)
 
   active_species = pl.read_csv(build_path / 'arborist' / 'active-species.tsv', separator='\t')
-  
   data_fetcher = DataFetcher(build_path)
   all_peptides = data_fetcher.get_all_peptides()
 

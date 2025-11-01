@@ -1,9 +1,11 @@
+import re
 import json
 import argparse
 import subprocess
 import polars as pl
 from polars.exceptions import NoDataError
 from pathlib import Path
+from Bio import SeqIO
 from pepmatch import Preprocessor, Matcher
 from ARC.classifier import SeqClassifier
 from protein_tree.data_fetch import DataFetcher
@@ -20,7 +22,68 @@ class AssignmentHandler:
     self.num_threads = num_threads
     self.species_path = build_path / 'species' / str(self.taxon_id)
 
+  def generate_proteome_tsv(self):
+    if (self.species_path / 'proteome.fasta').stat().st_size == 0: return
+    regexes = {
+      'protein_id': re.compile(r"\|([^|]*)\|"),         # between | and |
+      'entry_name': re.compile(r"\|([^\|]*?)\s"),       # between | and space
+      'protein_name': re.compile(r"\s(.+?)\sOS"),       # between space and space before OS
+      'gene': re.compile(r"GN=(.*?)(?=\s[A-Z]{2}=|$)"), # between GN= and PE= or eol
+      'pe_level': re.compile(r"PE=(.+?)\s"),            # between PE= and space
+    }
+
+    proteins = list(SeqIO.parse(self.species_path / 'proteome.fasta', 'fasta'))
+    gp_proteome_path = self.species_path / 'gp_proteome.fasta'
+    if gp_proteome_path.exists():
+      gp_ids = [str(protein.id.split('|')[1]) for protein in list(SeqIO.parse(gp_proteome_path, 'fasta'))]
+    else:
+      gp_ids = []
+
+    proteome_data = []
+    for protein in proteins:
+      metadata = []
+      for key in regexes:
+        match = regexes[key].search(str(protein.description))
+
+        if match:
+          metadata.append(match.group(1))
+        else:
+          if key == 'protein_id':
+            metadata.append(str(protein.id))
+          elif key == 'pe_level':
+            metadata.append(0)
+          else:
+            metadata.append('')
+
+      gp = 1 if protein.id.split('|')[1] in gp_ids else 0
+      metadata.append(gp)
+      metadata.append(str(protein.seq))
+      metadata.append(protein.id.split('|')[0])
+      proteome_data.append(metadata)
+
+    columns = [
+      'Protein ID', 'Entry Name', 'Protein Name', 'Gene', 'Protein Existence Level', 
+      'Gene Priority', 'Sequence', 'Database'
+    ]
+    proteome = pl.DataFrame(proteome_data, schema=columns, orient='row').with_columns(
+      (pl.when(pl.col('Protein ID').str.contains('-'))
+      .then(pl.col('Protein ID').str.split('-').list.last())
+      .otherwise(pl.lit('1')).alias('Isoform Count')),
+      (pl.when(pl.col('Protein ID').str.contains('-'))
+      .then(
+        pl.col('Protein Existence Level').filter(pl.col('Protein ID').str.split('-').list.first() == pl.col('Protein ID')).first()
+      )
+      .otherwise(pl.col('Protein Existence Level')).alias('Protein Existence Level')),
+      pl.col('Gene').str.replace_all(r'[ \.\(\)]', '_').alias('Gene')
+    ).select([
+      'Database', 'Gene', 'Protein ID', 'Entry Name', 'Isoform Count', 'Protein Name', 
+      'Protein Existence Level', 'Gene Priority', 'Sequence'
+    ])
+    proteome.write_csv(self.species_path / 'proteome.tsv', separator='\t')
+
   def process_species(self):
+    self.generate_proteome_tsv()
+
     source_processor = SourceProcessor(
       self.taxon_id, self.group, self.sources, self.num_threads, self.species_path
     )
@@ -36,7 +99,7 @@ class AssignmentHandler:
     files_to_remove = [
       'alignments.csv', 'alignments.tsv', 'arc-temp-results.tsv', 'peptide-matches.tsv', 'proteome.fasta.pdb',
       'proteome.fasta.phr', 'proteome.fasta.pin', 'proteome.fasta.pjs', 'proteome.fasta.pot',
-      'proteome.fasta.psq', 'proteome.fasta.ptf', 'proteome.fasta.pto', 'sources.fasta'
+      'proteome.fasta.psq', 'proteome.fasta.ptf', 'proteome.fasta.pto', 'sources.fasta', 'proteome.tsv'
     ]
     for file in files_to_remove:
       file_path = self.species_path / file
@@ -155,7 +218,7 @@ class SourceProcessor:
 
     arc_df.write_csv(self.species_path / 'arc-results.tsv', separator='\t')
     return arc_df
-  
+
   def combine_arc_data(self, top_protein_data, arc_df):
     arc_df = arc_df.with_columns(
       pl.concat_str(
@@ -235,7 +298,7 @@ class SourceProcessor:
     alignments = alignments.with_columns(
       (pl.col('Database') == 'sp').alias('is_reviewed')
     )
-    
+
     alignments = alignments.with_columns(
       pl.col('Query').cast(pl.String).alias('Query'),
     )
@@ -248,7 +311,7 @@ class SourceProcessor:
     if missing_sources.shape[0] != 0:
       missing_sources = pl.DataFrame({'Query': missing_sources['Source Accession'].to_list()})
       top_proteins = top_proteins.join(missing_sources, how='full', on='Query', coalesce=True)
-   
+
     return top_proteins
 
   def assign_manuals(self, top_proteins):
@@ -329,7 +392,7 @@ class PeptideProcessor:
       output_name=self.species_path / 'peptide-matches.tsv',
       sequence_version=False
     ).match()
-  
+
   def assign_parents(self):
     matches = pl.read_csv(self.species_path / 'peptide-matches.tsv', separator='\t').with_columns(
       pl.col('Gene').cast(pl.String).alias('Gene'),
@@ -417,7 +480,7 @@ class PeptideProcessor:
       return fragment_map
     else:
       return {}
-      
+
   def handle_allergens(self, assignments):
     allergy_data = pl.read_json(build_path / 'arborist' / 'allergens.json')
     assignments = assignments.join(
@@ -432,7 +495,7 @@ class PeptideProcessor:
       .then(pl.col('mapped_id')).otherwise(pl.col('Protein ID')).alias('Protein ID')
     )
     return assignments
-  
+
   def add_synonyms(self, assignments):
     if (self.species_path / 'synonym-data.json').exists():
       with open(self.species_path / 'synonym-data.json', 'r') as f:
@@ -440,17 +503,16 @@ class PeptideProcessor:
       species_synonym_data = {k: ', '.join(v) for k, v in species_synonym_data.items()}
     else:
       species_synonym_data = {}
-    
+
     manual_synonyms = pl.read_csv(build_path / 'arborist' / 'manual-synonyms.tsv', separator='\t')
     manual_synonym_data = dict(manual_synonyms.select(pl.col('Accession'), pl.col('Synonyms')).iter_rows())
-    
     for accession, synonyms in manual_synonym_data.items():
       if accession in species_synonym_data:
         combined_synonyms = set(species_synonym_data[accession].split(', ') + synonyms.split(', '))
         species_synonym_data[accession] = ', '.join(combined_synonyms)
       else:
         species_synonym_data[accession] = synonyms
-    
+
     assignments = assignments.with_columns(
       pl.col('Protein ID').replace_strict(species_synonym_data, default='').alias('Assigned Protein Synonyms'),
     )
@@ -581,7 +643,7 @@ if __name__ == "__main__":
   all_species = not bool(taxon_id)
 
   active_species = pl.read_csv(build_path / 'arborist' / 'active-species.tsv', separator='\t')
-  
+
   data_fetcher = DataFetcher(build_path)
   all_peptides = data_fetcher.get_all_peptides()
   all_sources = data_fetcher.get_all_sources()
