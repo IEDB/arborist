@@ -99,7 +99,7 @@ class AssignmentHandler:
     files_to_remove = [
       'alignments.csv', 'alignments.tsv', 'arc-temp-results.tsv', 'peptide-matches.tsv', 'proteome.fasta.pdb',
       'proteome.fasta.phr', 'proteome.fasta.pin', 'proteome.fasta.pjs', 'proteome.fasta.pot',
-      'proteome.fasta.psq', 'proteome.fasta.ptf', 'proteome.fasta.pto', 'sources.fasta', 'proteome.tsv'
+      'proteome.fasta.psq', 'proteome.fasta.ptf', 'proteome.fasta.pto', 'sources.fasta', 'proteome.tsv', 'proteome.db'
     ]
     for file in files_to_remove:
       file_path = self.species_path / file
