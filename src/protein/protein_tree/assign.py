@@ -588,7 +588,6 @@ def check_for_proteome(taxon_id, active_taxa, species_name, group):
       taxon_id, species_name, group, peptides, build_path
     )
     proteome_selector.select()
-    proteome_selector.to_tsv()
 
 def check_for_skips(taxon_id):
   if (build_path / 'species' / str(taxon_id) / 'proteome.fasta').stat().st_size == 0:
