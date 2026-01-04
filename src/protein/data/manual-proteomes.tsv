@@ -1,0 +1,365 @@
+Species Taxon ID	Species Name	Proteome ID
+24	Shewanella putrefaciens	UP000008209
+174	Leptospira borgpetersenii	UP000011783
+195	Campylobacter coli	UP000352088
+196	Campylobacter fetus	UP000000760
+271	Thermus aquaticus	UP000037685
+292	Burkholderia cepacia (Burkholderia cepacia genomovar I)	UP000029575
+294	Pseudomonas fluorescens	UP000002332
+300	Pseudomonas mendocina	UP000254260
+317	Pseudomonas syringae	UP000004471
+329	Ralstonia pickettii	UP000013280
+346	Xanthomonas citri	UP000000576
+384	Rhizobium leguminosarum	UP000293652
+470	Acinetobacter baumannii	UP000005740
+480	Moraxella catarrhalis	UP000280228
+511	Alcaligenes faecalis	UP000245216
+550	Enterobacter cloacae	UP000027611
+554	Pectobacterium carotovorum	UP000003783
+556	Dickeya chrysanthemi	UP000002735
+562	Escherichia coli	UP000000625
+614	Serratia liquefaciens	UP000317572
+615	Serratia marcescens	UP000037482
+630	Yersinia enterocolitica	UP000000642
+633	Yersinia pseudotuberculosis	UP000001011
+634	Yersinia bercovieri	UP000229378
+636	Edwardsiella tarda	UP000002230
+645	Aeromonas salmonicida	UP000000225
+659	Photobacterium phosphoreum	UP000241618
+661	Photobacterium angustum	UP000001603
+663	Vibrio alginolyticus	UP000565155
+670	Vibrio parahaemolyticus	UP000002493
+672	Vibrio vulnificus	UP000002275
+674	Vibrio mimicus	UP000004827
+714	Aggregatibacter actinomycetemcomitans	UP000072236
+715	Actinobacillus pleuropneumoniae	UP000001432
+774	Bartonella bacilliformis	UP000000643
+781	Rickettsia conorii	UP000000816
+783	Rickettsia rickettsii	UP000006832
+785	Rickettsia typhi	UP000000604
+788	Rickettsia canadensis	UP000007056
+817	Bacteroides fragilis	UP000003917
+820	Bacteroides uniformis	UP000014212
+851	Fusobacterium nucleatum (Fusibacterium nucleatum)	UP000002521
+859	Fusobacterium necrophorum (Fusibacterium necrophorum)	UP000027094
+948	Anaplasma phagocytophilum (agent of human granulocytic ehrlichiosis)	UP000055047
+1019	Capnocytophaga sputigena	UP000217334
+1076	Rhodopseudomonas palustris	UP000001426
+1292	Staphylococcus warneri	UP000240717
+1303	Streptococcus oralis	UP000540162
+1310	Streptococcus sobrinus	UP000016617
+1313	Streptococcus pneumoniae	UP000000586
+1334	Streptococcus dysgalactiae	UP000339049
+1336	Streptococcus equi	UP000001365
+1352	Enterococcus faecium	UP001141166
+1359	Lactococcus cremoris	UP000015854
+1405	Bacillus mycoides	UP000002154
+1422	Geobacillus stearothermophilus	UP000075424
+1428	Bacillus thuringiensis	UP000195152
+1496	Clostridium difficile	UP000001978
+1502	Clostridium perfringens	UP000000818
+1520	Clostridium beijerinckii	UP000000565
+1525	Moorella thermoacetica	UP000182811
+1531	Enterocloster clostridioformis	UP000013180
+1604	Lactobacillus amylovorus	UP000007033
+1605	Ligilactobacillus animalis	UP001238155
+1613	Limosilactobacillus fermentum	UP000094714
+1622	Ligilactobacillus murinus	UP000051612
+1638	Listeria ivanovii	UP000001286
+1640	Listeria seeligeri	UP000004302
+1642	Listeria innocua	UP000002513
+1643	Listeria welshimeri	UP000000779
+1661	Trueperella pyogenes	UP000275951
+1681	Bifidobacterium bifidum	UP000006173
+1747	Cutibacterium acnes	UP000000603
+1767	Mycobacterium intracellulare	UP000020825
+1778	Mycobacterium gordonae	UP000051677
+1809	Mycobacterium ulcerans	UP000000765
+1833	Rhodococcus erythropolis	UP000502345
+1916	Streptomyces lividans	UP000002769
+2099	Mesomycoplasma hyopneumoniae	UP000006822
+2100	Mesomycoplasma hyorhinis	UP000009399
+2133	Spiroplasma citri	UP000464735
+2702	Gardnerella vaginalis	UP000001453
+3562	Spinacia oleracea (spinach)	UP001155700
+3656	Cucumis melo (Oriental melon)	UP000089565
+3981	Hevea brasiliensis (rubbertree)	UP000467840
+5039	Blastomyces dermatitidis	UP000007802
+5076	Penicillium chrysogenum	UP000076449
+5207	Cryptococcus neoformans	UP000002149
+5507	Fusarium oxysporum	UP000219602
+5825	Plasmodium chabaudi	UP000507536
+6198	Opisthorchis viverrini (Southeast Asian liver fluke)	UP000054324
+7137	Galleria mellonella (greater wax moth)	UP000504614
+8022	Oncorhynchus mykiss (rainbow trout)	UP000193380
+8030	Salmo salar (Atlantic salmon)	UP000087266
+9627	Vulpes vulpes (silver fox)	UP000286640
+9685	Felis catus (cat)	UP000011712
+9798	Equus przewalskii (Przewalski horse)	UP000694949
+10029	Cricetulus griseus (Chinese hamsters)	UP000001075
+10036	Mesocricetus auratus (Syrian golden hamster)	UP000189706
+10042	Peromyscus maniculatus (North American deer mouse)	UP000504601
+10320	Bovine alphaherpesvirus 1 (Bovine herpesvirus 1)	UP000144590
+10359	Human herpesvirus 5 (Human cytomegalovirus)	UP000008992
+10566	Human papillomavirus (Human Papilloma Virus)	UP000097802
+10574	Monkey B-lymphotropic papovavirus	UP000173801
+11072	Japanese encephalitis virus (Japanese encephalitis (JE) virus)	UP000160671
+11082	West Nile virus	UP000096925
+11083	Powassan virus (Flavivirus powassan)	UP000096423
+11216	Human respirovirus 3 (Human parainfluenza 3 virus)	UP000162202
+11241	Rinderpest morbillivirus (Rinderpest virus)	UP000008654
+11276	Vesicular stomatitis virus (vesicular stomatitis virus VSV)	UP000147073
+12721	Human immunodeficiency virus	UP000134713
+28035	Staphylococcus lugdunensis	UP000070063
+28037	Streptococcus mitis	UP000501099
+28038	Latilactobacillus curvatus	UP000050828
+28080	Campylobacter upsaliensis	UP000005813
+28108	Alteromonas macleodii	UP000063991
+28116	Bacteroides ovatus	UP000518615
+28130	Prevotella disiens	UP000003610
+28131	Prevotella intermedia	UP000230500
+28132	Prevotella melaninogenica	UP000267517
+28151	Serratia proteamaculans	UP000192912
+28327	Murine rotavirus	UP000137931
+28446	Anaerotignum propionicum	UP000184204
+28448	Komagataeibacter xylinus	UP000032683
+28901	Salmonella enterica	UP000001014
+28903	Mycoplasmopsis bovis	UP000008713
+29380	Staphylococcus caprae	UP000003152
+29388	Staphylococcus capitis	UP000291949
+29430	Acinetobacter haemolyticus	UP000003085
+29438	Pseudomonas savastanoi	UP000276932
+29442	Pseudomonas tolaasii	UP000549134
+29466	Veillonella parvula	UP000501734
+29484	Yersinia frederiksenii	UP000254835
+29497	Vibrio splendidus	UP000050463
+29507	Leptospira kirschneri	UP000006253
+29523	Bacteroides sp.	UP000257711
+29760	Vitis vinifera (wine grape)	UP000009183
+30538	Vicugna pacos (alpaca)	UP000504605
+32049	Picosynechococcus sp. PCC 7002 (Agmenellum quadruplicatum PR-6)	UP000001688
+33025	Phascolarctobacterium faecium	UP000484547
+33060	Yersinia mollaretii	UP000040841
+33708	Murid gammaherpesvirus 4 (Murid herpesvirus 4)	UP000099649
+33934	Anoxybacillus flavithermus	UP000196782
+33940	Geobacillus thermodenitrificans	UP000001578
+33989	Rickettsia amblyommatis	UP000008005
+33990	Rickettsia bellii	UP000001951
+36809	Mycobacteroides abscessus	UP000185014
+37332	Nocardia seriolae	UP000019401
+37769	Cryptococcus gattii (Cryptococcus gattii VGI)	UP000007805
+39483	Faecalitalea cylindroides	UP000008801
+39486	Dorea formicigenerans	UP000005359
+39950	Dialister pneumosintes	UP000094757
+40050	African horse sickness virus	UP000146235
+40214	Acinetobacter johnsonii	UP000012047
+40216	Acinetobacter radioresistens	UP000314285
+40834	Borrelia duttonii	UP000019148
+43765	Corynebacterium amycolatum	UP000594774
+46221	Porcine circovirus	UP000132454
+46503	Parabacteroides merdae	UP000006271
+47466	Borrelia miyamotoi	UP000291995
+47770	Lactobacillus crispatus	UP000002371
+47886	Pseudomonas luteola	UP000250443
+51031	Necator americanus (New World hookworm)	UP000053676
+54736	Salmonella bongori	UP000000289
+55601	Vibrio anguillarum	UP000655243
+57667	Simian-Human immunodeficiency virus (SIV/HIV)	UP000157732
+59779	Paracoccus marcusii	UP000308834
+60552	Burkholderia vietnamiensis	UP000002287
+61435	Dehalococcoides mccartyi	UP000002506
+67294	Streptomyces filamentosus (Streptomyces roseisporus)	UP000632849
+68887	Torque teno virus (Hepatitis TT virus)	UP000008256
+69218	Enterobacter cancerogenus	UP000351155
+72556	Achromobacter piechaudii	UP000004510
+75658	Campylobacter lanienae	UP000194309
+75985	Mannheimia haemolytica	UP000315164
+76832	Myroides odoratimimus	UP000069030
+76857	Fusobacterium polymorphum (Fusibacterium nucleatum subsp. polymorphum)	UP000001921
+77095	Segatella bryantii	UP000887043
+79923	Clonorchis sinensis (oriental liver fluke)	UP000008909
+83262	Mycobacteroides immunogenum	UP000037843
+83456	Myxococcus virescens	UP000321224
+83558	Chlamydia pneumoniae	UP000000583
+83559	Chlamydia suis	UP000825134
+85708	Porcine circovirus 2 (Porcine circovirus Type II)	UP000000470
+85831	Bacteroides acidifaciens	UP000267159
+89059	Ligilactobacillus acidipiscis	UP000051491
+89586	Neoehrlichia mikurensis	UP001059822
+93678	TTV-like mini virus (Torque teno mini virus)	UP000101695
+97138	Clostridium sp. MD294	UP000012445
+104102	Acetobacter tropicalis	UP000004319
+105751	Aeromonas bestiarum	UP001168135
+110321	Sinorhizobium medicae (Ensifer meliloti WSM4191)	UP000001108
+110539	Mycolicibacterium vanbaalenii	UP000430146
+120505	Baboon cytomegalovirus	UP001151210
+121723	Photobacterium sp. SKA34	UP000005284
+122355	Pseudomonas psychrophila	UP000658390
+136966	SEN virus (SEN-V)	UP001226763
+138072	Candidatus Hamiltonella defensa (Consessor aphidicola)	UP000216438
+152682	Sphingomonas melonis	UP000033203
+155615	Fusobacterium vincentii (Fusibacterium nucleatum subsp. fusiforme)	UP000004925
+158836	Enterobacter hormaechei (CDC Enteric Group 75)	UP000249031
+160808	Acidithiobacillus ferrivorans	UP000009220
+163164	Wolbachia endosymbiont of Drosophila melanogaster (Wolbachia (endosymbiont of Drosophila melanogaster))	UP000008215
+166486	Roseburia intestinalis	UP000479531
+170573	Staphylococcus pettenkoferi	UP001081438
+176275	Beauveria bassiana	UP000030106
+200454	Pseudomonas tremae	UP000050523
+202950	Acinetobacter baylyi	UP000000430
+203192	Stutzerimonas chloritidismutans	UP000017822
+214856	Alistipes finegoldii	UP000006052
+237609	Pseudomonas alkylphenolica	UP000028931
+237895	Cryptosporidium hominis	UP000199752
+246618	Bifidobacterium thermacidophilum	UP000029003
+246787	Bacteroides cellulosilyticus	UP000061809
+256839	Shewanella decolorationis	UP000321124
+257758	Streptococcus pseudopneumoniae	UP000001637
+300180	Mopeia Lassa virus reassortant 29 (Mopeia Lassa reassortant 29)	UP000099038
+312306	Pseudomonas entomophila	UP000000658
+313589	Janibacter sp. HTCC2649	UP000005063
+313627	Bacillus sp. NRRL B-14911	UP000004554
+314262	Roseobacter sp. MED193	UP000005943
+329854	Bacteroides intestinalis	UP000004596
+333767	Alphapapillomavirus 3 (Human papillomavirus - 61)	UP000111499
+333924	Betapapillomavirus 2	UP000008232
+333990	Carnobacterium sp. AT7	UP000005587
+337043	Alphapapillomavirus 4 (Human papillomavirus - 2)	UP000009114
+337049	Alphapapillomavirus 11 (Human papillomavirus - 34)	UP000246263
+337050	Alphapapillomavirus 6 (Human papillomavirus - 53)	UP000007666
+338188	Bacteroides finegoldii	UP000007995
+339268	Mycobacterium colombiense	UP000006455
+351745	Shewanella sp. W3-18-1	UP000002597
+357276	Phocaeicola dorei	UP000004849
+371601	Bacteroides xylanisolvens	UP001199266
+387090	Phocaeicola coprophilus	UP000283855
+387093	Sulfurovum sp. NBC37-1	UP000006378
+412467	Entamoeba nuttalli	UP000006769
+412955	Pseudomonas sp. SCT	UP000268673
+419612	Camelus ferus (Wild Bactrian camel)	UP000030684
+447106	Leptospira licerasiae	UP000004889
+465541	Streptomyces sp. Mg1	UP000035653
+469009	'Brassica napus' phytoplasma	UP000246205
+469613	Enterobacteriaceae bacterium 9_2_54FAA	UP000004908
+487316	Acinetobacter soli	UP000185674
+502049	Thalassospira profundimaris	UP000007365
+544580	Actinomyces oris	UP000185963
+556261	Clostridium sp. D5	UP000003978
+565995	Bundibugyo ebolavirus (Bundibugyo virus)	UP000102471
+566466	gamma proteobacterium NOR5-3	UP000003977
+580165	Bacillus cytotoxicus	UP000243916
+649756	Anaerostipes hadrus	UP000008960
+658655	Lachnospiraceae bacterium 1_4_56FAA	UP000004289
+664662	Borreliella bavariensis	UP000002276
+674529	Bacteroides faecis	UP000095606
+693153	Vibrio atlanticus	UP000009100
+707882	Duck astrovirus 1	UP000117347
+759851	Sporosarcina newyorkensis	UP000005316
+862909	Trichodysplasia spinulosa-associated polyomavirus	UP000112218
+864596	Bat coronavirus BM48-31/BGR/2008	UP000149701
+1016852	Banana streak CA virus (Banana streak Cavendish virus)	UP000208096
+1133363	Schmallenberg virus	UP000127450
+1134687	Klebsiella michiganensis	UP000020202
+1160968	Rabbit coronavirus HKU14	UP000145001
+1176484	Canine vesivirus (Canine calicivirus)	UP000130782
+1179777	Mycoplasma feriruminatoris	UP001178740
+1193095	Paucilactobacillus hokkaidonensis	UP000031620
+1214225	Acidocella sp. MX-AZ02	UP000006217
+1236180	Halopelagius longus	UP000199289
+1268303	Rhodococcus sp. AW25M09	UP000011207
+1281454	Rodent hepacivirus	UP000112255
+1337054	Paenibacillus sp. A3	UP000050308
+1349999	Goose astrovirus	UP000201524
+1380865	Rana catesbeiana virus	UP000317581
+1432052	Eisenbergiella tayi	UP000094067
+1457141	Chlamydia avium	UP000019433
+1457153	Chlamydia gallinacea	UP000019147
+1472417	Butyricimonas paravirosa	UP000576368
+1508220	Bat coronavirus	UP000102490
+1511895	Dependoparvovirus anseriform1 (Anseriform dependoparvovirus 1)	UP000099578
+1527299	Psychromonas sp. PRT-SC03	UP000053944
+1564681	Carnobacterium sp. CP1	UP000064734
+1566298	Paraiso Escondido virus	UP000147468
+1586324	Porcine deltacoronavirus	UP000115701
+1849603	Enterobacteriaceae bacterium	UP001251511
+1855372	bacterium JGI 053	UP000218046
+1879010	Bacillota bacterium	UP000681864
+1885248	Variegated squirrel bornavirus 1	UP000155354
+1891726	Alphapolyomavirus quintihominis (Human polyomavirus 5)	UP000154903
+1891729	Alphapolyomavirus mauratus (Hamster polyomavirus)	UP000008477
+1891730	Alphapolyomavirus muris (Murine polyomavirus)	UP000008479
+1891762	Betapolyomavirus hominis (BK polyomavirus)	UP000103779
+1891770	Betapolyomavirus secumuris	UP000158963
+1895866	Verrucomicrobia bacterium 61-8	UP000184555
+1898104	Bacteroidota bacterium	UP000509427
+1898112	Rhodospirillaceae bacterium	UP000811197
+1898203	Lachnospiraceae bacterium	UP000191179
+1913988	Alphaproteobacteria bacterium	UP000291202
+1933178	Orthobunyavirus akabaneense (Akabane orthobunyavirus)	UP000158189
+1965089	Coronavirus HKU15	UP000115701
+1978231	Acidobacteriota bacterium	UP000783034
+1980456	Orthohantavirus andesense (Andes hantavirus)	UP001248129
+1980916	Novirhabdovirus piscine (Piscine novirhabdovirus)	UP000154838
+2016460	Giant panda anellovirus	UP000676270
+2021370	Sphingobacteriaceae bacterium	UP000294109
+2024894	Acidimicrobiaceae bacterium	UP000229470
+2026735	Deltaproteobacteria bacterium	UP000430523
+2026763	Myxococcales bacterium	UP000291769
+2026800	Verrucomicrobiaceae bacterium	UP000293567
+2030927	Bacteroidales bacterium	UP000676034
+2044939	Clostridia bacterium	UP000655701
+2044940	Desulfobacterales bacterium	UP000885785
+2049047	Prevotellaceae bacterium	UP000245693
+2052156	Chlamydiia bacterium	UP000700679
+2053569	Lentisphaeria bacterium	UP000261795
+2053591	Planctomycetales bacterium	UP000787361
+2066070	Mesorhizobium japonicum	UP000000552
+2115988	Swine acute diarrhea syndrome related coronavirus	UP001235867
+2136182	Acinetobacter cumulans	UP000267166
+2169991	Mammarenavirus juninense (Argentinian mammarenavirus)	UP000233860
+2212467	Bacteroidaceae bacterium	UP000490672
+2478486	Holophagales bacterium	UP000749712
+2485925	Oscillospiraceae bacterium	UP001055059
+2499685	Betaarterivirus suid 2	UP000115425
+2599941	Oligoflexia bacterium	UP000445643
+2708335	Pangolin coronavirus	UP001230437
+2860474	Anser fabalis coronavirus NCN2	UP001251675
+2872809	Betacoronavirus sp. RpYN06 (Betacoronavirus sp. RsYN06)	UP001246797
+2900548	Actinomycetota bacterium (Actinobacteria bacterium)	UP000678472
+2978683	Burkholderia orbicola	UP000002169
+3042615	Paraglaciecola sp. T6c (Paraglaciecola atlantica T6c)	UP000001981
+3047813	Circovirus duck	UP000141790
+3048170	Orthoflavivirus kyasanurense	UP000097483
+3048175	Orthoflavivirus langatense	UP000007766
+3048184	Orthoflavivirus loupingi	UP000296935
+3048280	Circovirus porcine3	UP000288289
+3048308	Orthoflavivirus saboyaense	UP000112648
+3048316	Orthoflavivirus sepikense	UP000112296
+3048360	Orthoflavivirus tembusu	UP000098575
+3049524	Mardivirus anatidalpha1	UP000135812
+3050254	Quwivirus caviidbeta2	UP000102041
+3050298	Roseolovirus humanbeta7	UP000009246
+3050308	Cytomegalovirus macacinebeta3	UP000101154
+3050329	Orthopneumovirus muris	UP000133604
+3052041	Bocaparvovirus primate2 (Primate bocaparvovirus 2)	UP000098414
+3052236	Hepacivirus platyrrhini (Hepacivirus B)	UP000114117
+3052300	Mammarenavirus caliense (Cali mammarenavirus)	UP000139415
+3052317	Mammarenavirus machupoense (Machupo mammarenavirus)	UP000233880
+3052320	Mammarenavirus mopeiaense (Mopeia mammarenavirus)	UP000119238
+3052342	Morbillivirus canis (Canine morbillivirus)	UP000162058
+3052343	Morbillivirus caprinae (Pseudorinderpest virus)	UP000180906
+3052468	Orthoflavivirus louisense	UP000156857
+3052474	Orthohantavirus chocloense (Choclo orthohantavirus)	UP000243631
+3052483	Orthohantavirus khabarovskense (Khabarovsk hantavirus)	UP000105174
+3052493	Orthohantavirus puumalaense (Puumala hantavirus)	UP000008482
+3052499	Orthohantavirus sinnombreense (Sin Nombre hantavirus)	UP000113911
+3052599	Pararubulavirus menangleense (Menangle pararubulavirus)	UP000148233
+3052608	Pegivirus hominis (Pegivirus C)	UP000137011
+3052620	Pestivirus brazilense (Pestivirus H)	UP000096104
+3052622	Pestivirus ovis (Pestivirus D)	UP000106705
+3052625	Pestivirus suis (Pestivirus C)	UP000148997
+3052626	Pestivirus tauri (Pestivirus B)	UP000099428
+3052729	Respirovirus bovis (Bovine parainfluenza 3 virus)	UP000109333
+3240514	Potyvirus cucurbitaflavitesselati	UP000008610
+3240600	Potyvirus plumpoxi	UP000232930
+3241303	Senecavirus valles	UP000000672
