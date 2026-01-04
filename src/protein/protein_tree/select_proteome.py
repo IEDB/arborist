@@ -33,6 +33,8 @@ class ProteomeSelector:
     self.species_path.mkdir(parents=True, exist_ok=True)
     self.session = requests.Session()
 
+    (self.species_path / 'proteome.db').unlink(missing_ok=True) # delete preprocessed file
+
     self.manual_proteomes = self._load_manual_proteomes()
     self.proteome_list = self._get_candidate_proteomes()
     self.num_proteomes = len(self.proteome_list) + 1
