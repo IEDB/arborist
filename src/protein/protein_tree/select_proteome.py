@@ -12,7 +12,6 @@ from pepmatch import Preprocessor, Matcher
 from protein_tree.data_fetch import DataFetcher
 
 
-MANUAL_PROTEOMES_PATH = Path(__file__).parents[1] / 'data' / 'manual-proteomes.tsv'
 ALLERGEN_SPECIES_IDS = [15957, 13101, 13451, 3369, 3505, 3513, 3617, 3818, 3847, 39584, 4045, 4212, 4214, 4522, 4565, 6689, 6954, 6956, 6973, 6978, 746128]
 REPLACEMENT_TAXON_IDS = {
   3240504: 146500, 3240514: 12232, 3240520: 29271, 3240552: 322053, 3240600: 12211, 3240642: 12216,
@@ -33,32 +32,10 @@ class ProteomeSelector:
     self.species_path.mkdir(parents=True, exist_ok=True)
     self.session = requests.Session()
 
-    (self.species_path / 'proteome.db').unlink(missing_ok=True) # delete preprocessed file
-
-    self.manual_proteomes = self._load_manual_proteomes()
     self.proteome_list = self._get_candidate_proteomes()
     self.num_proteomes = len(self.proteome_list) + 1
 
   def select(self):
-    if self.taxon_id in self.manual_proteomes:
-      manual_proteome_id = self.manual_proteomes[self.taxon_id]
-      print(f'Using manual proteome: {manual_proteome_id}')
-
-      self._fetch_proteome_file(manual_proteome_id)
-      self._rename_proteome_file(manual_proteome_id)
-      self._fetch_fragment_data(manual_proteome_id)
-      self._fetch_synonym_data(manual_proteome_id)
-
-      try:
-        proteome_taxon = self._get_proteome_taxon(manual_proteome_id)
-        self._fetch_gp_proteome(manual_proteome_id, proteome_taxon)
-      except:
-        pass
-
-      self._preprocess_proteome()
-      self._write_metadata(manual_proteome_id, self.taxon_id, 'Manual', self.species_name)
-      return
-
     if self.proteome_list.is_empty() or self.taxon_id in ALLERGEN_SPECIES_IDS:
       self._fetch_orphans()
       self._write_metadata('', self.taxon_id, 'Orphans', self.species_name)
@@ -293,13 +270,6 @@ class ProteomeSelector:
       'Proteome Taxon ID': proteome_taxon, 'Proteome Type': proteome_type, 'Proteome Label': proteome_label
     }).write_csv(self.species_path / 'species-data.tsv', separator='\t')
 
-  def _load_manual_proteomes(self):
-    """Load the manual proteomes mapping if it exists"""
-    if MANUAL_PROTEOMES_PATH.exists():
-      df = pl.read_csv(MANUAL_PROTEOMES_PATH, separator='\t')
-      return dict(df.select(['Species Taxon ID', 'Proteome ID']).iter_rows())
-    return {}
-
   def _get_candidate_proteomes(self):
     url = f'https://rest.uniprot.org/proteomes/stream?format=json&compressed=true&query=taxonomy_id:{self.taxon_id}'
     try:
@@ -314,17 +284,6 @@ class ProteomeSelector:
     proteome_list.write_csv(self.species_path / 'proteome-list.tsv', separator='\t')
 
     return proteome_list
-
-  def _get_proteome_taxon(self, proteome_id: str):
-    """Get the proteome's taxon ID from UniProt API"""
-    url = f'https://rest.uniprot.org/proteomes/{proteome_id}'
-    try:
-      r = self.session.get(url)
-      r.raise_for_status()
-      data = r.json()
-      return data.get('taxonomy', {}).get('taxonId', self.taxon_id)
-    except:
-      return self.taxon_id
 
   def _parse_proteome_json(self, json_text: str):
     data = json.loads(json_text)
