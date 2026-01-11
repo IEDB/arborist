@@ -99,7 +99,7 @@ class AssignmentHandler:
     files_to_remove = [
       'alignments.csv', 'alignments.tsv', 'arc-temp-results.tsv', 'peptide-matches.tsv', 'proteome.fasta.pdb',
       'proteome.fasta.phr', 'proteome.fasta.pin', 'proteome.fasta.pjs', 'proteome.fasta.pot',
-      'proteome.fasta.psq', 'proteome.fasta.ptf', 'proteome.fasta.pto', 'sources.fasta', 'proteome.tsv'
+      'proteome.fasta.psq', 'proteome.fasta.ptf', 'proteome.fasta.pto', 'sources.fasta', 'proteome.tsv', 'proteome.db'
     ]
     for file in files_to_remove:
       file_path = self.species_path / file
@@ -370,8 +370,14 @@ class PeptideProcessor:
     self.write_assignments(assignments)
 
   def preprocess_proteome(self):
-    if (self.species_path / 'proteome.db').exists():
+    db_file = self.species_path / 'proteome.db'
+    db_gz_file = self.species_path / 'proteome.db.gz'
+    if db_gz_file.exists() and not db_file.exists():
+      subprocess.run(['gunzip', '-k', str(db_gz_file)], check=True)
+
+    if (db_file).exists():
       return
+
     gp_proteome = self.species_path / 'gp_proteome.fasta' if (self.species_path / 'gp_proteome.fasta').exists() else ''
     Preprocessor(
       proteome = self.species_path / 'proteome.fasta',
