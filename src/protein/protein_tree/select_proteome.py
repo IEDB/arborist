@@ -1,5 +1,6 @@
 import argparse
 import re
+import subprocess
 import requests
 import gzip
 import json
@@ -168,6 +169,8 @@ class ProteomeSelector:
         file.unlink()
     for file in self.species_path.glob('*.db'):
       file.unlink()
+    for file in self.species_path.glob('*.db.gz'):
+      file.unlink()
  
   def _preprocess_proteome(self):
     gp_proteome = self.species_path / 'gp_proteome.fasta' if (self.species_path / 'gp_proteome.fasta').exists() else ''
@@ -176,6 +179,10 @@ class ProteomeSelector:
       preprocessed_files_path = self.species_path,
       gene_priority_proteome=gp_proteome
     ).sql_proteome(k = 5)
+
+    db_file = self.species_path / 'proteome.db'
+    if db_file.exists():
+      subprocess.run(['gzip', str(db_file)], check=True)
 
   def _rename_proteome_file(self, proteome_id: str):
     (self.species_path / f'{proteome_id}.fasta').rename(self.species_path / 'proteome.fasta')
