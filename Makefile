@@ -455,10 +455,10 @@ build/arborist/allergens.csv: | build/
 build/arborist/allergens.tsv: src/util/csv2tsv.py build/arborist/allergens.csv
 	$(VENV_PYTHON) $^ $@
 
-build/arborist/allergens.json: src/protein/data/allergens.json 
-	cp $< $@
+build/arborist/allergen-species-map.json: build/arborist/allergens.tsv build/arborist/active-species.tsv src/protein/protein_tree/allergen_species_map.py
+	$(VENV_PYTHON) src/protein/protein_tree/allergen_species_map.py
 
-build/arborist/manual-parents.tsv: build/arborist/allergens.tsv build/arborist/allergens.json
+build/arborist/manual-parents.tsv: build/arborist/allergens.tsv
 	cp src/protein/data/manual-parents.tsv $@
 
 build/arborist/manual-synonyms.tsv: build/arborist/manual-parents.tsv
