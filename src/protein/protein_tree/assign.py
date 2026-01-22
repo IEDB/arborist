@@ -359,6 +359,7 @@ class PeptideProcessor:
     self.peptides = peptides
     self.source_assignments = source_assignments
     self.species_path = species_path
+    self.bin_path = Path(__file__).parents[3] / 'bin'
 
   def process(self):
     has_allergens = self.create_allergen_fasta()
