@@ -330,18 +330,6 @@ class SourceProcessor:
     protein_data = top_proteins.join(
       self.proteome, how='left', left_on='Subject', right_on='Protein ID', coalesce=False
     )
-    allergy_data = pl.read_json(build_path / 'arborist' / 'allergens.json')
-    protein_data = protein_data.join(
-      allergy_data, left_on='Protein ID', right_on='uniprot_id', how='left', coalesce=True
-    )
-    protein_data = protein_data.with_columns(
-      pl.when(pl.col('allergen_name').is_not_null())
-      .then(pl.col('allergen_name')).otherwise(pl.col('Protein Name')).alias('Protein Name')
-    )
-    protein_data = protein_data.with_columns(
-      pl.when(pl.col('mapped_id').is_not_null())
-      .then(pl.col('mapped_id')).otherwise(pl.col('Protein ID')).alias('Protein ID')
-    )
     protein_data = protein_data.select(pl.col(
       'Query', 'Score', 'Gene_right', 'Protein ID', 'Protein Name'
     )).rename({
