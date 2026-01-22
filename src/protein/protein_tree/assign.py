@@ -361,7 +361,7 @@ class PeptideProcessor:
     self.species_path = species_path
 
   def process(self):
-    self.create_allergen_fasta()
+    has_allergens = self.create_allergen_fasta()
     self.preprocess_proteome()
     self.search_peptides()
     assignments = self.assign_parents()
