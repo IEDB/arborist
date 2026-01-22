@@ -381,7 +381,7 @@ class PeptideProcessor:
     fasta_path = self.species_path / 'allergens.fasta'
 
     with open(fasta_path, 'w') as f:
-      for row in species_allergens.iter_rows(named=true):
+      for row in species_allergens.iter_rows(named=True):
         allergen_name = row['name']
         sequence = row['sequence']
 
