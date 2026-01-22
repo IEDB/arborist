@@ -494,6 +494,62 @@ class PeptideProcessor:
     )
     return assignments
 
+  def align_to_allergens(self, assignments):
+    allergen_fasta = self.species_path / 'allergens.fasta'
+    if not allergen_fasta.exists():
+      return assignments
+
+    sources_fasta = self.species_path / 'sources.fasta'
+    alignments_file = self.species_path / 'allergen-alignments.csv'
+
+    makeblastdb_cmd = [
+      str(self.bin_path / 'makeblastdb'),
+      '-in', str(allergen_fasta),
+      '-dbtype', 'prot',
+      '-out', str(allergen_fasta)
+    ]
+
+    blastp_cmd = [
+      str(self.bin_path / 'blastp'),
+      '-query', str(sources_fasta),
+      '-db', str(allergen_fasta),
+      '-evalue', '1',
+      '-outfmt', '10',
+      '-num_threads', '1',
+      '-out', str(alignments_file)
+    ]
+    subprocess.run(makeblastdb_cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.run(blastp_cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+    alignment_cols = [
+      'Query', 'Subject', '% Identity', 'Alignment Length', 'Mismatches', 'Gap Openings',
+      'Query Start', 'Query End', 'Subject Start', 'Subject End', 'E-value', 'Bit Score'
+    ]
+
+    try:
+      alignments = pl.read_csv(alignments_file, separator=',', has_header=False, new_columns=alignment_cols)
+      alignments = alignments.with_columns(
+        pl.col('Subject').str.split('|').list.get(1).alias('Allergen Name')
+      )
+      high_identity = alignments.filter(pl.col('% Identity') >= 95.0)
+      allergen_map = dict(high_identity.select('Query', 'Allergen Name').iter_rows())
+      assignments = assignments.with_columns(
+        pl.col('Source Accession').replace_strict(allergen_map, default=None).alias('Allergen Match')
+      )
+      assignments = assignments.with_columns(
+        pl.when(pl.col('Allergen Match').is_not_null())
+        .then(pl.col('Allergen Match'))
+        .otherwise(pl.col('Protein Name'))
+        .alias('Protein Name')
+      )
+
+      assignments = assignments.drop('Allergen Match')
+
+    except:
+      pass
+
+    return assignments
+
   def get_protein_data(self, assignments):
     proteome = pl.read_csv(self.species_path / 'proteome.tsv', separator='\t')
     proteome = proteome.select(pl.col('Database', 'Entry Name', 'Protein ID', 'Sequence'))
