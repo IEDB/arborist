@@ -371,42 +371,42 @@ class PeptideProcessor:
     assignments = self.add_synonyms(assignments)
     self.write_assignments(assignments)
 
-  def create_allergen_fasta(self):
-    allergens = pl.read_csv(build_path / 'arborist' / 'allergens.tsv', separator='\t')
-    species_allergens = allergens.filter(pl.col('SpeciesID') == self.taxon_id)
 
-    if species_allergens.height == 0:
-      return False
+def create_allergen_fasta(self):
+  allergens = pl.read_csv(build_path / 'arborist' / 'allergens.tsv', separator='\t')
+  species_allergens = allergens.filter(pl.col('SpeciesID') == self.taxon_id)
 
-    fasta_path = self.species_path / 'allergens.fasta'
+  if species_allergens.height == 0:
+    return False
 
-    with open(fasta_path, 'w') as f:
-      for row in species_allergens.iter_rows(named=True):
-        allergen_name = row['name']
-        sequence = row['sequence']
+  fasta_path = self.species_path / 'allergens.fasta'
+  with open(fasta_path, 'w') as f:
+    for row in species_allergens.iter_rows(named=True):
+      allergen_name = row['Name']
+      sequence = row['Sequence']
 
-        if not sequence:
-          continue
+      if not sequence:
+        continue
 
-        if '>' in sequence:
-          fragments = re.split(r'>', sequence)
-          for i, fragment in enumerate(fragments[1:], start=1):
-            parts = fragment.split(':', 1)
-            if len(parts) == 2:
-              seq_part = parts[1]
-            else:
-              seq_part = parts[0]
-            clean_seq = re.sub(r'[^a-z]', '', seq_part.upper())
-            if clean_seq and len(clean_seq) >= 5:
-              header = f"{allergen_name.replace(' ', '_')}_frag_{i}|{allergen_name}"
-              f.write(f">{header}\n{clean_seq}\n")
-        else:
-          clean_seq = re.sub(r'[^a-z]', '', sequence.upper())
+      if '>' in sequence:
+        fragments = re.split(r'>', sequence)
+        for i, fragment in enumerate(fragments[1:], start=1):
+          parts = fragment.split(':', 1)
+          if len(parts) == 2:
+            seq_part = parts[1]
+          else:
+            seq_part = parts[0]
+          clean_seq = re.sub(r'[^A-Z]', '', seq_part.upper())
           if clean_seq and len(clean_seq) >= 5:
-            header = f"{allergen_name.replace(' ', '_')}|{allergen_name}"
+            header = f"{allergen_name.replace(' ', '_')}_frag_{i}|{allergen_name}"
             f.write(f">{header}\n{clean_seq}\n")
+      else:
+        clean_seq = re.sub(r'[^A-Z]', '', sequence.upper())
+        if clean_seq and len(clean_seq) >= 5:
+          header = f"{allergen_name.replace(' ', '_')}|{allergen_name}"
+          f.write(f">{header}\n{clean_seq}\n")
 
-    return true
+  return True
 
   def preprocess_proteome(self):
     db_file = self.species_path / 'proteome.db'
