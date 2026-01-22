@@ -6,23 +6,35 @@ from pathlib import Path
 def create_species_map(allergens, active_species):
   iuis_to_clean = {}
   for s in allergens['Species'].unique().to_list():
-    clean = s.lower().split('(')[0].strip()
-    iuis_to_clean[s] = clean
+    base = s.lower().split('(')[0].strip()
+    iuis_to_clean[s] = [base]
+
+    if '(' in s:
+      paren_content = s.split('(')[1].split(')')[0].strip().lower()
+      iuis_to_clean[s].append(paren_content)
 
   species_map = {}
   for row in active_species.iter_rows(named=True):
     taxon_id = row['Species ID']
     label = row['Species Label'].lower()
-    for iuis_full, iuis_clean in iuis_to_clean.items():
-      if iuis_clean in label or label.split('(')[0].strip() in iuis_clean:
-        species_map[iuis_full] = taxon_id
-        break
+    label_base = label.split('(')[0].strip()
+
+    for iuis_full, iuis_variants in iuis_to_clean.items():
+      for variant in iuis_variants:
+        if variant in label or label_base in variant or variant == label_base:
+          species_map[iuis_full] = taxon_id
+          break
 
   manual_fixes = {
     'Bombyx mori': 7091,
     'Dermatophagoides pteronyssinus': 6956,
     'Brassica napus': 3708,
     'Prunus persica': 3760,
+    'Felis domesticus (F. catus)': 9685,
+    'Bos domesticus (Bos taurus)': 9913,
+    'Gallus domesticus (G. gallus)': 9031,
+    'Canis familiaris (C. lupus familiaris)': 9615,
+    'Rana esculenta (Pelophylax esculentus)': 45623,
   }
   species_map.update(manual_fixes)
   species_map.pop('Exopalaemon modestus', None)
