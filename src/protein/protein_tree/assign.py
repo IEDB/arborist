@@ -388,6 +388,7 @@ class PeptideProcessor:
         if not sequence:
           continue
 
+        allergen_name_safe = allergen_name.replace(' ', '_')
         if '>' in sequence:
           fragments = re.split(r'>', sequence)
           for i, fragment in enumerate(fragments[1:], start=1):
@@ -398,12 +399,12 @@ class PeptideProcessor:
               seq_part = parts[0]
             clean_seq = re.sub(r'[^A-Z]', '', seq_part.upper())
             if clean_seq and len(clean_seq) >= 5:
-              header = f"{allergen_name.replace(' ', '_')}_frag_{i}|{allergen_name}"
+              header = f"{allergen_name_safe}_frag_{i}"
               f.write(f">{header}\n{clean_seq}\n")
         else:
           clean_seq = re.sub(r'[^A-Z]', '', sequence.upper())
           if clean_seq and len(clean_seq) >= 5:
-            header = f"{allergen_name.replace(' ', '_')}|{allergen_name}"
+            header = f"{allergen_name_safe}"
             f.write(f">{header}\n{clean_seq}\n")
 
     return True
@@ -530,7 +531,10 @@ class PeptideProcessor:
     try:
       alignments = pl.read_csv(alignments_file, separator=',', has_header=False, new_columns=alignment_cols)
       alignments = alignments.with_columns(
-        pl.col('Subject').str.split('|').list.get(1).alias('Allergen Name')
+        pl.col('Subject')
+          .str.replace(r'_frag_\d+$', '')
+          .str.replace_all('_', ' ')
+          .alias('Allergen Name')
       )
       high_identity = alignments.filter(pl.col('% Identity') >= 95.0)
       allergen_map = dict(high_identity.select('Query', 'Allergen Name').iter_rows())
