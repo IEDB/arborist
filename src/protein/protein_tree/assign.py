@@ -361,13 +361,52 @@ class PeptideProcessor:
     self.species_path = species_path
 
   def process(self):
+    self.create_allergen_fasta()
     self.preprocess_proteome()
     self.search_peptides()
     assignments = self.assign_parents()
-    assignments = self.handle_allergens(assignments)
+    if has_allergens:
+      assignments = self.align_to_allergens(assignments)
     assignments = self.get_protein_data(assignments)
     assignments = self.add_synonyms(assignments)
     self.write_assignments(assignments)
+
+  def create_allergen_fasta(self):
+    allergens = pl.read_csv(build_path / 'arborist' / 'allergens.tsv', separator='\t')
+    species_allergens = allergens.filter(pl.col('SpeciesID') == self.taxon_id)
+
+    if species_allergens.height == 0:
+      return False
+
+    fasta_path = self.species_path / 'allergens.fasta'
+
+    with open(fasta_path, 'w') as f:
+      for row in species_allergens.iter_rows(named=true):
+        allergen_name = row['name']
+        sequence = row['sequence']
+
+        if not sequence:
+          continue
+
+        if '>' in sequence:
+          fragments = re.split(r'>', sequence)
+          for i, fragment in enumerate(fragments[1:], start=1):
+            parts = fragment.split(':', 1)
+            if len(parts) == 2:
+              seq_part = parts[1]
+            else:
+              seq_part = parts[0]
+            clean_seq = re.sub(r'[^a-z]', '', seq_part.upper())
+            if clean_seq and len(clean_seq) >= 5:
+              header = f"{allergen_name.replace(' ', '_')}_frag_{i}|{allergen_name}"
+              f.write(f">{header}\n{clean_seq}\n")
+        else:
+          clean_seq = re.sub(r'[^a-z]', '', sequence.upper())
+          if clean_seq and len(clean_seq) >= 5:
+            header = f"{allergen_name.replace(' ', '_')}|{allergen_name}"
+            f.write(f">{header}\n{clean_seq}\n")
+
+    return true
 
   def preprocess_proteome(self):
     db_file = self.species_path / 'proteome.db'
@@ -486,21 +525,6 @@ class PeptideProcessor:
       return fragment_map
     else:
       return {}
-
-  def handle_allergens(self, assignments):
-    allergy_data = pl.read_json(build_path / 'arborist' / 'allergens.json')
-    assignments = assignments.join(
-      allergy_data, left_on='Protein ID', right_on='uniprot_id', how='left', coalesce=True
-    )
-    assignments = assignments.with_columns(
-      pl.when(pl.col('allergen_name').is_not_null())
-      .then(pl.col('allergen_name')).otherwise(pl.col('Protein Name')).alias('Protein Name')
-    )
-    assignments = assignments.with_columns(
-      pl.when(pl.col('mapped_id').is_not_null())
-      .then(pl.col('mapped_id')).otherwise(pl.col('Protein ID')).alias('Protein ID')
-    )
-    return assignments
 
   def add_synonyms(self, assignments):
     if (self.species_path / 'synonym-data.json').exists():
