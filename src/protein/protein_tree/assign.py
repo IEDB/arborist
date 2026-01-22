@@ -100,6 +100,8 @@ class AssignmentHandler:
       'alignments.csv', 'alignments.tsv', 'arc-temp-results.tsv', 'peptide-matches.tsv', 'proteome.fasta.pdb',
       'proteome.fasta.phr', 'proteome.fasta.pin', 'proteome.fasta.pjs', 'proteome.fasta.pot',
       'proteome.fasta.psq', 'proteome.fasta.ptf', 'proteome.fasta.pto', 'sources.fasta', 'proteome.tsv', 'proteome.db'
+      'allergens.fasta.pdb', 'allergens.fasta.phr', 'allergens.fasta.pin', 'allergens.fasta.pjs', 'allergens.fasta.pot',
+      'allergens.fasta.psq', 'allergens.fasta.ptf', 'allergens.fasta.pto'
     ]
     for file in files_to_remove:
       file_path = self.species_path / file
@@ -547,7 +549,12 @@ class PeptideProcessor:
         .otherwise(pl.col('Protein Name'))
         .alias('Protein Name')
       )
-
+      assignments = assignments.with_columns(
+        pl.when(pl.col('Allergen Match').is_not_null())
+        .then(pl.col('Allergen Match'))
+        .otherwise(pl.col('Source Assigned Protein Name'))
+        .alias('Source Assigned Protein Name')
+      )
       assignments = assignments.drop('Allergen Match')
 
     except:
