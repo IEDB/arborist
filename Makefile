@@ -452,10 +452,8 @@ proteome: build/arborist/proteomes.built
 build/arborist/allergens.csv: | build/
 	curl -L --retry 10 -o $@ 'http://www.allergen.org/csv.php?table=joint'
 
-build/arborist/allergens.tsv: src/util/csv2tsv.py build/arborist/allergens.csv
-	$(VENV_PYTHON) $^ $@
-
-build/arborist/allergen-species-map.json: build/arborist/allergens.tsv build/arborist/active-species.tsv src/protein/protein_tree/allergen_species_map.py
+build/arborist/allergens.tsv: src/util/csv2tsv.py build/arborist/allergens.csv src/protein/protein_tree/allergen_species_map.py build/arborist/active-species.tsv
+	$(VENV_PYTHON) src/util/csv2tsv.py build/arborist/allergens.csv $@
 	$(VENV_PYTHON) src/protein/protein_tree/allergen_species_map.py
 
 build/arborist/manual-parents.tsv: build/arborist/allergens.tsv
