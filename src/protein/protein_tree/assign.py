@@ -99,7 +99,7 @@ class AssignmentHandler:
     files_to_remove = [
       'alignments.csv', 'alignments.tsv', 'arc-temp-results.tsv', 'peptide-matches.tsv', 'proteome.fasta.pdb',
       'proteome.fasta.phr', 'proteome.fasta.pin', 'proteome.fasta.pjs', 'proteome.fasta.pot',
-      'proteome.fasta.psq', 'proteome.fasta.ptf', 'proteome.fasta.pto', 'sources.fasta', 'proteome.tsv', 'proteome.db'
+      'proteome.fasta.psq', 'proteome.fasta.ptf', 'proteome.fasta.pto', 'sources.fasta', 'proteome.tsv', 'proteome.db',
       'allergens.fasta.pdb', 'allergens.fasta.phr', 'allergens.fasta.pin', 'allergens.fasta.pjs', 'allergens.fasta.pot',
       'allergens.fasta.psq', 'allergens.fasta.ptf', 'allergens.fasta.pto'
     ]
