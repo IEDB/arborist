@@ -517,7 +517,7 @@ build/arborist/protein-tree-with-gene.owl: build/arborist/protein-tree-with-gene
 	robot convert -i $< -o $@
 
 build/arborist/epitope-mappings.tsv: build/arborist/protein-tree.owl
-	$(VENV_PYTHON) src/protein/protein_tree/immunomebrowser.py -n 10
+	$(VENV_PYTHON) src/protein/protein_tree/immunomebrowser.py
 
 .PHONY: protein
 protein: build/arborist/epitope-mappings.tsv build/arborist/protein-tree-with-gene.owl
