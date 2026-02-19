@@ -152,16 +152,26 @@ class EpitopeMapper:
 
     is_discontinuous = pl.col('Epitope Sequence').str.contains(r'[0-9]')
 
-    tier2_linear = with_source.filter(~is_discontinuous)
+    has_source_positions = (
+      pl.col('Source Starting Position').is_not_null() &
+      pl.col('Source Ending Position').is_not_null()
+    )
+
+    tier2_linear = with_source.filter(~is_discontinuous & has_source_positions)
     tier2_discontinuous = with_source.filter(is_discontinuous)
 
-    tier3_linear = without_source.filter(~is_discontinuous)
+    tier3_linear_no_seq = without_source.filter(~is_discontinuous)
+    tier3_linear_no_pos = with_source.filter(~is_discontinuous & ~has_source_positions)
     tier3_discontinuous = without_source.filter(is_discontinuous)
+
+    if tier3_linear_no_pos.height > 0:
+      print(f'  Tier 2 linear missing source positions, routed to tier 3: {tier3_linear_no_pos.height}')
+
+    tier3 = pl.concat([tier3_linear_no_seq, tier3_linear_no_pos])
 
     if tier3_discontinuous.height > 0:
       print(f'  Tier 3 discontinuous (no source seq, unmappable): {tier3_discontinuous.height}')
 
-    tier3 = tier3_linear
     return tier2_linear, tier2_discontinuous, tier3
 
   def _make_exact_mappings(self, exact):
