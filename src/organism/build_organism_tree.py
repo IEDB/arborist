@@ -146,6 +146,41 @@ def copy_triples(con):
     ''')
 
 
+def copy_scientific_names(con):
+    '''Given a database connection,
+    for each subject in the 'organism_tree' table,
+    copy the scientific name as a synonym
+    if it differs from the current label.'''
+    synonym_type = (
+        '{"oio:hasSynonymType":[{'
+        '"datatype":"xsd:string",'
+        '"meta":"owl:Axiom",'
+        '"object":"NCBI Taxonomy scientific name"'
+        '}]}'
+    )
+    cur = con.cursor()
+    cur.execute(f'''
+    INSERT INTO organism_tree
+    SELECT
+        1 AS asserted,
+        0 AS retracted,
+        "iedb-taxon:organism_tree" AS graph,
+        ncbitaxon.subject,
+        "oio:hasExactSynonym" AS predicate,
+        ncbitaxon.object,
+        'xsd:string' AS datatype,
+        '{synonym_type}' AS annotation
+    FROM ncbitaxon
+    JOIN organism_tree ON ncbitaxon.subject = organism_tree.subject
+    WHERE ncbitaxon.predicate = 'rdfs:label'
+      AND organism_tree.predicate = 'rdfs:label'
+      AND ncbitaxon.object != organism_tree.object
+      AND LOWER(ncbitaxon.object) != LOWER(organism_tree.object)
+    ''')
+    for row in cur.fetchall():
+        print(row)
+
+
 def main():
     parser = ArgumentParser('Build the organism tree')
     parser.add_argument('ldtab', help='Path to the LDTab SQLite database')
@@ -222,6 +257,7 @@ def main():
                 triples.append([curie, 'rdfs:subClassOf', row['parent2']])
         insert_triples(con, 'organism_tree', triples)
         copy_triples(con)
+        copy_scientific_names(con)
         index_statement_table(con, 'organism_tree')
         # args.active_taxa.seek(0)
         # check_lower(con, args.active_taxa)
