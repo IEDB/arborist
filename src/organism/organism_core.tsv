@@ -102,7 +102,7 @@ NCBITaxon:6893	Araneid (spider)	singular of NCBI Taxonomy scientific name (singu
 NCBITaxon:6920	Loxosceles	NCBI Taxonony scientific name		upper	NCBITaxon:6893	Araneid (spider)	
 NCBITaxon:6855	Scorpiones (scorpion)	singular of NCBI Taxonomy scientific name		upper	NCBITaxon:6854	Arachnid	
 NCBITaxon:6875	Centruroides	NCBI Taxonony scientific name		upper	NCBITaxon:6854	Arachnid	
-NCBITaxon:6657	Crustacean	singular of NCBI Taxonomy scientific name		upper	NCBITaxon:33208	Metazoan	
+NCBITaxon:197562	Pancrustacea (crustaceans)	NCBI Taxonomy scientific name (NCBI BLAST name)		upper	NCBITaxon:33208	Metazoan	
 NCBITaxon:6447	Mollusc	singular of NCBI Taxonomy scientific name		upper	NCBITaxon:33208	Metazoan	
 NCBITaxon:6231	Nematode (roundworm)	singular of NCBI Taxonomy scientific name (NCBI common name)		upper	NCBITaxon:33208	Metazoan	
 NCBITaxon:6251	Ascaris	NCBI Taxonomy scientific name		upper	NCBITaxon:6231	Nematode (roundworm)	

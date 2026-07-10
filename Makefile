@@ -312,7 +312,7 @@ cache/ncbitaxon/:
 	mkdir $@
 
 #TAXDMP_VERSION := $(shell date +"%Y-%m-01")
-TAXDMP_VERSION := 2026-01-01
+TAXDMP_VERSION := 2026-07-01
 
 # Fetch the taxdmp.zip for this month.
 cache/ncbitaxon/taxdmp_$(TAXDMP_VERSION).zip: | cache/ncbitaxon/ current/
