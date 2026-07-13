@@ -99,7 +99,7 @@ bin/ build/ cache/ current/:
 
 .PHONY: test
 test:
-	$(MAKE) -C test test
+	$(MAKE) -C tests test
 
 
 ### Install Dependencies
@@ -635,7 +635,7 @@ build/proteins/latest/epitope-mappings_new.tsv: build/proteins/latest/
 
 .PHONY: leidos
 leidos: build/organisms/latest/ build/proteins/previous/ build/proteins/latest/epitope-mappings_new.tsv
-	$(VENV_PYTHON) -m pytest test/test_leidos.py
+	$(VENV_PYTHON) -m pytest tests/test_leidos.py
 
 
 ### Nanobot Actions
