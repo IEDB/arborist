@@ -14,4 +14,4 @@ push_files.sh
 
 
 # test
-!test/build/
+!tests/build/
