@@ -99,7 +99,7 @@ class AssignmentHandler:
     files_to_remove = [
       'alignments.csv', 'alignments.tsv', 'arc-temp-results.tsv', 'peptide-matches.tsv', 'proteome.fasta.pdb',
       'proteome.fasta.phr', 'proteome.fasta.pin', 'proteome.fasta.pjs', 'proteome.fasta.pot',
-      'proteome.fasta.psq', 'proteome.fasta.ptf', 'proteome.fasta.pto', 'sources.fasta', 'proteome.tsv', 'proteome.db',
+      'proteome.fasta.psq', 'proteome.fasta.ptf', 'proteome.fasta.pto', 'sources.fasta', 'proteome.tsv',
       'allergens.fasta.pdb', 'allergens.fasta.phr', 'allergens.fasta.pin', 'allergens.fasta.pjs', 'allergens.fasta.pot',
       'allergens.fasta.psq', 'allergens.fasta.ptf', 'allergens.fasta.pto'
     ]
@@ -400,20 +400,12 @@ class PeptideProcessor:
     return True
 
   def preprocess_proteome(self):
-    db_file = self.species_path / 'proteome.db'
-    db_gz_file = self.species_path / 'proteome.db.gz'
-    if db_gz_file.exists() and not db_file.exists():
-      subprocess.run(['gunzip', '-k', str(db_gz_file)], check=True)
-
-    if (db_file).exists():
+    if (self.species_path / 'proteome_5mers.pepidx').exists():
       return
-
-    gp_proteome = self.species_path / 'gp_proteome.fasta' if (self.species_path / 'gp_proteome.fasta').exists() else ''
     Preprocessor(
       proteome = self.species_path / 'proteome.fasta',
       preprocessed_files_path = self.species_path,
-      gene_priority_proteome=gp_proteome
-    ).sql_proteome(k = 5)
+    ).preprocess(k = 5)
 
   def search_peptides(self):
     peptides = [peptide for peptide in self.peptides['Sequence'].to_list() if peptide]

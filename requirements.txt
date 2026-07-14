@@ -8,8 +8,8 @@ mysql-connector-python
 sqlalchemy
 pytest
 requests
-pepmatch==1.1.2
-polars==1.2.0
+pepmatch==1.17.0
+polars==1.42.1
 
 # protein tree package
 -e ./src/protein

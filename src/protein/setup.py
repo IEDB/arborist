@@ -27,7 +27,7 @@ setup(
     'lxml>=4.9.2',
     'mysql-connector-python>=8.0.32',
     'pandas>=1.3.0',
-    'pepmatch>=0.9.4',
+    'pepmatch>=1.17.0',
     'sqlalchemy>=2.0.4',
     'pytest>=7.3.2',
     'requests>=2.31.0',
