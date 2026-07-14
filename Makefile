@@ -442,9 +442,13 @@ build/arborist/proteome_after.tsv: build/arborist/proteome.tsv
 build/arborist/proteome.html: src/protein/data/proteomes.tsv build/arborist/proteome_after.tsv
 	daff --output $@ $^
 
+# Report the proteome selected for each active species, flagging EMPTY/MISSING ones.
+build/arborist/proteome-selection-report.tsv: src/protein/protein_tree/report_proteomes.py build/arborist/proteomes.built
+	$(VENV_PYTHON) src/protein/protein_tree/report_proteomes.py -b build/
+
 # TODO: delete all proteome.db files when reselecting so that they are remade
 .PHONY: proteome
-proteome: build/arborist/proteomes.built
+proteome: build/arborist/proteomes.built build/arborist/proteome-selection-report.tsv
 
 
 ### 5. Build Protein Tree
