@@ -1,6 +1,5 @@
 import argparse
 import re
-import subprocess
 import requests
 import gzip
 import json
@@ -127,23 +126,13 @@ class ProteomeSelector:
     return max(proteome_counts.items(), key=lambda item: item[1])[0]
 
   def _get_match_count(self, peptide_seqs: list, proteome_id: str):
-    Preprocessor(
-      proteome = self.species_path / f'{proteome_id}.fasta',
-      preprocessed_files_path = self.species_path,
-    ).sql_proteome(k = 5)
-
-    Matcher(
+    matches = Matcher(
       query = peptide_seqs,
-      proteome_file = self.species_path / f'{proteome_id}.fasta', 
-      max_mismatches = 0, 
+      proteome_file = self.species_path / f'{proteome_id}.fasta',
+      max_mismatches = 0,
       k = 5,
       preprocessed_files_path = self.species_path,
-      output_format='tsv',
-      output_name=self.species_path / f'{proteome_id}-matches.tsv'
     ).match()
-
-    matches = pl.read_csv(self.species_path / f'{proteome_id}-matches.tsv', separator='\t')
-    (self.species_path / f'{proteome_id}-matches.tsv').unlink()
 
     matches = matches.filter(
       pl.col('Matched Sequence').is_not_null()
@@ -167,22 +156,14 @@ class ProteomeSelector:
     for file in self.species_path.glob('*.fasta'):
       if file.name != f'{proteome_id}.fasta':
         file.unlink()
-    for file in self.species_path.glob('*.db'):
-      file.unlink()
-    for file in self.species_path.glob('*.db.gz'):
+    for file in self.species_path.glob('*.pepidx'):
       file.unlink()
  
   def _preprocess_proteome(self):
-    gp_proteome = self.species_path / 'gp_proteome.fasta' if (self.species_path / 'gp_proteome.fasta').exists() else ''
     Preprocessor(
       proteome = self.species_path / 'proteome.fasta',
       preprocessed_files_path = self.species_path,
-      gene_priority_proteome=gp_proteome
-    ).sql_proteome(k = 5)
-
-    db_file = self.species_path / 'proteome.db'
-    if db_file.exists():
-      subprocess.run(['gzip', str(db_file)], check=True)
+    ).preprocess(k = 5)
 
   def _rename_proteome_file(self, proteome_id: str):
     (self.species_path / f'{proteome_id}.fasta').rename(self.species_path / 'proteome.fasta')
