@@ -33,11 +33,6 @@ class AssignmentHandler:
     }
 
     proteins = list(SeqIO.parse(self.species_path / 'proteome.fasta', 'fasta'))
-    gp_proteome_path = self.species_path / 'gp_proteome.fasta'
-    if gp_proteome_path.exists():
-      gp_ids = [str(protein.id.split('|')[1]) for protein in list(SeqIO.parse(gp_proteome_path, 'fasta'))]
-    else:
-      gp_ids = []
 
     proteome_data = []
     for protein in proteins:
@@ -55,15 +50,13 @@ class AssignmentHandler:
           else:
             metadata.append('')
 
-      gp = 1 if protein.id.split('|')[1] in gp_ids else 0
-      metadata.append(gp)
       metadata.append(str(protein.seq))
       metadata.append(protein.id.split('|')[0])
       proteome_data.append(metadata)
 
     columns = [
       'Protein ID', 'Entry Name', 'Protein Name', 'Gene', 'Protein Existence Level', 
-      'Gene Priority', 'Sequence', 'Database'
+      'Sequence', 'Database'
     ]
     proteome = pl.DataFrame(proteome_data, schema=columns, orient='row').with_columns(
       (pl.when(pl.col('Protein ID').str.contains('-'))
@@ -77,7 +70,7 @@ class AssignmentHandler:
       pl.col('Gene').str.replace_all(r'[ \.\(\)]', '_').alias('Gene')
     ).select([
       'Database', 'Gene', 'Protein ID', 'Entry Name', 'Isoform Count', 'Protein Name', 
-      'Protein Existence Level', 'Gene Priority', 'Sequence'
+      'Protein Existence Level', 'Sequence'
     ])
     proteome.write_csv(self.species_path / 'proteome.tsv', separator='\t')
 

@@ -6,7 +6,7 @@ import json
 import polars as pl
 
 from pathlib import Path
-from requests.exceptions import ChunkedEncodingError, ReadTimeout, ConnectionError, HTTPError
+from requests.exceptions import ChunkedEncodingError, ReadTimeout, ConnectionError
 
 from pepmatch import Preprocessor, Matcher
 from protein_tree.data_fetch import DataFetcher
@@ -72,7 +72,6 @@ class ProteomeSelector:
       self._rename_proteome_file(proteome_id)
       self._fetch_fragment_data(proteome_id)
       self._fetch_synonym_data(proteome_id)
-      self._fetch_gp_proteome(proteome_id, proteome_taxon)
       self._preprocess_proteome()
       self._write_metadata(proteome_id, proteome_taxon, selected_proteome_type, proteome_label)
 
@@ -228,29 +227,6 @@ class ProteomeSelector:
       json.dump(synonym_map, f, indent=2)
 
     return synonym_map
-
-  def _fetch_gp_proteome(self, proteome_id: str, proteome_taxon: int):
-    ftp_url = f'https://ftp.uniprot.org/pub/databases/uniprot/knowledgebase/reference_proteomes/'
-    if self.group == 'archeobacterium':
-      ftp_url += f'Archaea/{proteome_id}/{proteome_id}_{proteome_taxon}.fasta.gz'
-    elif self.group == 'bacterium':
-      ftp_url += f'Bacteria/{proteome_id}/{proteome_id}_{proteome_taxon}.fasta.gz'
-    elif self.group in ['plant', 'vertebrate', 'other-eukaryote']:
-      ftp_url += f'Eukaryota/{proteome_id}/{proteome_id}_{proteome_taxon}.fasta.gz'
-    elif self.group == 'virus':
-      ftp_url += f'Viruses/{proteome_id}/{proteome_id}_{proteome_taxon}.fasta.gz'
-    else:
-      return
-
-    try:
-      with self.session.get(ftp_url, stream=True) as r:
-        r.raise_for_status()
-        with open(f'{self.species_path}/gp_proteome.fasta', 'wb') as f:
-          f.write(gzip.open(r.raw, 'rb').read())
-    except (ChunkedEncodingError, ReadTimeout, ConnectionError):
-      self._fetch_gp_proteome(proteome_id, proteome_taxon) # recursive call on error
-    except HTTPError:
-      return
 
   def _write_metadata(self, proteome_id: str, proteome_taxon: int, proteome_type: str, proteome_label: str):
     pl.DataFrame({
