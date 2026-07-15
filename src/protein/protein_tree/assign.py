@@ -402,17 +402,29 @@ class PeptideProcessor:
 
   def search_peptides(self):
     peptides = [peptide for peptide in self.peptides['Sequence'].to_list() if peptide]
-    Matcher(
-      query=peptides,
+    out = self.species_path / 'peptide-matches.tsv'
+    matcher_args = dict(
       proteome_file=self.species_path / 'proteome.fasta',
       max_mismatches=0,
       k=5,
       preprocessed_files_path=self.species_path,
-      best_match=False, 
-      output_format='tsv',
-      output_name=self.species_path / 'peptide-matches.tsv',
-      sequence_version=False
-    ).match()
+      best_match=False,
+      sequence_version=False,
+    )
+    CHUNK = 100_000
+    if len(peptides) <= CHUNK:
+      Matcher(query=peptides, output_format='tsv', output_name=out, **matcher_args).match()
+      return
+    # Large query sets (e.g. human ~1M peptides) OOM if every match is held in
+    # memory before writing. Exact matching is per-peptide independent, so we
+    # match in chunks and stream each batch to disk: the concatenated rows are
+    # identical to a single-shot run, with the header written once.
+    first = True
+    for i in range(0, len(peptides), CHUNK):
+      df = Matcher(query=peptides[i:i + CHUNK], output_format='dataframe', **matcher_args).match()
+      with open(out, 'wb' if first else 'ab') as f:
+        df.write_csv(f, separator='\t', include_header=first)
+      first = False
 
   def assign_parents(self):
     matches = pl.read_csv(self.species_path / 'peptide-matches.tsv', separator='\t').with_columns(
