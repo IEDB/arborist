@@ -42,10 +42,11 @@ class ProteomeSelector:
     else:
       proteome_types = [
         'Reference and representative proteome',
-        'Representative',
+        'Representative proteome',
         'Reference proteome',
-        'Other',
-        'Redundant'
+        'Other proteome',
+        'Non Reference proteome',
+        'Redundant proteome',
       ]
 
       selected_proteomes = self.proteome_list
@@ -53,7 +54,7 @@ class ProteomeSelector:
 
       for proteome_type in proteome_types:
         proteomes = self.proteome_list.filter(
-          pl.col('Proteome Type').str.contains(proteome_type)
+          pl.col('Proteome Type') == proteome_type
         )
         if not proteomes.is_empty():
           selected_proteomes = proteomes
@@ -70,6 +71,14 @@ class ProteomeSelector:
         self._fetch_proteome_file(proteome_id)
 
       self._rename_proteome_file(proteome_id)
+      # UniProt demoted non-reference proteomes to UniParc, so a selected
+      # proteome can return an empty UniProtKB fetch. Fall back to taxon-level
+      # orphans (all UniProtKB proteins for the species) when that happens.
+      proteome_fasta = self.species_path / 'proteome.fasta'
+      if not proteome_fasta.exists() or proteome_fasta.stat().st_size == 0:
+        self._fetch_orphans()
+        self._write_metadata('', self.taxon_id, 'Orphans', self.species_name)
+        return
       self._fetch_fragment_data(proteome_id)
       self._fetch_synonym_data(proteome_id)
       self._preprocess_proteome()
