@@ -523,8 +523,15 @@ build/arborist/protein-tree-with-gene.owl: build/arborist/protein-tree-with-gene
 build/arborist/epitope-mappings.tsv: build/arborist/protein-tree.owl
 	$(VENV_PYTHON) src/protein/protein_tree/immunomebrowser.py
 
+# Weekly parent-assignment stats -> master sheet in the repo dir. Non-breaking:
+# stats.py always exits 0, and this leaf target never gates the assignment outputs.
+build/arborist/parent-assignment-stats.built: src/protein/protein_tree/stats.py build/arborist/all-peptide-assignments.tsv
+	$(VENV_PYTHON) src/protein/protein_tree/stats.py -b build/
+	touch $@
+
 .PHONY: protein
 protein: build/arborist/epitope-mappings.tsv build/arborist/protein-tree-with-gene.owl
+protein: build/arborist/parent-assignment-stats.built
 
 ### 6. TODO Build Molecule Tree
 
