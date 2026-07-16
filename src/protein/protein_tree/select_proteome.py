@@ -3,6 +3,7 @@ import re
 import requests
 import gzip
 import json
+import time
 import polars as pl
 
 from pathlib import Path
@@ -75,7 +76,7 @@ class ProteomeSelector:
       # proteome can return an empty UniProtKB fetch. Fall back to taxon-level
       # orphans (all UniProtKB proteins for the species) when that happens.
       proteome_fasta = self.species_path / 'proteome.fasta'
-      if not proteome_fasta.exists() or proteome_fasta.stat().st_size == 0:
+      if not self._has_fasta_records(proteome_fasta):
         self._fetch_orphans()
         self._write_metadata('', self.taxon_id, 'Orphans', self.species_name)
         return
@@ -148,17 +149,35 @@ class ProteomeSelector:
 
     return matches.height
 
-  def _fetch_proteome_file(self, proteome_id: str):
+  def _fetch_proteome_file(self, proteome_id: str, attempt: int = 1):
+    max_attempts = 5
     url = f'https://rest.uniprot.org/uniprotkb/stream?format=fasta&includeIsoform=true&query=(proteome:{proteome_id})'
+    proteome_file = self.species_path / f'{proteome_id}.fasta'
     try:
       with self.session.get(url, stream=True) as r:
         r.raise_for_status()
-        with open(self.species_path / f'{proteome_id}.fasta', 'w') as f:
+        with open(proteome_file, 'w') as f:
           for chunk in r.iter_content(chunk_size=65536):
             if chunk:  # filter out keep-alive new chunks
               f.write(chunk.decode())
     except (ChunkedEncodingError, ReadTimeout, ConnectionError):
-      self._fetch_proteome_file(proteome_id)  # recursive call on error
+      if attempt < max_attempts:
+        time.sleep(2 ** attempt)
+        return self._fetch_proteome_file(proteome_id, attempt + 1)
+      return
+    # UniProt's /stream can return a transient error as an HTTP 200 body
+    # ('Error encountered when streaming data. Please try again later.'), which
+    # raise_for_status cannot catch. Validate we actually got FASTA and retry
+    # with backoff; the caller falls back to orphans if it never recovers.
+    if not self._has_fasta_records(proteome_file) and attempt < max_attempts:
+      time.sleep(2 ** attempt)
+      return self._fetch_proteome_file(proteome_id, attempt + 1)
+
+  def _has_fasta_records(self, proteome_file) -> bool:
+    if not proteome_file.exists() or proteome_file.stat().st_size == 0:
+      return False
+    with open(proteome_file) as f:
+      return any(line.startswith('>') for line in f)
 
   def _remove_unselected_proteomes(self, proteome_id: str):
     for file in self.species_path.glob('*.fasta'):

@@ -23,7 +23,8 @@ class AssignmentHandler:
     self.species_path = build_path / 'species' / str(self.taxon_id)
 
   def generate_proteome_tsv(self):
-    if (self.species_path / 'proteome.fasta').stat().st_size == 0: return
+    proteome_fasta = self.species_path / 'proteome.fasta'
+    if not proteome_fasta.exists() or proteome_fasta.stat().st_size == 0: return
     regexes = {
       'protein_id': re.compile(r"\|([^|]*)\|"),         # between | and |
       'entry_name': re.compile(r"\|([^\|]*?)\s"),       # between | and space
@@ -32,7 +33,11 @@ class AssignmentHandler:
       'pe_level': re.compile(r"PE=(.+?)\s"),            # between PE= and space
     }
 
-    proteins = list(SeqIO.parse(self.species_path / 'proteome.fasta', 'fasta'))
+    try:
+      proteins = list(SeqIO.parse(proteome_fasta, 'fasta'))
+    except ValueError:  # non-FASTA payload (e.g. a UniProt stream-error body) slipped through
+      return
+    if not proteins: return  # non-empty file but zero parseable records
 
     proteome_data = []
     for protein in proteins:
@@ -46,7 +51,7 @@ class AssignmentHandler:
           if key == 'protein_id':
             metadata.append(str(protein.id))
           elif key == 'pe_level':
-            metadata.append(0)
+            metadata.append('0')
           else:
             metadata.append('')
 
@@ -54,11 +59,12 @@ class AssignmentHandler:
       metadata.append(protein.id.split('|')[0])
       proteome_data.append(metadata)
 
-    columns = [
-      'Protein ID', 'Entry Name', 'Protein Name', 'Gene', 'Protein Existence Level', 
-      'Sequence', 'Database'
-    ]
-    proteome = pl.DataFrame(proteome_data, schema=columns, orient='row').with_columns(
+    schema = {
+      'Protein ID': pl.String, 'Entry Name': pl.String, 'Protein Name': pl.String,
+      'Gene': pl.String, 'Protein Existence Level': pl.String,
+      'Sequence': pl.String, 'Database': pl.String,
+    }
+    proteome = pl.DataFrame(proteome_data, schema=schema, orient='row').with_columns(
       (pl.when(pl.col('Protein ID').str.contains('-'))
       .then(pl.col('Protein ID').str.split('-').list.last())
       .otherwise(pl.lit('1')).alias('Isoform Count')),
