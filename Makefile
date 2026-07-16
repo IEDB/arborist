@@ -529,9 +529,15 @@ build/arborist/parent-assignment-stats.built: src/protein/protein_tree/stats.py 
 	$(VENV_PYTHON) src/protein/protein_tree/stats.py -b build/
 	touch $@
 
+# Weekly alert + digest email off the master sheet. Non-breaking: alert.py always
+# exits 0. Set ALERT_EMAIL=0 to suppress email (e.g. on arborist-dev).
+build/arborist/protein-tree-alert.built: src/protein/protein_tree/alert.py src/protein/protein_tree/notify_email.py build/arborist/parent-assignment-stats.built
+	$(VENV_PYTHON) src/protein/protein_tree/alert.py -b build/
+	touch $@
+
 .PHONY: protein
 protein: build/arborist/epitope-mappings.tsv build/arborist/protein-tree-with-gene.owl
-protein: build/arborist/parent-assignment-stats.built
+protein: build/arborist/parent-assignment-stats.built build/arborist/protein-tree-alert.built
 
 ### 6. TODO Build Molecule Tree
 
