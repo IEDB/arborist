@@ -1,0 +1,11 @@
+# Frozen regression fixture for Listeria innocua (taxon 1642).
+#
+# This directory intentionally EXISTS but contains NO proteome.fasta. It
+# reproduces the exact failing state from bus brief #124: upstream Makefile
+# stages create build/species/<id>/ for a newly-active species before the
+# proteome-selection stage has produced proteome.fasta.
+#
+# Old check_for_proteome guarded on `species_path.exists()`, so with this dir
+# present it skipped on-demand selection; check_for_skips then called
+# .stat().st_size on the missing proteome.fasta and crashed the whole run with
+# FileNotFoundError. See tests/test_species_1642.py.

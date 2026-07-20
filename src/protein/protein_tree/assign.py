@@ -7,7 +7,6 @@ from polars.exceptions import NoDataError
 from pathlib import Path
 from Bio import SeqIO
 from pepmatch import Preprocessor, Matcher
-from ARC.classifier import SeqClassifier
 from protein_tree.data_fetch import DataFetcher
 from protein_tree.select_proteome import ProteomeSelector
 
@@ -187,6 +186,7 @@ class SourceProcessor:
     subprocess.run(mmseqs2_cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
   def run_arc(self):
+    from ARC.classifier import SeqClassifier  # heavy git dep; only vertebrates need it
     arc_results_exist = (self.species_path / 'arc-results.tsv').exists()
     if arc_results_exist:
       old_arc_df = pl.read_csv(self.species_path / 'arc-results.tsv', separator='\t')
@@ -668,7 +668,13 @@ def do_assignments(taxon_id):
 
 def check_for_proteome(taxon_id, active_taxa, species_name, group):
   species_path = build_path / 'species' / str(taxon_id)
-  if not species_path.exists():
+  proteome_fasta = species_path / 'proteome.fasta'
+  # Trigger on-demand selection when proteome.fasta is MISSING or EMPTY, not
+  # just when the species directory is absent. Upstream Makefile stages create
+  # build/species/<id>/ (epitopes/taxa/sources) for a newly-active species
+  # before its proteome exists; guarding on the directory alone skipped
+  # selection and left a dir-but-no-fasta hole that crashed the whole run.
+  if not proteome_fasta.exists() or proteome_fasta.stat().st_size == 0:
     print(f'No proteome detected for {species_name} (ID: {taxon_id}), selecting best one...')
     data_fetcher = DataFetcher(build_path)
     peptides = data_fetcher.get_peptides_for_species(all_peptides, active_taxa)
@@ -678,7 +684,12 @@ def check_for_proteome(taxon_id, active_taxa, species_name, group):
     proteome_selector.select()
 
 def check_for_skips(taxon_id):
-  if (build_path / 'species' / str(taxon_id) / 'proteome.fasta').stat().st_size == 0:
+  # Belt-and-suspenders: treat a missing proteome.fasta the same as an empty
+  # one -> skip this species cleanly, never raise. On-demand selection can
+  # legitimately produce nothing (no UniProt candidates, no orphan proteins),
+  # and one bad species must never kill the entire run again.
+  proteome_fasta = build_path / 'species' / str(taxon_id) / 'proteome.fasta'
+  if not proteome_fasta.exists() or proteome_fasta.stat().st_size == 0:
     print(f'Proteome is empty, skipping.')
     return True
 

@@ -86,9 +86,15 @@ class ProteomeSelector:
       self._write_metadata(proteome_id, proteome_taxon, selected_proteome_type, proteome_label)
 
   def _fetch_orphans(self):
+    # Guarantee proteome.fasta exists even when the taxon has zero orphan
+    # proteins in UniProtKB. Otherwise select() leaves a species dir with no
+    # proteome.fasta -> the dir-but-no-fasta hole. An empty file is cleanly
+    # skippable downstream instead of crashing.
+    proteome_fasta = self.species_path / 'proteome.fasta'
+    proteome_fasta.touch()
     url = f'https://rest.uniprot.org/uniprotkb/search?format=fasta&query=taxonomy_id:{self.taxon_id}&size=500'
     for batch in self._get_batches(url):
-      with open(self.species_path / 'proteome.fasta', 'a') as f:
+      with open(proteome_fasta, 'a') as f:
         f.write(batch.text)
 
   def _get_batches(self, batch_url: str):
@@ -193,7 +199,15 @@ class ProteomeSelector:
     ).preprocess(k = 5)
 
   def _rename_proteome_file(self, proteome_id: str):
-    (self.species_path / f'{proteome_id}.fasta').rename(self.species_path / 'proteome.fasta')
+    src = self.species_path / f'{proteome_id}.fasta'
+    dst = self.species_path / 'proteome.fasta'
+    if src.exists():
+      src.rename(dst)
+    else:
+      # Fetch exhausted its retries without producing a file. Leave an empty
+      # proteome.fasta so select()'s _has_fasta_records check falls back to
+      # orphans instead of raising FileNotFoundError here.
+      dst.touch()
 
   def _fetch_fragment_data(self, proteome_id: str):
     url = f'https://rest.uniprot.org/uniprotkb/search?format=json&query=proteome:{proteome_id}&fields=ft_chain,ft_peptide,ft_propep,ft_signal,ft_transit&size=500'
