@@ -97,9 +97,14 @@ clobber:
 bin/ build/ cache/ current/:
 	mkdir -p $@
 
-.PHONY: test
+.PHONY: test test-e2e
+# Default: offline siloed suite. e2e tests are deselected by tests/pytest.ini.
 test:
-	$(MAKE) -C tests test
+	$(VENV_PYTHON) -m pytest tests/
+
+# End-to-end tier (arborist-dev): needs aligner binaries + build data.
+test-e2e:
+	$(VENV_PYTHON) -m pytest -m e2e tests/
 
 
 ### Install Dependencies
@@ -652,7 +657,7 @@ build/proteins/latest/epitope-mappings_new.tsv: build/proteins/latest/
 
 .PHONY: leidos
 leidos: build/organisms/latest/ build/proteins/previous/ build/proteins/latest/epitope-mappings_new.tsv
-	$(VENV_PYTHON) -m pytest tests/test_leidos.py
+	$(VENV_PYTHON) -m pytest -m e2e tests/test_protein_output.py
 
 
 ### Nanobot Actions

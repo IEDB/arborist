@@ -1,18 +1,20 @@
 # Arborist protein-tree tests
 
-Two tiers. The default suite is **siloed and fully offline** — no external
-binaries, no MySQL, no network — so it runs anywhere, asahidake included. The
-heavy end-to-end suite runs on arborist-dev where the aligner binaries and
-build data live.
+Two tiers, split by the `e2e` pytest marker (registered in `pytest.ini`). The
+default suite is **siloed and fully offline** — no external binaries, no MySQL,
+no network — so it runs anywhere, asahidake included. The `e2e` tier runs on
+arborist-dev where the aligner binaries and build data live.
 
 ## Offline suite (default — run this while iterating)
 
 ```
-cd tests && make test        # == python3 -m pytest -q
+pytest            # from tests/  (or `make test` from the repo root)
 ```
 
-Runs in seconds. Each test builds its own hermetic `build/` tree in a tmp dir
-(see the `silo` fixture in `conftest.py`) and exercises one unit of logic:
+`pytest.ini` sets `addopts = -m "not e2e"`, so bare `pytest` runs only the
+offline suite. It finishes in seconds. Each test builds its own hermetic
+`build/` tree in a tmp dir (see the `silo` fixture in `conftest.py`) and
+exercises one unit of logic:
 
 | file | subsystem | how it stays offline |
 |------|-----------|----------------------|
@@ -26,20 +28,22 @@ The external aligners (blastp/mmseqs2) and ARC never run here: their outputs
 are frozen as tiny fixtures, or replaced by pepmatch, which does exact peptide
 matching in-process.
 
-The bin/data-dependent tests (`test_assignments`, `test_leidos`) **self-skip**
-when their prerequisites are absent, so `make test` is green on asahidake.
-
-## End-to-end suite (arborist-dev only)
-
-Needs the aligner binaries in `../bin` and real build data.
+## End-to-end tier (arborist-dev only)
 
 ```
-cd tests && make test-e2e
+pytest -m e2e     # from tests/  (or `make test-e2e` from the repo root)
 ```
 
-Generates a real `assign.py -b build -n 4` run, then asserts the golden
-`expected-assignments.tsv` per species. `test_leidos.py` additionally validates
-`build/proteins/latest/*` after a full pipeline build.
+Needs the aligner binaries in `../bin` and real build data. `-m e2e` overrides
+the default deselect. The `e2e` tests also **self-skip** when their
+prerequisites are absent, so a stray selection off-box is safe.
+
+- `test_assignments.py` — generates a real `assign.py -b build -n 4` run against
+  the committed golden fixtures (a session fixture, no Makefile wrapper), then
+  diffs each species against its `expected-assignments.tsv`.
+- `test_protein_output.py` — validates the protein-tree output files delivered
+  to the IEDB backend (`build/proteins/latest/*`); driven by the `make leidos`
+  target after a full pipeline build.
 
 ## Single-species real run (arborist-dev, inputs already present)
 

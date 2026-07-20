@@ -2,11 +2,17 @@ import pytest
 import polars as pl
 from pathlib import Path
 
+# Validates the protein-tree output files delivered to the IEDB backend (the
+# `leidos` make target). Post-build, needs build/proteins/latest, so it is
+# `e2e`: bare `pytest` deselects it; `pytest -m e2e` runs it on arborist-dev.
 _LATEST = Path(__file__).parents[1] / 'build' / 'proteins' / 'latest'
-pytestmark = pytest.mark.skipif(
-  not _LATEST.exists(),
-  reason='post-build validation: needs build/proteins/latest (run on arborist-dev after a build)',
-)
+pytestmark = [
+  pytest.mark.e2e,
+  pytest.mark.skipif(
+    not _LATEST.exists(),
+    reason='e2e: needs build/proteins/latest (run `pytest -m e2e` on arborist-dev after a build)',
+  ),
+]
 
 
 @pytest.fixture
