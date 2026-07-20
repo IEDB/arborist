@@ -4,6 +4,15 @@ from pathlib import Path
 
 species = [108, 9593, 9606, 3052236]
 
+# End-to-end assertions over a real assign.py run. That run needs the external
+# aligners (blastp/mmseqs2) + ARC, so it is NOT offline -- drive it with
+# `make test-e2e` on arborist-dev. Its outputs are cleaned between runs, so we
+# skip whenever they are absent (bare/offline `pytest`, e.g. on asahidake).
+pytestmark = pytest.mark.skipif(
+  not (Path(__file__).parent / 'build' / 'species' / '108' / 'peptide-assignments.tsv').exists(),
+  reason='e2e: run `make test-e2e` (needs blastp/mmseqs2/ARC binaries + generated output)',
+)
+
 @pytest.fixture(scope='session')
 def species_path() -> Path:
   return Path(__file__).parent / 'build' / 'species'

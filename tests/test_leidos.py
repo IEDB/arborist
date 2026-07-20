@@ -2,6 +2,12 @@ import pytest
 import polars as pl
 from pathlib import Path
 
+_LATEST = Path(__file__).parents[1] / 'build' / 'proteins' / 'latest'
+pytestmark = pytest.mark.skipif(
+  not _LATEST.exists(),
+  reason='post-build validation: needs build/proteins/latest (run on arborist-dev after a build)',
+)
+
 
 @pytest.fixture
 def files_path() -> Path:
