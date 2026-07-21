@@ -2,6 +2,10 @@ import re
 import json
 import argparse
 import subprocess
+import os
+# Cap polars' thread pool: this pipeline is RAM-bound (31GB box, no swap) and the
+# per-core memory arenas measurably inflated footprint during the human step.
+os.environ.setdefault("POLARS_MAX_THREADS", "4")
 import polars as pl
 from polars.exceptions import NoDataError
 from pathlib import Path
@@ -407,8 +411,15 @@ class PeptideProcessor:
     ).preprocess(k = 5)
 
   def search_peptides(self):
-    peptides = [peptide for peptide in self.peptides['Sequence'].to_list() if peptide]
     out = self.species_path / 'peptide-matches.tsv'
+    # Resume/idempotency guard, mirroring preprocess_proteome: the matcher is the
+    # most expensive step and its output can be multi-GB. If a prior run already
+    # produced peptide-matches.tsv (e.g. one that died downstream in
+    # assign_parents), reuse it instead of recomputing. cleanup_files removes this
+    # file after a successful species, so the normal weekly run is unaffected.
+    if out.exists() and out.stat().st_size > 0:
+      return
+    peptides = [peptide for peptide in self.peptides['Sequence'].to_list() if peptide]
     matcher_args = dict(
       proteome_file=self.species_path / 'proteome.fasta',
       max_mismatches=0,
@@ -433,40 +444,60 @@ class PeptideProcessor:
       first = False
 
   def assign_parents(self):
-    matches = pl.read_csv(self.species_path / 'peptide-matches.tsv', separator='\t').with_columns(
-      pl.col('Gene').cast(pl.String).alias('Gene'),
-    )
+    matches_path = self.species_path / 'peptide-matches.tsv'
     peptides_with_genes = self.peptides.filter(pl.col('Source Assigned Gene').is_not_null())
     peptides_without_genes = self.peptides.filter(pl.col('Source Assigned Gene').is_null())
 
-    matches_with_genes = peptides_with_genes.join(
-      matches, how="left", coalesce=False,
-      left_on=["Sequence", "Source Assigned Gene"], 
-      right_on=["Query Sequence", "Gene"]
-    )
-    matches_with_genes = matches_with_genes.with_columns(
-      (pl.col('Protein ID') == pl.col('Source Assigned Protein ID')).alias('is_source_match')
-    )
-
-    matches_without_genes = peptides_without_genes.join(
-      matches, how="left", coalesce=False,
-      left_on=["Sequence", "Source Assigned Protein ID"], 
-      right_on=["Query Sequence", "Protein ID"]
-    )
-
-    top_matches_with_genes = matches_with_genes.sort(
-      ["Sequence", "Gene Priority", "is_source_match", "SwissProt Reviewed", "Protein Existence Level", "Protein ID"],
-      descending=[False, True, True, True, False, False]
-    ).group_by("Sequence").first()
-
-    top_matches_without_genes = matches_without_genes.sort(
-      ["Sequence", "Gene Priority", "SwissProt Reviewed", "Protein Existence Level", "Protein ID"],
-      descending=[False, True, True, False, False]
-    ).group_by("Sequence").first()
-
     match_cols = ['Sequence', 'Gene', 'Protein ID', 'Protein Name', 'Index start', 'Index end', 'SwissProt Reviewed']
-    top_matches_with_genes = top_matches_with_genes.select(match_cols)
-    top_matches_without_genes = top_matches_without_genes.select(match_cols)
+    used_cols = ['Query Sequence', 'Gene', 'Protein ID', 'Protein Name', 'Index start',
+                 'Index end', 'SwissProt Reviewed', 'Protein Existence Level', 'Gene Priority']
+
+    # The human peptide-matches.tsv is ~34M rows (~4GB). Joining it whole against
+    # ~2.9M peptides then sorting materializes >27GB and OOMs the 31GB box -- the
+    # polars streaming engine does NOT bound this join+sort (verified: it falls
+    # back to in-memory). Every match for a peptide shares its Query Sequence and
+    # the final pick is a per-Sequence top-1, so we partition by a hash of the
+    # sequence into buckets and process one bucket at a time: peak memory ~1/N,
+    # output identical because each Sequence lands in exactly one bucket. scan_csv
+    # projects only the 9 columns we use out of the file's 15.
+    n_buckets = 8
+    tops_with_genes = []
+    tops_without_genes = []
+    for b in range(n_buckets):
+      matches_b = (
+        pl.scan_csv(matches_path, separator='\t')
+        .select(used_cols)
+        .filter(pl.col('Query Sequence').hash().mod(n_buckets) == b)
+        .with_columns(pl.col('Gene').cast(pl.String).alias('Gene'))
+        .collect()
+      )
+      pwg_b = peptides_with_genes.filter(pl.col('Sequence').hash().mod(n_buckets) == b)
+      pwog_b = peptides_without_genes.filter(pl.col('Sequence').hash().mod(n_buckets) == b)
+
+      matches_with_genes = pwg_b.join(
+        matches_b, how="left", coalesce=False,
+        left_on=["Sequence", "Source Assigned Gene"],
+        right_on=["Query Sequence", "Gene"]
+      ).with_columns(
+        (pl.col('Protein ID') == pl.col('Source Assigned Protein ID')).alias('is_source_match')
+      )
+      tops_with_genes.append(matches_with_genes.sort(
+        ["Sequence", "Gene Priority", "is_source_match", "SwissProt Reviewed", "Protein Existence Level", "Protein ID", "Index start", "Index end"],
+        descending=[False, True, True, True, False, False, False, False]
+      ).group_by("Sequence").first().select(match_cols))
+
+      matches_without_genes = pwog_b.join(
+        matches_b, how="left", coalesce=False,
+        left_on=["Sequence", "Source Assigned Protein ID"],
+        right_on=["Query Sequence", "Protein ID"]
+      )
+      tops_without_genes.append(matches_without_genes.sort(
+        ["Sequence", "Gene Priority", "SwissProt Reviewed", "Protein Existence Level", "Protein ID", "Index start", "Index end"],
+        descending=[False, True, True, False, False, False, False]
+      ).group_by("Sequence").first().select(match_cols))
+
+    top_matches_with_genes = pl.concat(tops_with_genes)
+    top_matches_without_genes = pl.concat(tops_without_genes)
 
     assignments_with_genes = peptides_with_genes.join(
       top_matches_with_genes, how="left", coalesce=False,

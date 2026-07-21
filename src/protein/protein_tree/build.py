@@ -9,25 +9,49 @@ def build_tree(tree_base, assignments, gene_layer=False):
   'species protein' parent."""
   new_rows = []
 
+  # Deterministic ordering for every tie-sensitive pick below, so the build is
+  # reproducible run-to-run. The old mode().first() / unique(keep="any") were
+  # order-unstable and caused run-to-run tree drift. Among tied Assigned Protein
+  # IDs prefer the canonical SwissProt accession: non-null first, then SHORTEST id
+  # (6-char P/O/Q##### beats 10-char A0A... TrEMBL), then lexicographic. ('SwissProt
+  # Reviewed' is not in all-peptide-assignments.tsv, so length is the canonical proxy.)
+  pid_null = pl.col('Assigned Protein ID').is_null()
+  pid_len = pl.col('Assigned Protein ID').str.len_chars().fill_null(2**31)
+
   arc_parents = assignments.filter(
     (pl.col('ARC Assignment').str.contains('TCR')) |
     (pl.col('ARC Assignment').str.contains('BCR')) |
     (pl.col('ARC Assignment').str.contains('MHC'))
-  ).unique(subset=['Source Accession'])
+  ).sort(
+    ['Source Accession', pid_null, pid_len, 'Assigned Protein ID'], nulls_last=True
+  ).unique(subset=['Source Accession'], keep='first', maintain_order=True)
+
+  # Parent protein per source = the most frequently assigned protein ID (the mode),
+  # ties broken canonical. Reproduces the old mode().first() when unambiguous; only
+  # genuine ties change, now deterministically.
+  parent_by_source = assignments.group_by(
+    ['Source Accession', 'Assigned Protein ID']
+  ).agg(
+    pl.len().alias('_count')
+  ).sort(
+    ['Source Accession', '_count', pid_null, pid_len, 'Assigned Protein ID'],
+    descending=[False, True, False, False, False], nulls_last=True
+  ).group_by('Source Accession', maintain_order=True).first().select(
+    'Source Accession', pl.col('Assigned Protein ID').alias('Parent Protein ID')
+  )
 
   normal_parents = assignments.join(
-    assignments.group_by('Source Accession').agg(
-      pl.col('Assigned Protein ID').mode().first()
-    ).rename({'Assigned Protein ID': 'Parent Protein ID'}),
-    how='left', on='Source Accession', coalesce=True
+    parent_by_source, how='left', on='Source Accession', coalesce=True
   ).filter(
     (pl.col('Assigned Protein ID') == pl.col('Parent Protein ID')),
     ~(pl.col('Source Accession').is_in(arc_parents['Source Accession']))
-  ).unique(subset=['Parent Protein ID'])
+  ).sort(
+    ['Parent Protein ID', 'Source Accession']
+  ).unique(subset=['Parent Protein ID'], keep='first', maintain_order=True)
 
   others = assignments.filter(
     (pl.col('Assigned Protein ID').is_null()),
-  ).unique(subset=['Source Accession'])
+  ).sort(['Source Accession']).unique(subset=['Source Accession'], keep='first', maintain_order=True)
 
   new_rows.extend(add_normal_parents(normal_parents, gene_layer=gene_layer))
   new_rows.extend(add_arc_parents(arc_parents))
@@ -352,18 +376,23 @@ def triple(subject, predicate, object, datatype='_IRI'):
 
 if __name__ == "__main__":
   build_path = Path(__file__).parents[3] / 'build'
-  numeric_cols = [
-    'Epitope ID',
-    'Species Taxon ID',
-    'Organism ID',
-    'Source Starting Position',
-    'Source Ending Position',
-    'Assigned Protein Starting Position',
-    'Assigned Protein Ending Position'
+  # build_tree consumes only these protein/source-level columns. The full file is
+  # dominated by 'Assigned Protein Sequence' (a full AA sequence per epitope row)
+  # plus epitope-level columns, none of which build_tree reads -- projecting them
+  # away at scan time cuts peak RSS ~5-6x and keeps the build within RAM after the
+  # polars 1.42 upgrade's heavier join/sort.
+  needed_cols = [
+    'Source Accession', 'Assigned Protein ID', 'ARC Assignment', 'Species Taxon ID',
+    'Species Name', 'Source Assigned Gene', 'Assigned Protein Name',
+    'Assigned Protein Fragments', 'Assigned Protein Length',
+    'Assigned Protein Review Status', 'Assigned Protein Synonyms',
   ]
-  assignments = pl.read_csv(
-    build_path / 'arborist' / 'all-peptide-assignments.tsv', separator='\t', schema_overrides={col: pl.Float64 for col in numeric_cols}
-  ).with_columns(pl.col(numeric_cols).cast(pl.Int64))
+  assignments = pl.scan_csv(
+    build_path / 'arborist' / 'all-peptide-assignments.tsv', separator='\t',
+    schema_overrides={'Species Taxon ID': pl.Float64},
+  ).select(needed_cols).with_columns(
+    pl.col('Species Taxon ID').cast(pl.Int64)
+  ).collect()
 
   source_data = pl.read_csv(build_path / 'arborist' / 'all-source-data.tsv', separator='\t')
   assignments = assignments.join(source_data, how='left', on='Source Accession', coalesce=True)
