@@ -453,13 +453,34 @@ class PeptideProcessor:
                  'Index end', 'SwissProt Reviewed', 'Protein Existence Level', 'Gene Priority']
 
     # The human peptide-matches.tsv is ~34M rows (~4GB). Joining it whole against
-    # ~2.9M peptides then sorting materializes >27GB and OOMs the 31GB box -- the
-    # polars streaming engine does NOT bound this join+sort (verified: it falls
-    # back to in-memory). Every match for a peptide shares its Query Sequence and
-    # the final pick is a per-Sequence top-1, so we partition by a hash of the
-    # sequence into buckets and process one bucket at a time: peak memory ~1/N,
-    # output identical because each Sequence lands in exactly one bucket. scan_csv
-    # projects only the 9 columns we use out of the file's 15.
+    # the ~2.9M peptide occurrences and then sorting materializes an N x M cartesian
+    # on promiscuous ("hot") sequences and OOMs the 31GB box; hash-partitioning the
+    # skewed key cannot bound it (one hot sequence is a single key). Instead we
+    # REDUCE before joining: collapse the peptide side to compact per-key aggregates,
+    # join the matches many-to-ONE, and pick the per-Sequence top-1. Peak is then
+    # linear in the match count (no cartesian). The match read is still streamed in
+    # hash buckets to keep peak low; the reduction is per-Sequence so bucketing is
+    # exact.
+    #
+    # The pick is source-dependent, so the peptide side is carried, not dropped:
+    #   with_genes:    per (Sequence, Source Assigned Gene) -> the SET of Source
+    #                  Assigned Protein IDs; matches join many-to-one on
+    #                  (Query Sequence, Gene); is_source_match = Protein ID in set.
+    #   without_genes: distinct (Sequence, Source Assigned Protein ID); matches join
+    #                  on the exact protein.
+    # Both use an inner join, so a peptide occurrence whose source protein has no
+    # match no longer injects a null row that (via nulls-first sort) would poison
+    # the whole sequence's pick -- real matches win. Assigned Protein ID is
+    # unchanged; only previously-blanked coordinates/names recover.
+    src_gene_sets = peptides_with_genes.group_by(
+      ['Sequence', 'Source Assigned Gene']
+    ).agg(
+      pl.col('Source Assigned Protein ID').unique().alias('_src_pids')
+    )
+    src_prot_keys = peptides_without_genes.select(
+      ['Sequence', 'Source Assigned Protein ID']
+    ).unique()
+
     n_buckets = 8
     tops_with_genes = []
     tops_without_genes = []
@@ -471,27 +492,28 @@ class PeptideProcessor:
         .with_columns(pl.col('Gene').cast(pl.String).alias('Gene'))
         .collect()
       )
-      pwg_b = peptides_with_genes.filter(pl.col('Sequence').hash().mod(n_buckets) == b)
-      pwog_b = peptides_without_genes.filter(pl.col('Sequence').hash().mod(n_buckets) == b)
 
-      matches_with_genes = pwg_b.join(
-        matches_b, how="left", coalesce=False,
-        left_on=["Sequence", "Source Assigned Gene"],
-        right_on=["Query Sequence", "Gene"]
+      candidates_with_genes = matches_b.join(
+        src_gene_sets, how="inner",
+        left_on=["Query Sequence", "Gene"],
+        right_on=["Sequence", "Source Assigned Gene"],
       ).with_columns(
-        (pl.col('Protein ID') == pl.col('Source Assigned Protein ID')).alias('is_source_match')
+        pl.col('_src_pids').list.contains(pl.col('Protein ID')).alias('is_source_match'),
+        pl.col('Query Sequence').alias('Sequence'),
       )
-      tops_with_genes.append(matches_with_genes.sort(
+      tops_with_genes.append(candidates_with_genes.sort(
         ["Sequence", "Gene Priority", "is_source_match", "SwissProt Reviewed", "Protein Existence Level", "Protein ID", "Index start", "Index end"],
         descending=[False, True, True, True, False, False, False, False]
       ).group_by("Sequence").first().select(match_cols))
 
-      matches_without_genes = pwog_b.join(
-        matches_b, how="left", coalesce=False,
-        left_on=["Sequence", "Source Assigned Protein ID"],
-        right_on=["Query Sequence", "Protein ID"]
+      candidates_without_genes = matches_b.join(
+        src_prot_keys, how="inner",
+        left_on=["Query Sequence", "Protein ID"],
+        right_on=["Sequence", "Source Assigned Protein ID"],
+      ).with_columns(
+        pl.col('Query Sequence').alias('Sequence')
       )
-      tops_without_genes.append(matches_without_genes.sort(
+      tops_without_genes.append(candidates_without_genes.sort(
         ["Sequence", "Gene Priority", "SwissProt Reviewed", "Protein Existence Level", "Protein ID", "Index start", "Index end"],
         descending=[False, True, True, False, False, False, False]
       ).group_by("Sequence").first().select(match_cols))
