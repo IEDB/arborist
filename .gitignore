@@ -1,3 +1,4 @@
+*credentials*
 *.egg-info/
 .venv/
 _venv/
