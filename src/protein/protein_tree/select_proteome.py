@@ -116,9 +116,14 @@ class ProteomeSelector:
 
   def _proteome_tiebreak(self, selected_proteomes: pl.DataFrame):
     proteome_counts = {}
-    # pepmatch k=5 cannot run on shorter queries (1.17.1+ raises); null/blank
-    # Sequence rows also exist in IEDB extracts — drop both before Matcher.
-    peptide_seqs = [s for s in self.peptides['Sequence'].to_list() if s and len(s) >= 5]
+    # Linear epitopes go to pepmatch (k=5). Discontinuous (digits, e.g. R87 or
+    # "H15, G16, …") score by residue-at-position on the candidate FASTA.
+    seqs = [s for s in self.peptides['Sequence'].to_list() if s]
+    linear_seqs = [s for s in seqs if not re.search(r'\d', s) and len(s) >= 5]
+    disc_epitopes = [
+      self._parse_discontinuous(s) for s in seqs if re.search(r'\d', s)
+    ]
+    disc_epitopes = [e for e in disc_epitopes if e]
     if selected_proteomes.height > 20 and not selected_proteomes.select(pl.col('BUSCO Score').is_null().all()).item(0,0):
       proteome = selected_proteomes.sort('BUSCO Score').tail(1)
       proteome_id = proteome.item(0, 'Proteome ID')
@@ -137,25 +142,56 @@ class ProteomeSelector:
         if not (self.species_path / f'{proteome_id}.fasta').exists():
           self._fetch_proteome_file(proteome_id)
 
-        match_count = self._get_match_count(peptide_seqs, proteome_id)
+        match_count = self._get_match_count(linear_seqs, disc_epitopes, proteome_id)
         proteome_counts[(proteome_id, proteome_taxon, proteome_label)] = match_count
 
     return max(proteome_counts.items(), key=lambda item: item[1])[0]
 
-  def _get_match_count(self, peptide_seqs: list, proteome_id: str):
-    matches = Matcher(
-      query = peptide_seqs,
-      proteome_file = self.species_path / f'{proteome_id}.fasta',
-      max_mismatches = 0,
-      k = 5,
-      preprocessed_files_path = self.species_path,
-    ).match()
+  def _parse_discontinuous(self, seq: str):
+    """Parse 'R87' / 'H15, G16, Y20' into [(aa, pos), ...]."""
+    return [(m.group(1).upper(), int(m.group(2))) for m in re.finditer(r'([A-Za-z])(\d+)', seq)]
 
-    matches = matches.filter(
-      pl.col('Matched Sequence').is_not_null()
-    ).unique('Query Sequence')
+  def _discontinuous_match_count(self, disc_epitopes: list, proteome_file: Path) -> int:
+    """Count discontinuous epitopes whose every residue matches some protein at pos."""
+    if not disc_epitopes or not proteome_file.exists():
+      return 0
+    proteins = []
+    seq_chunks = []
+    with open(proteome_file) as f:
+      for line in f:
+        if line.startswith('>'):
+          if seq_chunks:
+            proteins.append(''.join(seq_chunks).upper())
+            seq_chunks = []
+        else:
+          seq_chunks.append(line.strip())
+      if seq_chunks:
+        proteins.append(''.join(seq_chunks).upper())
+    if not proteins:
+      return 0
+    hits = 0
+    for tokens in disc_epitopes:
+      for prot in proteins:
+        if all(0 < pos <= len(prot) and prot[pos - 1] == aa for aa, pos in tokens):
+          hits += 1
+          break
+    return hits
 
-    return matches.height
+  def _get_match_count(self, linear_seqs: list, disc_epitopes: list, proteome_id: str):
+    proteome_file = self.species_path / f'{proteome_id}.fasta'
+    linear_hits = 0
+    if linear_seqs:
+      matches = Matcher(
+        query = linear_seqs,
+        proteome_file = proteome_file,
+        max_mismatches = 0,
+        k = 5,
+        preprocessed_files_path = self.species_path,
+      ).match()
+      linear_hits = matches.filter(
+        pl.col('Matched Sequence').is_not_null()
+      ).unique('Query Sequence').height
+    return linear_hits + self._discontinuous_match_count(disc_epitopes, proteome_file)
 
   def _fetch_proteome_file(self, proteome_id: str, attempt: int = 1):
     max_attempts = 5

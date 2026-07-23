@@ -419,8 +419,23 @@ class PeptideProcessor:
     # file after a successful species, so the normal weekly run is unaffected.
     if out.exists() and out.stat().st_size > 0:
       return
-    # Drop null/blank and length < k (pepmatch 1.17.1+ raises if k > min query len).
-    peptides = [p for p in self.peptides['Sequence'].to_list() if p and len(p) >= 5]
+    # Linear epitopes only for pepmatch k=5. Discontinuous (contain digits) are
+    # not exact string queries; short linear peptides are too promiscuous.
+    # Null/blank dropped. If nothing remains, write empty matches (no crash).
+    peptides = [
+      p for p in self.peptides['Sequence'].to_list()
+      if p and not re.search(r'\d', p) and len(p) >= 5
+    ]
+    if not peptides:
+      print(f'No linear peptides with length >= 5 for taxon {self.taxon_id}; skipping pepmatch.')
+      pl.DataFrame(schema={
+        'Query ID': pl.Utf8, 'Query Sequence': pl.Utf8, 'Matched Sequence': pl.Utf8,
+        'Protein ID': pl.Utf8, 'Protein Name': pl.Utf8, 'Gene': pl.Utf8, 'Species': pl.Utf8,
+        'Taxon ID': pl.Utf8, 'Gene Priority': pl.Boolean, 'Index start': pl.Int64,
+        'Index end': pl.Int64, 'Protein Existence Level': pl.Int64,
+        'SwissProt Reviewed': pl.Boolean,
+      }).write_csv(out, separator='\t')
+      return
     matcher_args = dict(
       proteome_file=self.species_path / 'proteome.fasta',
       max_mismatches=0,
