@@ -51,7 +51,7 @@ help:
 	@echo "  ncbitaxon    build the NCBI Taxonomy"
 	@echo "  organism     build the organism and subspecies trees"
 	@echo "  proteome     select proteomes"
-	@echo "  protein      build the protein tree"
+	@echo "  protein      build the protein tree (optional: FROM=<Species ID> to resume assign)"
 	@echo "  molecule     build the molecule tree"
 	@echo "  leidos       copy files for Leidos"
 	@echo "  all          build all trees"
@@ -471,8 +471,15 @@ build/arborist/manual-parents.tsv: build/arborist/allergens.tsv
 build/arborist/manual-synonyms.tsv: build/arborist/manual-parents.tsv
 	cp src/protein/data/manual-synonyms.tsv $@
 
+# Optional resume: make protein FROM=<Species ID> (active-species.tsv order, inclusive).
+# When FROM is set, force re-run of assign even if all-peptide-assignments.tsv exists.
+FROM ?=
+ifneq ($(strip $(FROM)),)
+.PHONY: build/arborist/all-peptide-assignments.tsv
+endif
+
 build/arborist/all-peptide-assignments.tsv: build/arborist/manual-parents.tsv build/arborist/manual-synonyms.tsv
-	$(VENV_PYTHON) src/protein/protein_tree/assign.py -n 8
+	$(VENV_PYTHON) src/protein/protein_tree/assign.py -n 8 $(if $(strip $(FROM)),--from-taxon $(FROM),)
 
 build/arborist/protein-tree.assigned: build/arborist/all-peptide-assignments.tsv
 	touch $@

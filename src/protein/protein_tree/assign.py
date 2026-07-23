@@ -778,7 +778,11 @@ def combine_data():
 if __name__ == "__main__":
   parser = argparse.ArgumentParser()
   parser.add_argument(
-    '-t', '--taxon_id', type=int, help='Taxon ID of the species to process.',
+    '-t', '--taxon_id', type=int, help='Taxon ID of a single species to process (no combine step).',
+  )
+  parser.add_argument(
+    '--from-taxon', type=int, dest='from_taxon',
+    help='Resume a full run from this Species ID inclusive (active-species.tsv order), then combine.',
   )
   parser.add_argument(
     '-b', '--build_path', type=str, help='Path for all Arborist build files.',
@@ -790,9 +794,13 @@ if __name__ == "__main__":
   )
   args = parser.parse_args()
 
+  if args.taxon_id is not None and args.from_taxon is not None:
+    parser.error('use only one of -t/--taxon_id and --from-taxon')
+
   taxon_id = args.taxon_id
+  from_taxon = args.from_taxon
   build_path = Path(args.build_path)
-  all_species = not bool(taxon_id)
+  single_species = taxon_id is not None
 
   active_species = pl.read_csv(build_path / 'arborist' / 'active-species.tsv', separator='\t')
 
@@ -800,9 +808,24 @@ if __name__ == "__main__":
   all_peptides = data_fetcher.get_all_peptides()
   all_sources = data_fetcher.get_all_sources()
 
-  if all_species:
-    for row in active_species.rows(named=True):
+  if single_species:
+    do_assignments(taxon_id)
+  else:
+    rows = active_species.rows(named=True)
+    if from_taxon is not None:
+      ids = [row['Species ID'] for row in rows]
+      try:
+        start = ids.index(from_taxon)
+      except ValueError:
+        raise SystemExit(
+          f'--from-taxon {from_taxon} not found in active-species.tsv '
+          f'({len(ids)} species)'
+        )
+      rows = rows[start:]
+      print(
+        f'Resuming from Species ID {from_taxon} '
+        f'({len(rows)} of {len(ids)} species remaining)'
+      )
+    for row in rows:
       do_assignments(row['Species ID'])
     combine_data()
-  else:
-    do_assignments(taxon_id)
