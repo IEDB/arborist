@@ -116,7 +116,9 @@ class ProteomeSelector:
 
   def _proteome_tiebreak(self, selected_proteomes: pl.DataFrame):
     proteome_counts = {}
-    peptide_seqs = self.peptides['Sequence'].to_list()
+    # pepmatch k=5 cannot run on shorter queries (1.17.1+ raises); null/blank
+    # Sequence rows also exist in IEDB extracts — drop both before Matcher.
+    peptide_seqs = [s for s in self.peptides['Sequence'].to_list() if s and len(s) >= 5]
     if selected_proteomes.height > 20 and not selected_proteomes.select(pl.col('BUSCO Score').is_null().all()).item(0,0):
       proteome = selected_proteomes.sort('BUSCO Score').tail(1)
       proteome_id = proteome.item(0, 'Proteome ID')

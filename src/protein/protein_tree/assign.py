@@ -419,7 +419,8 @@ class PeptideProcessor:
     # file after a successful species, so the normal weekly run is unaffected.
     if out.exists() and out.stat().st_size > 0:
       return
-    peptides = [peptide for peptide in self.peptides['Sequence'].to_list() if peptide]
+    # Drop null/blank and length < k (pepmatch 1.17.1+ raises if k > min query len).
+    peptides = [p for p in self.peptides['Sequence'].to_list() if p and len(p) >= 5]
     matcher_args = dict(
       proteome_file=self.species_path / 'proteome.fasta',
       max_mismatches=0,
