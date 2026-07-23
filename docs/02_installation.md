@@ -1,52 +1,126 @@
 # Installation
 
-To run the Arborist project, you need to set up an environment with several system-level dependencies, Python packages, and database connection details. This guide will walk you through the process.
+Linux **x86_64** only. Run all commands from the **repository root** unless noted.
 
-## 1. Dependencies
+## 1. System packages
 
-Arborist relies on a number of command-line tools for data processing, ontology manipulation, and bioinformatics tasks. Please ensure the following tools are installed and available in your system's `PATH`.
+These must be on the host `PATH` before Make can run. `make deps` does **not** install them.
 
-### System-Level Binaries and Software
-* **make**: For executing the build commands defined in Makefiles.
-* **Java**: A Java Runtime Environment (JRE) is required to run `robot.jar`.
-* **Python**: The Python interpreter needs to be installed using at least Python 3.7 or greater.
-* **curl**: For downloading files from the web, used in the `disease` module Makefile.
-* **mysql-client**: The `mysql` command-line client is needed by the `src/util/mysql2tsv` script to query the IEDB database.
-* **sqlite3**: The `sqlite3` command-line tool is used for interacting with the local SQLite databases.
+| Package | Why |
+|---------|-----|
+| `make` | Build driver |
+| Java JRE | `robot.jar`, `ldtab.jar` |
+| Python 3.8+ | Build scripts; create `_venv` |
+| `curl` | Downloads |
+| `sqlite3` | **Required at Makefile parse time** — without it, even `make help` fails |
+| MySQL/MariaDB client (`mysql`) | **Required at Makefile parse time**; used to pull IEDB |
+| `unzip` | Extract QSV during `make deps` |
 
-### Bioinformatics and General Tools
-* **NCBI BLAST+**: The `blastp` and `makeblastdb` executables are required. Download them from the [NCBI BLAST website](https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/).
-* **MMseqs2**: Used for fast, sensitive protein searching. Installation instructions are on the [MMseqs2 GitHub page](https://github.com/soedinglab/MMseqs2).
-* **HMMER**: The `hmmscan` tool is used for protein domain analysis. You can get it from the [HMMER website](http://eddylab.org/software/hmmer/).
-* **ROBOT**: A tool for working with ontologies, used for filtering and merging. Get it from the [ROBOT GitHub page](https://github.com/ontodev/robot).
-* **LDTab**: A tool for converting OWL ontologies into linked data tables. Get it from the [LDTab GitHub page](https://github.com/ontodev/ldtab.clj).
-* **Nanobot**: The backend tool for serving and browsing trees/tables. Get it from the [Nanobot GitHub page](https://github.com/ontodev/nanobot.rs).
-* **valve-export**: A lightweight ontology validation engine written in Rust. Find it in the [VALVE GitHub repository](https://github.com/ontodev/valve.rs).
-* **QSV**: A high-performance command-line toolkit for CSV/TSV files. Get it from the [QSV GitHub page](https://github.com/jqnatividad/qsv).
+Debian/Ubuntu example:
 
-Note: `make deps` will install these tools, but not the system-level software, which you will have to do manually. After installing these tools, make sure their binaries are located in a directory included in your system's `PATH`.
+```bash
+sudo apt install -y make default-jre-headless python3 curl sqlite3 mariadb-client unzip
+```
 
-## 2. Python Environment Setup
+Confirm:
 
-It is highly recommended to use a Python virtual environment to manage the project's dependencies. You can run `setup_env.sh` which will install packages to `_venv` within Arborist root directory or you can run the following:
+```bash
+make help    # must print tasks, not "Please install SQLite 3"
+```
 
-**Create and activate a virtual environment:**
+Also useful: `git` (for some pip VCS deps).
+
+## 2. Python environment
+
+Install from the **root** `requirements.txt` (includes the editable protein package and pinned `pepmatch`).
+
 ```bash
 python3 -m venv _venv
-source _venv/bin/activate
-pip install -r src/protein/requirements.txt
+export VENV_PYTHON=$PWD/_venv/bin/python
+"$VENV_PYTHON" -m pip install -U pip
+"$VENV_PYTHON" -m pip install -r requirements.txt
 ```
 
-This will install all necessary libraries, including `polars`, `pandas`, `pepmatch`, and the ARC toolkit directly from its Git repository.
-
-## 3. Database Configuration
-
-The Arborist project needs to connect to an IEDB MySQL database to fetch the latest data for its builds. The `src/util/mysql2tsv` script requires the following environment variables to be set either manually or in your `.bashrc` file:
+With [uv](https://github.com/astral-sh/uv):
 
 ```bash
-export IEDB_MYSQL_HOST='database_host'
-export IEDB_MYSQL_PORT='port_#'
-export IEDB_MYSQL_USER='your_username'
-export IEDB_MYSQL_PASSWORD='your_password'
-export IEDB_MYSQL_DATABASE='database_name'
+uv venv _venv
+export VENV_PYTHON=$PWD/_venv/bin/python
+uv pip install --python "$VENV_PYTHON" -r requirements.txt
 ```
+
+`setup_env.sh` is an older helper that creates `_venv` via `pip`; prefer the commands above if you do not want its `sudo chown` step.
+
+**Important:** the Makefile invokes `$(VENV_PYTHON)` for Python steps. Export it in every shell before `make`, or activate the venv (`source _venv/bin/activate`) so the same interpreter is used consistently.
+
+```bash
+export VENV_PYTHON=$PWD/_venv/bin/python
+```
+
+## 3. Project tools (`make deps`)
+
+Downloads/builds ROBOT, LDTab, Nanobot, valve-export, QSV, BLAST+, HMMER (`hmmscan`), and MMseqs2 into `bin/`. The Makefile prepends `bin/` to `PATH` for its recipes.
+
+```bash
+export VENV_PYTHON=$PWD/_venv/bin/python
+make deps
+```
+
+Sanity check (optional):
+
+```bash
+ls bin/robot bin/nanobot bin/blastp bin/hmmscan bin/mmseqs bin/qsv
+```
+
+## 4. IEDB MySQL (needed for `make iedb` and full `make all`)
+
+Set all five (names are fixed):
+
+```bash
+export IEDB_MYSQL_HOST='<host>'
+export IEDB_MYSQL_PORT='<port>'
+export IEDB_MYSQL_USER='<user>'
+export IEDB_MYSQL_PASSWORD='<password>'
+export IEDB_MYSQL_DATABASE='<database>'
+```
+
+- Prefer a private env file or secret store; do not commit credentials.
+- Some deployments use a mode-`0600` password file (e.g. `.iedb_query`) with wrapper scripts such as `arborist.sh` — that is optional; the Make/`mysql2tsv` path is the env vars above.
+- The build host must be able to open a TCP connection to that MySQL instance (on-network, VPN, or firewall allowlist as your site requires). Verify with a simple client check that does not log the password.
+
+`make ncbitaxon` and `make deps` do **not** need these variables.
+
+## 5. External ontology input
+
+`make molecule` (and therefore `make all`) expects this file at the **repo root**:
+
+```text
+nonpeptide-tree-20240305.owl
+```
+
+It is gitignored. Copy it from your team’s Arborist data host or artifact store. Without it, earlier stages can still run; molecule/all will fail when they reach that step.
+
+## 6. Runtime knobs
+
+| Variable | Purpose |
+|----------|---------|
+| `VENV_PYTHON` | Python used by Make (set this) |
+| `ALERT_EMAIL=0` | Disable SMTP alert side effects (recommended on non-prod / personal hosts; default may try an institutional relay) |
+| `IEDB_MYSQL_*` | IEDB pull |
+
+Example:
+
+```bash
+export VENV_PYTHON=$PWD/_venv/bin/python
+export ALERT_EMAIL=0
+```
+
+## 7. Disk and network
+
+- Fresh full builds pull NCBI taxdump, IEDB extracts, many UniProt proteomes, ontologies, and large assignment intermediates. Keep **ample free disk** (on the order of hundreds of GiB for a comfortable full E2E).
+- Public HTTPS/FTP egress is required for NCBI, UniProt, GitHub releases, OBO, etc.
+- Optional speedup: copy a coherent `cache/`, `current/`, and `build/species/` snapshot from an existing build host (preserve symlink targets). That is not a substitute for documenting a from-scratch path.
+
+## 8. Docker note
+
+`Dockerfile` / `run_image.sh` exist but are not a complete turnkey E2E by themselves (secrets, external OWL, and full source layout still matter). Prefer native `_venv` + `make deps` unless you maintain the image path yourself.
