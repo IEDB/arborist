@@ -12,7 +12,7 @@ from email.message import EmailMessage
 
 DEFAULT_SMTP_HOST = 'smtp.lji.org'
 DEFAULT_SMTP_PORT = 25
-DEFAULT_EMAIL_TO = 'dmarrama@lji.org'
+DEFAULT_EMAIL_TO = 'dmarrama@lji.org, rvita@lji.org'
 DEFAULT_EMAIL_FROM = 'arborist@lji.org'
 
 STATUS_GREEN = 'green'
