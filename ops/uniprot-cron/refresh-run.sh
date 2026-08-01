@@ -130,4 +130,24 @@ set_state last_refresh_completed "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 set_state refreshed_release "$release"
 log "state: dev now built against $release"
 
+# --- the gate. Nothing to block yet (promotion does not exist), so this records
+# the verdict and marks a HOLD rather than pretending to guard anything.
+set +e
+"$VENV_PYTHON" src/protein/protein_tree/diff_metrics.py -b build/
+gate=$?
+set -e
+case "$gate" in
+  0)  log "gate: numbers identical -- eligible for promotion once that exists" ;;
+  10) log "gate: numbers changed within thresholds -- needs review" ;;
+  20) log "gate: ESCALATED -- volume drop, status regression or proteome ID flip" ;;
+  *)  log "gate: diff-metrics failed with exit $gate" ;;
+esac
+if (( gate != 0 )); then
+  hold="$STATE_DIR/HOLD-$release"
+  printf 'gate_exit=%s\nat=%s\ndiff=%s\n' "$gate" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+    "$REPO/build/reports/diff-metrics.tsv" > "$hold"
+  log "wrote $hold"
+fi
+set_state last_gate_exit "$gate"
+
 log "refresh done. Nothing promoted; prod is untouched."
