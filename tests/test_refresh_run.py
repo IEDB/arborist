@@ -81,3 +81,19 @@ def test_build_includes_proteome_before_protein():
   assert 'proteome' in targets
   assert targets.index('proteome') < targets.index('protein')
   assert not re.search(r'^make weekly$', SOURCE, re.MULTILINE)
+
+
+def test_records_what_was_actually_built():
+  """state.json tracks what UniProt is on; without these, dev could silently
+  fall a release behind and nothing would say so."""
+  assert 'set_state last_refresh_started' in SOURCE
+  assert 'set_state last_refresh_completed' in SOURCE
+  assert 'set_state refreshed_release' in SOURCE
+  # completion is recorded after the build, never before it
+  assert SOURCE.index('make deps') < SOURCE.index('set_state last_refresh_completed')
+  assert SOURCE.index('set_state last_refresh_started') < SOURCE.index('make deps')
+
+
+def test_state_write_is_atomic():
+  """A torn state.json would make the watcher re-announce a handled release."""
+  assert 'tmp.replace(path)' in SOURCE
