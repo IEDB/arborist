@@ -396,7 +396,7 @@ build/arborist/active-species.tsv: src/organism/get_active_species.py build/arbo
 organism: build/arborist/organism_core.html
 organism: build/arborist/organism-tree-ldtab.tsv build/arborist/subspecies-tree-ldtab.tsv
 organism: build/arborist/organism-tree.owl build/arborist/subspecies-tree.owl
-organism: build/arborist/active-species.tsv build/arborist/proteome.tsv
+organism: build/arborist/active-species.tsv
 	make reload
 
 build/organisms/latest/: build/arborist/subspecies-tree.owl
@@ -413,11 +413,6 @@ build/organisms/latest/: build/arborist/subspecies-tree.owl
 # Copy peptides and sources into the directory.
 # Select a proteome for that species,
 # fetching FASTA and XML annotations.
-
-# TODO: Use previously selected proteomes or force refresh.
-build/arborist/proteome.tsv: build/arborist/active-species.tsv src/protein/data/proteomes.tsv
-	qsv join --left 'Species ID' $< 'Species ID' $(word 2,$^) \
-	| qsv select 1-6,12- --output $@
 
 build/species/%/:
 	mkdir -p $@
@@ -436,16 +431,8 @@ build/species/%/sources.tsv: build/iedb/peptide_source.tsv build/species/%/taxa.
 
 .PRECIOUS: build/species/%/epitopes.tsv build/species/%/sources.tsv
 
-build/arborist/proteomes.built: build/arborist/proteome.tsv
+build/arborist/proteomes.built: build/arborist/active-species.tsv
 	$(VENV_PYTHON) src/protein/protein_tree/select_proteome.py -b build/
-
-# Remove epitope counts from proteome table.
-build/arborist/proteome_after.tsv: build/arborist/proteome.tsv
-	qsv select 1-5,7- $< --output $@
-
-# Compare new proteomes to src/proteome.
-build/arborist/proteome.html: src/protein/data/proteomes.tsv build/arborist/proteome_after.tsv
-	daff --output $@ $^
 
 # Report the proteome selected for each active species, flagging EMPTY/MISSING ones.
 build/arborist/proteome-selection-report.tsv: src/protein/protein_tree/report_proteomes.py build/arborist/proteomes.built
