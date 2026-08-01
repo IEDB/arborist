@@ -12,6 +12,7 @@
 # select_proteome.py.
 set -euo pipefail
 
+BUILD_HOST_FQDN=arborist-dev.lji.org
 REPO=/mnt/data/arborist
 LOCK=/var/lock/arborist-build.lock
 STATE_DIR=/var/lib/arborist-uniprot-watch
@@ -23,7 +24,10 @@ log() { echo "[$(date -u +%Y-%m-%dT%H:%M:%SZ)] $*"; }
 die() { echo "[$(date -u +%Y-%m-%dT%H:%M:%SZ)] FATAL: $*" >&2; exit 1; }
 
 # --- containment. This script deletes a directory tree; it runs on dev or nowhere.
-[[ "$(hostname -s)" == "arborist-dev" ]] || die "refusing: not arborist-dev (this is $(hostname -s))"
+# Exact full hostname, no glob: a short-name match would also accept an
+# arborist-dev in some other domain.
+host=$(hostname)
+[[ "$host" == "$BUILD_HOST_FQDN" ]] || die "refusing: not $BUILD_HOST_FQDN (this is $host)"
 [[ "$(id -u)" == "0" ]] || die "refusing: run as root (sudo)"
 [[ -d "$REPO/.git" && -f "$REPO/arborist.sh" ]] || die "refusing: $REPO is not the arborist checkout"
 

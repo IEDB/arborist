@@ -66,8 +66,11 @@ def test_species_wipe_is_a_literal_path():
 
 
 def test_fails_closed_off_the_build_host():
-  assert 'hostname -s' in SOURCE
-  assert SOURCE.index('hostname -s') < SOURCE.index('rm -rf')
+  """Exact full hostname before the delete -- no glob, no short-name match."""
+  assert 'BUILD_HOST_FQDN=arborist-dev.lji.org' in SOURCE
+  assert 'hostname -s' not in SOURCE
+  assert 'arborist-dev*' not in SOURCE
+  assert SOURCE.index('BUILD_HOST_FQDN') < SOURCE.index('rm -rf')
 
 
 def test_build_includes_proteome_before_protein():
