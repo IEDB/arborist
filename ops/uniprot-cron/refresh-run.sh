@@ -85,8 +85,25 @@ log "disk: ${free_gb}G free on /mnt/data"
 release=$(python3 -c "import json,sys; print(json.load(open('$STATE_DIR/state.json'))['last_seen_release'])" 2>/dev/null || echo unknown)
 log "starting refresh for UniProt release $release"
 
+# state.json tracks what UniProt is on; these fields track what we actually
+# built, so "is dev a release behind?" is answerable without guessing.
+set_state() {
+  [[ -f "$STATE_DIR/state.json" ]] || return 0
+  STATE_FILE="$STATE_DIR/state.json" STATE_KEY="$1" STATE_VALUE="$2" python3 - <<'PY'
+import json, os, pathlib
+path = pathlib.Path(os.environ['STATE_FILE'])
+state = json.loads(path.read_text())
+state[os.environ['STATE_KEY']] = os.environ['STATE_VALUE']
+tmp = path.with_suffix('.json.tmp')
+tmp.write_text(json.dumps(state, indent=2, sort_keys=True) + '\n')
+tmp.replace(path)
+PY
+}
+
 exec 9>"$LOCK"
 flock -n 9 || die "build lock held (weekly running?); refresh skipped"
+
+set_state last_refresh_started "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 
 # Everything under build/species is derived: taxa.txt, epitopes.tsv, sources.tsv
 # from the IEDB stages, and proteome.fasta/species-data.tsv/*.pepidx from
@@ -109,5 +126,8 @@ mkdir -p "$(dirname "$stamp")"
     "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$(git -C "$REPO" rev-parse HEAD)"
 } > "$stamp"
 log "wrote $stamp"
+set_state last_refresh_completed "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+set_state refreshed_release "$release"
+log "state: dev now built against $release"
 
 log "refresh done. Nothing promoted; prod is untouched."
