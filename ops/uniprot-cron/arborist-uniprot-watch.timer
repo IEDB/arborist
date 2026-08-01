@@ -1,0 +1,14 @@
+[Unit]
+Description=Monthly Arborist UniProt release watch
+ConditionHost=arborist-dev*
+
+[Timer]
+# Monthly (Dan steer): UniProt ships ~every 8 weeks. Manual kick:
+#   systemctl start arborist-uniprot-watch.service
+OnCalendar=*-*-05 06:30:00
+Persistent=true
+RandomizedDelaySec=30m
+Unit=arborist-uniprot-watch.service
+
+[Install]
+WantedBy=timers.target
