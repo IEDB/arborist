@@ -14,6 +14,7 @@ REPO="${1:-$(cd "$HERE/../.." && pwd)}"
 install -d -m 0755 /opt/arborist-uniprot/bin /var/lib/arborist-uniprot-watch /var/log/arborist-uniprot
 install -m 0755 "$HERE/watch-release.py" /opt/arborist-uniprot/bin/watch-release.py
 install -m 0755 "$HERE/refresh-run.sh" /opt/arborist-uniprot/bin/refresh-run.sh
+install -m 0755 "$HERE/promote-to-prod.sh" /opt/arborist-uniprot/bin/promote-to-prod.sh
 install -m 0644 "$HERE/README.md" /opt/arborist-uniprot/README.md
 
 sed "s|^Environment=ARBORIST_REPO=.*|Environment=ARBORIST_REPO=$REPO|" \

@@ -3,19 +3,22 @@
 The UniProt-release → refresh → promote pipeline
 (`/home/dmx2/reviews/uniprot-release-cron-feasibility.md` §10), as far as it is built.
 
-**Nothing here promotes anything.** `watch-release.py` detects releases and mails
-you; `refresh-run.sh` rebuilds arborist-dev. Neither writes a byte to
-pepmatch-curation.
+`watch-release.py` detects releases and mails you. `refresh-run.sh` rebuilds
+arborist-dev. `promote-to-prod.sh` is the only script that writes to prod or
+pepmatch-curation, and it refuses without a clean gate or your approval.
 
 ## What do I run?
 
-Everything below runs on **arborist-dev**, as root. Nothing here touches prod.
+Everything below runs on **arborist-dev**, as root. Only the promote reaches off-box.
 
 | When | Command |
 |---|---|
 | After any `git pull` of this repo | `sudo ops/uniprot-cron/install.sh "$PWD"` |
 | A CONFIRMED release mail arrived | `sudo nohup /opt/arborist-uniprot/bin/refresh-run.sh > /var/log/arborist-uniprot/refresh.log 2>&1 &` |
 | Check on a running refresh | `tail -f /var/log/arborist-uniprot/refresh.log` |
+| Refresh finished, numbers reviewed | `sudo /opt/arborist-uniprot/bin/promote-to-prod.sh --dry-run` |
+| Ready to push dev → prod + pepmatch | `sudo nohup /opt/arborist-uniprot/bin/promote-to-prod.sh --confirm > /var/log/arborist-uniprot/promote.log 2>&1 &` |
+| Why was a promote refused? | `cat /var/lib/arborist-uniprot-watch/HOLD-*` and `build/reports/diff-metrics.tsv` |
 | Did the watch run? | `journalctl -u arborist-uniprot-watch.service -n 30 --no-pager` |
 | What release are we on? | `cat /var/lib/arborist-uniprot-watch/state.json` |
 | Poll UniProt right now | `sudo systemctl start arborist-uniprot-watch.service` |
@@ -191,16 +194,59 @@ Afterwards, `build/reports/release-stamp.tsv` records which UniProt release,
 IEDB snapshot and git SHA produced the tree — `.pepidx` carries no release
 field, so that file is the only answer to "what is this?".
 
+## The promote (`promote-to-prod.sh`)
+
+The only script here that writes outside arborist-dev. Two destinations:
+
+| Destination | Payload |
+|---|---|
+| `arborist` (prod) | all of `build/species/` — a full mirror, `--delete`, ~83 G |
+| `dmarrama@pepmatch-curation` | every `.pepidx`, flattened into `/media/data/pepmatch/proteomes/` as `<taxon>_<k>mers.pepidx` |
+
+```sh
+sudo /opt/arborist-uniprot/bin/promote-to-prod.sh --dry-run   # writes nothing
+sudo nohup /opt/arborist-uniprot/bin/promote-to-prod.sh --confirm \
+  > /var/log/arborist-uniprot/promote.log 2>&1 &
+```
+
+It refuses unless `last_gate_exit` is 0 **or** you approved the release:
+
+```sh
+mv /var/lib/arborist-uniprot-watch/HOLD-<release> \
+   /var/lib/arborist-uniprot-watch/APPROVED-<release>
+```
+
+Order of operations: check the gate → prove both hosts reachable → build k=3
+indexes → hardlink-snapshot prod's tree → mirror to prod → sync indexes to
+pepmatch-curation → checksum both → drop the snapshot → record
+`last_sync_completed`.
+
+The snapshot is `cp -al`, not a copy: prod has 104 G free and the tree is 83 G,
+so a real copy would nearly fill the disk. Hardlinks cost directory entries, and
+rsync replaces files by rename, so the snapshot keeps the old inodes. Any failure
+after that point leaves `build/species.prev-<release>` in place for rollback;
+success deletes it.
+
+**k=3 indexes.** Arborist only ever builds k=5. pepmatch-curation also serves
+3-mers for eight heavily queried species — 9606, 10090, 10116, 9612, 9796, 9823,
+9913, 9986 — built by `preprocess_3mers.py` right before the push, reusing
+pepmatch's own `Preprocessor`. Idempotent: an index newer than its FASTA is left
+alone.
+
+ssh is `BatchMode=yes` throughout, so a missing key fails in seconds instead of
+hanging. prod uses root's key; pepmatch-curation uses the existing
+`/home/dmarrama/.ssh/pepmatch_curation_rsa` rather than a second credential.
+
 ## Tests
 
 Offline, no network, no arborist-dev:
 
 ```sh
-pytest tests/test_watch_release.py tests/test_refresh_run.py
+pytest tests/
 ```
 
 ## Not built yet
 
-`diff-metrics.py` (the numbers gate), `promote-to-prod.sh`, `flock` on the
-weekly's own schedule, k=3 index generation, and anything that writes to
-pepmatch-curation.
+`flock` on the weekly build's own schedule (so a weekly and a refresh can never
+overlap from the weekly's side), and automatic promotion — every promote is
+still a command you type.
