@@ -1,14 +1,15 @@
 # UniProt release watch (arborist-dev)
 
-Phase 1 of the UniProt-release → refresh → promote pipeline
-(`/home/dmx2/reviews/uniprot-release-cron-feasibility.md` §10).
+The UniProt-release → refresh → promote pipeline
+(`/home/dmx2/reviews/uniprot-release-cron-feasibility.md` §10), as far as it is built.
 
-**This phase detects and notifies. It never runs `make`, never touches
-pepmatch-curation, never writes a byte outside `/var/lib/arborist-uniprot-watch`.**
+**Nothing here promotes anything.** `watch-release.py` detects releases and mails
+you; `refresh-run.sh` rebuilds arborist-dev. Neither writes a byte to
+pepmatch-curation.
 
 ## What it does
 
-Once a month, `watch-release.py` reads three independent signals:
+Once a week, `watch-release.py` reads three independent signals:
 
 | Signal | Why |
 |---|---|
@@ -40,8 +41,8 @@ Outcomes, all of which notify (silence must mean the timer is broken):
 ## Install (run on arborist-dev, as root)
 
 ```sh
-cd ~/lji/arborist                       # the arborist checkout on arborist-dev
-git fetch origin && git checkout feat/uniprot-release-cron && git pull
+cd /mnt/data/arborist
+git checkout main && git pull
 
 sudo ops/uniprot-cron/install.sh "$PWD"
 ```
@@ -49,7 +50,7 @@ sudo ops/uniprot-cron/install.sh "$PWD"
 That installs `/opt/arborist-uniprot/bin/watch-release.py`, creates
 `/var/lib/arborist-uniprot-watch/` and `/var/log/arborist-uniprot/`, writes both
 systemd units with `ARBORIST_REPO` pointing at the checkout, and enables the
-monthly timer. It refuses to run anywhere but arborist-dev.
+weekly timer. It refuses to run anywhere but arborist-dev.
 
 Seed the baseline and prove the whole path works without waiting a month:
 
@@ -104,11 +105,51 @@ Hostname gate in three places — `install.sh`, `watch-release.py`
 (`exit 78` unless `hostname -s` is `arborist-dev`), and `ConditionHost=arborist-dev*`
 on both units (glob, because the box reports the FQDN `arborist-dev.lji.org`).
 
+## The refresh (`refresh-run.sh`)
+
+Run by hand after the watch reports a confirmed release. Nothing schedules it.
+
+```sh
+sudo /opt/arborist-uniprot/bin/refresh-run.sh            # DATESTAMP auto-resolved
+sudo /opt/arborist-uniprot/bin/refresh-run.sh 20260726   # or pin the snapshot
+```
+
+It takes `flock -n /var/lock/arborist-build.lock` so a weekly build can never
+overlap, wipes `/mnt/data/arborist/build/species/` (literal path, no variable),
+then runs:
+
+```
+make weekly_clean
+make deps iedb ncbitaxon organism proteome protein
+```
+
+`proteome` is the point — `make weekly` omits it, so `arborist.sh` alone would
+reassign against stale FASTA and never call `select_proteome.py`. The run goes
+all the way through `protein` so arborist-dev is a usable snapshot and the
+assignment numbers exist for a later gate. It promotes nothing.
+
+`DATESTAMP` is the most recent Sunday, then walks back up to 4 Sundays until an
+`iedb_query_<stamp>` database exists on `web02.internal.iedb.org`, logging a
+warning if it had to fall back. It aborts if `/mnt/data` is under 200 G free,
+because `assign.py` reuses any per-species output with size > 0 and a
+disk-death mid-run leaves truncated files the next run silently trusts.
+
+Afterwards, `build/reports/release-stamp.tsv` records which UniProt release,
+IEDB snapshot and git SHA produced the tree — `.pepidx` carries no release
+field, so that file is the only answer to "what is this?".
+
+Expect hours: the species wipe means every proteome is re-fetched from UniProt.
+
 ## Tests
 
-`tests/test_watch_release.py`, offline, no network: `pytest tests/test_watch_release.py`.
+Offline, no network, no arborist-dev:
 
-## Not in this phase
+```sh
+pytest tests/test_watch_release.py tests/test_refresh_run.py
+```
 
-`refresh-run.sh`, `diff-metrics.py`, `promote-to-prod.sh`, the build `flock`, k=3
-index generation, and anything that writes to pepmatch-curation.
+## Not built yet
+
+`diff-metrics.py` (the numbers gate), `promote-to-prod.sh`, `flock` on the
+weekly's own schedule, k=3 index generation, and anything that writes to
+pepmatch-curation.
