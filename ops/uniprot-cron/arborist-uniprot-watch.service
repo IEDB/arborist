@@ -1,0 +1,30 @@
+[Unit]
+Description=Arborist UniProt release watch (detect + notify only)
+Documentation=file:///opt/arborist-uniprot/README.md
+ConditionHost=arborist-dev
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+Environment=ARBORIST_REPO=/home/dmarrama/lji/arborist
+# Optional push; leave unset for email-only.
+# Environment=NTFY_URL=http://ntfy.internal:5681
+# Environment=NTFY_TOPIC=jobs
+ExecStart=/usr/bin/python3 /opt/arborist-uniprot/bin/watch-release.py --state-dir /var/lib/arborist-uniprot-watch
+StateDirectory=arborist-uniprot-watch
+LogsDirectory=arborist-uniprot
+TimeoutStartSec=10min
+Nice=10
+
+# It reads three URLs and writes one state dir. Nothing else.
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=read-only
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+
+[Install]
+WantedBy=multi-user.target
