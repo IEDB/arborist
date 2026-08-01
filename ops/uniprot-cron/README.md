@@ -100,11 +100,6 @@ sudo ops/uniprot-cron/install.sh "$PWD"
 sudo systemctl disable --now arborist-uniprot-watch.timer
 ```
 
-Optional ntfy push: uncomment `NTFY_URL` / `NTFY_TOPIC` in the service unit
-(`NTFY_USER`/`NTFY_PASSWORD` if the server needs auth). Unset = email only.
-Mail goes to `notify_email.DEFAULT_EMAIL_TO` (dmarrama@, rvita@); override with
-`WATCH_EMAIL_TO` in the unit.
-
 ## Files
 
 ```
@@ -121,7 +116,18 @@ State lives under `/var/lib` deliberately: `make weekly_clean` wipes
 
 Hostname gate in three places — `install.sh`, `watch-release.py`
 (`exit 78` unless `hostname -s` is `arborist-dev`), and `ConditionHost=arborist-dev*`
-on both units (glob, because the box reports the FQDN `arborist-dev.lji.org`).
+on both units. `refresh-run.sh`, which deletes a directory tree, is stricter
+still: exact `hostname == arborist-dev.lji.org`, no glob, no short name.
+
+## Who gets mailed
+
+`dmarrama@lji.org` only. This is dev release plumbing, not the prod weekly
+digest — `notify_email`'s default list (which includes rvita@) is deliberately
+not used here, and a test enforces that. Override with `WATCH_EMAIL_TO` in the
+service unit.
+
+Optional ntfy push: set `NTFY_URL` / `NTFY_TOPIC` in the service unit
+(`NTFY_USER`/`NTFY_PASSWORD` if it needs auth). Unset = email only.
 
 ## The refresh (`refresh-run.sh`)
 

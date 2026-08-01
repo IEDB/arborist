@@ -33,6 +33,10 @@ STABILITY_HOURS = 48
 HTTP_TIMEOUT = 30
 USER_AGENT = 'arborist-uniprot-watch/1 (+dmarrama@lji.org)'
 
+# Dev release plumbing, not the weekly digest -- deliberately narrower than
+# notify_email.DEFAULT_EMAIL_TO. Randi gets the prod weekly stats, not this.
+WATCH_EMAIL_TO = 'dmarrama@lji.org'
+
 RELDATE_URL = ('https://ftp.uniprot.org/pub/databases/uniprot/current_release/'
                'knowledgebase/complete/reldate.txt')
 REST_URL = 'https://rest.uniprot.org/uniprotkb/P05067.json'
@@ -146,7 +150,7 @@ def send_email(subject: str, body: str, repo: Path) -> str:
     from protein_tree import notify_email
   except ImportError as error:
     return f'email skipped (no protein_tree at {repo}: {error})'
-  to = os.environ.get('WATCH_EMAIL_TO', notify_email.DEFAULT_EMAIL_TO)
+  to = os.environ.get('WATCH_EMAIL_TO', WATCH_EMAIL_TO)
   html = '<pre>' + body.replace('&', '&amp;').replace('<', '&lt;') + '</pre>'
   try:
     message = notify_email.build_message(subject, html, to=to, text_body=body)

@@ -219,3 +219,12 @@ def test_deployment_date_is_not_a_signal(watch):
 def test_decide_matrix(watch, stored, released, expected):
   now = datetime(2026, 8, 10, tzinfo=timezone.utc)
   assert watch.decide(stored, '2026_03', now, 48, released) == expected
+
+
+def test_release_mail_does_not_go_to_the_weekly_digest_list(watch):
+  """Randi is on the prod weekly stats, not dev UniProt plumbing."""
+  assert watch.WATCH_EMAIL_TO == 'dmarrama@lji.org'
+  assert 'rvita' not in watch.WATCH_EMAIL_TO
+  code = [line for line in SCRIPT.read_text().splitlines()
+          if not line.lstrip().startswith('#')]
+  assert not any('DEFAULT_EMAIL_TO' in line for line in code)
