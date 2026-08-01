@@ -7,6 +7,24 @@ The UniProt-release → refresh → promote pipeline
 you; `refresh-run.sh` rebuilds arborist-dev. Neither writes a byte to
 pepmatch-curation.
 
+## What do I run?
+
+Everything below runs on **arborist-dev**, as root. Nothing here touches prod.
+
+| When | Command |
+|---|---|
+| After any `git pull` of this repo | `sudo ops/uniprot-cron/install.sh "$PWD"` |
+| A CONFIRMED release mail arrived | `sudo nohup /opt/arborist-uniprot/bin/refresh-run.sh > /var/log/arborist-uniprot/refresh.log 2>&1 &` |
+| Check on a running refresh | `tail -f /var/log/arborist-uniprot/refresh.log` |
+| Did the watch run? | `journalctl -u arborist-uniprot-watch.service -n 30 --no-pager` |
+| What release are we on? | `cat /var/lib/arborist-uniprot-watch/state.json` |
+| Poll UniProt right now | `sudo systemctl start arborist-uniprot-watch.service` |
+| Is the timer armed? | `systemctl list-timers arborist-uniprot-watch.timer` |
+
+`state.json` answers the drift question directly: `last_seen_release` is what
+UniProt is on, `refreshed_release` is what dev was last built against. Equal
+means dev is current.
+
 ## What it does
 
 Once a week, `watch-release.py` reads three independent signals:
@@ -107,12 +125,41 @@ on both units (glob, because the box reports the FQDN `arborist-dev.lji.org`).
 
 ## The refresh (`refresh-run.sh`)
 
-Run by hand after the watch reports a confirmed release. Nothing schedules it.
+Run by hand after the watch mails you a CONFIRMED release. Nothing schedules it.
+
+**It takes hours** — the species wipe re-downloads every proteome from UniProt.
+Never run it in a bare terminal; the ssh session will die and take the build
+with it. Run it detached and watch the log:
 
 ```sh
-sudo /opt/arborist-uniprot/bin/refresh-run.sh            # DATESTAMP auto-resolved
-sudo /opt/arborist-uniprot/bin/refresh-run.sh 20260726   # or pin the snapshot
+sudo nohup /opt/arborist-uniprot/bin/refresh-run.sh \
+  > /var/log/arborist-uniprot/refresh.log 2>&1 &
+
+tail -f /var/log/arborist-uniprot/refresh.log
 ```
+
+`Ctrl-C` out of the `tail` whenever you want; the build keeps going. To check on
+it later, or after logging back in:
+
+```sh
+tail -50 /var/log/arborist-uniprot/refresh.log   # where it is now
+pgrep -af refresh-run.sh                         # still running?
+```
+
+The first ~30 seconds tell you most of what matters: resolved IEDB snapshot,
+disk check, lock acquired, species wiped. Past `wiping …/build/species/` it is
+in normal `make` territory. The last line on success is
+`refresh done. Nothing promoted; prod is untouched.`
+
+To pin the IEDB snapshot instead of auto-resolving the most recent Sunday:
+
+```sh
+sudo nohup /opt/arborist-uniprot/bin/refresh-run.sh 20260726 \
+  > /var/log/arborist-uniprot/refresh.log 2>&1 &
+```
+
+If it refuses immediately, the message says why: wrong host, not root, lock
+held by a weekly build, disk under 200 G, or no IEDB snapshot found.
 
 It takes `flock -n /var/lock/arborist-build.lock` so a weekly build can never
 overlap, wipes `/mnt/data/arborist/build/species/` (literal path, no variable),
@@ -137,8 +184,6 @@ disk-death mid-run leaves truncated files the next run silently trusts.
 Afterwards, `build/reports/release-stamp.tsv` records which UniProt release,
 IEDB snapshot and git SHA produced the tree — `.pepidx` carries no release
 field, so that file is the only answer to "what is this?".
-
-Expect hours: the species wipe means every proteome is re-fetched from UniProt.
 
 ## Tests
 
