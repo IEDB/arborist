@@ -131,10 +131,11 @@ def test_recovery_to_selected_does_not_escalate(tmp_path):
 
   assert [c['Change'] for c in changes] == ['status', 'proteome_id']
   assert next(c for c in changes if c['Change'] == 'status')['Severity'] == 'INFO'
-  assert verdict([], changes) == EXIT_ESCALATED  # the UPID flip still holds it
+  assert verdict([], changes) == EXIT_CHANGED
 
 
-def test_proteome_id_flip_holds(tmp_path):
+def test_proteome_id_flip_is_noted_not_escalated(tmp_path):
+  """New UPIDs are normal churn. If one cost us anything, the counts escalate."""
   baseline = write_report(tmp_path / 'reports' / 'proteome-selection-report-2026-06-14.tsv',
                           [('5693', 'T. cruzi', 'SELECTED', 'UP000002296')])
   current = write_report(tmp_path / 'arborist' / 'proteome-selection-report.tsv',
@@ -144,7 +145,8 @@ def test_proteome_id_flip_holds(tmp_path):
 
   assert len(changes) == 1
   assert changes[0]['Change'] == 'proteome_id'
-  assert verdict([], changes) == EXIT_ESCALATED
+  assert changes[0]['Severity'] == 'INFO'
+  assert verdict([], changes) == EXIT_CHANGED
 
 
 def test_new_species_is_not_a_regression(tmp_path):
@@ -213,3 +215,13 @@ def test_main_exits_escalated_on_a_collapse(tmp_path):
 def test_main_without_a_stats_sheet_fails_closed(tmp_path):
   """No numbers means no evidence; that must never read as promotable."""
   assert main(['-b', str(tmp_path / 'build'), '-s', str(tmp_path / 'missing.tsv')]) == EXIT_ESCALATED
+
+
+def test_upid_flip_that_actually_cost_us_still_escalates(thresholds):
+  """The UPID change is INFO, but the assignment collapse it caused is not."""
+  deltas, _ = compare_metrics(sheet([
+    ('5693', 'Trypanosoma cruzi', 'epitopes_assigned', 22000, 20000),
+  ]), thresholds)
+  changes = [{'Species ID': '5693', 'Change': 'proteome_id', 'Severity': 'INFO'}]
+
+  assert verdict(deltas, changes) == EXIT_ESCALATED

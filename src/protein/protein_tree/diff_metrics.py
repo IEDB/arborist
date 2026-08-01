@@ -14,8 +14,10 @@ Two comparisons:
 
 Exit codes:
    0  identical. Every metric equal, no status or UPID change.
-  10  changed, within thresholds. Needs a human.
-  20  escalated. A WARNING/CRITICAL drop, a status regression, or a UPID flip.
+  10  changed, within thresholds. A UPID flip lands here: new proteome IDs are
+      normal churn, and if one cost us anything the counts escalate on their own.
+  20  escalated. A WARNING/CRITICAL volume drop, or a status regression toward
+      ORPHANS/EMPTY/MISSING.
 
 Writes a per-species delta TSV so the verdict is auditable rather than asserted.
 """
@@ -125,13 +127,15 @@ def compare_selection(current_report: Path, baseline_report: Path):
         'Severity': SEVERITY_CRITICAL if regressed else SEVERITY_INFO,
       })
     if old_upid != new_upid:
+      # A new UPID is normal churn -- worth reading, not worth blocking. If it
+      # actually cost us anything, the assignment counts say so and those escalate.
       changes.append({
         'Species ID': row['Species ID'],
         'Species Name': row.get('Species Name', ''),
         'Change': 'proteome_id',
         'Baseline': old_upid,
         'Current': new_upid,
-        'Severity': SEVERITY_WARNING,
+        'Severity': SEVERITY_INFO,
       })
   return changes
 
