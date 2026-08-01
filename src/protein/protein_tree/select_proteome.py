@@ -38,8 +38,7 @@ class ProteomeSelector:
 
   def select(self):
     if self.proteome_list.is_empty() or self.taxon_id in ALLERGEN_SPECIES_IDS:
-      self._fetch_orphans()
-      self._write_metadata('', self.taxon_id, 'Orphans', self.species_name)
+      self._use_orphans()
     else:
       proteome_types = [
         'Reference and representative proteome',
@@ -70,6 +69,7 @@ class ProteomeSelector:
         proteome_taxon = selected_proteomes.item(0, 'Proteome Taxon ID')
         proteome_label = selected_proteomes.item(0, 'Proteome Label')
         self._fetch_proteome_file(proteome_id)
+        self._invalidate_pepidx()  # parity with the multi-candidate path
 
       self._rename_proteome_file(proteome_id)
       # UniProt demoted non-reference proteomes to UniParc, so a selected
@@ -77,24 +77,28 @@ class ProteomeSelector:
       # orphans (all UniProtKB proteins for the species) when that happens.
       proteome_fasta = self.species_path / 'proteome.fasta'
       if not self._has_fasta_records(proteome_fasta):
-        self._fetch_orphans()
-        self._write_metadata('', self.taxon_id, 'Orphans', self.species_name)
+        self._use_orphans()
         return
       self._fetch_fragment_data(proteome_id)
       self._fetch_synonym_data(proteome_id)
       self._preprocess_proteome()
       self._write_metadata(proteome_id, proteome_taxon, selected_proteome_type, proteome_label)
 
+  def _use_orphans(self):
+    # Orphan/fallback finisher: refetch, rebuild the index only if we got records.
+    self._fetch_orphans()
+    if self._has_fasta_records(self.species_path / 'proteome.fasta'):
+      self._preprocess_proteome()
+    self._write_metadata('', self.taxon_id, 'Orphans', self.species_name)
+
   def _fetch_orphans(self):
-    # Guarantee proteome.fasta exists even when the taxon has zero orphan
-    # proteins in UniProtKB. Otherwise select() leaves a species dir with no
-    # proteome.fasta -> the dir-but-no-fasta hole. An empty file is cleanly
-    # skippable downstream instead of crashing.
+    # Rewrite proteome.fasta from scratch so orphans never append onto a prior
+    # selection; open('w') truncates even when the taxon has zero orphans.
     proteome_fasta = self.species_path / 'proteome.fasta'
-    proteome_fasta.touch()
+    self._invalidate_pepidx()
     url = f'https://rest.uniprot.org/uniprotkb/search?format=fasta&query=taxonomy_id:{self.taxon_id}&size=500'
-    for batch in self._get_batches(url):
-      with open(proteome_fasta, 'a') as f:
+    with open(proteome_fasta, 'w') as f:
+      for batch in self._get_batches(url):
         f.write(batch.text)
 
   def _get_batches(self, batch_url: str):
@@ -227,9 +231,13 @@ class ProteomeSelector:
     for file in self.species_path.glob('*.fasta'):
       if file.name != f'{proteome_id}.fasta':
         file.unlink()
+    self._invalidate_pepidx()
+
+  def _invalidate_pepidx(self):
+    # assign.py reuses proteome_5mers.pepidx if present, so purge stale indexes.
     for file in self.species_path.glob('*.pepidx'):
       file.unlink()
- 
+
   def _preprocess_proteome(self):
     Preprocessor(
       proteome = self.species_path / 'proteome.fasta',
