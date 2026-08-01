@@ -191,7 +191,7 @@ def decide(state: dict, release: str, now: datetime, stability_hours: int,
            released_at: datetime = None) -> str:
   """known | sighted | settling | confirmed -- the outcomes for an agreed release.
 
-  A monthly timer cannot rely on two polls 48h apart, so the release's own
+  A weekly timer cannot rely on two polls 48h apart, so the release's own
   Last-Modified settles it when available; the two-poll path is the fallback.
   """
   if release == state.get('last_seen_release'):
@@ -260,7 +260,7 @@ def main(argv=None) -> int:
     notify('Arborist UniProt watch FAILED',
            f'Release poll failed, no release decision made.\n\n{error}\n\n'
            f'Host: {host}\nState: {state_path}\n'
-           'The monthly check did not complete -- fix the fetch or the box.',
+           'The scheduled check did not complete -- fix the fetch or the box.',
            args, priority='high')
     return EXIT_FETCH_FAILED
 
@@ -279,7 +279,7 @@ def main(argv=None) -> int:
     notify(f'Arborist UniProt watch: sources disagree ({", ".join(sorted(sources))})',
            f'reldate.txt={reldate_release}\nrest x-uniprot-release={rest_release}\n'
            f'RELEASE.metalink={metalink_release}\n\n'
-           'Likely a mirror mid-sync. No refresh triggered; next monthly poll re-checks.',
+           'Likely a mirror mid-sync. No refresh triggered; the next poll re-checks.',
            args)
     return 0
 
@@ -309,7 +309,7 @@ def main(argv=None) -> int:
       save_state(state_path, state)
     notify(f'Arborist UniProt watch: no new release ({release})',
            f'UniProt is still on {release}; last confirmed {state.get("confirmed_at")}.\n'
-           'Nothing to refresh. This mail proves the monthly timer ran.',
+           'Nothing to refresh. This mail proves the watch ran.',
            args, priority='low')
     return 0
 
@@ -348,9 +348,11 @@ def main(argv=None) -> int:
   notify(f'Arborist UniProt watch: {release} CONFIRMED',
          f'UniProt {release} is settled ({age}; previous {previous}).\n'
          f'Marker: {marker}\n\n'
-         'This watcher builds nothing. Refresh on arborist-dev is still manual:\n'
-         '  make weekly_clean && make deps iedb ncbitaxon organism proteome protein\n'
-         '(under flock /var/lock/arborist-build.lock, ALERT_EMAIL=0)',
+         'This watcher builds nothing. Run the refresh on arborist-dev:\n\n'
+         '  sudo nohup /opt/arborist-uniprot/bin/refresh-run.sh \\\n'
+         '    > /var/log/arborist-uniprot/refresh.log 2>&1 &\n\n'
+         'It takes hours and promotes nothing. Watch it with\n'
+         '  tail -f /var/log/arborist-uniprot/refresh.log',
          args, priority='high')
   return 0
 

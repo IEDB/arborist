@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Install the monthly UniProt release watch on arborist-dev. Run as root.
+# Install the UniProt release watch + refresh runner on arborist-dev. Run as root.
 #   sudo ops/uniprot-cron/install.sh [/path/to/arborist/repo]
 # Idempotent: re-run after a git pull to ship a new watch-release.py.
 set -euo pipefail
