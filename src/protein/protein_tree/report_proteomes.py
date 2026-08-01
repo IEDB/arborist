@@ -16,6 +16,7 @@ Status per active species:
 
 import argparse
 import sys
+from datetime import date
 from pathlib import Path
 
 import polars as pl
@@ -129,6 +130,22 @@ def summarize(report: pl.DataFrame) -> str:
   )
 
 
+def archive_previous(report_file: Path, archive_dir: Path):
+  """Move an existing report aside, stamped with the day it was written.
+
+  Archives live in build/reports/, not beside the live report, because
+  `make weekly_clean` does `rm -rf build/arborist/` and would eat the history.
+  Returns the archive path, or None when there was nothing to move.
+  """
+  if not report_file.exists():
+    return None
+  written = date.fromtimestamp(report_file.stat().st_mtime)
+  archive_dir.mkdir(parents=True, exist_ok=True)
+  archive = archive_dir / f'{report_file.stem}-{written.isoformat()}.tsv'
+  report_file.replace(archive)
+  return archive
+
+
 def main():
   parser = argparse.ArgumentParser(description=__doc__)
   parser.add_argument(
@@ -140,9 +157,12 @@ def main():
 
   report = build_report(build_path)
   output = build_path / 'arborist' / 'proteome-selection-report.tsv'
+  archived = archive_previous(output, build_path / 'reports')
   report.write_csv(output, separator='\t')
 
   print(f'Proteome selection: {summarize(report)}', file=sys.stderr)
+  if archived:
+    print(f'Archived previous report to {archived}', file=sys.stderr)
   print(f'Wrote {output}', file=sys.stderr)
 
 

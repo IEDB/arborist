@@ -1,7 +1,12 @@
+import os
+import shutil
+from datetime import datetime
+
 import polars as pl
 import pytest
 
 from protein_tree.report_proteomes import (
+  archive_previous,
   build_report,
   classify_species,
   summarize,
@@ -165,3 +170,36 @@ def test_summarize_counts(build_path):
 def test_classify_species_missing_dir(tmp_path):
   result = classify_species(tmp_path / 'does-not-exist')
   assert result['Status'] == STATUS_MISSING
+
+def test_archive_previous_stamps_the_day_it_was_written(build_path):
+  """Each build's report becomes history instead of being overwritten."""
+  arborist = build_path / 'arborist'
+  arborist.mkdir(parents=True)
+  report = arborist / 'proteome-selection-report.tsv'
+  report.write_text('Species ID\n9606\n')
+  written = datetime(2026, 6, 14, 3, 0).timestamp()
+  os.utime(report, (written, written))
+
+  archive = archive_previous(report, build_path / 'reports')
+
+  assert archive == build_path / 'reports' / 'proteome-selection-report-2026-06-14.tsv'
+  assert archive.read_text() == 'Species ID\n9606\n'
+  assert not report.exists()
+
+
+def test_archive_previous_is_a_no_op_on_first_run(build_path):
+  assert archive_previous(build_path / 'arborist' / 'nope.tsv', build_path / 'reports') is None
+  assert not (build_path / 'reports').exists()
+
+
+def test_archives_survive_weekly_clean(build_path):
+  """weekly_clean does rm -rf build/arborist/; the history must not live there."""
+  arborist = build_path / 'arborist'
+  arborist.mkdir(parents=True)
+  report = arborist / 'proteome-selection-report.tsv'
+  report.write_text('Species ID\n9606\n')
+
+  archive = archive_previous(report, build_path / 'reports')
+  shutil.rmtree(arborist)
+
+  assert archive.exists()
