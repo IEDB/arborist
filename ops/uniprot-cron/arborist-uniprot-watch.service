@@ -1,7 +1,8 @@
 [Unit]
 Description=Arborist UniProt release watch (detect + notify only)
 Documentation=file:///opt/arborist-uniprot/README.md
-ConditionHost=arborist-dev
+# Glob: this box reports the FQDN arborist-dev.lji.org, and ConditionHost matches it whole.
+ConditionHost=arborist-dev*
 After=network-online.target
 Wants=network-online.target
 

@@ -101,8 +101,8 @@ State lives under `/var/lib` deliberately: `make weekly_clean` wipes
 ## Containment
 
 Hostname gate in three places — `install.sh`, `watch-release.py`
-(`exit 78` unless `hostname -s` is `arborist-dev`), and `ConditionHost=arborist-dev`
-on both units. Never install this on asahidake or pepmatch-curation.
+(`exit 78` unless `hostname -s` is `arborist-dev`), and `ConditionHost=arborist-dev*`
+on both units (glob, because the box reports the FQDN `arborist-dev.lji.org`).
 
 ## Tests
 

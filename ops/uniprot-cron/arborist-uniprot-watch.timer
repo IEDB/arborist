@@ -1,6 +1,6 @@
 [Unit]
 Description=Monthly Arborist UniProt release watch
-ConditionHost=arborist-dev
+ConditionHost=arborist-dev*
 
 [Timer]
 # Monthly (Dan steer): UniProt ships ~every 8 weeks. Manual kick:
