@@ -3,6 +3,7 @@ import re
 import requests
 import gzip
 import json
+import shutil
 import time
 import polars as pl
 
@@ -387,7 +388,41 @@ class ProteomeSelector:
 
     return proteome_list
 
+SELECTED_SPECIES_FILES = ('proteome_5mers.pepidx', 'fragment-data.json', 'synonym-data.json')
+
+def proteome_complete(taxon_id: int, build_path: Path) -> bool:
+  """Conservative per-species resume check. species-data.tsv is written last in
+  every select() path, so it is the done-marker; anything short of the full
+  output set for the species' kind is partial and must be redone. EMPTY/Orphans
+  species legitimately lack a pepidx when their FASTA has no records."""
+  species_dir = build_path / 'species' / str(taxon_id)
+  fasta = species_dir / 'proteome.fasta'
+  metadata = species_dir / 'species-data.tsv'
+  if not (fasta.is_file() and metadata.is_file() and metadata.stat().st_size > 0):
+    return False
+  try:
+    meta = pl.read_csv(metadata, separator='\t')
+    proteome_type = meta['Proteome Type'][0]
+  except Exception:
+    return False
+  if proteome_type == 'Orphans':
+    return fasta.stat().st_size == 0 or (species_dir / 'proteome_5mers.pepidx').is_file()
+  if not all((species_dir / name).is_file() for name in SELECTED_SPECIES_FILES):
+    return False
+  try:  # a crash can truncate a JSON mid-write; unparsable means partial
+    json.loads((species_dir / 'fragment-data.json').read_text())
+    json.loads((species_dir / 'synonym-data.json').read_text())
+  except (ValueError, OSError):
+    return False
+  return True
+
 def get_proteome(taxon_id: int, build_path: Path):
+  if proteome_complete(taxon_id, build_path):
+    print(f'Skipping taxon {taxon_id}: species outputs complete, resume', flush=True)
+    return
+  species_dir = build_path / 'species' / str(taxon_id)
+  if species_dir.exists():  # partial dir from a crashed run: redo from scratch
+    shutil.rmtree(species_dir)
   species_row = active_species.row(by_predicate=pl.col('Species ID') == taxon_id)
   species_name = species_row[2]
   group = species_row[4]
@@ -425,7 +460,12 @@ if __name__ == "__main__":
   all_peptides = data_fetcher.get_all_peptides()
 
   if all_species:
-    for row in active_species.rows(named=True):
+    total = active_species.height
+    for index, row in enumerate(active_species.rows(named=True), start=1):
+      started = time.time()
       get_proteome(row['Species ID'], build_path)
+      print(f'[timing] species {index}/{total} taxon {row["Species ID"]}: {time.time() - started:.1f}s', flush=True)
   else:
+    started = time.time()
     get_proteome(taxon_id, build_path)
+    print(f'[timing] taxon {taxon_id}: {time.time() - started:.1f}s', flush=True)
