@@ -7,7 +7,7 @@ import time
 import polars as pl
 
 from pathlib import Path
-from requests.exceptions import ChunkedEncodingError, ReadTimeout, ConnectionError
+from requests.exceptions import ChunkedEncodingError, HTTPError, ReadTimeout, ConnectionError
 
 from pepmatch import Preprocessor, Matcher
 from protein_tree.data_fetch import DataFetcher
@@ -18,6 +18,16 @@ REPLACEMENT_TAXON_IDS = {
   3240504: 146500, 3240514: 12232, 3240520: 29271, 3240552: 322053, 3240600: 12211, 3240642: 12216,
   3240644: 270478, 3241303: 390157, 10002316: 694009, 10002383: 1415852, 10002948: 2015376
 }
+MAX_HTTP_ATTEMPTS = 5
+
+def is_retryable_error(e: Exception) -> bool:
+  """Transient UniProt failures worth a backoff retry: HTTP 5xx/429, dropped
+  connections, and HTTP 200 payloads that failed to parse (UniProt endpoints
+  can return an error page with status 200, which raise_for_status misses)."""
+  if isinstance(e, HTTPError):
+    code = e.response.status_code if e.response is not None else 0
+    return code == 429 or code >= 500
+  return isinstance(e, (ValueError, OSError, EOFError, ChunkedEncodingError, ReadTimeout, ConnectionError))
 
 class ProteomeSelector:
   def __init__(self, taxon_id: int, species_name: str, group: str, peptides: pl.DataFrame, build_path: Path):
@@ -102,14 +112,20 @@ class ProteomeSelector:
         f.write(batch.text)
 
   def _get_batches(self, batch_url: str):
+    attempt = 1
     while batch_url:
       try:
         r = self.session.get(batch_url)
         r.raise_for_status()
         yield r
         batch_url = self._get_next_link(r.headers)
-      except (ChunkedEncodingError, ReadTimeout, ConnectionError):
-        yield from self._get_batches(batch_url)
+        attempt = 1  # each page gets a fresh retry budget
+      except (HTTPError, ChunkedEncodingError, ReadTimeout, ConnectionError) as e:
+        if attempt < MAX_HTTP_ATTEMPTS and is_retryable_error(e):
+          time.sleep(2 ** attempt)
+          attempt += 1
+        else:
+          raise
 
   def _get_next_link(self, headers: dict):
     re_next_link = re.compile(r'<(.+)>; rel="next"') # regex to extract URL
@@ -208,8 +224,8 @@ class ProteomeSelector:
           for chunk in r.iter_content(chunk_size=65536):
             if chunk:  # filter out keep-alive new chunks
               f.write(chunk.decode())
-    except (ChunkedEncodingError, ReadTimeout, ConnectionError):
-      if attempt < max_attempts:
+    except (HTTPError, ChunkedEncodingError, ReadTimeout, ConnectionError) as e:
+      if attempt < max_attempts and is_retryable_error(e):
         time.sleep(2 ** attempt)
         return self._fetch_proteome_file(proteome_id, attempt + 1)
       return
@@ -324,13 +340,20 @@ class ProteomeSelector:
 
   def _get_candidate_proteomes(self):
     url = f'https://rest.uniprot.org/proteomes/stream?format=json&compressed=true&query=taxonomy_id:{self.taxon_id}'
-    try:
-      r = self.session.get(url)
-      r.raise_for_status()
-      data = gzip.decompress(r.content).decode('utf-8')
-      proteome_list = self._parse_proteome_json(data)
-    except (ChunkedEncodingError, ReadTimeout, ConnectionError):
-      proteome_list = self._get_candidate_proteomes()
+    attempt = 1
+    while True:
+      try:
+        r = self.session.get(url)
+        r.raise_for_status()
+        data = gzip.decompress(r.content).decode('utf-8')
+        proteome_list = self._parse_proteome_json(data)
+        break
+      except (HTTPError, ValueError, OSError, EOFError, ChunkedEncodingError, ReadTimeout, ConnectionError) as e:
+        if attempt < MAX_HTTP_ATTEMPTS and is_retryable_error(e):
+          time.sleep(2 ** attempt)
+          attempt += 1
+        else:
+          raise
 
     proteome_list = proteome_list.filter(pl.col('Proteome Type') != 'Excluded')
     proteome_list.write_csv(self.species_path / 'proteome-list.tsv', separator='\t')
