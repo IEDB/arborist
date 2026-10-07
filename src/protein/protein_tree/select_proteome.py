@@ -19,7 +19,7 @@ REPLACEMENT_TAXON_IDS = {
   3240504: 146500, 3240514: 12232, 3240520: 29271, 3240552: 322053, 3240600: 12211, 3240642: 12216,
   3240644: 270478, 3241303: 390157, 10002316: 694009, 10002383: 1415852, 10002948: 2015376
 }
-MAX_HTTP_ATTEMPTS = 5
+MAX_HTTP_ATTEMPTS = 8
 
 def is_retryable_error(e: Exception) -> bool:
   """Transient UniProt failures worth a backoff retry: HTTP 5xx/429, dropped
@@ -123,7 +123,7 @@ class ProteomeSelector:
         attempt = 1  # each page gets a fresh retry budget
       except (HTTPError, ChunkedEncodingError, ReadTimeout, ConnectionError) as e:
         if attempt < MAX_HTTP_ATTEMPTS and is_retryable_error(e):
-          time.sleep(2 ** attempt)
+          time.sleep(min(2 ** attempt, 60))
           attempt += 1
         else:
           raise
@@ -215,7 +215,7 @@ class ProteomeSelector:
     return linear_hits + self._discontinuous_match_count(disc_epitopes, proteome_file)
 
   def _fetch_proteome_file(self, proteome_id: str, attempt: int = 1):
-    max_attempts = 5
+    max_attempts = MAX_HTTP_ATTEMPTS
     url = f'https://rest.uniprot.org/uniprotkb/stream?format=fasta&includeIsoform=true&query=(proteome:{proteome_id})'
     proteome_file = self.species_path / f'{proteome_id}.fasta'
     try:
@@ -227,7 +227,7 @@ class ProteomeSelector:
               f.write(chunk.decode())
     except (HTTPError, ChunkedEncodingError, ReadTimeout, ConnectionError) as e:
       if attempt < max_attempts and is_retryable_error(e):
-        time.sleep(2 ** attempt)
+        time.sleep(min(2 ** attempt, 60))
         return self._fetch_proteome_file(proteome_id, attempt + 1)
       return
     # UniProt's /stream can return a transient error as an HTTP 200 body
@@ -351,7 +351,7 @@ class ProteomeSelector:
         break
       except (HTTPError, ValueError, OSError, EOFError, ChunkedEncodingError, ReadTimeout, ConnectionError) as e:
         if attempt < MAX_HTTP_ATTEMPTS and is_retryable_error(e):
-          time.sleep(2 ** attempt)
+          time.sleep(min(2 ** attempt, 60))
           attempt += 1
         else:
           raise
