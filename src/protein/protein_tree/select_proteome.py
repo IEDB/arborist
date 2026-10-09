@@ -20,6 +20,11 @@ REPLACEMENT_TAXON_IDS = {
   3240644: 270478, 3241303: 390157, 10002316: 694009, 10002383: 1415852, 10002948: 2015376
 }
 MAX_HTTP_ATTEMPTS = 8
+# Connect/read timeouts per HTTP request. The read timeout bounds the wait
+# between stream chunks, not total transfer time, so large FASTA streams are
+# unaffected; without it a server half-closed connection blocks forever
+# (observed 2026-10-08: 54min+ stall on a CLOSE-WAIT socket to UniProt).
+HTTP_TIMEOUT = (10, 30)
 
 def is_retryable_error(e: Exception) -> bool:
   """Transient UniProt failures worth a backoff retry: HTTP 5xx/429, dropped
@@ -116,7 +121,7 @@ class ProteomeSelector:
     attempt = 1
     while batch_url:
       try:
-        r = self.session.get(batch_url)
+        r = self.session.get(batch_url, timeout=HTTP_TIMEOUT)
         r.raise_for_status()
         yield r
         batch_url = self._get_next_link(r.headers)
@@ -219,7 +224,7 @@ class ProteomeSelector:
     url = f'https://rest.uniprot.org/uniprotkb/stream?format=fasta&includeIsoform=true&query=(proteome:{proteome_id})'
     proteome_file = self.species_path / f'{proteome_id}.fasta'
     try:
-      with self.session.get(url, stream=True) as r:
+      with self.session.get(url, stream=True, timeout=HTTP_TIMEOUT) as r:
         r.raise_for_status()
         with open(proteome_file, 'w') as f:
           for chunk in r.iter_content(chunk_size=65536):
@@ -344,7 +349,7 @@ class ProteomeSelector:
     attempt = 1
     while True:
       try:
-        r = self.session.get(url)
+        r = self.session.get(url, timeout=HTTP_TIMEOUT)
         r.raise_for_status()
         data = gzip.decompress(r.content).decode('utf-8')
         proteome_list = self._parse_proteome_json(data)
