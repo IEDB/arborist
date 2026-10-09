@@ -4,6 +4,7 @@ import requests
 import gzip
 import json
 import shutil
+import sys
 import time
 import polars as pl
 
@@ -48,6 +49,11 @@ class ProteomeSelector:
     self.species_path = build_path / 'species' / str(taxon_id)
     self.species_path.mkdir(parents=True, exist_ok=True)
     self.session = requests.Session()
+    # Never reuse a pooled keep-alive connection: urllib3 happily re-serves a
+    # pooled connection that the server has half-closed, which wedges the run
+    # (2026-10-08/09 CLOSE-WAIT stalls). Connection: close gives every request
+    # a fresh TCP connection; per-request HTTP_TIMEOUT still bounds it.
+    self.session.headers['Connection'] = 'close'
 
     self.proteome_list = self._get_candidate_proteomes()
     self.num_proteomes = len(self.proteome_list) + 1
@@ -128,7 +134,9 @@ class ProteomeSelector:
         attempt = 1  # each page gets a fresh retry budget
       except (HTTPError, ChunkedEncodingError, ReadTimeout, ConnectionError) as e:
         if attempt < MAX_HTTP_ATTEMPTS and is_retryable_error(e):
-          time.sleep(min(2 ** attempt, 60))
+          wait = min(2 ** attempt, 60)
+          print(f'[retry] _get_batches attempt {attempt}/{MAX_HTTP_ATTEMPTS} after {type(e).__name__}: {e}; sleeping {wait}s', file=sys.stderr, flush=True)
+          time.sleep(wait)
           attempt += 1
         else:
           raise
@@ -232,7 +240,9 @@ class ProteomeSelector:
               f.write(chunk.decode())
     except (HTTPError, ChunkedEncodingError, ReadTimeout, ConnectionError) as e:
       if attempt < max_attempts and is_retryable_error(e):
-        time.sleep(min(2 ** attempt, 60))
+        wait = min(2 ** attempt, 60)
+        print(f'[retry] _fetch_proteome_file attempt {attempt}/{max_attempts} after {type(e).__name__}: {e}; sleeping {wait}s', file=sys.stderr, flush=True)
+        time.sleep(wait)
         return self._fetch_proteome_file(proteome_id, attempt + 1)
       return
     # UniProt's /stream can return a transient error as an HTTP 200 body
@@ -356,7 +366,9 @@ class ProteomeSelector:
         break
       except (HTTPError, ValueError, OSError, EOFError, ChunkedEncodingError, ReadTimeout, ConnectionError) as e:
         if attempt < MAX_HTTP_ATTEMPTS and is_retryable_error(e):
-          time.sleep(min(2 ** attempt, 60))
+          wait = min(2 ** attempt, 60)
+          print(f'[retry] _get_candidate_proteomes attempt {attempt}/{MAX_HTTP_ATTEMPTS} after {type(e).__name__}: {e}; sleeping {wait}s', file=sys.stderr, flush=True)
+          time.sleep(wait)
           attempt += 1
         else:
           raise
