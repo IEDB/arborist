@@ -230,6 +230,7 @@ class ProteomeSelector:
   def _fetch_proteome_file(self, proteome_id: str, attempt: int = 1):
     max_attempts = MAX_HTTP_ATTEMPTS
     url = f'https://rest.uniprot.org/uniprotkb/stream?format=fasta&includeIsoform=true&query=(proteome:{proteome_id})'
+    print(f'[fetch] streaming proteome {proteome_id} (candidate {attempt} phase)', file=sys.stderr, flush=True)
     proteome_file = self.species_path / f'{proteome_id}.fasta'
     try:
       with self.session.get(url, stream=True, timeout=HTTP_TIMEOUT) as r:
