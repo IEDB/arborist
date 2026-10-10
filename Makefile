@@ -431,7 +431,18 @@ build/species/%/sources.tsv: build/iedb/peptide_source.tsv build/species/%/taxa.
 
 .PRECIOUS: build/species/%/epitopes.tsv build/species/%/sources.tsv
 
-build/arborist/proteomes.built: build/arborist/active-species.tsv
+# The proteome stage consumes the active species list as DATA, fully decoupled
+# from the organism chain that produces it: no make-level dependency, so
+# `make proteome` never rebuilds taxonomy or IEDB state (mixing taxonomy moves
+# with proteome refreshes is what made 2026_02 uninterpretable, and the chain
+# hard-depends on the IEDB MySQL snapshot, unreachable in some contexts).
+# Run `make organism` on a fresh checkout to produce the list.
+# This recipe intentionally never creates this target: select_proteome re-runs
+# on every invocation, per-species resume keeps that cheap, and a release
+# refresh wipes build/species/ (refresh-run.sh does) to force full re-selection.
+build/arborist/proteomes.built:
+	@test -f build/arborist/active-species.tsv || { \
+	  echo "ERROR: build/arborist/active-species.tsv missing - run 'make organism' first"; exit 1; }
 	$(VENV_PYTHON) src/protein/protein_tree/select_proteome.py -b build/
 
 # Report the proteome selected for each active species, flagging EMPTY/MISSING ones.
