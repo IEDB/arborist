@@ -467,7 +467,23 @@ if __name__ == "__main__":
     '-b', '--build_path', type=str, help='Path for all Arborist build files.',
     default=Path(__file__).parents[3] / 'build'
   )
+  parser.add_argument(
+    '--shards', type=int, default=1,
+    help='Total number of parallel workers partitioning the species list. '
+         'Each worker processes the species whose list index is congruent to '
+         'its shard index modulo --shards, so slices are disjoint and stable.'
+  )
+  parser.add_argument(
+    '--shard-index', type=int, default=0,
+    help='0-based index of this worker; must satisfy 0 <= index < --shards.'
+  )
   args = parser.parse_args()
+  if args.shards < 1:
+    parser.error('--shards must be >= 1')
+  if not 0 <= args.shard_index < args.shards:
+    parser.error('--shard-index must satisfy 0 <= index < --shards')
+  shards = args.shards
+  shard_index = args.shard_index
 
   taxon_id = args.taxon_id
   build_path = Path(args.build_path)
@@ -478,11 +494,26 @@ if __name__ == "__main__":
   all_peptides = data_fetcher.get_all_peptides()
 
   if all_species:
-    total = active_species.height
-    for index, row in enumerate(active_species.rows(named=True), start=1):
+    rows = active_species.rows(named=True)
+    total = len(rows)
+    # Stable disjoint partition: shard k owns list indices i % shards == k,
+    # independent of progress - restarting a worker re processes exactly its
+    # own slice, and resume skips species another worker already completed.
+    mine = [
+      (index, row) for index, row in enumerate(rows, start=1)
+      if index % shards == shard_index
+    ]
+    print(f'[shard] worker {shard_index}/{shards}: {len(mine)} of {total} species', flush=True)
+    for index, row in mine:
       started = time.time()
-      get_proteome(row['Species ID'], build_path)
-      print(f'[timing] species {index}/{total} taxon {row["Species ID"]}: {time.time() - started:.1f}s', flush=True)
+      try:
+        get_proteome(row['Species ID'], build_path)
+      except Exception as e:
+        # One bad species must not kill the shard run: log and continue; the
+        # species has no species-data.tsv done-marker, so the report flags it
+        # MISSING and a rerun redoes it via resume.
+        print(f'[error] species {index}/{total} taxon {row["Species ID"]}: {type(e).__name__}: {e}', flush=True)
+      print(f'[timing] shard {shard_index}/{shards} species {index}/{total} taxon {row["Species ID"]}: {time.time() - started:.1f}s', flush=True)
   else:
     started = time.time()
     get_proteome(taxon_id, build_path)
