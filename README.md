@@ -56,6 +56,10 @@ make serve   # http://localhost:3000
 Always export `VENV_PYTHON` (or activate `_venv`) before `make`.
 Set `ALERT_EMAIL=0` on machines that should not send SMTP alerts through the default LJI relay.
 
+### Weekly run failure alerts
+
+`./arborist.sh DATESTAMP MYSQL_HOST` runs `make weekly_clean` and `make weekly`. If any stage fails (pre-check, make error, a child killed by the OOM killer, or missing/stale outputs in `build/proteins/latest/`), it emails an urgent message with the last 60 lines of the run log (`arborist-last-run.log`) via `protein_tree.notify_failure`. Recipient defaults to `dmarrama@lji.org`; override with `ARBORIST_FAILURE_EMAIL`. This is separate from the `ALERT_EMAIL` weekly digest (`alert.py`), which only compares metrics after a successful `make protein`. The script cannot report its own SIGKILL.
+
 ## Usage
 
 The `Makefile` defines the build. Run `make help` for tasks.

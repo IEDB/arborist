@@ -1,7 +1,71 @@
 import argparse
+from array import array
 import polars as pl
 from pathlib import Path
 from Bio.Align import PairwiseAligner, substitution_matrices
+
+# Columns of all-peptide-assignments.tsv this script never needs per row. The
+# parent sequence is ~70% of the file (3.3 GB of 4.7 GB in a 2026-07 build) and
+# is repeated on every row of a protein, so it is read once per protein instead.
+# The 2026-10-18 prod OOM (31.5 GB RSS) was this eager read plus per-pair
+# alignment dicts. Fragments is never read.
+PER_ROW_HEAVY_COLUMNS = ('Assigned Protein Sequence', 'Assigned Protein Fragments')
+
+# Mapping rows are turned into DataFrames in chunks this big so Python row dicts
+# never pile up.
+CHUNK_ROWS = 50_000
+
+
+class PositionMap:
+  """Source position -> (parent position, parent residue) from one global alignment.
+
+  Same answers as the dict it replaces (`get(pos)` is None for a gap in the parent
+  or a position outside the source), at ~5 bytes per source residue instead of
+  ~200, so caching every aligned pair stays small.
+  """
+  __slots__ = ('_parent_positions', '_parent_residues')
+
+  def __init__(self, qseq, sseq):
+    parent_positions = array('i')
+    parent_residues = []
+    parent_pos = 1
+    for qres, sres in zip(qseq, sseq):
+      if qres != '-' and sres != '-':
+        parent_positions.append(parent_pos)
+        parent_residues.append(sres)
+        parent_pos += 1
+      elif qres == '-':
+        parent_pos += 1
+      elif sres == '-':
+        parent_positions.append(0)
+        parent_residues.append('-')
+    self._parent_positions = parent_positions
+    self._parent_residues = ''.join(parent_residues)
+
+  def get(self, source_pos):
+    if 1 <= source_pos <= len(self._parent_positions):
+      parent_pos = self._parent_positions[source_pos - 1]
+      if parent_pos:
+        return (parent_pos, self._parent_residues[source_pos - 1])
+    return None
+
+
+def read_protein_sequences(path):
+  """One row per Assigned Protein ID with its sequence.
+
+  Refuses data where one ID has two sequences: the per-row sequence this replaces
+  would then differ between rows and a lookup by ID would silently pick one.
+  """
+  sequences = pl.read_csv(
+    path, separator='\t', columns=['Assigned Protein ID', 'Assigned Protein Sequence']
+  ).filter(pl.col('Assigned Protein ID').is_not_null()).unique()
+  if sequences['Assigned Protein ID'].is_duplicated().any():
+    raise ValueError(f'{path}: an Assigned Protein ID has more than one Assigned Protein Sequence')
+  return sequences
+
+
+def with_parent_sequence(frame, protein_sequences):
+  return frame.join(protein_sequences, on='Assigned Protein ID', how='left', maintain_order='left')
 
 
 def get_all_parent_data(assignments, source_data, species_data):
@@ -86,14 +150,15 @@ def make_parent_proteins(all_parent_data):
 
 
 class EpitopeMapper:
-  def __init__(self, assignments, source_data):
+  def __init__(self, assignments, source_data, protein_sequences):
     self.assignments = assignments
-    self.source_data = source_data
+    self.protein_sequences = protein_sequences
     self.source_seq_map = dict(
       source_data.filter(
         pl.col('Sequence').is_not_null() & (pl.col('Sequence') != '')
       ).select('Source Accession', 'Sequence').iter_rows()
     )
+    self.source_accessions = list(self.source_seq_map)
     self.aligner = self._init_aligner()
     self.alignment_cache = {}
 
@@ -109,7 +174,9 @@ class EpitopeMapper:
     print(f'Total assignment rows: {self.assignments.height}')
 
     exact, non_exact = self._split_assignments()
+    self.assignments = None
     tier2_linear, tier2_discontinuous, tier3 = self._split_non_exact(non_exact)
+    del non_exact
 
     print(f'Tier 1 (exact match): {exact.height}')
     print(f'Tier 2 linear (source->parent): {tier2_linear.height}')
@@ -117,15 +184,23 @@ class EpitopeMapper:
     print(f'Tier 3 (peptide->parent, no source seq): {tier3.height}')
 
     exact_mappings = self._make_exact_mappings(exact)
+    del exact
     print(f'Exact mappings produced: {exact_mappings.height}')
 
+    tier2_linear = with_parent_sequence(tier2_linear, self.protein_sequences)
     tier2_linear_mappings = self._make_tier2_linear_mappings(tier2_linear)
+    del tier2_linear
     print(f'Tier 2 linear mappings produced: {tier2_linear_mappings.height}')
 
+    tier2_discontinuous = with_parent_sequence(tier2_discontinuous, self.protein_sequences)
     tier2_disc_mappings = self._make_tier2_discontinuous_mappings(tier2_discontinuous)
+    del tier2_discontinuous
+    self.alignment_cache = {}
     print(f'Tier 2 discontinuous mappings produced: {tier2_disc_mappings.height}')
 
+    tier3 = with_parent_sequence(tier3, self.protein_sequences)
     tier3_mappings = self._make_tier3_mappings(tier3)
+    del tier3
     print(f'Tier 3 mappings produced: {tier3_mappings.height}')
 
     self._combine_and_write(exact_mappings, tier2_linear_mappings, tier2_disc_mappings, tier3_mappings)
@@ -144,7 +219,7 @@ class EpitopeMapper:
 
   def _split_non_exact(self, non_exact):
     has_source_seq = non_exact.with_columns(
-      pl.col('Source Accession').is_in(list(self.source_seq_map.keys())).alias('_has_source')
+      pl.col('Source Accession').is_in(self.source_accessions).alias('_has_source')
     )
 
     with_source = has_source_seq.filter(pl.col('_has_source')).drop('_has_source')
@@ -213,28 +288,7 @@ class EpitopeMapper:
     try:
       alignments = self.aligner.align(source_seq, parent_seq)
       top = alignments[0]
-      qseq = str(top[0])
-      sseq = str(top[1])
-
-      pos_map = {}
-      qpos = 1
-      spos = 1
-      for qres, sres in zip(qseq, sseq):
-        if qres != '-' and sres != '-':
-          pos_map[qpos] = (spos, sres)
-          qpos += 1
-          spos += 1
-        elif qres == '-':
-          spos += 1
-        elif sres == '-':
-          pos_map[qpos] = None
-          qpos += 1
-
-      result = {
-        'pos_map': pos_map,
-        'qseq': qseq,
-        'sseq': sseq,
-      }
+      result = {'pos_map': PositionMap(str(top[0]), str(top[1]))}
       self.alignment_cache[cache_key] = result
       return result
     except Exception as e:
@@ -315,6 +369,7 @@ class EpitopeMapper:
       if (i + 1) % 1000 == 0 or (i + 1) == total_pairs:
         print(f'    Aligned {i + 1}/{total_pairs} pairs ({aligned_count} successful)')
 
+    frames = []
     results = []
     for row in tier2_linear.iter_rows(named=True):
       alignment_data = self.alignment_cache.get((row['Source Accession'], row['Assigned Protein ID']))
@@ -332,14 +387,11 @@ class EpitopeMapper:
         'parent_accession': row['Assigned Protein ID'],
         **mapping,
       })
+      if len(results) >= CHUNK_ROWS:
+        frames.append(self._mapping_frame(results))
+        results = []
 
-    if not results:
-      return self._empty_mapping_df()
-
-    return pl.DataFrame(results).cast({
-      'epitope_id': pl.Int64, 'epitope_start': pl.Int64, 'epitope_end': pl.Int64,
-      'parent_start': pl.Int64, 'parent_end': pl.Int64
-    })
+    return self._concat_mapping_frames(frames, results)
 
   def _make_tier2_discontinuous_mappings(self, tier2_disc):
     if tier2_disc.height == 0:
@@ -356,6 +408,7 @@ class EpitopeMapper:
         pair_row['Source Accession'], pair_row['Assigned Protein ID'], pair_row['Assigned Protein Sequence']
       )
 
+    frames = []
     results = []
     for row in tier2_disc.iter_rows(named=True):
       alignment_data = self.alignment_cache.get((row['Source Accession'], row['Assigned Protein ID']))
@@ -371,14 +424,11 @@ class EpitopeMapper:
         'parent_accession': row['Assigned Protein ID'],
         **mapping,
       })
+      if len(results) >= CHUNK_ROWS:
+        frames.append(self._mapping_frame(results))
+        results = []
 
-    if not results:
-      return self._empty_mapping_df()
-
-    return pl.DataFrame(results).cast({
-      'epitope_id': pl.Int64, 'epitope_start': pl.Int64, 'epitope_end': pl.Int64,
-      'parent_start': pl.Int64, 'parent_end': pl.Int64
-    })
+    return self._concat_mapping_frames(frames, results)
 
   def _map_discontinuous_via_alignment(self, row, alignment_data):
     seq = row['Epitope Sequence']
@@ -528,6 +578,7 @@ class EpitopeMapper:
     local_aligner.extend_gap_score = -1
 
     total = tier3.height
+    frames = []
     results = []
     failed = 0
     for i, row in enumerate(tier3.iter_rows(named=True)):
@@ -595,6 +646,9 @@ class EpitopeMapper:
           'parent_alignment': sseq_clean,
           'parent_alignment_modified': parent_alignment_modified,
         })
+        if len(results) >= CHUNK_ROWS:
+          frames.append(self._mapping_frame(results))
+          results = []
       except Exception as e:
         print(f'  WARNING: Tier 3 alignment failed for epitope {row["Epitope ID"]}: {e}')
         failed += 1
@@ -603,13 +657,7 @@ class EpitopeMapper:
       if (i + 1) % 1000 == 0 or (i + 1) == total:
         print(f'    Tier 3 progress: {i + 1}/{total} ({failed} failed)')
 
-    if not results:
-      return self._empty_mapping_df()
-
-    return pl.DataFrame(results).cast({
-      'epitope_id': pl.Int64, 'epitope_start': pl.Int64, 'epitope_end': pl.Int64,
-      'parent_start': pl.Int64, 'parent_end': pl.Int64
-    })
+    return self._concat_mapping_frames(frames, results)
 
   def _modify_parent_alignment(self, qseq, sseq):
     if len(qseq) != len(sseq):
@@ -633,6 +681,16 @@ class EpitopeMapper:
       'all_gaps': pl.Float64, 'source_alignment': pl.String,
       'parent_alignment': pl.String, 'parent_alignment_modified': pl.String,
     })
+
+  def _mapping_frame(self, rows):
+    return pl.DataFrame(rows, schema=self._empty_mapping_df().schema)
+
+  def _concat_mapping_frames(self, frames, rows):
+    if rows:
+      frames.append(self._mapping_frame(rows))
+    if not frames:
+      return self._empty_mapping_df()
+    return pl.concat(frames)
 
   def _combine_and_write(self, *mapping_dfs):
     combined = pl.concat([df for df in mapping_dfs if df.height > 0])
@@ -667,11 +725,19 @@ if __name__ == '__main__':
     'Assigned Protein Starting Position', 'Assigned Protein Ending Position'
   ]
 
-  print(f'Reading assignments from {build_path / "arborist" / "all-peptide-assignments.tsv"}')
+  assignments_path = build_path / 'arborist' / 'all-peptide-assignments.tsv'
+  print(f'Reading assignments from {assignments_path}')
+  assignment_columns = [
+    col for col in pl.read_csv(assignments_path, separator='\t', n_rows=0).columns
+    if col not in PER_ROW_HEAVY_COLUMNS
+  ]
   assignments = pl.read_csv(
-    build_path / 'arborist' / 'all-peptide-assignments.tsv', separator='\t',
+    assignments_path, separator='\t', columns=assignment_columns,
     schema_overrides={col: pl.Float64 for col in numeric_cols}
   ).with_columns(pl.col(numeric_cols).cast(pl.Int64))
+
+  print('Reading parent protein sequences...')
+  protein_sequences = read_protein_sequences(assignments_path)
 
   print(f'Reading source data from {build_path / "arborist" / "all-source-data.tsv"}')
   source_data = pl.read_csv(build_path / 'arborist' / 'all-source-data.tsv', separator='\t')
@@ -680,13 +746,17 @@ if __name__ == '__main__':
   species_data = pl.read_csv(build_path / 'arborist' / 'all-species-data.tsv', separator='\t')
 
   print('Generating parent data...')
-  all_parent_data = get_all_parent_data(assignments, source_data, species_data)
+  all_parent_data = with_parent_sequence(
+    get_all_parent_data(assignments, source_data, species_data), protein_sequences
+  )
   make_source_parents(all_parent_data)
   print('Wrote source-parents.tsv')
   make_parent_proteins(all_parent_data)
   print('Wrote parent-proteins.tsv')
+  del all_parent_data
 
   print('Starting epitope mappings...')
-  mapper = EpitopeMapper(assignments, source_data)
+  mapper = EpitopeMapper(assignments, source_data, protein_sequences)
+  del assignments, source_data
   mapper.make_epitope_mappings()
   print('Done.')
