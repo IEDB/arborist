@@ -50,7 +50,8 @@ def recent_oom_kills() -> str:
   """Best effort: kernel OOM lines, if dmesg is readable by this user."""
   try:
     output = subprocess.run(
-      ['dmesg', '-T'], capture_output=True, text=True, timeout=10, check=True
+      ['dmesg', '-T'], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+      universal_newlines=True, timeout=10, check=True
     ).stdout
   except (OSError, subprocess.SubprocessError):
     return '(dmesg not readable here)'
