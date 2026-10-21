@@ -1,5 +1,6 @@
 """Guards on the only script that writes outside arborist-dev."""
 
+import os
 import re
 import subprocess
 from pathlib import Path
@@ -10,8 +11,17 @@ SCRIPT = Path(__file__).parent.parent / 'ops' / 'uniprot-cron' / 'promote-to-pro
 SOURCE = SCRIPT.read_text()
 
 
-def run(*args):
-  return subprocess.run(['bash', str(SCRIPT), *args], capture_output=True, text=True)
+def run(*args, fake_hostname=None, shim_dir=None):
+  """Run the script. fake_hostname puts a `hostname` first on PATH, so the host gate
+  sees that name wherever the suite runs (on arborist-dev the real gate passes and
+  the next refusal, root, would fire instead)."""
+  env = os.environ.copy()
+  if fake_hostname:
+    shim = shim_dir / 'hostname'
+    shim.write_text(f'#!/bin/sh\necho {fake_hostname}\n')
+    shim.chmod(0o755)
+    env['PATH'] = f'{shim_dir}{os.pathsep}{env["PATH"]}'
+  return subprocess.run(['bash', str(SCRIPT), *args], capture_output=True, text=True, env=env)
 
 
 def test_refuses_without_an_explicit_mode():
@@ -21,10 +31,10 @@ def test_refuses_without_an_explicit_mode():
   assert '--dry-run' in result.stderr and '--confirm' in result.stderr
 
 
-def test_refuses_off_the_build_host():
-  result = run('--confirm')
+def test_refuses_off_the_build_host(tmp_path):
+  result = run('--confirm', fake_hostname='some-other-box.example.org', shim_dir=tmp_path)
   assert result.returncode != 0
-  assert 'arborist-dev.lji.org' in result.stderr
+  assert 'refusing: not arborist-dev.lji.org (this is some-other-box.example.org)' in result.stderr
 
 
 def test_host_gate_precedes_every_remote_write():

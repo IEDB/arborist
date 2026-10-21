@@ -17,6 +17,7 @@ no organism rebuild, no network (ProteomeSelector is spied so on-demand
 selection never touches UniProt).
 """
 
+import shutil
 from types import SimpleNamespace
 from pathlib import Path
 
@@ -49,15 +50,26 @@ class _SpySelector:
 
 
 @pytest.fixture
-def assign_env(monkeypatch):
-  data_fetcher = assign.DataFetcher(FIXTURE_BUILD)
-  monkeypatch.setattr(assign, 'build_path', FIXTURE_BUILD, raising=False)
+def assign_env(monkeypatch, tmp_path):
+  """Run against a throwaway copy of the fixture tree and yield its species dir.
+
+  The committed fixture is never written to, so the suite also passes from a
+  read-only checkout (arborist-dev's /mnt/data/arborist is root-owned) and
+  leaves nothing behind.
+  """
+  build = tmp_path / 'build'
+  shutil.copytree(FIXTURE_BUILD, build)
+  # copytree keeps the source's modes; a read-only checkout must not make the copy read-only
+  for path in [build, *build.rglob('*')]:
+    path.chmod(path.stat().st_mode | 0o700)
+  data_fetcher = assign.DataFetcher(build)
+  monkeypatch.setattr(assign, 'build_path', build, raising=False)
   monkeypatch.setattr(
     assign, 'active_species',
     # Active Taxa is comma-delimited text in production (e.g. "9593, 9595"); a
     # single-row fixture would otherwise infer Int64 and break the .split().
     pl.read_csv(
-      FIXTURE_BUILD / 'arborist' / 'active-species.tsv', separator='\t',
+      build / 'arborist' / 'active-species.tsv', separator='\t',
       schema_overrides={'Active Taxa': pl.String},
     ),
     raising=False,
@@ -68,11 +80,7 @@ def assign_env(monkeypatch):
   monkeypatch.setattr(assign, 'args', SimpleNamespace(num_threads=1), raising=False)
   monkeypatch.setattr(assign, 'ProteomeSelector', _SpySelector)
   _SpySelector.instances = []
-  yield
-  # Keep the committed fixture pristine: drop anything a run may have created.
-  for junk in SPECIES_DIR.iterdir():
-    if junk.name != '.gitkeep':
-      junk.unlink()
+  return build / 'species' / str(TAXON)
 
 
 def test_fixture_reproduces_failing_state():
@@ -82,12 +90,13 @@ def test_fixture_reproduces_failing_state():
 
 def test_check_for_skips_missing_proteome_returns_true(assign_env):
   # Previously raised FileNotFoundError on .stat() and killed the whole run.
-  assert not (SPECIES_DIR / 'proteome.fasta').exists()
+  species_dir = assign_env
+  assert not (species_dir / 'proteome.fasta').exists()
   assert assign.check_for_skips(TAXON) is True
 
 
 def test_check_for_skips_empty_proteome_returns_true(assign_env):
-  (SPECIES_DIR / 'proteome.fasta').touch()
+  (assign_env / 'proteome.fasta').touch()
   assert assign.check_for_skips(TAXON) is True
 
 
@@ -98,7 +107,7 @@ def test_check_for_proteome_triggers_selection_when_missing(assign_env):
 
 
 def test_check_for_proteome_skips_selection_when_present(assign_env):
-  (SPECIES_DIR / 'proteome.fasta').write_text('>fake\nMSIINFEKL\n')
+  (assign_env / 'proteome.fasta').write_text('>fake\nMSIINFEKL\n')
   assign.check_for_proteome(TAXON, [TAXON], 'Listeria innocua', 'bacterium')
   assert _SpySelector.instances == []
 
@@ -108,4 +117,4 @@ def test_do_assignments_1642_no_crash_and_skips_cleanly(assign_env):
   # cleanly and continue -- never raise.
   assign.do_assignments(TAXON)
   assert len(_SpySelector.instances) == 1, 'on-demand selection should have been attempted'
-  assert not (SPECIES_DIR / 'peptide-assignments.tsv').exists(), 'should skip, not assign'
+  assert not (assign_env / 'peptide-assignments.tsv').exists(), 'should skip, not assign'
