@@ -18,3 +18,4 @@ push_files.sh
 !tests/build/
 !tests/fixtures/**/build/
 !tests/fixtures/**/build/**
+arborist-last-run.log
