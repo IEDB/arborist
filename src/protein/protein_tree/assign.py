@@ -13,6 +13,7 @@ from Bio import SeqIO
 from pepmatch import Preprocessor, Matcher
 from protein_tree.data_fetch import DataFetcher
 from protein_tree.select_proteome import ProteomeSelector
+from protein_tree import skipped_proteomes
 
 
 class AssignmentHandler:
@@ -743,7 +744,9 @@ def check_for_proteome(taxon_id, active_taxa, species_name, group):
   # build/species/<id>/ (epitopes/taxa/sources) for a newly-active species
   # before its proteome exists; guarding on the directory alone skipped
   # selection and left a dir-but-no-fasta hole that crashed the whole run.
-  if not proteome_fasta.exists() or proteome_fasta.stat().st_size == 0:
+  # A species with a fetch-skipped.tsv record had a UniProt fetch fail on an
+  # earlier run: select again so the failed proteome is retried, not cached.
+  if not proteome_fasta.exists() or proteome_fasta.stat().st_size == 0 or skipped_proteomes.has_skips(species_path):
     print(f'No proteome detected for {species_name} (ID: {taxon_id}), selecting best one...')
     data_fetcher = DataFetcher(build_path)
     peptides = data_fetcher.get_peptides_for_species(all_peptides, active_taxa)
@@ -844,3 +847,6 @@ if __name__ == "__main__":
     for row in rows:
       do_assignments(row['Species ID'])
     combine_data()
+  summary = skipped_proteomes.format_skips(skipped_proteomes.load_skips(build_path))
+  if summary:
+    print(f'[skip-summary] {summary}', flush=True)

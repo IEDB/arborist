@@ -13,6 +13,7 @@ from requests.exceptions import ChunkedEncodingError, HTTPError, ReadTimeout, Co
 
 from pepmatch import Preprocessor, Matcher
 from protein_tree.data_fetch import DataFetcher
+from protein_tree import skipped_proteomes
 
 
 ALLERGEN_SPECIES_IDS = [15957, 13101, 13451, 3369, 3505, 3513, 3617, 3818, 3847, 39584, 4045, 4212, 4214, 4522, 4565, 6689, 6954, 6956, 6973, 6978, 746128]
@@ -36,6 +37,29 @@ def is_retryable_error(e: Exception) -> bool:
     return code == 429 or code >= 500
   return isinstance(e, (ValueError, OSError, EOFError, ChunkedEncodingError, ReadTimeout, ConnectionError))
 
+# Network failures a UniProt fetch can raise; is_retryable_error() decides which
+# of them are worth a backoff retry.
+UNIPROT_FETCH_ERRORS = (HTTPError, ChunkedEncodingError, ReadTimeout, ConnectionError)
+# When a taxon has more than 20 candidates the best-BUSCO one is taken without a
+# tiebreak. If its fetch fails, fall back to the next best, but only this many
+# deep so a UniProt outage cannot stall the build on every candidate.
+MAX_BUSCO_FETCH_CANDIDATES = 3
+
+class ProteomeFetchError(Exception):
+  """A UniProt proteome fetch failed for good (retries exhausted, or a
+  non-retryable HTTP error), or no usable candidate remained. Callers skip the
+  proteome (or the taxon) instead of letting the build crash on a FASTA that
+  was never written. str(e) is the reason; `attempts` is 0 when no single fetch
+  is to blame."""
+  def __init__(self, proteome_id: str, attempts: int, cause):
+    self.proteome_id = proteome_id
+    self.attempts = attempts
+    self.cause = cause
+    reason = f'{type(cause).__name__}: {cause}' if isinstance(cause, Exception) else str(cause)
+    super().__init__(reason)
+
+SELECT_FETCH_ERRORS = (ProteomeFetchError,) + UNIPROT_FETCH_ERRORS
+
 class ProteomeSelector:
   def __init__(self, taxon_id: int, species_name: str, group: str, peptides: pl.DataFrame, build_path: Path):
     if taxon_id in REPLACEMENT_TAXON_IDS.keys():
@@ -55,10 +79,33 @@ class ProteomeSelector:
     # a fresh TCP connection; per-request HTTP_TIMEOUT still bounds it.
     self.session.headers['Connection'] = 'close'
 
-    self.proteome_list = self._get_candidate_proteomes()
-    self.num_proteomes = len(self.proteome_list) + 1
+    # The candidate list is a UniProt fetch too: if it fails for good, select()
+    # skips the taxon rather than the constructor crashing the build.
+    self._list_error = None
+    try:
+      self.proteome_list = self._get_candidate_proteomes()
+      self.num_proteomes = len(self.proteome_list) + 1
+    except UNIPROT_FETCH_ERRORS + (ValueError, EOFError, OSError) as e:
+      self.proteome_list = None
+      self.num_proteomes = 0
+      self._list_error = ProteomeFetchError('', MAX_HTTP_ATTEMPTS if is_retryable_error(e) else 1, e)
 
   def select(self):
+    # A UniProt fetch that cannot be completed must never crash the whole build
+    # (2026-11-01: eight HTTP 500s on one candidate proteome ended in a PEPMatch
+    # panic on a FASTA that was never written). Skip the taxon instead: it gets
+    # the same empty proteome.fasta as any other empty taxon, and the
+    # fetch-skipped.tsv record makes the next build retry it.
+    skipped_proteomes.clear_skips(self.species_path)
+    try:
+      if getattr(self, '_list_error', None) is not None:
+        raise self._list_error
+      self._select()
+    except SELECT_FETCH_ERRORS as e:
+      self._record_skip(getattr(e, 'proteome_id', ''), e, skipped_proteomes.OUTCOME_TAXON_SKIPPED)
+      self._skip_taxon()
+
+  def _select(self):
     if self.proteome_list.is_empty() or self.taxon_id in ALLERGEN_SPECIES_IDS:
       self._use_orphans()
     else:
@@ -159,12 +206,16 @@ class ProteomeSelector:
     ]
     disc_epitopes = [e for e in disc_epitopes if e]
     if selected_proteomes.height > 20 and not selected_proteomes.select(pl.col('BUSCO Score').is_null().all()).item(0,0):
-      proteome = selected_proteomes.sort('BUSCO Score').tail(1)
-      proteome_id = proteome.item(0, 'Proteome ID')
-      proteome_taxon = proteome.item(0, 'Proteome Taxon ID')
-      proteome_label = proteome.item(0, 'Proteome Label')
-      self._fetch_proteome_file(proteome_id)
-      return proteome_id, proteome_taxon, proteome_label
+      best_first = selected_proteomes.sort('BUSCO Score').tail(MAX_BUSCO_FETCH_CANDIDATES).reverse()
+      for proteome in best_first.rows(named=True):
+        proteome_id = proteome['Proteome ID']
+        try:
+          self._fetch_proteome_file(proteome_id)
+        except ProteomeFetchError as e:
+          self._record_skip(proteome_id, e, skipped_proteomes.OUTCOME_CANDIDATE_DROPPED)
+          continue
+        return proteome_id, proteome['Proteome Taxon ID'], proteome['Proteome Label']
+      raise ProteomeFetchError('', 0, f'the {best_first.height} best-BUSCO candidate proteomes all failed to fetch')
     else:
       if selected_proteomes.height > 200:
         selected_proteomes = selected_proteomes.sort('Protein Count', descending=True).head(200) # get top 200 proteomes
@@ -174,10 +225,19 @@ class ProteomeSelector:
         proteome_label = proteome['Proteome Label']
 
         if not (self.species_path / f'{proteome_id}.fasta').exists():
-          self._fetch_proteome_file(proteome_id)
+          try:
+            self._fetch_proteome_file(proteome_id)
+          except ProteomeFetchError as e:
+            # Drop this candidate and score the rest; never score a FASTA that
+            # was not written.
+            self._record_skip(proteome_id, e, skipped_proteomes.OUTCOME_CANDIDATE_DROPPED)
+            continue
 
         match_count = self._get_match_count(linear_seqs, disc_epitopes, proteome_id)
         proteome_counts[(proteome_id, proteome_taxon, proteome_label)] = match_count
+
+      if not proteome_counts:
+        raise ProteomeFetchError('', 0, f'all {selected_proteomes.height} candidate proteomes failed to fetch')
 
     return max(proteome_counts.items(), key=lambda item: item[1])[0]
 
@@ -214,7 +274,9 @@ class ProteomeSelector:
   def _get_match_count(self, linear_seqs: list, disc_epitopes: list, proteome_id: str):
     proteome_file = self.species_path / f'{proteome_id}.fasta'
     linear_hits = 0
-    if linear_seqs:
+    # Guard: PEPMatch's Rust preprocess panics (not an exception) on a missing
+    # FASTA, so only hand it a file that exists and has records.
+    if linear_seqs and self._has_fasta_records(proteome_file):
       matches = Matcher(
         query = linear_seqs,
         proteome_file = proteome_file,
@@ -227,32 +289,46 @@ class ProteomeSelector:
       ).unique('Query Sequence').height
     return linear_hits + self._discontinuous_match_count(disc_epitopes, proteome_file)
 
-  def _fetch_proteome_file(self, proteome_id: str, attempt: int = 1):
-    max_attempts = MAX_HTTP_ATTEMPTS
+
+  def _fetch_proteome_file(self, proteome_id: str):
+    """Stream one proteome's UniProtKB FASTA to <id>.fasta.
+
+    Writes <id>.fasta.part and renames it only on success, so a failed or
+    interrupted fetch never leaves a missing or partial <id>.fasta behind (the
+    tiebreak treats an existing <id>.fasta as fetched). Raises
+    ProteomeFetchError when the retry budget is spent or on a non-retryable
+    HTTP error; a failure is never cached, the next build fetches again."""
     url = f'https://rest.uniprot.org/uniprotkb/stream?format=fasta&includeIsoform=true&query=(proteome:{proteome_id})'
-    print(f'[fetch] streaming proteome {proteome_id} (candidate {attempt} phase)', file=sys.stderr, flush=True)
     proteome_file = self.species_path / f'{proteome_id}.fasta'
-    try:
-      with self.session.get(url, stream=True, timeout=HTTP_TIMEOUT) as r:
-        r.raise_for_status()
-        with open(proteome_file, 'w') as f:
-          for chunk in r.iter_content(chunk_size=65536):
-            if chunk:  # filter out keep-alive new chunks
-              f.write(chunk.decode())
-    except (HTTPError, ChunkedEncodingError, ReadTimeout, ConnectionError) as e:
-      if attempt < max_attempts and is_retryable_error(e):
+    part_file = self.species_path / f'{proteome_id}.fasta.part'
+    for attempt in range(1, MAX_HTTP_ATTEMPTS + 1):
+      print(f'[fetch] streaming proteome {proteome_id} (candidate {attempt} phase)', file=sys.stderr, flush=True)
+      try:
+        with self.session.get(url, stream=True, timeout=HTTP_TIMEOUT) as r:
+          r.raise_for_status()
+          with open(part_file, 'w') as f:
+            for chunk in r.iter_content(chunk_size=65536):
+              if chunk:  # filter out keep-alive new chunks
+                f.write(chunk.decode())
+      except UNIPROT_FETCH_ERRORS as e:
+        if part_file.exists():
+          part_file.unlink()
+        if attempt >= MAX_HTTP_ATTEMPTS or not is_retryable_error(e):
+          raise ProteomeFetchError(proteome_id, attempt, e) from e
         wait = min(2 ** attempt, 60)
-        print(f'[retry] _fetch_proteome_file attempt {attempt}/{max_attempts} after {type(e).__name__}: {e}; sleeping {wait}s', file=sys.stderr, flush=True)
+        print(f'[retry] _fetch_proteome_file attempt {attempt}/{MAX_HTTP_ATTEMPTS} after {type(e).__name__}: {e}; sleeping {wait}s', file=sys.stderr, flush=True)
         time.sleep(wait)
-        return self._fetch_proteome_file(proteome_id, attempt + 1)
+        continue
+      # UniProt's /stream can return a transient error as an HTTP 200 body
+      # ('Error encountered when streaming data. Please try again later.'), which
+      # raise_for_status cannot catch. Validate we actually got FASTA and retry
+      # with backoff; if it never recovers the (record-less) file is kept, and
+      # the caller falls back to orphans.
+      if not self._has_fasta_records(part_file) and attempt < MAX_HTTP_ATTEMPTS:
+        time.sleep(2 ** attempt)
+        continue
+      part_file.replace(proteome_file)
       return
-    # UniProt's /stream can return a transient error as an HTTP 200 body
-    # ('Error encountered when streaming data. Please try again later.'), which
-    # raise_for_status cannot catch. Validate we actually got FASTA and retry
-    # with backoff; the caller falls back to orphans if it never recovers.
-    if not self._has_fasta_records(proteome_file) and attempt < max_attempts:
-      time.sleep(2 ** attempt)
-      return self._fetch_proteome_file(proteome_id, attempt + 1)
 
   def _has_fasta_records(self, proteome_file) -> bool:
     if not proteome_file.exists() or proteome_file.stat().st_size == 0:
@@ -264,6 +340,8 @@ class ProteomeSelector:
     for file in self.species_path.glob('*.fasta'):
       if file.name != f'{proteome_id}.fasta':
         file.unlink()
+    for file in self.species_path.glob('*.fasta.part'):
+      file.unlink()
     self._invalidate_pepidx()
 
   def _invalidate_pepidx(self):
@@ -271,9 +349,41 @@ class ProteomeSelector:
     for file in self.species_path.glob('*.pepidx'):
       file.unlink()
 
+  def _record_skip(self, proteome_id: str, error, outcome: str):
+    """Log a visible [skip] line and persist it for the retry and the summary."""
+    attempts = getattr(error, 'attempts', None)
+    if attempts is None:  # raw network error from a batch fetch, not a ProteomeFetchError
+      attempts = MAX_HTTP_ATTEMPTS if is_retryable_error(error) else 1
+    reason = str(error) if isinstance(error, ProteomeFetchError) else f'{type(error).__name__}: {error}'
+    detail = f'fetch failed after {attempts} attempts: {reason}' if attempts else reason
+    target = f'proteome {proteome_id}' if proteome_id else 'all proteomes'
+    print(f'[skip] {target} for taxon {self.taxon_id} ({self.species_name}): {detail}', file=sys.stderr, flush=True)
+    skipped_proteomes.record_skip(
+      self.species_path, self.taxon_id, self.species_name, proteome_id, outcome, detail,
+    )
+
+  def _skip_taxon(self):
+    """No usable proteome: leave the species in the state check_for_skips already
+    skips ('Proteome is empty'): an empty proteome.fasta, no index, no candidate
+    or partial FASTA and no done-marker (species-data.tsv). fetch-skipped.tsv is
+    kept; it is what makes the next build try this taxon again."""
+    for pattern in ('*.fasta', '*.fasta.part', '*.pepidx'):
+      for file in self.species_path.glob(pattern):
+        file.unlink()
+    for name in ('species-data.tsv', 'fragment-data.json', 'synonym-data.json'):
+      stale = self.species_path / name
+      if stale.exists():
+        stale.unlink()
+    (self.species_path / 'proteome.fasta').write_text('')
+
   def _preprocess_proteome(self):
+    proteome = self.species_path / 'proteome.fasta'
+    if not self._has_fasta_records(proteome):
+      # Nothing to index; PEPMatch panics on a missing or empty FASTA.
+      self._invalidate_pepidx()
+      return
     Preprocessor(
-      proteome = self.species_path / 'proteome.fasta',
+      proteome = proteome,
       preprocessed_files_path = self.species_path,
     ).preprocess(k = 5)
 
@@ -283,9 +393,9 @@ class ProteomeSelector:
     if src.exists():
       src.rename(dst)
     else:
-      # Fetch exhausted its retries without producing a file. Leave an empty
-      # proteome.fasta so select()'s _has_fasta_records check falls back to
-      # orphans instead of raising FileNotFoundError here.
+      # No FASTA to promote. Leave an empty proteome.fasta so select()'s
+      # _has_fasta_records check falls back to orphans instead of raising
+      # FileNotFoundError here.
       dst.touch()
 
   def _fetch_fragment_data(self, proteome_id: str):
@@ -417,6 +527,8 @@ def proteome_complete(taxon_id: int, build_path: Path) -> bool:
   fasta = species_dir / 'proteome.fasta'
   metadata = species_dir / 'species-data.tsv'
   if not (fasta.is_file() and metadata.is_file() and metadata.stat().st_size > 0):
+    return False
+  if skipped_proteomes.has_skips(species_dir):  # a skipped fetch is retried, never cached
     return False
   try:
     meta = pl.read_csv(metadata, separator='\t')
