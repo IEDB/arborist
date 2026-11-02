@@ -24,6 +24,7 @@ import polars as pl
 
 from protein_tree import notify_email
 from protein_tree.notify_email import STATUS_GREEN, STATUS_WARNING, STATUS_CRITICAL
+from protein_tree import skipped_proteomes
 
 REPO_ROOT = Path(__file__).parents[3]
 ID_COLUMNS = ['Species ID', 'Species Name', 'Metric']
@@ -205,7 +206,7 @@ def _overview_rows(sheet: pl.DataFrame, weeks: list) -> list:
   return rows
 
 
-def render_html(sheet: pl.DataFrame, findings: list, weeks: list, status: str, week: str) -> str:
+def render_html(sheet: pl.DataFrame, findings: list, weeks: list, status: str, week: str, skips: list = None) -> str:
   esc = html_lib.escape
   escalated = [f for f in findings if f['severity'] in ESCALATED]
   parts = [
@@ -231,13 +232,26 @@ def render_html(sheet: pl.DataFrame, findings: list, weeks: list, status: str, w
   else:
     parts.append('<p>No week-to-week warnings or criticals.</p>')
 
+  if skips:
+    parts.append(f'<h3>Skipped UniProt proteomes ({len(skips)})</h3>')
+    parts.append('<p>These proteome fetches failed after all retries and were skipped instead of failing the build. '
+                 'They are retried on the next build.</p>')
+    parts.append('<table border="1" cellpadding="4" cellspacing="0">')
+    parts.append('<tr><th>Species</th><th>Proteome</th><th>Outcome</th><th>Error</th></tr>')
+    for row in skips:
+      parts.append(
+        f"<tr><td>{esc(row['Species Name'])} ({esc(row['Species ID'])})</td><td>{esc(row['Proteome ID'] or '-')}</td>"
+        f"<td>{esc(row['Outcome'])}</td><td>{esc(row['Error'])}</td></tr>"
+      )
+    parts.append('</table>')
+
   parts.append('</body></html>')
   return '\n'.join(parts)
 
 
-def _send_digest(status, findings, weeks, week, sheet, env):
+def _send_digest(status, findings, weeks, week, sheet, env, skips=None):
   """Build + send the digest email. Raises on send failure (caller swallows)."""
-  html_body = render_html(sheet, findings, weeks, status, week)
+  html_body = render_html(sheet, findings, weeks, status, week, skips)
   subject = notify_email.subject_for_status(status, week)
   message = notify_email.build_message(
     subject, html_body,
@@ -269,14 +283,21 @@ def run(args, env=None) -> None:
 
   week = weeks[-1] if weeks else '?'
   status = overall_status(findings)
+  # A skipped proteome silently loses that taxon's assignments for the week, so
+  # a run with skips is never plain green.
+  skips = skipped_proteomes.load_skips(build_path)
+  if skips and status == STATUS_GREEN:
+    status = STATUS_WARNING
 
   print(render_banner(status, findings, week), file=sys.stderr)
+  if skips:
+    print(skipped_proteomes.format_skips(skips), file=sys.stderr)
 
   html_out.parent.mkdir(parents=True, exist_ok=True)
-  html_out.write_text(render_html(sheet, findings, weeks, status, week))
+  html_out.write_text(render_html(sheet, findings, weeks, status, week, skips))
 
   if env.get('ALERT_EMAIL', '1') == '1':
-    _send_digest(status, findings, weeks, week, sheet, env)
+    _send_digest(status, findings, weeks, week, sheet, env, skips)
     print(f'alert: emailed weekly digest ({status})', file=sys.stderr)
   else:
     print('alert: ALERT_EMAIL disabled, skipping email', file=sys.stderr)
