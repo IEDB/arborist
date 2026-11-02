@@ -60,6 +60,10 @@ Set `ALERT_EMAIL=0` on machines that should not send SMTP alerts through the def
 
 `./arborist.sh DATESTAMP MYSQL_HOST` runs `make weekly_clean` and `make weekly`. If any stage fails (pre-check, make error, a child killed by the OOM killer, or missing/stale outputs in `build/proteins/latest/`), it emails an urgent message with the last 60 lines of the run log (`arborist-last-run.log`) via `protein_tree.notify_failure`. Recipient defaults to `dmarrama@lji.org`; override with `ARBORIST_FAILURE_EMAIL`. This is separate from the `ALERT_EMAIL` weekly digest (`alert.py`), which only compares metrics after a successful `make protein`. The script cannot report its own SIGKILL.
 
+### Weekly digest levels (`alert.py`)
+
+Every TOTAL metric of the stats sheet (`source_antigens_total`, `source_antigens_assigned`, `epitopes_total`, `epitopes_assigned`, `epitopes_located_exact`) is graded on week-over-week relative change, rises and drops alike: YELLOW at >= 2%, ORANGE at >= 10%, RED at >= 25% (`ALERT_YELLOW_PCT`, `ALERT_ORANGE_PCT`, `ALERT_RED_PCT`). A fall of the `epitopes_located_exact / epitopes_assigned` ratio by more than `ALERT_RATIO_RED_PCT` (10%) is RED, and so is a metric missing from the sheet. Per-species drops (`epitopes_assigned`, `source_antigens_assigned`, `epitopes_located_exact`) keep the absolute/percent rules (`ALERT_HARD_ABS` etc.; WARNING = YELLOW, CRITICAL = RED). Skipped UniProt proteomes are a YELLOW WARNING. The subject shows the worst level (green only when nothing tripped) and the email lists each finding with the metric, the percent and the previous -> current values.
+
 ## Usage
 
 The `Makefile` defines the build. Run `make help` for tasks.

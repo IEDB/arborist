@@ -333,8 +333,9 @@ def test_run_with_skips_is_a_warning_not_green(silo, tmp_path):
   skipped_proteomes.record_skip(silo.species_path(TAXON), TAXON, 'X', 'UPC',
                                 skipped_proteomes.OUTCOME_TAXON_SKIPPED, 'boom')
   stats = tmp_path / 'stats.tsv'
-  pl.DataFrame({'Species ID': ['TOTAL'], 'Species Name': [''], 'Metric': ['epitopes_assigned'],
-                '2026-W01': ['10'], '2026-W02': ['10']}).write_csv(stats, separator='\t')
+  metrics = alert.OVERVIEW_METRICS
+  pl.DataFrame({'Species ID': ['TOTAL'] * len(metrics), 'Species Name': [''] * len(metrics), 'Metric': metrics,
+                '2026-W01': ['10'] * len(metrics), '2026-W02': ['10'] * len(metrics)}).write_csv(stats, separator='\t')
   args = types.SimpleNamespace(stats_file=str(stats), build_path=str(silo.build), html_out=str(tmp_path / 'alert.html'))
 
   alert.run(args, env={'ALERT_EMAIL': '0'})

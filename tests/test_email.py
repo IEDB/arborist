@@ -1,14 +1,16 @@
 import smtplib
 
 from protein_tree import notify_email
-from protein_tree.notify_email import STATUS_GREEN, STATUS_WARNING, STATUS_CRITICAL
+from protein_tree.notify_email import STATUS_GREEN, STATUS_WARNING, STATUS_ORANGE, STATUS_CRITICAL
 
 
 def test_subject_wording():
   assert notify_email.subject_for_status(STATUS_GREEN, '2026-W29') == \
     'Arborist prod run is green - 2026-W29'
   assert notify_email.subject_for_status(STATUS_WARNING, '2026-W29') == \
-    'Arborist prod run is green with WARNING(s) - 2026-W29'
+    'Arborist prod run is YELLOW with WARNING(s) - 2026-W29'
+  assert notify_email.subject_for_status(STATUS_ORANGE, '2026-W29') == \
+    'Arborist prod run is ORANGE with a WARNING - 2026-W29'
   assert notify_email.subject_for_status(STATUS_CRITICAL, '2026-W29') == \
     'Arborist prod run is RED with a CRITICAL - 2026-W29'
 

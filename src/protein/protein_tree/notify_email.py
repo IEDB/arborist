@@ -17,15 +17,18 @@ DEFAULT_EMAIL_FROM = 'arborist@lji.org'
 
 STATUS_GREEN = 'green'
 STATUS_WARNING = 'warning'
+STATUS_ORANGE = 'orange'
 STATUS_CRITICAL = 'critical'
 
 
 def subject_for_status(status: str, week: str) -> str:
-  """Traffic-light subject line; keyword surfaced when not green."""
+  """Traffic-light subject line showing the worst level; green only when nothing tripped."""
   if status == STATUS_CRITICAL:
     return f'Arborist prod run is RED with a CRITICAL - {week}'
+  if status == STATUS_ORANGE:
+    return f'Arborist prod run is ORANGE with a WARNING - {week}'
   if status == STATUS_WARNING:
-    return f'Arborist prod run is green with WARNING(s) - {week}'
+    return f'Arborist prod run is YELLOW with WARNING(s) - {week}'
   return f'Arborist prod run is green - {week}'
 
 

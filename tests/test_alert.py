@@ -1,3 +1,4 @@
+import html as html_lib
 import sys
 import types
 
@@ -169,3 +170,163 @@ def test_main_exit_zero_when_email_send_fails(tmp_path, monkeypatch):
   assert alert.main() == 0
   # HTML digest still written before the (failed) send
   assert (tmp_path / 'alert.html').exists()
+
+
+# ---- every overview metric is graded on week-over-week relative change ----
+
+def _totals(weeks, **series):
+  """TOTAL rows for the overview metrics; series maps metric -> (prev, curr)."""
+  return _sheet([('TOTAL', '', m, p, c) for m, (p, c) in series.items()], weeks=weeks)
+
+
+# The real TOTAL rows of the weekly stats sheet (prod, 2026-11-01).
+W40_W41 = dict(
+  source_antigens_total=(241502, 241503), source_antigens_assigned=(238476, 238477),
+  epitopes_total=(2393207, 2393285), epitopes_assigned=(2381226, 2381304),
+  epitopes_located_exact=(1727972, 1728041),
+)
+W41_W44 = dict(
+  source_antigens_total=(241503, 241534), source_antigens_assigned=(238477, 238505),
+  epitopes_total=(2393285, 2393386), epitopes_assigned=(2381304, 2381431),
+  epitopes_located_exact=(1728041, 329248),   # -81%: shipped as "green" on 2026-11-01
+)
+
+
+def _overview(series, **overrides):
+  merged = {**series, **overrides}
+  sheet = _totals(WEEKS, **merged)
+  weeks = alert.week_columns(sheet)
+  return alert.compute_overview_findings(sheet, weeks, TH)
+
+
+def test_replayed_w44_located_exact_collapse_is_red():
+  findings = _overview(W41_W44)
+  by_metric = {f['metric']: f for f in findings}
+  assert by_metric['epitopes_located_exact']['severity'] == SEVERITY_CRITICAL
+  # only the collapse and the ratio trip; the +31/+28/+101/+127 moves stay green
+  assert set(by_metric) == {'epitopes_located_exact', 'epitopes_located_exact/epitopes_assigned'}
+  assert by_metric['epitopes_located_exact/epitopes_assigned']['severity'] == SEVERITY_CRITICAL
+  assert overall_status(findings) == STATUS_CRITICAL
+  line = alert.format_finding(by_metric['epitopes_located_exact'])
+  assert 'epitopes_located_exact' in line and '-80.9%' in line and '1728041 -> 329248' in line and '[RED]' in line
+  assert notify_email.subject_for_status(overall_status(findings), '2026-W44') == \
+    'Arborist prod run is RED with a CRITICAL - 2026-W44'
+
+
+def test_normal_week_is_green():
+  assert _overview(W40_W41) == []
+
+
+def test_normal_week_with_a_hundred_epitopes_either_way_is_green():
+  assert _overview(W41_W44, epitopes_located_exact=(1728041, 1728041 + 100)) == []
+  assert _overview(W41_W44, epitopes_located_exact=(1728041, 1728041 - 100),
+                   epitopes_assigned=(2381304, 2381304 - 100)) == []
+
+
+@pytest.mark.parametrize('prev,curr,expected', [
+  (1000, 1019, None),                  # +1.9%
+  (1000, 1020, SEVERITY_WARNING),      # +2%  yellow
+  (1000, 1099, SEVERITY_WARNING),
+  (1000, 1100, 'ORANGE'),              # +10% orange
+  (1000, 1249, 'ORANGE'),
+  (1000, 1250, SEVERITY_CRITICAL),     # +25% red
+  (1000, 980, SEVERITY_WARNING),       # drops grade the same as rises
+  (1000, 900, 'ORANGE'),
+  (1000, 750, SEVERITY_CRITICAL),
+  (1000, 0, SEVERITY_CRITICAL),
+  (0, 50, None),                       # no baseline to compare against
+])
+def test_relative_change_levels(prev, curr, expected):
+  assert alert.classify_change(prev, curr, TH) == expected
+
+
+def test_every_overview_metric_is_graded_not_just_assigned():
+  for metric in alert.OVERVIEW_METRICS:
+    findings = _overview(W40_W41, **{metric: (1000, 700)})
+    assert any(f['metric'] == metric and f['severity'] == SEVERITY_CRITICAL for f in findings), metric
+
+
+def test_orange_status_and_banner_and_subject():
+  findings = _overview(W40_W41, epitopes_total=(2393207, 2393207 + 250000))   # +10.4%
+  assert overall_status(findings) == 'orange'
+  assert 'ORANGE' in alert.render_banner('orange', findings, '2026-W02')
+  assert notify_email.subject_for_status('orange', '2026-W02') == \
+    'Arborist prod run is ORANGE with a WARNING - 2026-W02'
+
+
+def test_ratio_collapse_is_red_even_when_each_total_moves_less_than_red():
+  # located -20% (orange alone) while assigned is flat: the ratio falls 20% -> RED
+  findings = _overview(W40_W41, epitopes_located_exact=(1000000, 800000), epitopes_assigned=(1400000, 1400000))
+  by_metric = {f['metric']: f['severity'] for f in findings}
+  assert by_metric['epitopes_located_exact'] == 'ORANGE'
+  assert by_metric['epitopes_located_exact/epitopes_assigned'] == SEVERITY_CRITICAL
+  assert overall_status(findings) == STATUS_CRITICAL
+
+
+def test_ratio_threshold_is_configurable():
+  th = Thresholds.from_env({'ALERT_RATIO_RED_PCT': '30'})
+  sheet = _totals(WEEKS, **{**W40_W41, 'epitopes_located_exact': (1000000, 800000), 'epitopes_assigned': (1400000, 1400000)})
+  findings = alert.compute_overview_findings(sheet, alert.week_columns(sheet), th)
+  assert 'epitopes_located_exact/epitopes_assigned' not in {f['metric'] for f in findings}
+
+
+def test_thresholds_come_from_env():
+  th = Thresholds.from_env({'ALERT_YELLOW_PCT': '5', 'ALERT_ORANGE_PCT': '20', 'ALERT_RED_PCT': '50'})
+  assert alert.classify_change(1000, 1030, th) is None
+  assert alert.classify_change(1000, 1200, th) == 'ORANGE'
+  assert alert.classify_change(1000, 1500, th) == SEVERITY_CRITICAL
+
+
+def test_missing_metric_row_is_red():
+  series = {k: v for k, v in W40_W41.items() if k != 'epitopes_located_exact'}
+  findings = _overview(series)
+  missing = [f for f in findings if f['kind'] == 'missing']
+  assert [f['metric'] for f in missing] == ['epitopes_located_exact']
+  assert missing[0]['severity'] == SEVERITY_CRITICAL
+  assert 'MISSING' in alert.format_finding(missing[0])
+
+
+def test_missing_current_value_is_red():
+  sheet = _totals(WEEKS, **W40_W41)
+  sheet = sheet.with_columns(
+    pl.when(pl.col('Metric') == 'epitopes_total').then(None).otherwise(pl.col(WEEKS[1])).alias(WEEKS[1]))
+  findings = alert.compute_overview_findings(sheet, list(WEEKS), TH)
+  assert [(f['metric'], f['kind']) for f in findings] == [('epitopes_total', 'missing')]
+
+
+def test_run_replay_writes_red_html_naming_the_metric(tmp_path):
+  sheet = _totals(WEEKS, **W41_W44)
+  alert.run(_args(tmp_path, sheet), env={'ALERT_EMAIL': '0'})
+  html = html_lib.unescape((tmp_path / 'alert.html').read_text())
+  assert 'CRITICAL' in html
+  assert 'epitopes_located_exact -80.9% (1728041 -> 329248, -1398793) [RED]' in html
+  assert 'ratio' in html
+
+
+def test_run_replay_sends_red_subject(tmp_path, monkeypatch):
+  sent = []
+  monkeypatch.setattr(notify_email, 'send_email', lambda message, **k: sent.append(message))
+  alert.run(_args(tmp_path, _totals(WEEKS, **W41_W44)), env={'ALERT_EMAIL': '1'})
+  assert sent[0]['Subject'] == 'Arborist prod run is RED with a CRITICAL - 2026-W02'
+
+
+def test_run_normal_week_is_green_subject(tmp_path, monkeypatch):
+  sent = []
+  monkeypatch.setattr(notify_email, 'send_email', lambda message, **k: sent.append(message))
+  alert.run(_args(tmp_path, _totals(WEEKS, **W40_W41)), env={'ALERT_EMAIL': '1'})
+  assert sent[0]['Subject'] == 'Arborist prod run is green - 2026-W02'
+
+
+def test_total_is_not_graded_by_the_absolute_drop_rule_in_run(tmp_path, monkeypatch):
+  # a 1,500-epitope drop on 2.4M (0.06%) used to be CRITICAL via agg_abs; it is green by relative change
+  sent = []
+  monkeypatch.setattr(notify_email, 'send_email', lambda message, **k: sent.append(message))
+  series = {**W40_W41, 'epitopes_assigned': (2381226, 2381226 - 1500)}
+  alert.run(_args(tmp_path, _totals(WEEKS, **series)), env={'ALERT_EMAIL': '1'})
+  assert sent[0]['Subject'] == 'Arborist prod run is green - 2026-W02'
+
+
+def test_per_species_located_exact_collapse_is_critical():
+  sheet = _sheet([('9606', 'Homo sapiens', 'epitopes_located_exact', 1193335, 6476)])
+  findings, _ = compute_findings(sheet, TH)
+  assert findings[0]['severity'] == SEVERITY_CRITICAL
